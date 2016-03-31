@@ -11,14 +11,14 @@
     "test": "test"
   },
   "dependencies": {
-    "mojular-moj-elements": "mojular/moj-elements"
+    "mojular-moj-elements": "mojular/moj-elements",
+    "webpack": "^1.12.2"
   },
   "devDependencies": {
-    "webpack": "^1.12.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dom Smith <dom@teneightfive.com>",
-  "license": "ISC"
+  "license": "MIT"
 }
