@@ -7,6 +7,8 @@ gem 'wdm', '~> 0.1.0', platforms: [:mswin, :mingw]
 
 gem 'foreman'
 gem 'sass_paths'
+gem 'pry'
+gem 'slim'
 
 # Windows does not come with time zone data
 gem 'tzinfo-data', platforms: [:mswin, :mingw, :jruby]

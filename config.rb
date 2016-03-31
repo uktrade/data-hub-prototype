@@ -20,7 +20,11 @@ page '/*.txt', layout: false
 
 # General configuration
 
-set :layout, 'base'
+Slim::Engine.disable_option_validator!
+Slim::Engine.set_options pretty: true
+Slim::Engine.set_options attr_list_delims: { '(' => ')', '[' => ']' }
+
+set :layout, 'ukti'
 
 # Reload the browser automatically whenever files change
 configure :development do
