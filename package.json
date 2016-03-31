@@ -1,0 +1,24 @@
+{
+  "name": "data-hub-prototype",
+  "version": "0.1.0",
+  "description": "Initial prototype for the data hub",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UKTradeInvestment/data-hub-prototype"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "mojular-moj-elements": "mojular/moj-elements"
+  },
+  "devDependencies": {
+    "webpack": "^1.12.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dom Smith <dom@teneightfive.com>",
+  "license": "ISC"
+}
