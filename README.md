@@ -63,10 +63,12 @@ heroku config
 
 ## Development
 
-Assets are compiled using [webpack](https://webpack.github.io/). [Foreman](http://ddollar.github.io/foreman/) can be used to simultaneously run a middleman server and a webpack module bundler.
+Assets are compiled using [gulp](http://gulpjs.com/) and [webpack](https://webpack.github.io/). They are run as part middleman's [external pipeline](https://middlemanapp.com/advanced/external-pipeline/).
 
-Run:
+To run a development server, run middleman's server using:
 
 ```
-foreman start --procfile dev.Procfile
+bundle exec middleman server
 ```
+
+A [Browsersync](https://www.browsersync.io/) instance is now available at (http://localhost:3000/)[http://localhost:3000/] which will auto reload on changes to assets.

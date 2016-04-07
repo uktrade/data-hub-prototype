@@ -17,11 +17,8 @@
 # Ignore .DS_store file
 .DS_Store
 
-# Ignore the build directory
-/build
-*.bundle.js
-*.bundle.js.map
+# Ignore gulp/webpack assets
+/.tmp
 
-# Ignore mojular layouts
-source/layouts/base.erb
-source/layouts/internal.erb
+# Ignore node packages
+node_modules/

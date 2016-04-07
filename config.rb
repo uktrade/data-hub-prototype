@@ -1,5 +1,3 @@
-require 'sass_paths'
-
 ###
 # Page options, layouts, aliases and proxies
 ###
@@ -20,16 +18,7 @@ page '/*.txt', layout: false
 
 # General configuration
 
-Slim::Engine.disable_option_validator!
-Slim::Engine.set_options pretty: true
-Slim::Engine.set_options attr_list_delims: { '(' => ')', '[' => ']' }
-
 set :layout, 'ukti'
-
-# Reload the browser automatically whenever files change
-configure :development do
-  activate :livereload
-end
 
 ###
 # Helpers
@@ -42,22 +31,22 @@ end
 #   end
 # end
 
-# Load Sass paths and copy images & layouts
-require 'find'
-`mkdir -p "#{config.source}/#{config.images_dir}" "#{config.source}/#{config.layouts_dir}"`
-Find.find('node_modules').grep(/mojular[a-z-]+\/package\.json/).map do |package|
-  sassPaths = JSON.parse(IO.read(package))['sassPaths']
-  dirname = File.dirname(package)
-  sassPaths.map { |path| SassPaths.append(File.expand_path(path, File.directory?(path) ? '' : dirname)) } if sassPaths
-  FileUtils.cp_r Find.find(dirname).grep(/images\//), "#{config.source}/#{config.images_dir}"
-  FileUtils.cp_r Find.find(dirname).grep(/layouts\/erb\//), "#{config.source}/#{config.layouts_dir}"
-end
+# asset pipeline
+activate :external_pipeline,
+  name: :gulp,
+  command: build? ? 'npm run build' : 'npm start',
+  source: '.tmp/dist'
+
+# Ignore CSS & JS as they are handled by external pipeline
+ignore { |path| path =~ /(javascripts|stylesheets)\/(.*)$/ && !$2.match(/bundle\.js|\.css/) }
 
 # Build-specific configuration
 configure :build do
-  # Minify CSS on build
-  # activate :minify_css
+  activate :relative_assets
 
-  # Minify Javascript on build
-  # activate :minify_javascript
+  activate :minify_css
+  activate :minify_javascript
+
+  # Ignore CSS & JS map files
+  ignore '*.map'
 end
