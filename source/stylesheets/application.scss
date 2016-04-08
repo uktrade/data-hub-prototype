@@ -9,7 +9,8 @@ $images-dir: '/images/';
 @import 'ukti/colours';
 @import 'table-list';
 @import 'summary';
-@import 'toolbar';
+@import 'pagination';
+@import 'griddle';
 
 table tr:nth-child(even) {
   th,

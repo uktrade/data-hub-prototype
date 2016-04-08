@@ -8,20 +8,4 @@ title: Data hub
       h1 Companies
     .column-third.get-started
       a.button.button-secondary Add company
-form.toolbar
-  input.form-control placeholder="e.g. company name, contact name"
-.table-list
-  table
-    thead
-      tr
-        th Company name
-        th Country
-        th Sector
-        th Primary contact
-    tbody
-      - data.companies.each do |c|
-        tr
-          td= link_to c.name, "companies/#{c.id}.html"
-          td= c.country
-          td= c.sector
-          td= link_to c.primaryContact, "#"
+#companies

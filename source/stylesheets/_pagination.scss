@@ -1,0 +1,23 @@
+$pagination-spacing: 10px;
+
+.pagination {
+  .page {
+    margin: 0 0 0 $pagination-spacing;
+  }
+
+  .next {
+    margin-left: $pagination-spacing;
+  }
+
+  .is-selected {
+    cursor: default;
+    color: $black;
+    text-decoration: none;
+
+    &:link,
+    &:visited,
+    &:hover {
+      color: $black;
+    }
+  }
+}

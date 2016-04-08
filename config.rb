@@ -22,7 +22,14 @@ data.companies.each do |c|
   }
 end
 
+# proxy data to json files
+["companies"].each do |source|
+  proxy "/data/#{source}.json", "/data.json", :locals => { :source => source }, :ignore => true
+end
+
+# ignore proxy templates
 ignore "company.html"
+ignore "data.json"
 
 # General configuration
 
