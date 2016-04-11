@@ -1,8 +1,20 @@
-@charset "utf-8";
+@charset 'utf-8';
 $images-dir: '/images/';
 
 // All components
 @import 'govuk';
 
+// application specific
 @import 'ukti/leftnav';
 @import 'ukti/colours';
+@import 'table-list';
+@import 'summary';
+@import 'pagination';
+@import 'griddle';
+
+table tr:nth-child(even) {
+  th,
+  td {
+    background: $grey-4;
+  }
+}

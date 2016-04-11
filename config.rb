@@ -16,6 +16,21 @@ page '/*.txt', layout: false
 # proxy "/this-page-has-no-template.html", "/template-file.html", locals: {
 #  which_fake_page: "Rendering a fake page with a local variable" }
 
+data.companies.each do |c|
+  proxy "/companies/#{c.id}.html", "/company.html", locals: {
+    company: c
+  }
+end
+
+# proxy data to json files
+["companies"].each do |source|
+  proxy "/data/#{source}.json", "/data.json", :locals => { :source => source }, :ignore => true
+end
+
+# ignore proxy templates
+ignore "company.html"
+ignore "data.json"
+
 # General configuration
 
 set :layout, 'ukti'

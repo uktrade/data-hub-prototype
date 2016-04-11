@@ -1,0 +1,11 @@
+.griddle thead th {
+  cursor: pointer;
+}
+
+.griddle-filter {
+  margin: 20px 0;
+
+  .form-control {
+    border-color: $grey-2;
+  }
+}
