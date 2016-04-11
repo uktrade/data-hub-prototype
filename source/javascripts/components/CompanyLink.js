@@ -1,6 +1,14 @@
 import React from 'react';
+import {Link} from 'react-router';
 
-export default (props) => {
-  let url = `/companies/${props.rowData.id}.html`;
-  return <a href={url}>{props.data}</a>;
+const CompanyLink = ({data, rowData}) =>
+  <Link to={`/company/${rowData.id}/profile`}>
+    {data}
+  </Link>;
+
+CompanyLink.propTypes = {
+  data: React.PropTypes.string,
+  rowData: React.PropTypes.object,
 };
+
+export default CompanyLink;

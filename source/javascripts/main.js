@@ -1,16 +1,35 @@
 'use strict';
 
 import React from 'react';
-import {render} from 'react-dom';
+import { render } from 'react-dom';
+import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 import CompaniesList from './components/CompaniesList';
+import CompanyProfile from './components/CompanyProfile';
+import CompanyDetails from './components/CompanyDetails';
+import Companies from './components/Companies';
+
 import Mojular from 'mojular';
 
-const companiesElement = document.getElementById('companies');
+const containerElement = document.querySelector('#content .container');
 
-if (companiesElement) {
+if (containerElement) {
   render(
-    <CompaniesList />,
-    companiesElement
+    <Router history={hashHistory}>
+      <Route path="/" component={Companies}>
+        <IndexRoute component={CompaniesList} />
+      </Route>
+
+      <Route path="/company/:id" component={CompanyProfile}>
+        <IndexRoute component={CompanyDetails}/>
+        <Route path="profile" component={CompanyDetails} />
+        <Route path="contacts" component={CompanyDetails} />
+        <Route path="interactions" component={CompanyDetails} />
+        <Route path="projects" component={CompanyDetails} />
+        <Route path="deliveries" component={CompanyDetails} />
+        <Route path="documents" component={CompanyDetails} />
+      </Route>
+    </Router>,
+    containerElement
   );
 }
 
