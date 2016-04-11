@@ -5,8 +5,7 @@ This prototype is based on [middleman](https://middlemanapp.com/), a static site
 ## Dependencies
 
 * [Ruby](https://www.ruby-lang.org/en/)
-* [Node.js](https://nodejs.org/en/)
-* [Foreman](http://ddollar.github.io/foreman/) (for development only)
+* [Node.js](https://nodejs.org/en/) (at least v4 and NPM v3)
 
 ## Installation
 
@@ -68,7 +67,7 @@ Assets are compiled using [gulp](http://gulpjs.com/) and [webpack](https://webpa
 To run a development server, run middleman's server using:
 
 ```
-bundle exec middleman server
+middleman server
 ```
 
 A [Browsersync](https://www.browsersync.io/) instance is now available at (http://localhost:3000/)[http://localhost:3000/] which will auto reload on changes to assets.
