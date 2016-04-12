@@ -21,7 +21,7 @@ export default class CompaniesList extends React.Component {
         results={data}
         tableClassName="table-list"
         showFilter="true"
-        filterPlaceholderText="e.g. company name, contact name"
+        filterPlaceholderText="Search, e.g. by company name or contact name"
         useGriddleStyles={false}
         useCustomPagerComponent="true"
         customPagerComponent={Pagination}
