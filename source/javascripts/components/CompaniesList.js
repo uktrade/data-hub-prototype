@@ -27,7 +27,7 @@ export default class CompaniesList extends React.Component {
         customPagerComponent={Pagination}
         resultsPerPage={20}
         initialSort="name"
-        noDataMessage={"No companies found"} />
+        noDataMessage="No companies found" />
     );
   }
 }

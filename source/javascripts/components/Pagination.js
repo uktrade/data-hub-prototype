@@ -7,18 +7,24 @@ export default class Pagination extends React.Component {
   }
 
   render() {
-    let previous = '';
+    let prev = '';
     let next = '';
     let pages = [];
     let startIndex = Math.max(this.props.currentPage - 5, 0);
     let endIndex = Math.min(startIndex + 11, this.props.maxPage);
 
     if (this.props.currentPage > 0) {
-      previous = <a href="#companies" onClick={this.props.previous} className="previous">{this.props.previousText}</a>;
+      prev = (<a
+        href="#companies"
+        onClick={this.props.previous}
+        className="pager-previous">{this.props.previousText}</a>);
     }
 
     if (this.props.currentPage != (this.props.maxPage - 1)) {
-      next = <a href="#companies" onClick={this.props.next} className="next">{this.props.nextText}</a>;
+      next = (<a
+        href="#companies"
+        onClick={this.props.next}
+        className="pager-next">{this.props.nextText}</a>);
     }
 
     if (this.props.maxPage >= 11 && (endIndex - startIndex) <= 10) {
@@ -26,20 +32,21 @@ export default class Pagination extends React.Component {
     }
 
     for (var i = startIndex; i < endIndex; i++) {
-      let selected = this.props.currentPage == i ? ' is-selected' : '';
-      pages.push(<a
-        href="#companies"
-        onClick={this.pageChange}
-        className={`page ${selected}`}
-        data-value={i}
-        key={i}>{i + 1}</a>);
+      let selected = this.props.currentPage == i ? 'is-selected' : '';
+      pages.push(<li key={i}>
+        <a href="#companies" onClick={this.pageChange} className={selected} data-value={i}>{i + 1}</a>
+      </li>);
     }
 
     return (
-      <div className="pagination">
-        {previous}
-        {pages}
-        {next}
+      <div className="pager">
+        <div className="pager-controls">
+          {prev}
+          <ul className="pager-items">
+            {pages}
+          </ul>
+          {next}
+        </div>
       </div>
     );
   }
