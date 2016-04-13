@@ -12,18 +12,19 @@ class CompanyInteractions extends React.Component {
           <Link to="/">{interaction.description}</Link>
         </h2>
         <p className="interaction-type">{interaction.type}</p>
-        <p className="interaction-meta">Advisor: <Link to="/">{interaction.advisor}</Link></p>
-        <p className="interaction-meta">Contact: <Link to="/">{interaction.contact}</Link></p>
+        <p className="interaction-meta">Advisor: <a href="#">{interaction.advisor}</a></p>
+        <p className="interaction-meta">Contact: <a href="#">{interaction.contact}</a></p>
       </li>
     );
   }
 
   render() {
-    const interactions = this.props.company.interactions;
+    console.log(this.props.company);
+    console.log(this.props.company.interactions[0].advisor);
 
     return (
       <ul className="interactions">
-        {interactions.map(this.renderInteraction)}
+        {this.props.company.interactions.map(this.renderInteraction)}
       </ul>
     );
   }
