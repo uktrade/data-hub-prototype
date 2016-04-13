@@ -1,20 +1,19 @@
 import React from 'react';
-import ContactLink from './ContactLink';
-import { Link } from 'react-router';
+import {Link} from 'react-router';
 import Time from 'react-time';
 
 class CompanyInteractions extends React.Component {
 
   renderInteraction(interaction, i) {
     return (
-      <li key={i}>
-        <Link className="interaction" to="/">
-          <h2 className="heading interaction-heading">{interaction.type}</h2>
-          <div className="interaction-date"><Time value={interaction.date} format="DD MMM YY" /></div>
-          <div className="interaction-description">{interaction.description}</div>
-          <div className="interaction-advisor">Advisor: {interaction.advisor}</div>
-          <div className="interaction-contact">Contact: {interaction.contact}</div>
-        </Link>
+      <li key={i} className="interaction">
+        <p className="interaction-date"><Time value={interaction.date} format="DD MMM YY" /></p>
+        <h2 className="interaction-heading">
+          <Link to="/">{interaction.description}</Link>
+        </h2>
+        <p className="interaction-type">{interaction.type}</p>
+        <p className="interaction-meta">Advisor: <Link to="/">{interaction.advisor}</Link></p>
+        <p className="interaction-meta">Contact: <Link to="/">{interaction.contact}</Link></p>
       </li>
     );
   }

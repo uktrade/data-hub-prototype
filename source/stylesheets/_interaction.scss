@@ -5,57 +5,46 @@
 }
 
 .interaction {
-
   @include clearfix;
   display: block;
   border: 1px solid $border-colour;
-  padding: 15px;
-  margin-bottom: 20px;
+  padding: 15px 15px 12px;
+  margin-bottom: 15px;
   position: relative;
   color: $text-colour;
   text-decoration: none;
+  box-shadow: 1px 1px 2px $grey-3;
 
   &:link,
   &:visited {
     color: $text-colour;
   }
 
-  &:hover {
-    outline: 2px solid $border-colour;
-  }
-
-  &:focus,
-  &:active {
-    background: $white;
-    outline: 2px solid $yellow;
-  }
-
-
-  h2.interaction-heading {
-    padding: 0;
-    margin: 0;
-    font-size: 24px;
+  .interaction-heading {
+    font-size: em(24);
+    margin-top: 0;
+    margin-bottom: 1em;
   }
 
   .interaction-date {
+    font-size: em(24);
+    font-weight: 700;
     position: absolute;
     top: 15px;
     right: 15px;
-    font-weight: bold;
-    text-decoration: none;
+    margin: 0;
   }
 
-  .interaction-description {
-    padding: 0;
-    margin: 0 0 20px 0;
+  .interaction-type {
+    font-weight: 700;
+    line-height: 1em;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    margin: 0;
   }
 
-  .interaction-advisor {
-    float: left;
+  .interaction-meta {
+    margin: 0;
   }
-
-  .interaction-contact {
-    float: right;
-  }
-
 }
