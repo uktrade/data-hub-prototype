@@ -32,3 +32,9 @@
     text-align: right;
   }
 }
+
+.table-list-actions {
+  @include media('>tablet') {
+    float: right;
+  }
+}

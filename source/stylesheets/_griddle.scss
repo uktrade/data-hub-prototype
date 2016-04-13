@@ -7,5 +7,10 @@
 
   .form-control {
     border-color: $grey-2;
+    width: 100%;
+
+    @include media('>tablet') {
+      width: 50%;
+    }
   }
 }

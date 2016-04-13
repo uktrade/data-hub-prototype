@@ -1,0 +1,13 @@
+// Fix secondary button styling when using as link
+.button-secondary {
+  &:link,
+  &:visited {
+    background-color: $grey-2;
+    color: $black;
+  }
+}
+
+.compact-heading {
+  margin-top: em(30, 48);
+  margin-bottom: em(40, 48);
+}
