@@ -40,10 +40,10 @@
 
     @include media('>tablet') {
       box-sizing: border-box;
-      width: 75%;
+      width: 80%;
       float: left;
       margin: 0;
-      padding: 0 15px;
+      padding: 0 0 0 15px;
       border-left: 1px solid $grey-2;
     }
 

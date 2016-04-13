@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router';
 import Time from 'react-time';
 
 class CompanyInteractions extends React.Component {
@@ -9,7 +8,7 @@ class CompanyInteractions extends React.Component {
       <li key={i} className="interaction">
         <p className="interaction-date"><Time value={interaction.date} format="DD MMM YY" /></p>
         <h2 className="interaction-heading">
-          <Link to="/">{interaction.subject}</Link>
+          <a href="#">{interaction.subject}</a>
         </h2>
         <p className="interaction-type">{interaction.type}</p>
         <p className="interaction-meta">Advisor: <a href="#">{interaction.advisor}</a></p>
