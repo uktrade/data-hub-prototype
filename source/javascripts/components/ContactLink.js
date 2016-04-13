@@ -1,5 +1,12 @@
 import React from 'react';
 
-export default (props) => {
-  return <a href="#">{props.data}</a>;
+const ContactLink = ({data}) =>
+  <a href="#">
+    {data}
+  </a>;
+
+ContactLink.propTypes = {
+  data: React.PropTypes.string,
 };
+
+export default ContactLink;

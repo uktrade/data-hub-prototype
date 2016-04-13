@@ -1,17 +1,20 @@
-
-.left-nav-container {
+.tabs.tabs-left {
 
   @extend %contain-floats;
   clear: both;
 
-  .left-nav {
-    box-sizing: border-box;
-    width: 25%;
-    float: left;
-    margin: 0;
-    padding: 0;
+  .tabs-nav {
+    display: block;
 
-    nav a {
+    @include media('>tablet') {
+      box-sizing: border-box;
+      width: 20%;
+      float: left;
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
       display: block;
       color: $link-colour;
       text-decoration: none;
@@ -33,13 +36,17 @@
 
   }
 
-  .right-content {
-    box-sizing: border-box;
-    width: 75%;
-    float: left;
-    margin: 0;
-    padding: 0 15px;
-    border-left: 1px solid $grey-2;
+  .tabs-content {
+    display: block;
+
+    @include media('>tablet') {
+      box-sizing: border-box;
+      width: 75%;
+      float: left;
+      margin: 0;
+      padding: 0 15px;
+      border-left: 1px solid $grey-2;
+    }
 
     > h1:first-child,
     > h2:first-child,

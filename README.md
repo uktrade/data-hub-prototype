@@ -72,3 +72,6 @@ bundle exec middleman server
 ```
 
 A [Browsersync](https://www.browsersync.io/) instance is now available at (http://localhost:3000/)[http://localhost:3000/] which will auto reload on changes to assets.
+
+## Data
+Dummy data from http://beta.json-generator.com/VkBnuhrkZ
