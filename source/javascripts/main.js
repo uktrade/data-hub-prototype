@@ -6,6 +6,7 @@ import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 import CompaniesList from './components/CompaniesList';
 import CompanyProfile from './components/CompanyProfile';
 import CompanyDetails from './components/CompanyDetails';
+import CompanyInteractions from './components/CompanyInteractions';
 import Companies from './components/Companies';
 
 import Mojular from 'mojular';
@@ -23,7 +24,7 @@ if (containerElement) {
         <IndexRoute component={CompanyDetails}/>
         <Route path="profile" component={CompanyDetails} />
         <Route path="contacts" component={CompanyDetails} />
-        <Route path="interactions" component={CompanyDetails} />
+        <Route path="interactions" component={CompanyInteractions} />
         <Route path="projects" component={CompanyDetails} />
         <Route path="deliveries" component={CompanyDetails} />
         <Route path="documents" component={CompanyDetails} />

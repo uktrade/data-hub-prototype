@@ -1,0 +1,42 @@
+.interactions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.interaction {
+
+  @include clearfix;
+
+  border: 1px solid $border-colour;
+  padding: 15px;
+  margin-bottom: 20px;
+  position: relative;
+
+  h2.interaction-heading {
+    padding: 0;
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .interaction-date {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-weight: bold;
+  }
+
+  .interaction-description {
+    padding: 0;
+    margin: 0 0 20px 0;
+  }
+
+  .interaction-advisor {
+    float: left;
+  }
+
+  .interaction-contact {
+    float: right;
+  }
+
+}

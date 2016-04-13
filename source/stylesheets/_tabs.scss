@@ -1,7 +1,6 @@
 .tabs.tabs-left {
 
-  @extend %contain-floats;
-  clear: both;
+  @include clearfix;
 
   .tabs-nav {
     display: block;
