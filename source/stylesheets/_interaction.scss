@@ -20,13 +20,16 @@
     color: $text-colour;
   }
 
-  &:hover,
-  &:focus {
+  &:hover {
     outline: 2px solid $border-colour;
   }
+
+  &:focus,
   &:active {
+    background: $white;
     outline: 2px solid $yellow;
   }
+
 
   h2.interaction-heading {
     padding: 0;
