@@ -1,12 +1,25 @@
 $pagination-spacing: 10px;
 
-.pagination {
-  .page {
-    margin: 0 0 0 $pagination-spacing;
+.pager-summary {
+  @include media('>tablet') {
+    float: left;
   }
+}
 
-  .next {
-    margin-left: $pagination-spacing;
+.pager-controls {
+  @include media('>tablet') {
+    float: right;
+  }
+}
+
+.pager-items {
+  margin: 0;
+  padding: 0;
+  display: inline;
+
+  li {
+    display: inline;
+    margin: 0 0 0 $pagination-spacing;
   }
 
   .is-selected {
@@ -20,4 +33,8 @@ $pagination-spacing: 10px;
       color: $black;
     }
   }
+}
+
+.pager-next {
+  margin-left: 10px;
 }

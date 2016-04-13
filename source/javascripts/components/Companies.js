@@ -2,15 +2,9 @@ import React from 'react';
 
 const Companies = ({children}) =>
   <div>
-    <div className="summary">
-      <div className="grid-row">
-        <div className="column-two-thirds">
-          <h1 className="heading">Companies</h1>
-        </div>
-        <div className="column-third get-started">
-          <a className="button button-secondary">Add company</a>
-        </div>
-      </div>
+    <h1 className="compact-heading">Companies</h1>
+    <div className="table-list-actions">
+      <a className="button button-secondary" href="#">Add new company</a>
     </div>
     {children}
   </div>;
