@@ -7,12 +7,14 @@ class CompanyInteractions extends React.Component {
 
   renderInteraction(interaction, i) {
     return (
-      <li key={i} className="interaction">
+      <li key={i}>
+        <Link className="interaction" to="/">
           <h2 className="heading interaction-heading">{interaction.type}</h2>
           <div className="interaction-date"><Time value={interaction.date} format="DD MMM YY" /></div>
           <div className="interaction-description">{interaction.description}</div>
           <div className="interaction-advisor">Advisor: <ContactLink data={interaction.advisor} /></div>
           <div className="interaction-contact">Contact: <ContactLink data={interaction.contact} /></div>
+        </Link>
       </li>
     );
   }
