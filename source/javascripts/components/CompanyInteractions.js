@@ -9,7 +9,7 @@ class CompanyInteractions extends React.Component {
       <li key={i} className="interaction">
         <p className="interaction-date"><Time value={interaction.date} format="DD MMM YY" /></p>
         <h2 className="interaction-heading">
-          <Link to="/">{interaction.description}</Link>
+          <Link to="/">{interaction.subject}</Link>
         </h2>
         <p className="interaction-type">{interaction.type}</p>
         <p className="interaction-meta">Advisor: <a href="#">{interaction.advisor}</a></p>
@@ -19,9 +19,6 @@ class CompanyInteractions extends React.Component {
   }
 
   render() {
-    console.log(this.props.company);
-    console.log(this.props.company.interactions[0].advisor);
-
     return (
       <ul className="interactions">
         {this.props.company.interactions.map(this.renderInteraction)}
