@@ -12,8 +12,8 @@ class CompanyInteractions extends React.Component {
           <h2 className="heading interaction-heading">{interaction.type}</h2>
           <div className="interaction-date"><Time value={interaction.date} format="DD MMM YY" /></div>
           <div className="interaction-description">{interaction.description}</div>
-          <div className="interaction-advisor">Advisor: <ContactLink data={interaction.advisor} /></div>
-          <div className="interaction-contact">Contact: <ContactLink data={interaction.contact} /></div>
+          <div className="interaction-advisor">Advisor: {interaction.advisor}</div>
+          <div className="interaction-contact">Contact: {interaction.contact}</div>
         </Link>
       </li>
     );
