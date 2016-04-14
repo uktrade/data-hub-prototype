@@ -8,7 +8,7 @@ const data = require('../../data/companies.json');
 const columns = [
   { displayName: 'Company name', columnName: 'name', customComponent: CompanyLink },
   { displayName: 'Primary contact', columnName: 'primaryContact', customComponent: ContactLink },
-  { displayName: 'Sector', columnName: 'sector' },
+  { displayName: 'City', columnName: 'city' },
   { displayName: 'Country', columnName: 'country' }
 ];
 
@@ -16,7 +16,7 @@ export default class CompaniesList extends React.Component {
   render() {
     return (
       <Griddle
-        columns={['name', 'primaryContact', 'sector', 'country']}
+        columns={['name', 'primaryContact', 'city', 'country']}
         columnMetadata={columns}
         results={data}
         tableClassName="table-list"
