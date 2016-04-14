@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var paths = require('./gulp/paths');
+var prod = process.env.NODE_ENV === 'production';
 
 module.exports = {
   entry: {
@@ -36,7 +37,8 @@ module.exports = {
     extensions: ['', '.json', '.js']
   },
 
-  plugins: [
-    new webpack.optimize.DedupePlugin()
-  ]
+  plugins: prod ? [
+    new webpack.optimize.UglifyJsPlugin({compress: { warnings: false }}),
+    new webpack.optimize.DedupePlugin()]
+    : [new webpack.optimize.DedupePlugin()]
 };

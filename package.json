@@ -1,6 +1,6 @@
 {
   "name": "data-hub-prototype",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "description": "Initial prototype for the data hub",
   "main": "index.js",
   "repository": {
@@ -49,6 +49,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "gulp build"
   },
-  "author": "Dom Smith <dom@teneightfive.com>, Zac Tolley <zac@thetolleys.com>",
+  "author": "Dom Smith <dom@teneightfive.com>",
+  "contributers": [
+    "Zac Tolley <zac@thetolleys.com>"
+  ],
   "license": "MIT"
 }

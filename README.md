@@ -1,9 +1,6 @@
 # Data hub prototype
 
-This prototype uses node and [mojular](https://github.com/mojular) to provide a simple hardcoded prototype for the Data hub app with a [GOV.UK](https://gov.uk/) look and feelyeah
-
-
-based on [middleman](https://middlemanapp.com/), a static site generator, and  for common layouts and patterns.
+This prototype uses node and [mojular](https://github.com/mojular) to provide a simple hardcoded prototype for the Data hub app with a [GOV.UK](https://gov.uk/) look and feel.
 
 ## Dependencies
 
