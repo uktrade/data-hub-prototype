@@ -4,7 +4,7 @@ import Pagination from './Pagination';
 import CompanyLink from './CompanyLink';
 import ContactLink from './ContactLink';
 
-const data = require('../../../data/companies.json');
+const data = require('../../data/companies.json');
 const columns = [
   { displayName: 'Company name', columnName: 'name', customComponent: CompanyLink },
   { displayName: 'Primary contact', columnName: 'primaryContact', customComponent: ContactLink },

@@ -1,15 +1,16 @@
 var webpack = require('webpack');
 var paths = require('./gulp/paths');
+var prod = process.env.NODE_ENV === 'production';
 
 module.exports = {
   entry: {
-    app: './source/javascripts/main.js',
+    app: `${paths.sourceJS}/main.js`,
     polyfills: ['JSON2', 'html5shiv']
   },
 
   output: {
-    path: paths.output,
-    filename: 'javascripts/[name].bundle.js'
+    path: paths.outputJS,
+    filename: '[name].bundle.js'
   },
 
   devtool: 'cheap-module-source-map',
@@ -33,14 +34,11 @@ module.exports = {
   },
 
   resolve: {
-    modulesDirectories: [
-      'node_modules',
-      'node_modules/mojular/node_modules'
-    ],
     extensions: ['', '.json', '.js']
   },
 
-  plugins: [
-    new webpack.optimize.DedupePlugin()
-  ]
+  plugins: prod ? [
+    new webpack.optimize.UglifyJsPlugin({compress: { warnings: false }}),
+    new webpack.optimize.DedupePlugin()]
+    : [new webpack.optimize.DedupePlugin()]
 };

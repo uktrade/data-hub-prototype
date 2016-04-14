@@ -1,10 +1,9 @@
 # Data hub prototype
 
-This prototype is based on [middleman](https://middlemanapp.com/), a static site generator, and [mojular](https://github.com/mojular) for common [GOV.UK](https://gov.uk/) layouts and patterns.
+This prototype uses node and [mojular](https://github.com/mojular) to provide a simple hardcoded prototype for the Data hub app with a [GOV.UK](https://gov.uk/) look and feel.
 
 ## Dependencies
 
-* [Ruby](https://www.ruby-lang.org/en/)
 * [Node.js](https://nodejs.org/en/) (at least v4 and NPM v3)
 
 ## Installation
@@ -15,32 +14,30 @@ This prototype is based on [middleman](https://middlemanapp.com/), a static site
   git clone https://github.com/UKTradeInvestment/data-hub-prototype
   ```
 
-2. Install ruby dependencies:
-
-  ```
-  bundle install
-  ```
-
-3. Install node dependencies:
+2. Install node dependencies:
 
   ```
   npm install
   ```
 
-4.
-  Build static files from source to `./build/`:
 
-  ```
-  middleman build
-  ```
+## Running locally
+Run the server in either production mode or develop mode
 
-  **OR**
+### Production
+Builds static assets and runs a server using node
 
-  Run a middleman server
+```
+npm run build
+npm start
+```
 
-  ```
-  middleman server
-  ```
+### Development
+Server watches for changes, builds and updates browser with browser-sync
+
+```
+npm run develop
+```
 
 ## Deployment
 
@@ -59,18 +56,6 @@ If you have the [heroku toolbelt](https://toolbelt.heroku.com/) installed you ca
 ```
 heroku config
 ```
-
-## Development
-
-Assets are compiled using [gulp](http://gulpjs.com/) and [webpack](https://webpack.github.io/). They are run as part middleman's [external pipeline](https://middlemanapp.com/advanced/external-pipeline/).
-
-To run a development server, run middleman's server using:
-
-```
-middleman server
-```
-
-A [Browsersync](https://www.browsersync.io/) instance is now available at (http://localhost:3000/)[http://localhost:3000/] which will auto reload on changes to assets.
 
 ## Data
 Dummy data from http://beta.json-generator.com/VkBnuhrkZ

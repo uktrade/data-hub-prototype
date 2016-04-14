@@ -2,10 +2,10 @@ const path = require('path');
 const projectDir = path.resolve(__dirname, '../');
 
 module.exports = {
-  output: `${projectDir}/.tmp/dist`,
-  outputStyles: `${projectDir}/.tmp/dist/stylesheets`,
-  outputJS: `${projectDir}/.tmp/dist/javascripts`,
-  sourceStyles: `${projectDir}/source/stylesheets`,
-  sourceJS: `${projectDir}/source/javascripts`,
+  output: `${projectDir}/build`,
+  outputStyles: `${projectDir}/build/stylesheets`,
+  outputJS: `${projectDir}/build/javascripts`,
+  sourceStyles: `${projectDir}/stylesheets`,
+  sourceJS: `${projectDir}/javascripts`,
   webpackConfig: `${projectDir}/webpack.config.js`
 };
