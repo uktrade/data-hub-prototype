@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-const data = require('../../../data/companies.json');
+const data = require('../../data/companies.json');
 
 class CompanyProfile extends React.Component {
 

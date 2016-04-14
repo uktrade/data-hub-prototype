@@ -1,0 +1,21 @@
+extends ../node_modules/mojular-templates/layouts/jade/base.jade
+
+block proposition
+  a.proposition-name(href="/") UK Trade & Investment
+
+block global_subheader
+  .subheader-item.phase-banner
+    .phase-tag.phase-tag-alpha Alpha
+    .phase-banner-message This is a new service – your #[a(href="#") feedback] will help us to improve it.
+
+block author
+  li Built by 
+    a(href="https://digitaltrade.blog.gov.uk/")
+      abbr(title="UK Trade &amp; Investment")  UKTI
+    = Digital
+
+block stylesheets
+  link(rel='stylesheet', href='/stylesheets/application.css')
+
+block main_js
+  script(src='/javascripts/app.bundle.js')

@@ -3,13 +3,13 @@ var paths = require('./gulp/paths');
 
 module.exports = {
   entry: {
-    app: './source/javascripts/main.js',
+    app: `${paths.sourceJS}/main.js`,
     polyfills: ['JSON2', 'html5shiv']
   },
 
   output: {
-    path: paths.output,
-    filename: 'javascripts/[name].bundle.js'
+    path: paths.outputJS,
+    filename: '[name].bundle.js'
   },
 
   devtool: 'cheap-module-source-map',
@@ -33,10 +33,6 @@ module.exports = {
   },
 
   resolve: {
-    modulesDirectories: [
-      'node_modules',
-      'node_modules/mojular/node_modules'
-    ],
     extensions: ['', '.json', '.js']
   },
 
