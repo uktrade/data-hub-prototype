@@ -30,7 +30,7 @@ class CompanyProfile extends React.Component {
         </div>
         <header>
           <h1 className="heading heading-xlarge">{company.name}
-            <span className="label label-primary">Tier {company.investmentClassification}</span>
+            <span className="label label-primary">Account {company.investmentClassification}</span>
           </h1>
         </header>
         <div className="tabs tabs-left">
