@@ -4,6 +4,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import CompaniesList from './components/CompaniesList';
+import CompanyCreate from './components/CompanyCreate';
 import CompanyProfile from './components/CompanyProfile';
 import CompanyDetails from './components/CompanyDetails';
 import CompanyContacts from './components/CompanyContacts';
@@ -20,6 +21,8 @@ if (containerElement) {
       <Route path="/" component={Companies}>
         <IndexRoute component={CompaniesList} />
       </Route>
+
+      <Route path="/company/add" component={CompanyCreate}/>
 
       <Route path="/company/:id" component={CompanyProfile}>
         <IndexRoute component={CompanyDetails}/>
