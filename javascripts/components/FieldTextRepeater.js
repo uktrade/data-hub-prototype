@@ -1,35 +1,30 @@
 import React from 'react';
 
 class FieldTextRepeater extends React.Component {
-  constructor(props) {
-    super(props);
-    this.addItem = this.addItem.bind(this);
-  }
 
   componentWillMount() {
-    this.setState({
-      fieldList: [{value: ''}]
-    });
+    if (this.props.fields.length === 0) {
+      this.props.fields.addField();
+    }
   }
 
-  addItem(e) {
+  addItem = (e) => {
     e.preventDefault();
-    this.setState({
-      fieldList: this.state.fieldList.concat([{value: ''}])
-    });
+    this.props.fields.addField();
   }
 
   render() {
     const props = this.props;
+    const fields = this.props.fields;
 
     return (
       <div className="form-group form-group--compact">
         <label className="form-label" htmlFor={this.props.id}>{this.props.label}</label>
-        {this.state.fieldList.map(function(item, i) {
-          return (<input key={i} className="form-control" id={`${props.id}-${i}`} type="text" value={item.value} />);
+        {fields.map(function(item, i) {
+          return (<input key={i} className="form-control" id={`${props.id}-${i}`} type="text" {...item} />);
         })}
         <p>
-          <a href="#" onClick={this.addItem}>Add another {this.props.repeatLabel}</a>
+          <a href={`#${this.props.id}`} onClick={this.addItem}>Add another {this.props.repeatLabel}</a>
         </p>
       </div>
     );
@@ -40,6 +35,7 @@ FieldTextRepeater.propTypes = {
   id: React.PropTypes.string,
   label: React.PropTypes.string,
   repeatLabel: React.PropTypes.string,
+  fields: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 };
 
 export default FieldTextRepeater;

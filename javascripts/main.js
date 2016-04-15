@@ -3,6 +3,12 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+
+import promise from 'redux-promise';
+import reducers from './reducers';
+
 import CompaniesList from './components/CompaniesList';
 import CompanyCreate from './components/CompanyCreate';
 import CompanyProfile from './components/CompanyProfile';
@@ -13,10 +19,11 @@ import Companies from './components/Companies';
 
 import Mojular from 'mojular';
 
-const containerElement = document.querySelector('#content .container');
+const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+const store = createStoreWithMiddleware(reducers);
 
-if (containerElement) {
-  render(
+render(
+  <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={Companies}>
         <IndexRoute component={CompaniesList} />
@@ -33,10 +40,11 @@ if (containerElement) {
         <Route path="deliveries" component={CompanyDetails} />
         <Route path="documents" component={CompanyDetails} />
       </Route>
-    </Router>,
-    containerElement
-  );
-}
+    </Router>
+  </Provider>,
+  document.querySelector('#content .container')
+);
+
 
 Mojular
   .use([

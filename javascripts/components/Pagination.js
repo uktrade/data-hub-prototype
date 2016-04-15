@@ -1,10 +1,6 @@
 import React from 'react';
 
 export default class Pagination extends React.Component {
-  constructor(props) {
-    super(props);
-    this.pageChange = this.pageChange.bind(this);
-  }
 
   render() {
     let prev = '';
@@ -51,7 +47,7 @@ export default class Pagination extends React.Component {
     );
   }
 
-  pageChange(event) {
+  pageChange = (event) => {
     this.props.setPage(parseInt(event.target.getAttribute('data-value')));
   }
 }

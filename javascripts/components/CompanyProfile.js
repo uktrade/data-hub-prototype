@@ -1,27 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router';
-const data = require('../../data/companies.json');
+import { getCompany } from '../actions/CompanyActions';
+import { connect } from 'react-redux';
 
 class CompanyProfile extends React.Component {
 
   componentWillMount() {
-    for (var company of data) {
-      if (company.id === this.props.params.id) {
-        this.setState({
-          company
-        });
-        break;
-      }
-    }
+    this.props.getCompany(this.props.params.id);
   }
 
   render() {
 
-    const company = this.state.company;
-    const id = this.props.params.id;
+    if (!this.props.company) {
+      return <p>Loading...</p>;
+    }
 
-    const childrenWithProps = React.Children.map(this.props.children,
-      (child) => React.cloneElement(child, { company: company }));
+    const company = this.props.company;
+    const id = this.props.params.id;
 
     return (
       <div className="profile">
@@ -54,7 +49,7 @@ class CompanyProfile extends React.Component {
               Documents
             </Link>
           </nav>
-          <div className="tabs-content">{childrenWithProps}</div>
+          <div className="tabs-content">{this.props.children}</div>
         </div>
       </div>
     );
@@ -63,8 +58,15 @@ class CompanyProfile extends React.Component {
 
 CompanyProfile.propTypes = {
   company: React.PropTypes.object,
+  getCompany: React.PropTypes.func,
   params: React.PropTypes.object,
   children: React.PropTypes.object,
 };
 
-export default CompanyProfile;
+function mapStateToProps({ companies }) {
+  return {
+    company: companies.company
+  };
+}
+
+export default connect(mapStateToProps, { getCompany })(CompanyProfile);

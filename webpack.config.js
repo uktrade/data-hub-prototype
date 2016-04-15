@@ -22,22 +22,23 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel',
         query: {
-          presets: ['es2015'],
-          compact: false
+          presets: ['es2015', 'react'],
+          plugins: ['transform-object-rest-spread', 'transform-class-properties', 'transform-runtime']
         }
-      },
-      {
-        include: /\.json$/,
-        loaders: ['json-loader']
       }
     ]
   },
 
   resolve: {
-    extensions: ['', '.json', '.js']
+    extensions: ['', '.js']
   },
 
   plugins: prod ? [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
     new webpack.optimize.UglifyJsPlugin({compress: { warnings: false }}),
     new webpack.optimize.DedupePlugin()]
     : [new webpack.optimize.DedupePlugin()]

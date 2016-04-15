@@ -1,9 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import ContactLink from './ContactLink';
 
 class CompanyDetails extends React.Component {
 
-  renderList(item, i) {
+  renderlist(item, i) {
     return (
       <li key={i}>
         {item}
@@ -13,6 +14,8 @@ class CompanyDetails extends React.Component {
 
   render() {
     const company = this.props.company;
+    let sectorList = company.otherSectors ? company.otherSectors.map(this.renderlist) : '';
+    let subsidiaryList = company.subsidiarys ? company.subsidiarys.map(this.renderlist) : '';
 
     return (
       <table className="table-detail">
@@ -39,7 +42,7 @@ class CompanyDetails extends React.Component {
           </tr>
           <tr>
             <th>Primary sector</th>
-            <td>{company.sector}</td>
+            <td>{company.primarySector}</td>
           </tr>
           <tr>
             <th>Website</th>
@@ -60,9 +63,13 @@ class CompanyDetails extends React.Component {
           <tr>
             <th>Other sectors</th>
             <td>
-              <ul>
-                {company.otherSectors.map(this.renderList)}
-              </ul>
+              <ul>{sectorList}</ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Subsidiary</th>
+            <td>
+              <ul>{subsidiaryList}</ul>
             </td>
           </tr>
         </tbody>
@@ -75,4 +82,11 @@ CompanyDetails.propTypes = {
   company: React.PropTypes.object,
 };
 
-export default CompanyDetails;
+
+function mapStateToProps({ companies }) {
+  return {
+    company: companies.company
+  };
+}
+
+export default connect(mapStateToProps)(CompanyDetails);
