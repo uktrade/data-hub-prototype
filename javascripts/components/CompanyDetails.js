@@ -34,12 +34,12 @@ class CompanyDetails extends React.Component {
             <td><ContactLink data={company.primaryContact} /></td>
           </tr>
           <tr>
-            <th>Primary sector</th>
-            <td>{company.sector}</td>
-          </tr>
-          <tr>
             <th>Business type</th>
             <td>{company.businessType}</td>
+          </tr>
+          <tr>
+            <th>Primary sector</th>
+            <td>{company.sector}</td>
           </tr>
           <tr>
             <th>Website</th>
