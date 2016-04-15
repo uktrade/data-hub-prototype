@@ -1,10 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const Companies = ({children}) =>
   <div>
     <h1 className="compact-heading">Companies</h1>
     <div className="table-list-actions">
-      <a className="button button-secondary" href="#">Add new company</a>
+      <Link className="button button-secondary" to="/company/add">Add new company</Link>
     </div>
     {children}
   </div>;

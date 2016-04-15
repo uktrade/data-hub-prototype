@@ -1,0 +1,34 @@
+.form-group--compact {
+  + .form-group--compact {
+    margin-top: em(12);
+  }
+}
+
+textarea.form-control {
+  display: block;
+}
+
+.form-control {
+  width: 100%;
+
+  @include media('>tablet') {
+    width: 50%;
+  }
+
+  + p {
+    margin-top: em(5);
+  }
+
+  + .form-control {
+    display: block;
+    margin-top: em(10);
+  }
+}
+
+.form-group {
+  &.inline {
+    @include media('>tablet') {
+      width: 50%;
+    }
+  }
+}
