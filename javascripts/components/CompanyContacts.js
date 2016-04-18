@@ -1,5 +1,6 @@
 import React from 'react';
 import Griddle from 'griddle-react';
+import { connect } from 'react-redux';
 import ContactLink from './ContactLink';
 
 const columns = [
@@ -33,4 +34,10 @@ CompanyContacts.propTypes = {
   company: React.PropTypes.object,
 };
 
-export default CompanyContacts;
+function mapStateToProps({ companies }) {
+  return {
+    company: companies.company
+  };
+}
+
+export default connect(mapStateToProps)(CompanyContacts);

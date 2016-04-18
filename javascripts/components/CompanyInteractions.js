@@ -1,5 +1,6 @@
 import React from 'react';
 import Time from 'react-time';
+import { connect } from 'react-redux';
 
 class CompanyInteractions extends React.Component {
 
@@ -30,4 +31,11 @@ CompanyInteractions.propTypes = {
   company: React.PropTypes.object,
 };
 
-export default CompanyInteractions;
+function mapStateToProps({ companies }) {
+  return {
+    company: companies.company
+  };
+}
+
+
+export default connect(mapStateToProps)(CompanyInteractions);
