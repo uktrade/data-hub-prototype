@@ -1,0 +1,35 @@
+.flash-message {
+  display: block;
+  font-size: em(24);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 15px;
+  padding: 22px 15px 19px;
+
+  @include media('<tablet') {
+    padding: 10px 15px;
+  }
+
+  &.flash-message--success {
+    background: $turquoise;
+    color: $white;
+    padding-left: 50px;
+    position: relative;
+
+    @include media('<tablet') {
+      padding-left: 45px;
+    }
+
+    &:before {
+      content: '\2714';
+      left: 15px;
+      position: absolute;
+      top: 21px;
+
+      @include media('<tablet') {
+        top: 11px;
+      }
+
+    }
+  }
+}
