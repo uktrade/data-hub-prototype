@@ -21,7 +21,9 @@ class CompanyInteractions extends React.Component {
   render() {
     return (
       <ul className="interactions">
-        {this.props.company.interactions.map(this.renderInteraction)}
+        {(this.props.company.interactions) &&
+           this.props.company.interactions.map(this.renderInteraction)
+        }
       </ul>
     );
   }
