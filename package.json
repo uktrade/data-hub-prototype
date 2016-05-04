@@ -41,6 +41,7 @@
     "redux": "^3.4.0",
     "redux-form": "^5.0.1",
     "redux-promise": "^0.5.3",
+    "request-promise": "^3.0.0",
     "require-dir": "^0.3.0",
     "webpack": "^1.12.14"
   },
