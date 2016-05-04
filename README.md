@@ -57,5 +57,14 @@ If you have the [heroku toolbelt](https://toolbelt.heroku.com/) installed you ca
 heroku config
 ```
 
+## Environment Variables
+The server side of this application integrates with the [Companies House API](https://beta.companieshouse.gov.uk/) . In order to use this
+service you must [obtain a application key](https://developer.companieshouse.gov.uk/api/docs/index/gettingStarted/apikey_authorisation.html)
+and set an environment variable so the server can use it, e.g.
+
+```
+export COMPANY_KEY=12312_123123_123_123123
+```
+
 ## Data
 Dummy data from http://beta.json-generator.com/EkcMaAFy-
