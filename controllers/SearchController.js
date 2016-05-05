@@ -1,56 +1,54 @@
 'use strict';
 
-const rp = require('request-promise');
-const config = require('../config');
+const api = require('../lib/companiesHouseApi');
 
-const KEY = config.companiesHouseApiKey;
-const COMPANY_BASE = config.companySearchUrl;
-const OFFICER_BASE = config.officerSearchUrl;
+function render(res, data) {
+  res.render('search', data);
+}
 
-function returnError(res, message) {
-  if (!message) {
-    message = 'error processing request';
+function handleError(res, error) {
+  res.render('search', {
+    error
+  });
+}
+
+function get(req, res) {
+  let kind = req.params.type;
+  let query = req.query.q;
+
+  switch (kind) {
+    case 'companies':
+      api
+        .findCompanies(query)
+        .then(function(result) {
+          render(res, {
+            kind,
+            query,
+            items: result.items,
+            total_results: result.total_results
+          });
+        })
+        .catch(function(err) {
+          handleError(res, err);
+        });
+      break;
+    case 'contacts':
+      render(res, {
+        kind,
+        query
+      });
+      break;
+    case 'projects':
+      render(res, {
+        kind,
+        query
+      });
+      break;
+    default:
+      render(res, {});
   }
-  res.status(500).send({ error: message });
-}
-
-function search(req, res, url) {
-
-  // Get the search query
-  if (!req.query.hasOwnProperty('q')) {
-    returnError(res, 'No query specified');
-    return;
-  }
-
-  const query = req.query.q;
-
-  const options = {
-    url: url,
-    qs: { q: query },
-    json: true,
-    auth: {
-      user: KEY
-    }
-  };
-
-  rp(options)
-    .then(function(result) {
-      res.json(result);
-    })
-    .catch(function(err) {
-      returnError(res, err.message);
-    });
-}
-
-function findCompany(req, res) {
-  search(req, res, COMPANY_BASE);
-}
-
-function findPerson(req, res) {
-  search(req, res, OFFICER_BASE);
 }
 
 module.exports = {
-  findCompany,
-  findPerson
+  get: get
 };
