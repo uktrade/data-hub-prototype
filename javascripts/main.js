@@ -1,6 +1,7 @@
 'use strict';
 
 import Mojular from 'mojular';
+import SearchBar from './searchbar';
 
 Mojular
   .use([
@@ -8,3 +9,6 @@ Mojular
     require('mojular-moj-elements')
   ])
   .init();
+
+new SearchBar('.searchbar');
+
