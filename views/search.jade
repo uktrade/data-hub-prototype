@@ -1,4 +1,26 @@
 extends ukti
 
 block content
-  | Search results
+  if query
+    .tabs.tabs--inline
+      .tabs-nav
+        .tabs-list
+          li
+            a(href='/search/companies?q=#{query}', class=kind === 'companies' ? 'is-selected' : '') Companies
+          li
+            a(href='/search/contacts?q=#{query}', class=kind === 'contacts' ? 'is-selected' : '') Contacts
+          li
+            a(href='/search/projects?q=#{query}', class=kind === 'projects' ? 'is-selected' : '') Projects
+      .tabs-content
+        .tabs-panel#tab-1
+          .tabs-panel-inner.text
+            if total_results > 0
+              ol.results-list
+                each item in items
+                  li
+                    h3
+                      a(href='/#{kind}/#{item.company_number}')= item.title
+                    p.meta= item.description
+                    p.meta= item.snippet
+            else
+              p No results matching your search
