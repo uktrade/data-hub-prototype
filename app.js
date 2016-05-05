@@ -18,8 +18,7 @@ app.get('/api/companies/:id', companyController.getCompany);
 app.post('/api/companies', companyController.postCompany);
 app.put('/app/companies/:id', companyController.putCompany);
 
-app.get('/api/search/company', searchController.findCompany);
-app.get('/api/search/person', searchController.findPerson);
+app.get('/search/:type?', searchController.get);
 
 // All undefined routes get send to the homepage for
 // react to handle.
