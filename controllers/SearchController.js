@@ -14,7 +14,7 @@ function handleError(res, error) {
 
 function get(req, res) {
   let kind = req.params.type;
-  let query = req.query.q;
+  let query = req.query.query;
 
   switch (kind) {
     case 'companies':
