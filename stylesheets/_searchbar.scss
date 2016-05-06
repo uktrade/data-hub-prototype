@@ -4,6 +4,10 @@
     position: relative;
     background: $white;
     margin: 30px 0 60px 0;
+
+    @include media('<tablet') {
+      margin: 10px 0 20px 0;
+    }
   }
 
   .searchbar-label {
@@ -27,6 +31,8 @@
     position: relative;
     border-right: none;
     line-height: 34px;
+    border-radius: 0;
+    -webkit-appearance: none;
   }
 
   .searchbar-submit {
@@ -41,11 +47,16 @@
     color: $white;
     cursor: pointer;
     background: $govuk-blue url('/images/search-button.png') no-repeat 8px 50%;
+    border-radius: 0;
 
-    @include media('<=tablet') {
-      width: 37px;
-      height: 37px;
+    @include media('<=desktop') {
+      top: 2px;
+      width: 47px;
+      height: 50px;
+      background-position-x: 6px;
     }
+
+
 
   }
 
