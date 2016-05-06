@@ -2,11 +2,11 @@ extends ukti
 
 block content
   h1= company.company_name
-  .tabs.tabs--inline
+  .tabs.tabs--inline.js-tabs
     .tabs-nav
       .tabs-list
         li
-          a(href='#tab-1') Details
+          a.is-selected(href='#tab-1') Details
         li
           a(href='#tab-2') Contacts
         li
@@ -17,6 +17,8 @@ block content
           include includes/company-details
       .tabs-panel#tab-2
         .tabs-panel-inner.text
+          h2 Contacts
       .tabs-panel#tab-3
         .tabs-panel-inner.text
+          h2 Interactions
           
