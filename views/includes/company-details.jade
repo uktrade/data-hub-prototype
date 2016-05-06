@@ -1,0 +1,48 @@
+h3 Companies house
+table.table-detail
+  tbody
+    tr
+      th(width='30%') Region
+      td South West
+    tr
+      th Registered office address
+      td
+        | #{company.registered_office_address.address_line_1},
+        | #{company.registered_office_address.address_line_2},
+        | #{company.registered_office_address.locality},
+        | #{company.registered_office_address.region},
+        | #{company.registered_office_address.postal_code}
+    tr
+      th Company type
+      td= company.type
+    tr
+      th Company status
+      td= company.company_status
+    tr
+      th Nature of business (SIC)
+      td
+        each code in company.sic_codes
+          = code
+h3 UKTI
+table.table-detail
+  tbody
+    tr
+      th(width='30%') Website
+      td
+    tr
+      th Business description
+      td 
+    tr
+      th Export experience
+      td 
+        | 2012 - Argentina
+        br
+        | 2010 - Brazil
+    tr
+      th Countries of interest
+      td
+        | Argentina
+        br
+        | Greece
+        br
+        | Denmark
