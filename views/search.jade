@@ -23,7 +23,7 @@ block content
                 each item in items
                   li
                     h3
-                      a(href='/#{kind}/#{item.company_number}')= item.title
+                      a(href='/#{kind}/#{item.company_number}')!= highlightText(item.title, query)
                     p.meta= item.description
                     p.meta= item.snippet
             else
