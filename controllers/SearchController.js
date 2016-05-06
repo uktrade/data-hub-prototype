@@ -12,6 +12,18 @@ function handleError(res, error) {
   });
 }
 
+function highlightText(str, searchTerm) {
+  str = str.toLowerCase();
+  searchTerm = searchTerm.toLowerCase();
+
+  let found = str.indexOf(searchTerm);
+
+  if (found === -1) {
+    return str;
+  }
+  return str.replace(searchTerm, `<strong>${searchTerm}</strong>`);
+}
+
 function get(req, res) {
   let kind = req.params.type;
   let query = req.query.query;
@@ -24,6 +36,7 @@ function get(req, res) {
           render(res, {
             kind,
             query,
+            highlightText,
             items: result.items,
             total_results: result.total_results
           });
@@ -35,13 +48,15 @@ function get(req, res) {
     case 'contacts':
       render(res, {
         kind,
-        query
+        query,
+        highlightText
       });
       break;
     case 'projects':
       render(res, {
         kind,
-        query
+        query,
+        highlightText
       });
       break;
     default:
