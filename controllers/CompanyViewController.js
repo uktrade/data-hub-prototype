@@ -1,10 +1,12 @@
 'use strict';
 
+const _ = require('lodash');
 const api = require('../lib/companiesHouseApi');
-let companiesData = require('../data/companies.json');
+const contactsData = require('../data/contacts.json');
 
 function get(req, res) {
   let companyNum = req.params.id;
+  let contacts = _.shuffle(contactsData);
 
   if (!companyNum) {
     res.redirect('/');
@@ -14,7 +16,8 @@ function get(req, res) {
     .findCompany(companyNum)
     .then(function(result) {
       res.render('company', {
-        company: result
+        company: result,
+        contacts: _.slice(contacts, 0, 5)
       });
     })
     .catch(function(error) {
