@@ -4,7 +4,6 @@ block content
 
   include searchbar
 
-
   if query
     .tabs.tabs--inline
       .tabs-nav
@@ -13,18 +12,16 @@ block content
             a(href='/search/companies?query=#{query}', class=kind === 'companies' ? 'is-selected' : '') Companies
           li
             a(href='/search/contacts?query=#{query}', class=kind === 'contacts' ? 'is-selected' : '') Contacts
-          li
-            a(href='/search/projects?query=#{query}', class=kind === 'projects' ? 'is-selected' : '') Projects
+
       .tabs-content
         .tabs-panel#tab-1
           .tabs-panel-inner.text
             if total_results > 0
               ol.results-list
                 each item in items
-                  li
-                    h3
-                      a(href='/#{kind}/#{item.company_number}')!= highlightText(item.title, query)
-                    p.meta= item.description
-                    p.meta= item.snippet
+                  if item.kind === "searchresults#officer"
+                    include searchresultcontact
+                  else
+                    include searchresultcompany
             else
               p No results matching your search

@@ -1,6 +1,7 @@
 'use strict';
 
 const api = require('../lib/companiesHouseApi');
+const contactsData = require('../data/contacts.json');
 
 function render(res, data) {
   res.render('search', data);
@@ -32,7 +33,26 @@ function get(req, res) {
     case 'companies':
       api
         .findCompanies(query)
-        .then(function(result) {
+        .then((result) => {
+          render(res, {
+            kind,
+            query,
+            highlightText,
+            items: result.items,
+            total_results: result.total_results
+          });
+        })
+        .catch((err) => {
+          handleError(res, err);
+        });
+      break;
+    case 'contacts':
+      api.findOfficers(query)
+        .then((result) => {
+          result.items = addRandomOfficerDetails(result.items);
+          return result;
+        })
+        .then((result) => {
           render(res, {
             kind,
             query,
@@ -44,24 +64,23 @@ function get(req, res) {
         .catch(function(err) {
           handleError(res, err);
         });
-      break;
-    case 'contacts':
-      render(res, {
-        kind,
-        query,
-        highlightText
-      });
-      break;
-    case 'projects':
-      render(res, {
-        kind,
-        query,
-        highlightText
-      });
-      break;
+        break;
     default:
       render(res, {});
   }
+
+}
+
+function addRandomOfficerDetails(items) {
+  return items.map((item) => {
+    const randindex = Math.round(Math.random() * (contactsData.length - 1));
+    const contact = contactsData[randindex];
+    item.position = contact.position;
+    item.company = {
+      title: contact.company
+    };
+    return item;
+  });
 }
 
 module.exports = {
