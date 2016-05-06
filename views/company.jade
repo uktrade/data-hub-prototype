@@ -1,0 +1,22 @@
+extends ukti
+
+block content
+  h1= company.company_name
+  .tabs.tabs--inline
+    .tabs-nav
+      .tabs-list
+        li
+          a(href='#tab-1') Details
+        li
+          a(href='#tab-2') Contacts
+        li
+          a(href='#tab-3') Interactions
+    .tabs-content
+      .tabs-panel#tab-1
+        .tabs-panel-inner.text
+          include includes/company-details
+      .tabs-panel#tab-2
+        .tabs-panel-inner.text
+      .tabs-panel#tab-3
+        .tabs-panel-inner.text
+          
