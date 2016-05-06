@@ -1,4 +1,36 @@
 extends ukti
 
 block content
-  include searchbar
+  .grid-row
+    .column-full
+      include searchbar
+
+  .grid-row.dashboard
+    .column-half
+      .dashboard-section
+        h2.dashboard-section-title Updates
+        ul.event-list
+          li.event-list-item
+            p.meta.date 23.05.2016
+            p.meta.details
+              a(href="#") Siemens Energy raised interest in energy sector
+          li.event-list-item
+            p.meta.date 23.05.2016
+            p.meta.details
+              a(href="#") New interaction activity with British Gas
+          li.event-list-item
+            p.meta.date 23.05.2016
+            p.meta.details
+              a(href="#") New interaction activity with Siemens Energy
+
+    .column-half
+      .dashboard-section
+        h2.dashboard-section-title Reminders
+        p No interactions has been added in the last 3 months with:
+        ul.plain-list
+          li.plain-list-item
+            a(href="#") Siemens Energy
+          li.plain-list-item
+            a(href="#") Shell
+          li.plain-list-item
+            a(href="#") NPower
