@@ -10,11 +10,11 @@ block content
       .tabs-nav
         .tabs-list
           li
-            a(href='/search/companies?q=#{query}', class=kind === 'companies' ? 'is-selected' : '') Companies
+            a(href='/search/companies?query=#{query}', class=kind === 'companies' ? 'is-selected' : '') Companies
           li
-            a(href='/search/contacts?q=#{query}', class=kind === 'contacts' ? 'is-selected' : '') Contacts
+            a(href='/search/contacts?query=#{query}', class=kind === 'contacts' ? 'is-selected' : '') Contacts
           li
-            a(href='/search/projects?q=#{query}', class=kind === 'projects' ? 'is-selected' : '') Projects
+            a(href='/search/projects?query=#{query}', class=kind === 'projects' ? 'is-selected' : '') Projects
       .tabs-content
         .tabs-panel#tab-1
           .tabs-panel-inner.text

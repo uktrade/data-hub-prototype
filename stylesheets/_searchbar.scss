@@ -26,6 +26,7 @@
     font-size: em(19);
     width: calc(100% - 47px);
     padding: 6px;
+    margin: 0;
     z-index: 3;
     background: transparent;
     position: relative;
@@ -49,11 +50,11 @@
     background: $govuk-blue url('/images/search-button.png') no-repeat 8px 50%;
     border-radius: 0;
 
-    @include media('<=desktop') {
-      top: 2px;
+    @include media('<=tablet') {
       width: 47px;
       height: 50px;
       background-position-x: 6px;
+
     }
 
 
