@@ -1,0 +1,14 @@
+p.actions
+  a.button.button-secondary(href="#") Add new contact
+ol.contact-list
+  each contact in contacts
+    li.contact-list__item
+      h3.contact-list__heading
+        a(href="#") #{contact.name.first} #{contact.name.last}
+        |  - #{contact.position}
+      p.contact-list__meta
+        strong Phone:
+        = contact.phone
+      p.contact-list__meta
+        strong Email:
+        = contact.email

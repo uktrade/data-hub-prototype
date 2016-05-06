@@ -1,0 +1,21 @@
+.contact-list {
+  list-style: none;
+  margin: em(20) 0 0;
+  padding: 0;
+}
+
+.contact-list__item {
+  border-bottom: 1px solid $grey-2;
+  margin-bottom: em(20);
+  padding-bottom: em(20);
+}
+
+.contact-list__heading {
+  font-size: em(19);
+  margin: 0 0 em(5);
+}
+
+.contact-list__meta {
+  font-size: em(16);
+  margin: 0;
+}
