@@ -58,7 +58,9 @@ function post(req, res) {
     countryOfInterest: req.body.countryOfInterest
   };
 
-  res.redirect(`/companies/${companyNum}`);
+  let query = req.query.query || '';
+
+  res.redirect(`/companies/${companyNum}?query=${query}`);
 
 }
 

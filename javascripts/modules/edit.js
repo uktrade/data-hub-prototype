@@ -3,7 +3,7 @@
 const $ = require('jquery');
 
 exports.Edit = {
-  el: '.hidden-edit',
+  el: '.js-hidden-edit',
 
   init: function() {
     this.cacheEls();

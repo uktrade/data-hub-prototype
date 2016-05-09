@@ -3,7 +3,7 @@
 const $ = require('jquery');
 exports.AddAnother = {
 
-  el: '.add-another',
+  el: '.js-add-another',
 
   init: function() {
     this.cacheEls();

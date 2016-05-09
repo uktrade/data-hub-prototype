@@ -25,7 +25,7 @@ table.table-detail
           each code in company.sic_codes
             = sicLookup(code)
 h3 UKTI
-.hidden-edit
+.js-hidden-edit
   .data-view
     table.table-detail
       tbody
@@ -40,7 +40,8 @@ h3 UKTI
           td
             if company.exportExperience
               each experiance in company.exportExperience
-                div #{experiance.year} - #{experiance.country}
+                div
+                  a(href="#") #{experiance.year} - #{experiance.country}
         tr
           th Countries of interest
           td
@@ -48,8 +49,7 @@ h3 UKTI
               each countryOfInterest in company.countryOfInterest
                 div= countryOfInterest
 
-    p.actions
-      button.button.button-secondary.edit-button Edit Company
+    button.button.button-secondary.edit-button Edit company
 
   form.edit-view(method="post")
     .form-group
@@ -60,7 +60,7 @@ h3 UKTI
       label.form-label(for="description") Business description
       textarea#description.form-control(name="businessDescription")= company.businessDescription
 
-    fieldset.fieldset-group.form-group.add-another
+    fieldset.fieldset-group.form-group.js-add-another
       if company.countryOfInterest
         each countryOfInterest, index in company.countryOfInterest
           .form-group.form-group--compact
