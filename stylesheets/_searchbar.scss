@@ -1,69 +1,71 @@
 .searchbar {
-
-  .searchbar-content {
-    position: relative;
-    background: $white;
-    margin: 30px 0 60px 0;
-
-    @include media('<tablet') {
-      margin: 10px 0 20px 0;
+  &.searchbar--header {
+    @include media('>tablet') {
+      @include span(4);
+      float: right;
+      padding-left: 0;
+      padding-right: 0;
     }
   }
+}
 
-  .searchbar-label {
-    position: absolute;
-    left: 0;
-    top: 1px;
-    z-index: 1;
-    width: 100%;
-    margin-right: 0;
-    color: $secondary-text-colour;
-    line-height: 50px;
-    text-indent: 15px;
+.searchbar-content {
+  position: relative;
+  background: $white;
+  margin-top: 10px;
+
+  @include media('>tablet') {
+    margin-top: 0;
   }
 
-  .searchbar-main {
-    font-size: em(19);
-    width: calc(100% - 47px);
-    padding: 6px;
-    margin: 0;
-    z-index: 3;
-    background: transparent;
-    position: relative;
-    border-right: none;
-    line-height: 34px;
-    border-radius: 0;
-    -webkit-appearance: none;
-  }
+  .searchbar--content & {
+    margin: 20px 0 30px;
 
-  .searchbar-submit {
-    position: absolute;
-    z-index: 4;
-    right: 0;
-    top: 0;
-    width: 50px;
-    height: 50px;
-    border: none;
-    text-indent: -5000px;
-    color: $white;
-    cursor: pointer;
-    background: $govuk-blue url('/images/search-button.png') no-repeat 8px 50%;
-    border-radius: 0;
-
-    @include media('<=tablet') {
-      width: 47px;
-      height: 50px;
-      background-position-x: 6px;
-
+    @include media('>tablet') {
+      margin-bottom: 60px;
     }
-
-
-
   }
+}
 
+.searchbar-main {
+  font-size: em(19);
+  width: calc(100% - 50px);
+  padding: 6px;
+  margin: 0;
+  z-index: 3;
+  background: transparent;
+  position: relative;
+  border-right: 0;
+  line-height: 34px;
+  border-radius: 0;
+  -webkit-appearance: none;
 
-  &.searchbar--state-hidelabel .searchbar-label {
-    display: none;
+  .searchbar--header & {
+    border: 0;
+    font-size: em(16);
+    line-height: 22px;
+    width: calc(100% - 34px);
   }
+}
 
+.searchbar-submit {
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  top: 0;
+  width: 50px;
+  height: 50px;
+  border: 0;
+  text-indent: -5000px;
+  color: $white;
+  cursor: pointer;
+  background: $govuk-blue url('/images/search-button.png') no-repeat 8px 50%;
+  border-radius: 0;
+
+  .searchbar--header & {
+    background-position: 0 50%;
+    border-left: 1px solid $black;
+    height: 34px;
+    width: 34px;
+  }
 }

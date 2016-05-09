@@ -1,7 +1,13 @@
 extends ../../node_modules/mojular-templates/layouts/jade/base.jade
 
+include ../mixins/search-bar
+
+block govuk_logo
+
 block proposition
-  a.proposition-name(href="/") UK Trade &amp; Investment
+  a.proposition-name(href="/") Data hub
+  if showSearch
+    +searchbar('header')
 
 block global_subheader
   .subheader-item.phase-banner
@@ -11,7 +17,7 @@ block global_subheader
 block author
   li Built by 
     a(href="https://digitaltrade.blog.gov.uk/")
-      abbr(title="UK Trade & Investment")  UKTI
+      abbr(title='UK Trade &amp; Investment')  UKTI
     = Digital
 
 block stylesheets

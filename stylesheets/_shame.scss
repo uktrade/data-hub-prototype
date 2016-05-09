@@ -55,7 +55,7 @@
     .form-label {
       display: none;
     }
-    
+
     &:first-child {
       .form-label {
         display: block;
@@ -66,4 +66,8 @@
 
 .data-smaller {
   padding-top: em(20);
+}
+
+.global-header .header-proposition {
+  float: none;
 }

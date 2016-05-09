@@ -1,7 +1,6 @@
 'use strict';
 
 import Mojular from 'mojular';
-import SearchBar from './searchbar';
 
 Mojular
   .use([
@@ -12,5 +11,3 @@ Mojular
     require('./modules/addanother'),
   ])
   .init();
-
-new SearchBar('.searchbar');
