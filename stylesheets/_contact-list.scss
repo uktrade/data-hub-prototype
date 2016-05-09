@@ -1,7 +1,23 @@
 .contact-list {
   list-style: none;
-  margin: em(20) 0 0;
+  margin: em(30) 0 0;
   padding: 0;
+
+  dl {
+    @include clearfix;
+    margin: 0;
+
+    dd {
+      clear: left;
+      float: left;
+      font-weight: 700;
+      margin: 0 em(10) 0 0;
+    }
+
+    dt {
+      float: left;
+    }
+  }
 }
 
 .contact-list__item {
@@ -12,10 +28,22 @@
 
 .contact-list__heading {
   font-size: em(19);
-  margin: 0 0 em(5);
+  font-weight: 700;
+  margin: 0 0 em(12);
 }
 
 .contact-list__meta {
-  font-size: em(16);
+  font-size: em(19);
   margin: 0;
+
+  &.contact-list__meta--inline {
+    display: inline;
+    margin-right: 15px;
+  }
+}
+
+.contact-list__date {
+  font-size: em(24);
+  font-weight: 700;
+  margin: 0 0 em(5);
 }
