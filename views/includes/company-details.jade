@@ -25,25 +25,54 @@ table.table-detail
           each code in company.sic_codes
             = sicLookup(code)
 h3 UKTI
-table.table-detail
-  tbody
-    tr
-      th(width='30%') Website
-      td
-    tr
-      th Business description
-      td
-    tr
-      th Export experience
-      td
-        | 2012 - Argentina
-        br
-        | 2010 - Brazil
-    tr
-      th Countries of interest
-      td
-        | Argentina
-        br
-        | Greece
-        br
-        | Denmark
+.hidden-edit
+  .data-view
+    table.table-detail
+      tbody
+        tr
+          th(width='30%') Website
+          td= company.website
+        tr
+          th Business description
+          td= company.businessDescription
+        tr
+          th Export experience
+          td
+            if company.exportExperience
+              each experiance in company.exportExperience
+                div #{experiance.year} - #{experiance.country}
+        tr
+          th Countries of interest
+          td
+            if company.countryOfInterest
+              each countryOfInterest in company.countryOfInterest
+                div= countryOfInterest
+
+    p.actions
+      button.button.button-secondary.edit-button Edit Company
+
+  form.edit-view(method="post")
+    .form-group
+      label.form-label(for="website") Website
+      input#website.form-control(type="text", name="website", value="#{company.website}")
+
+    .form-group
+      label.form-label(for="description") Business description
+      textarea#description.form-control(name="businessDescription")= company.businessDescription
+
+    fieldset.fieldset-group.form-group.add-another
+      if company.countryOfInterest
+        each countryOfInterest, index in company.countryOfInterest
+          .form-group.form-group--compact
+            label.form-label(for= 'country-of-interest-#{index}') Country of interest
+            input.form-control(id= 'country-of-interest-#{index}', name="countryOfInterest", type="text", value= countryOfInterest)
+      else
+        .form-group.form-group--compact
+          label.form-label(for="country-of-interest-1") Country of interest
+          input#country-of-interest-1.form-control(name="countryOfInterest", type="text")
+
+      a.add-another-button(href="#") Add another country
+
+    .form-group
+      button.button.button-primary.save-button(type="submit") Save
+      a.cancel-button(href='#') Cancel

@@ -5,6 +5,14 @@ const api = require('../lib/companiesHouseApi');
 const contactsData = require('../data/contacts.json');
 const sicCodes = require('../data/sic-codes.json');
 
+let uktiCompanyData = {};
+const defaultExtraData = {
+  website: '',
+  businessDescription: '',
+  countryOfInterest: ['Agentina', 'Greece']
+};
+
+
 function get(req, res) {
   let companyNum = req.params.id;
   let query = req.query.query;
@@ -16,10 +24,13 @@ function get(req, res) {
 
   api
     .findCompany(companyNum)
-    .then(function(result) {
+    .then((company) => {
+      return addUktiDataToCompany(company);
+    })
+    .then((company) => {
       res.render('company', {
         query,
-        company: result,
+        company: company,
         contacts: _.slice(contacts, 0, 5),
         sicLookup: function sicLookup(code) {
           let sicCode = _.find(sicCodes, { code });
@@ -31,13 +42,42 @@ function get(req, res) {
         }
       });
     })
-    .catch(function(error) {
+    .catch((error) => {
       res.render('company', {
         error
       });
     });
 }
 
+function post(req, res) {
+  let companyNum = req.params.id;
+
+  uktiCompanyData[companyNum] = {
+    website: req.body.website,
+    businessDescription: req.body.businessDescription,
+    countryOfInterest: req.body.countryOfInterest
+  };
+
+  res.redirect(`/companies/${companyNum}`);
+
+}
+
+function addUktiDataToCompany(company) {
+  const exportExperience = [
+    {
+      year: '2012',
+      country: 'Arentina'
+    },
+    {
+      year: '2010',
+      country: 'Brazil'
+    }
+  ];
+  const extraData = uktiCompanyData[company.company_number] || defaultExtraData;
+  return _.extend({exportExperience}, extraData, company)
+}
+
 module.exports = {
-  get: get
+  get: get,
+  post: post
 };
