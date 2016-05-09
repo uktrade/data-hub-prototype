@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const api = require('../lib/companiesHouseApi');
 const contactsData = require('../data/contacts.json');
+const sicCodes = require('../data/sic-codes.json');
 
 function get(req, res) {
   let companyNum = req.params.id;
@@ -17,7 +18,15 @@ function get(req, res) {
     .then(function(result) {
       res.render('company', {
         company: result,
-        contacts: _.slice(contacts, 0, 5)
+        contacts: _.slice(contacts, 0, 5),
+        sicLookup: function sicLookup(code) {
+          let sicCode = _.findWhere(sicCodes, { code });
+
+          if (!sicCode) {
+            return code;
+          }
+          return `${code} - ${sicCode.description}`;
+        }
       });
     })
     .catch(function(error) {
