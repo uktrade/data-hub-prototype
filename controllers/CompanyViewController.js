@@ -7,6 +7,7 @@ const sicCodes = require('../data/sic-codes.json');
 
 function get(req, res) {
   let companyNum = req.params.id;
+  let query = req.query.query;
   let contacts = _.shuffle(contactsData);
 
   if (!companyNum) {
@@ -17,6 +18,7 @@ function get(req, res) {
     .findCompany(companyNum)
     .then(function(result) {
       res.render('company', {
+        query,
         company: result,
         contacts: _.slice(contacts, 0, 5),
         sicLookup: function sicLookup(code) {

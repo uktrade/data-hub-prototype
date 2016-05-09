@@ -1,6 +1,7 @@
 extends ukti
 
 block content
+  a.back-link(href='/search/companies?query=#{query}') Back to company search
   h1= company.company_name
   .tabs.tabs--inline.js-tabs
     .tabs-nav
