@@ -1,5 +1,5 @@
 li.results-list-item
   h3
-    a(href='/#{kind}/#{item.company_number}')= item.title
+    a(href='/#{kind}/#{item.company_number}?query=#{query}')= item.title
   p.meta= item.description
   p.meta= item.snippet

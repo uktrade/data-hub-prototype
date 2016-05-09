@@ -1,9 +1,8 @@
 extends ukti
 
 block content
-
+  a.back-link(href='/') Back to homepage
   include searchbar
-
   if query
     .tabs.tabs--inline
       .tabs-nav
@@ -12,7 +11,6 @@ block content
             a(href='/search/companies?query=#{query}', class=kind === 'companies' ? 'is-selected' : '') Companies
           li
             a(href='/search/contacts?query=#{query}', class=kind === 'contacts' ? 'is-selected' : '') Contacts
-
       .tabs-content
         .tabs-panel#tab-1
           .tabs-panel-inner.text
