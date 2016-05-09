@@ -15,6 +15,9 @@ block content
         .tabs-panel#tab-1
           .tabs-panel-inner.text
             if total_results > 0
+              if kind === 'companies'
+                p.actions
+                  a.button.button-secondary(href="#") Add new company
               ol.results-list
                 each item in items
                   if item.kind === "searchresults#officer"
