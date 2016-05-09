@@ -20,7 +20,7 @@ function get(req, res) {
         company: result,
         contacts: _.slice(contacts, 0, 5),
         sicLookup: function sicLookup(code) {
-          let sicCode = _.findWhere(sicCodes, { code });
+          let sicCode = _.find(sicCodes, { code });
 
           if (!sicCode) {
             return code;
