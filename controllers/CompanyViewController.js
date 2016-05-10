@@ -31,7 +31,8 @@ function get(req, res) {
     .then((company) => {
       res.render('company', {
         query,
-        company: company,
+        company,
+        showSearch: true,
         contacts: _.slice(contacts, 0, 5),
         interactions: _.slice(interactionsData, 0, 5),
         sicLookup: function sicLookup(code) {

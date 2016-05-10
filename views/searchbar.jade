@@ -1,5 +1,0 @@
-form.searchbar(action="/search/#{kind || 'companies'}", method="get", role="search")
-  .searchbar-content
-    label.searchbar-label(for="search-main") Search for company
-    input#search-main.searchbar-main.form-control(type="search", name="query", autocomplete="off", value="#{query || ''}")
-    input.searchbar-submit(type="submit", value="Search")

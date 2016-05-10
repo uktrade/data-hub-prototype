@@ -1,8 +1,8 @@
-extends ukti
+extends layouts/ukti
 
 block content
   a.back-link(href='/') Back to homepage
-  include searchbar
+  +searchbar('content')
   if query
     .tabs.tabs--inline
       .tabs-nav
