@@ -1,4 +1,4 @@
 li.results-list-item
   h3
-    a(href='#')= item.title
+    a(href='#')!= highlightText(item.title, query)
   p.meta #{item.position} - #{item.company.title}
