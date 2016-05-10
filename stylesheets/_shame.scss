@@ -17,6 +17,7 @@
   text-align: right;
 }
 
+
 .back-link {
   display: inline-block;
   margin: em(20) 0 0;
@@ -28,4 +29,31 @@
     left: 0;
     position: absolute;
   }
+}
+
+.hidden {
+  display: none;
+}
+
+.form-group--compact + .form-group--compact {
+  margin-top: em(8);
+}
+
+.fieldset-group {
+
+  margin-top: em(22);
+  float: left;
+  width: 100%;
+
+  .form-group {
+    .form-label {
+      display: none;
+    }
+    &:first-child {
+      .form-label {
+        display: block;
+      }
+    }
+  }
+
 }
