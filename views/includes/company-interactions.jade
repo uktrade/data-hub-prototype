@@ -1,0 +1,23 @@
+.grid-row
+  .column-two-thirds
+    .data.data-smaller
+      .data-title 3 months
+      .data-subtitle since last interaction
+  .column-third
+    p.actions
+      a.button.button-secondary(href="#") Add new interaction
+ol.contact-list
+  each interaction in interactions
+    li.contact-list__item
+      h3.contact-list__heading
+        a(href="#")= interaction.subject
+      .grid-row
+        .column-two-thirds
+          dl
+            dd UKTI advisor:
+            dt #{interaction.advisor}
+            dd Company contact:
+            dt #{interaction.contact}
+        .column-third.u-align-right
+          p.contact-list__date= interaction.date
+          p.contact-list__meta= interaction.type

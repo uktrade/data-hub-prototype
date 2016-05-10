@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const api = require('../lib/companiesHouseApi');
 const contactsData = require('../data/contacts.json');
+const interactionsData = require('../data/interactions.json');
 const sicCodes = require('../data/sic-codes.json');
 
 let uktiCompanyData = {};
@@ -32,6 +33,7 @@ function get(req, res) {
         query,
         company: company,
         contacts: _.slice(contacts, 0, 5),
+        interactions: _.slice(interactionsData, 0, 5),
         sicLookup: function sicLookup(code) {
           let sicCode = _.find(sicCodes, { code });
 
