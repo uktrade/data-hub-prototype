@@ -9,7 +9,6 @@ exports.Edit = {
     this.cacheEls();
     this.bindEvents();
     this.showDataView();
-    console.log('done');
   },
 
   cacheEls: function() {

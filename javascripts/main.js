@@ -9,5 +9,6 @@ Mojular
     require('./modules/tabs'),
     require('./modules/edit'),
     require('./modules/addanother'),
+    require('./modules/searchbar'),
   ])
   .init();
