@@ -22,7 +22,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel',
         query: {
-          presets: ['es2015', 'react'],
+          presets: ['es2015'],
           plugins: ['transform-object-rest-spread', 'transform-class-properties', 'transform-runtime']
         }
       }
