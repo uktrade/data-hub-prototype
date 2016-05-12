@@ -1,6 +1,0 @@
-severity: warning
-
-linters:
-  SelectorFormat:
-    enabled: true
-    convention: hyphenated_BEM
