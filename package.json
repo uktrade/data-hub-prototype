@@ -23,7 +23,6 @@
     "gulp-nodemon": "^2.0.6",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.2.0",
-    "gulp-sass-lint": "^1.1.1",
     "gulp-sequence": "^0.4.5",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",
@@ -37,7 +36,9 @@
   },
   "devDependencies": {
     "browser-sync": "^2.11.2",
-    "eslint": "^2.7.0"
+    "eslint": "^2.7.0",
+    "gulp-eslint": "^2.0.0",
+    "gulp-sass-lint": "^1.1.1"
   },
   "scripts": {
     "start": "node app.js",
