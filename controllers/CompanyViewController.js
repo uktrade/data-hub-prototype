@@ -79,7 +79,7 @@ function addUktiDataToCompany(company) {
     }
   ];
   const extraData = uktiCompanyData[company.company_number] || defaultExtraData;
-  return _.extend({exportExperience}, extraData, company)
+  return _.extend({exportExperience}, extraData, company);
 }
 
 module.exports = {
