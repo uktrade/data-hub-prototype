@@ -27,7 +27,6 @@
 
 .back-link {
   display: inline-block;
-  margin: em(20) 0 0;
   padding-left: 20px;
   position: relative;
 
@@ -36,6 +35,11 @@
     left: 0;
     position: absolute;
   }
+
+  @include media($gt-big-phone) {
+    margin: em(20) 0 0;
+  }
+
 }
 
 .hidden {
