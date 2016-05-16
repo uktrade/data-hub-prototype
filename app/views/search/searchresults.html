@@ -1,0 +1,45 @@
+{% extends "../layouts/ukti.html" %}
+
+{% block main %}
+  <a class="back-link" href='/'>Back to homepage</a>
+  {% include "../components/searchbar.html" %}
+
+  {% if query %}
+    <div class="tabs tabs--inline">
+      <nav class="tabs-nav">
+        <ul class="tabs-list">
+          <li>
+            <a {% if kind == 'companies' %}class="is-selected" {% endif %}href='/search/companies?query={{query}}&amp;kind=companies'>Companies</a>
+          </li>
+          <li>
+            <a {% if kind == 'contacts' %}class="is-selected" {% endif %}href='/search/contacts?query={{query}}&amp;kind=contacts'>Contacts</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="tabs-content">
+        <div class="tabs-panel">
+          <div class="tabs-panel-inner">
+            {% if kind == 'companies' %}
+              <p class="actions">
+                <a href="#" class="button button-secondary">Add new company</a>
+              </p>
+            {% endif %}
+            {% if total_results > 0 %}
+              <ol class="results-list">
+                {% for item in items %}
+                  {% if item.kind == "searchresults#officer" %}
+                    {% include "./searchresult-contact.html" %}
+                  {% else %}
+                    {% include "./searchresult-company.html" %}
+                  {%  endif %}
+                {% endfor %}
+              </ol>
+            {% else %}
+              no results
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

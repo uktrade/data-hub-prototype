@@ -5,7 +5,11 @@ const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const paths = require('../paths');
 
-const SASS_PATHS = require('mojular-govuk-elements/package.json').sassPaths;
+const SASS_PATHS = [
+  `${paths.node_modules}/govuk-elements-sass/public/sass`,
+  `${paths.node_modules}/govuk_frontend_toolkit/stylesheets`,
+  `${paths.node_modules}/govuk_template_jinja/assets/stylesheets`
+];
 
 function buildDevelopmentStyles() {
   const sourcemaps = require('gulp-sourcemaps');

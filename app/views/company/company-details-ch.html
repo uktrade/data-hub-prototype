@@ -1,0 +1,25 @@
+<h3 class="heading-medium">Companies house</h3>
+<table class="table-detail">
+  <tbody>
+  <tr>
+    <th width="30%">Region</th>
+    <td>South West</td>
+  </tr>
+  <tr>
+    <th>Company type</th>
+    <td>{{ company.type }}</td>
+  </tr>
+  <tr>
+    <th>Company status</th>
+    <td>{{ company.company_status }}</td>
+  </tr>
+  <tr>
+    <th>Nature of business (SIC)</th>
+    <td>
+      {% for sic_code in company.sic_codes %}
+        {{ sic_code.code }} - {{ sic_code.title }}
+      {% endfor %}
+    </td>
+  </tr>
+  </tbody>
+</table>

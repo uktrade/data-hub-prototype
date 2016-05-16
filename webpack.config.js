@@ -4,8 +4,7 @@ var prod = process.env.NODE_ENV === 'production';
 
 module.exports = {
   entry: {
-    app: `${paths.sourceJS}/main.js`,
-    polyfills: ['JSON2', 'html5shiv']
+    app: `${paths.sourceJS}/main.js`
   },
 
   output: {
@@ -30,6 +29,10 @@ module.exports = {
   },
 
   resolve: {
+    modulesDirectories: [
+      'node_modules',
+      'node_modules/mojular/node_modules'
+    ],
     extensions: ['', '.js']
   },
 

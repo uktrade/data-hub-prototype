@@ -1,0 +1,38 @@
+<form method="post">
+  <div class="form-group">
+    <label class="form-label" for="website">Website</label>
+    <input id="website" class="form-control" name="website" value="{{ company.website }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="description">Business description</label>
+    <input id="description" class="form-control" name="businessDescription" value="{{ company.businessDescription }}" />
+  </div>
+  <fieldset class="fieldset-group form-group js-add-another">
+    {% if company.countryOfInterest %}
+      {% for countryOfInterest in company.countryOfInterest %}
+        <div class="form-group form-group--compact">
+          <label class="form-label" for="country-of-interest-{{ loop.index }}">Country of interest</label>
+          <input class="form-control"
+                 id="country-of-interest-{{ loop.index }}"
+                 name="countryOfInterest"
+                 type="text"
+                 value="{{ countryOfInterest }}" />
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="form-group form-group--compact">
+        <label class="form-label" for="country-of-interest-1">Country of interest</label>
+        <input class="form-control"
+               id="country-of-interest-{{ loop.index }}"
+               name="countryOfInterest"
+               type="text"
+               value="{{ countryOfInterest }}" />
+      </div>
+    {% endif %}
+    <a class="add-another-button" href="#">Add another country</a>
+  </fieldset>
+  <div class="form-group">
+    <button class="button button-primary save-button" type="submit">Save</button>
+    <a class="cancel-button" href="#">Cancel</a>
+  </div>
+</form>

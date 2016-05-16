@@ -1,0 +1,11 @@
+{% extends "./ukti.html" %}
+
+{% block header_class %}with-proposition{% endblock %}
+
+
+{% block proposition_header %}
+  {% set searchbarType = "header" %}
+  <div class="header-proposition">
+    {% include "../components/searchbar.html" %}
+  </div>
+{% endblock %}

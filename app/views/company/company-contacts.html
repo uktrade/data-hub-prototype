@@ -1,0 +1,24 @@
+<p class="actions">
+  <a class="button button-secondary" href="#">Add new contact</a>
+</p>
+
+<ol>
+  {% for contact in contacts %}
+    <li class="contact-list__item">
+      <h3 class="contact-list__heading">
+        <a href="#">{{ contact.name.first }} {{ contact.name.last }}</a>
+        {{ contact.position }}
+      </h3>
+      <div class="grid-row">
+        <div class="column-half">
+          <p class="contact-list__meta contact-list__meta--inline">Phone: {{ contact.phone }}</p>
+        </div>
+        <div class="column-half">
+          <p class="contact-list__meta contact-list__meta--inline">Email:
+            <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+          </p>
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+</ol>

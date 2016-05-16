@@ -5,7 +5,9 @@ module.exports = {
   output: `${projectDir}/build`,
   outputStyles: `${projectDir}/build/stylesheets`,
   outputJS: `${projectDir}/build/javascripts`,
-  sourceStyles: `${projectDir}/stylesheets`,
-  sourceJS: `${projectDir}/javascripts`,
-  webpackConfig: `${projectDir}/webpack.config.js`
+  sourceStyles: `${projectDir}/app/stylesheets`,
+  sourceJS: `${projectDir}/app/javascripts`,
+  webpackConfig: `${projectDir}/webpack.config.js`,
+  outputImages: `${projectDir}/build/images`,
+  node_modules: `${projectDir}/node_modules`
 };
