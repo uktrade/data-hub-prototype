@@ -1,7 +1,7 @@
 const gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
 
-gulp.task('serve', ['build'], (cb) => {
+gulp.task('serve', (cb) => {
   var started = false;
 
 	return nodemon({
