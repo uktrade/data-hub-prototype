@@ -43,7 +43,7 @@
   "scripts": {
     "start": "node app.js",
     "build": "gulp build",
-    "develop": "gulp develop",
+    "develop": "gulp watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "gulp build"
   },

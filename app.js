@@ -3,7 +3,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const port = (process.env.PORT || 8080);
+const config = require('./config');
 const companyViewController = require('./controllers/CompanyViewController');
 const searchController = require('./controllers/SearchController');
 
@@ -22,4 +22,4 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.listen(port);
+app.listen(config.port);
