@@ -1,0 +1,34 @@
+<table class="table-detail">
+  <tbody>
+  <tr>
+    <th width="30%">Website</th>
+    <td>{{ company.website }}</td>
+  </tr>
+  <tr>
+    <th>Business description</th>
+    <td>{{ company.businessDescription }}</td>
+  </tr>
+  <tr>
+    <th>Export experience</th>
+    <td>
+      {% if company.exportExperience %}
+        {% for experience in company.exportExperience  %}
+          <div>
+            <a href="#">{{ experience.year }} - {{ experience.country }}</a>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </td>
+  </tr>
+  <tr>
+    <th>Countries of interest</th>
+    <td>
+      {% if company.countryOfInterest %}
+        {% for countryOfInterest in company.countryOfInterest %}
+          <div>{{ countryOfInterest }}</div>
+        {% endfor %}
+      {% endif %}
+    </td>
+  </tr>
+  </tbody>
+</table>

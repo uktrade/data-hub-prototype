@@ -1,7 +1,0 @@
-mixin searchbar(location)
-
-  form(class="js-searchbar searchbar searchbar--#{location}", action="/search/#{kind || 'companies'}", method="get", role="search")
-    .searchbar__wrapper
-      label.searchbar__label(for="search-main-#{location}") Search for company name or contact
-      input.searchbar__input.form-control(type="search", id="search-main-#{location}", name="query", autocomplete="off", value=location !== 'header' ? (query || '') : '')
-      input.searchbar__submit(type="submit", value="Search")

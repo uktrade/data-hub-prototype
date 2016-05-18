@@ -1,0 +1,103 @@
+// Fix secondary button styling when using as link
+.button-secondary {
+  &:link,
+  &:visited {
+    background-color: $grey-2;
+    color: $black;
+  }
+}
+
+.compact-heading {
+  margin-bottom: em(40, 48);
+  margin-top: em(30, 48);
+}
+
+.actions {
+  margin: em(20) 0;
+
+  @include media(desktop) {
+    text-align: right;
+  }
+}
+
+.u-align-right {
+  text-align: right;
+}
+
+
+.back-link {
+  display: inline-block;
+  padding-left: 20px;
+  position: relative;
+  margin: em(20) 0 0;
+
+  &::before {
+    content: '<';
+    left: 0;
+    position: absolute;
+  }
+
+}
+
+.hidden {
+  display: none;
+}
+
+.form-group.form-group--compact {
+  margin-bottom: 10px;
+}
+
+.fieldset-group {
+  margin-top: em(22);
+  float: left;
+  width: 100%;
+
+  .form-group {
+    .form-label {
+      display: none;
+    }
+
+    &:first-child {
+      .form-label {
+        display: block;
+      }
+    }
+  }
+}
+
+.data-smaller {
+  padding-top: em(20);
+}
+
+#global-header .header-wrapper .header-global .header-logo {
+  display: none;
+}
+
+#global-header .header-wrapper .header-global .project-name {
+  float: left;
+  position: relative;
+  top: -1px;
+  height: 30px;
+  overflow: visible;
+  vertical-align: baseline;
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 1em;
+  text-decoration: none;
+  text-rendering: optimizeLegibility;
+  margin-bottom: -3px;
+  padding-top: 2px;
+  border-bottom: 1px solid transparent;
+  background-size: 35px 31px;
+  background-position: 0 0;
+  margin-left: 15px;
+
+  @include media(tablet) {
+    margin-left: 0;
+  }
+}
+
+#content {
+  min-height: 600px;
+}

@@ -1,0 +1,55 @@
+{% extends "layouts/ukti.html" %}
+
+{% block main %}
+
+  {% include "components/searchbar.html" %}
+
+  <div class="grid-row dashboard">
+    <div class="column-half">
+      <div class="dashboard-section">
+        <h2 class="dashboard-section-title">Updates</h2>
+        <ul class="event-list">
+          <li class="event-list-item">
+            <p class="meta">5 May 2016</p>
+            <p class="meta details">
+              <a href="#">Siemens Energy raised interest in energy sector</a>
+            </p>
+          </li>
+          <li class="event-list-item">
+            <p class="meta date">28 April 2016</p>
+            <p class="meta details">
+              <a href="#">New interaction activity with British Gas</a>
+            </p>
+          </li>
+          <li class="event-list-item">
+            <p class="meta date">27 April 2016</p>
+            <p class="meta details">
+              <a href="#">New interaction activity with Siemens Energy</a>
+            </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="column-half">
+      <div class="dashboard-section">
+        <h2 class="dashboard-section-title">Reminders</h2>
+        <p>No interactions have been added in the last 3 months with:</p>
+        <ul class="plain-list">
+          <li class="plain-list-item">
+            <a href="#">Siemens Energy</a>
+          </li>
+          <li class="plain-list-item">
+            <a href="#">Shell</a>
+          </li>
+          <li>
+          <li clas="plain-list-item">
+            <a href="#">NPower</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

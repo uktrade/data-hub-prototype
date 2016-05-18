@@ -1,0 +1,37 @@
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <div class="data data-smaller">
+      <div class="data-title bold-xlarge">3 months</div>
+      <div class="data-subtitle bold-xsmall">since last interaction</div>
+    </div>
+  </div>
+  <div class="column-one-third">
+    <p class="actions">
+      <a class="button button-secondary" href="#">Add new interaction</a>
+    </p>
+  </div>
+</div>
+
+<ol class="contact-list">
+  {% for interaction in interactions %}
+    <li class="contact-list__item">
+      <h3 class="contact-list__heading">
+        <a href="#">{{ interaction.subject }}</a>
+      </h3>
+      <div class="grid-row">
+        <div class="column-two-thirds">
+          <dl>
+            <dd>UKTI advisor</dd>
+            <dt>{{ interaction.advisor }}</dt>
+            <dd>Company contact:</dd>
+            <dt>{{ interaction.contact }}</dt>
+          </dl>
+        </div>
+        <div class="column-one-third u-align-right">
+          <p class="contact-list__date">{{ interaction.date }}</p>
+          <p class="contact-list__meta">{{ interaction.type }}</p>
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+</ol>

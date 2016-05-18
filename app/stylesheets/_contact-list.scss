@@ -1,0 +1,49 @@
+.contact-list {
+  list-style: none;
+  margin: em(30) 0 0;
+  padding: 0;
+
+  dl {
+    @extend %contain-floats;
+    margin: 0;
+
+    dd {
+      clear: left;
+      float: left;
+      font-weight: 700;
+      margin: 0 em(10) 0 0;
+    }
+
+    dt {
+      float: left;
+    }
+  }
+}
+
+.contact-list__item {
+  border-bottom: 1px solid $grey-2;
+  margin-bottom: em(20);
+  padding-bottom: em(20);
+}
+
+.contact-list__heading {
+  font-size: em(19);
+  font-weight: 700;
+  margin: 0 0 em(12);
+}
+
+.contact-list__meta {
+  font-size: em(19);
+  margin: 0;
+
+  &.contact-list__meta--inline {
+    display: inline;
+    margin-right: 15px;
+  }
+}
+
+.contact-list__date {
+  font-size: em(24);
+  font-weight: 700;
+  margin: 0 0 em(5);
+}

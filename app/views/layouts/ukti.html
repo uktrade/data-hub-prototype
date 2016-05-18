@@ -1,0 +1,28 @@
+{% extends "layouts/govuk_template.html" %}
+
+{% block inside_header %}
+  <div class="project-name">Datahub</div>
+{% endblock %}
+
+{% block head %}
+  <link href="{{ asset_path }}stylesheets//application.css?{{ startTime }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+  <main id="content" role="main">
+    <div class="phase-banner-alpha">
+      <p>
+        <strong class="phase-tag">ALPHA</strong>
+        <span>This is a new service – your <a href="#">feedback</a> will help us to improve it.</span>
+      </p>
+    </div>
+    <div class="container">
+      {% block main %}{% endblock %}
+    </div>
+  </main>
+{% endblock %}
+
+{% block body_end %}
+  <script src="{{ asset_path }}javascripts/app.bundle.js"></script>
+{% endblock %}

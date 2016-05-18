@@ -1,0 +1,39 @@
+{% extends "../layouts/ukti-search-header.html" %}
+
+{% block main %}
+  <a class="back-link" href='/search/companies?query={{query}}'>Back to company search</a>
+
+  <h1 class="heading-xlarge">{{ company.company_name }}</h1>
+  <div class="tabs tabs--inline js-tabs">
+    <nav class="tabs-nav">
+      <ul class="tabs-list">
+        <li>
+          <a class="is-selected" href="#tab-1">Details</a>
+        </li>
+        <li>
+          <a href="#tab-2">Contacts</a>
+        </li>
+        <li>
+          <a href="#tab-3">Interactions</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="tabs-content">
+      <div id="tab-1" class="tabs-panel">
+        <div class="tabs-panel-inner">
+          {% include "company/company-details.html" %}
+        </div>
+      </div>
+      <div id="tab-2" class="tabs-panel">
+        <div class="tabs-panel-inner">
+          {% include "company/company-contacts.html" %}
+        </div>
+      </div>
+      <div id="tab-3" class="tabs-panel">
+        <div class="tabs-panel-inner">
+          {% include "company/company-interactions.html" %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
