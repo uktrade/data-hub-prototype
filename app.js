@@ -8,8 +8,10 @@ const companyViewController = require('./app/controllers/CompanyController');
 const searchController = require('./app/controllers/SearchController');
 const nunjucks = require('express-nunjucks');
 const filters = require('./app/lib/filters');
+const compression = require('compression');
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(compression());
 
 let nunjucksConfig = {
   autoescape: true
