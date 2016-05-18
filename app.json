@@ -3,8 +3,10 @@
   "scripts":{},
   "env":{
     "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-nodejs.git",
-    "NPM_CONFIG_PRODUCTION": "false",
-    "NODE_MODULES_CACHE": "false"
+    "NODE_MODULES_CACHE": "false",
+    "COMPANY_KEY": {
+      "required": true
+    }
   },
   "addons":[]
 }
