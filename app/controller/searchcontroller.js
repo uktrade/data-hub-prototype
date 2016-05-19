@@ -1,73 +1,34 @@
 'use strict';
 
-const api = require('../service/companieshouseapiservice');
-const contactsData = require('../../data/contacts.json');
-
-function render(res, data) {
-  res.render('search/searchresults', data);
-}
-
-function handleError(res, error) {
-  res.render('search/searchresults', {
-    error
-  });
-}
+const searchService = require('../service/searchservice');
 
 function get(req, res) {
 
-  let kind = req.params.type;
-  let query = req.query.query;
-
-  switch (kind) {
-    case 'companies':
-      api
-        .findCompanies(query)
-        .then((result) => {
-          render(res, {
-            kind,
-            query,
-            items: result.items,
-            total_results: result.total_results
-          });
-        })
-        .catch((err) => {
-          handleError(res, err);
-        });
-      break;
-    case 'contacts':
-      api.findOfficers(query)
-        .then((result) => {
-          result.items = addRandomOfficerDetails(result.items);
-          return result;
-        })
-        .then((result) => {
-          render(res, {
-            kind,
-            query,
-            items: result.items,
-            total_results: result.total_results
-          });
-        })
-        .catch(function(err) {
-          handleError(res, err);
-        });
-        break;
-    default:
-      render(res, {});
+  if (!req.query.query || req.query.query === '') {
+    res.render('search/searchresults', {});
   }
 
-}
+  let query = req.query.query;
 
-function addRandomOfficerDetails(items) {
-  return items.map((item) => {
-    const randindex = Math.round(Math.random() * (contactsData.length - 1));
-    const contact = contactsData[randindex];
-    item.position = contact.position;
-    item.company = {
-      title: contact.company
-    };
-    return item;
+  searchService.search(query)
+    .then((results) => {
+      let total = 0;
+      if (results && results.length > 0) {
+        total = results.length;
+      }
+
+      res.render('search/searchresults', {
+        query,
+        results,
+        totalResults: total
+      });
+    })
+    .catch((error) => {
+      res.render('error', {
+      error
+    });
   });
+
 }
 
 module.exports = {

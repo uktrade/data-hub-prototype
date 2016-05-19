@@ -16,11 +16,13 @@ function searchLunr(term) {
       expandedResult.type = 'COMPANY';
     } else if(result.ref.charAt(0) === 'P') {
       const parts = result.ref.split('-');
-      const companyId = parts[0];
-      const contactId = parts[1];
+      const contactId = parts[0].slice(1);
+      const companyId = parts[1];
       expandedResult = companyRepository.getCompanyContact(companyId, contactId);
       expandedResult.type = "CONTACT";
     }
+
+    expandedResult.score = result.score;
 
     return expandedResult;
   });

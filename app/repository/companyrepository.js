@@ -26,21 +26,24 @@ function addRandomPeople(company) {
   company.contacts = [];
   for(let pos = 5; pos > 0; pos -= 1) {
     const randindex = Math.round(Math.random() * (contactsData.length - 1));
-    company.contacts.push(contactsData[randindex]);
+    let randomContact = contactsData[randindex];
+    randomContact.id = `${randomContact.id}`;
+    company.contacts.push(randomContact);
   }
 }
 
 function getCompanyContact(companyId, contactId) {
-  let company = getCompany(companyId);
 
+  let company = getCompany(companyId);
   let contacts = company.contacts;
-  for (let pos = contacts.length -1; pos ; pos -= 1 ) {
+  for (let pos =0; pos < contacts.length; pos += 1) {
     if (contacts[pos].id === contactId) {
       let contact = contacts[pos];
       contact.company = company;
       return contact;
     }
   }
+
 }
 
 module.exports = {

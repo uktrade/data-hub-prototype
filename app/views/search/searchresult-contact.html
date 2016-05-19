@@ -1,7 +1,8 @@
-<li class="results-list-item">
+<li class="results-list__result">
   <h3>
     <a href='#'>
-      {{item.title | capitalize | highlight(query) | safe }}</a>
+      {{result.title}} {{result.givenname}} {{result.surname}}</a>
   </h3>
-  <p class="meta">{{item.position}} - {{item.company.title}}</p>
+  <div class="meta">{{result.company.title}} - {{result.occupation}}</div>
+
 </li>
