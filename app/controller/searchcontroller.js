@@ -12,15 +12,15 @@ function get(req, res) {
 
   searchService.search(query)
     .then((results) => {
-      let total = 0;
+      let totalResults = 0;
       if (results && results.length > 0) {
-        total = results.length;
+        totalResults = results.length;
       }
 
       res.render('search/searchresults', {
         query,
         results,
-        totalResults: total
+        totalResults
       });
     })
     .catch((error) => {

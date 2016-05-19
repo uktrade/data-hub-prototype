@@ -14,12 +14,12 @@ function searchLunr(term) {
     if (result.ref.charAt(0) === 'C') {
       expandedResult = companyRepository.getCompany(result.ref.slice(1));
       expandedResult.type = 'COMPANY';
-    } else if(result.ref.charAt(0) === 'P') {
+    } else if (result.ref.charAt(0) === 'P') {
       const parts = result.ref.split('-');
       const contactId = parts[0].slice(1);
       const companyId = parts[1];
       expandedResult = companyRepository.getCompanyContact(companyId, contactId);
-      expandedResult.type = "CONTACT";
+      expandedResult.type = 'CONTACT';
     }
 
     expandedResult.score = result.score;
@@ -38,7 +38,7 @@ function indexCHRecord(company) {
 }
 
 function indexCompanyContacts(company) {
-  if(company.contacts && company.contacts.length > 0) {
+  if (company.contacts && company.contacts.length > 0) {
     company.contacts.forEach((contact) => {
       index.add({
         id: `P${contact.id}-${company.id}`,

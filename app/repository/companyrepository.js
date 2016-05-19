@@ -24,7 +24,7 @@ function updateCompany(company) {
 
 function addRandomPeople(company) {
   company.contacts = [];
-  for(let pos = 5; pos > 0; pos -= 1) {
+  for (let pos = 5; pos > 0; pos -= 1) {
     const randindex = Math.round(Math.random() * (contactsData.length - 1));
     let randomContact = contactsData[randindex];
     randomContact.id = `${randomContact.id}`;
@@ -34,9 +34,9 @@ function addRandomPeople(company) {
 
 function getCompanyContact(companyId, contactId) {
 
-  let company = getCompany(companyId);
+  const company = getCompany(companyId);
   let contacts = company.contacts;
-  for (let pos =0; pos < contacts.length; pos += 1) {
+  for (let pos = 0; pos < contacts.length; pos += 1) {
     if (contacts[pos].id === contactId) {
       let contact = contacts[pos];
       contact.company = company;
@@ -44,6 +44,7 @@ function getCompanyContact(companyId, contactId) {
     }
   }
 
+  return null;
 }
 
 module.exports = {
