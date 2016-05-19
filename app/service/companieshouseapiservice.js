@@ -1,7 +1,7 @@
 'use strict';
 
-var rp = require('request-promise');
-var companiesHouseConfig = require('../../config').companiesHouse;
+const rp = require('request-promise');
+const companiesHouseConfig = require('../../config').companiesHouse;
 
 function search(endpoint, params) {
   const options = {

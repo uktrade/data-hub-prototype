@@ -1,48 +1,61 @@
 'use strict';
 
-var companiesHouseApi = require('../lib/companiesHouseApi');
-var companyService = require('./companyservice');
-var lunr = require('lunr');
-var searchHistory = [];
-var index;
+let companiesHouseApi = require('./companieshouseapiservice');
+const companyRepository = require('../repository/companyrepository');
+const lunr = require('lunr');
+
+let searchHistory = [];
+let index;
 
 function searchLunr(term) {
   return index.search(term).map((result) => {
-    return companyService.getCompany(result.ref);
+    let expandedResult;
+
+    if (result.ref.charAt(0) === 'C') {
+      expandedResult = companyRepository.getCompany(result.ref.slice(1));
+      expandedResult.type = 'COMPANY';
+    } else if(result.ref.charAt(0) === 'P') {
+      const parts = result.ref.split('-');
+      const companyId = parts[0];
+      const contactId = parts[1];
+      expandedResult = companyRepository.getCompanyContact(companyId, contactId);
+      expandedResult.type = "CONTACT";
+    }
+
+    return expandedResult;
   });
 }
 
 function indexCHRecord(company) {
-  var newRecord = {
-    id: company.company_number,
+  index.add({
+    id: `C${company.id}`,
     title: company.title,
     description: company.description,
     address: company.address.postal_code
-  };
-
-  index.add(newRecord);
+  });
 }
 
 function indexCompanyContacts(company) {
-
+  if(company.contacts && company.contacts.length > 0) {
+    company.contacts.forEach((contact) => {
+      index.add({
+        id: `P${contact.id}-${company.id}`,
+        title: `${contact.title} ${contact.givenname} ${contact.surname}`,
+        address: `${contact.streetaddress}, ${contact.city}, ${contact.zipcode}`
+      });
+    });
+  }
 }
 
 function addCHRecords(companies) {
   companies.forEach((company) => {
     if (company.company_status === 'active') {
-      addRandomContactsToCompany(company);
-      company.id = company.company_number;
+      company = companyRepository.addCompany(company);
       indexCHRecord(company);
       indexCompanyContacts(company);
-      companyService.addCompany(company);
     }
   });
 }
-
-function addRandomContactsToCompany(company) {
-
-}
-
 
 function search(term) {
   return new Promise(function(fulfill, reject) {
@@ -55,7 +68,6 @@ function search(term) {
           fulfill(searchLunr(term));
         })
         .catch((error) => {
-          console.log(error);
           reject(error);
         });
     } else {
@@ -78,11 +90,6 @@ reset();
 
 module.exports = {
   search: search,
-  history: function() {
-    return searchHistory;
-  },
-  setCompaniesHouseApi: function(newApi) {
-    companiesHouseApi = newApi;
-  },
+  companiesHouseApi: companiesHouseApi, // Used only for testing.
   reset: reset
 };
