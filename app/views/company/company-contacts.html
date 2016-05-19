@@ -3,15 +3,15 @@
 </p>
 
 <ol>
-  {% for contact in contacts %}
+  {% for contact in company.contacts %}
     <li class="contact-list__item">
       <h3 class="contact-list__heading">
-        <a href="#">{{ contact.name.first }} {{ contact.name.last }}</a>
-        {{ contact.position }}
+        <a href="#">{{ contact.givenname }} {{ contact.surname }}</a>
+        {{ contact.occupation }}
       </h3>
       <div class="grid-row">
         <div class="column-half">
-          <p class="contact-list__meta contact-list__meta--inline">Phone: {{ contact.phone }}</p>
+          <p class="contact-list__meta contact-list__meta--inline">Phone: {{ contact.telephonenumber }}</p>
         </div>
         <div class="column-half">
           <p class="contact-list__meta contact-list__meta--inline">Email:

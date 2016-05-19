@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const api = require('../service/companieshouseapiservice');
-const contactsData = require('../../data/contacts.json');
 const interactionsData = require('../../data/interactions.json');
 const sicCodes = require('../../data/sic-codes.json');
 
@@ -10,14 +9,13 @@ let uktiCompanyData = {};
 const defaultExtraData = {
   website: '',
   businessDescription: '',
-  countryOfInterest: ['Agentina', 'Greece']
+  countryOfInterest: ['Argentina', 'Greece']
 };
 
 
 function get(req, res) {
   let companyNum = req.params.id;
   let query = req.query.query;
-  let contacts = _.shuffle(contactsData);
 
   if (!companyNum) {
     res.redirect('/');
@@ -34,7 +32,6 @@ function get(req, res) {
         query,
         company,
         showSearch: true,
-        contacts: _.slice(contacts, 0, 5),
         interactions: _.slice(interactionsData, 0, 5),
       });
     })

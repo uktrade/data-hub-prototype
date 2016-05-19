@@ -1,6 +1,6 @@
 <form
   class="js-searchbar searchbar{% if searchbarType %} searchbar--{{searchbarType}}{% endif %}"
-  action="/search/{{kind | default("companies") }}"
+  action="/search"
   method="get"
   role="search">
   <div class="searchbar__wrapper">
@@ -10,7 +10,7 @@
       id="search-main"
       name="query"
       autocomplete="off"
-      value="{% if not searchbarType or searchbarType == "" %}{{query}}{% endif %}"
+      value="{% if not searchbarType or searchbarType == '' %}{{query}}{% endif %}"
     />
     <input class="searchbar__submit" type="submit" value="Search" />
   </div>

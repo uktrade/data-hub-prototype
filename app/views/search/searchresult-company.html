@@ -1,9 +1,14 @@
-<li class="results-list-item">
+<li class="results-list__result">
   <h3>
-    <a href='/{{kind}}/{{item.company_number}}?query={{query}}'>
-      {{item.title | capitalize | highlight(query) | safe }}
+    <a href='/companies/{{result.company_number}}?query={{query}}'>
+      {{result.title | capitalize | highlight(query) | safe }}
     </a>
   </h3>
-  <p class="meta">{{item.description}}</p>
-  <p class="meta">{{item.snippet}}</p>
+  <div class="meta meta--ch">{{result.description}}</div>
+  <div class="meta meta--address">
+    {{result.address.address_line_1}},
+    {{result.address.address_line_2}},
+    {{result.address.locality}},
+    {{result.address.postal_code}}
+  </div>
 </li>
