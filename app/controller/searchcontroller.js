@@ -1,6 +1,6 @@
 'use strict';
 
-const api = require('../lib/companiesHouseApi');
+const api = require('../service/companieshouseapiservice');
 const contactsData = require('../../data/contacts.json');
 
 function render(res, data) {
