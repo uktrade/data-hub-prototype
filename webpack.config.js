@@ -1,48 +1,61 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
+const path = require('path');
 var paths = require('./gulp/paths');
-var prod = process.env.NODE_ENV === 'production';
+const nodeEnv = process.env.NODE_ENV || 'development';
+const isProd = nodeEnv === 'production';
 
 module.exports = {
+  devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
+  context: path.join(__dirname, './client'),
   entry: {
-    app: `${paths.sourceJS}/main.js`
+    app: `${paths.sourceJS}/main.js`,
+    search: `${paths.sourceJS}/search.js`
   },
-
   output: {
     path: paths.outputJS,
     filename: '[name].bundle.js'
   },
-
-  devtool: 'cheap-module-source-map',
-
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loader: 'babel',
-        query: {
-          presets: ['es2015'],
-          plugins: ['transform-object-rest-spread', 'transform-class-properties', 'transform-runtime']
-        }
-      }
-    ]
+        loaders: [
+          // 'react-hot',
+          'babel-loader'
+        ]
+      },
+    ],
   },
-
   resolve: {
-    modulesDirectories: [
+    extensions: ['', '.js', '.jsx'],
+    modules: [
+      paths.sourceJS,
       'node_modules',
       'node_modules/mojular/node_modules'
-    ],
-    extensions: ['', '.js']
+    ]
   },
-
-  plugins: prod ? [
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: Infinity,
+      filename: 'vendor.bundle.js'
     }),
-    new webpack.optimize.UglifyJsPlugin({compress: { warnings: false }}),
-    new webpack.optimize.DedupePlugin()]
-    : [new webpack.optimize.DedupePlugin()]
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      output: {
+        comments: false
+      },
+      sourceMap: false
+    }),
+    new webpack.DefinePlugin({
+      'process.env': { NODE_ENV: JSON.stringify(nodeEnv) }
+    })
+  ]
 };

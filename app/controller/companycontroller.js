@@ -1,7 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const api = require('../service/companieshouseapiservice');
+const api = require('../lib/companieshouseapis');
 const interactionsData = require('../../data/interactions.json');
 const sicCodes = require('../../data/sic-codes.json');
 
