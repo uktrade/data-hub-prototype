@@ -1,5 +1,8 @@
 {
-  "extends": "eslint:recommended",
+  "plugins": [
+    "react"
+  ],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "env": {
     "node": true,
     "es6": true,
@@ -79,6 +82,22 @@
     "max-nested-callbacks": [2, 3],
     "no-nested-ternary": 1,
     "space-before-function-paren": [1, "never"],
-    "spaced-comment": [1, "always"]
+    "spaced-comment": [1, "always"],
+    "react/jsx-boolean-value": 1,
+    "react/jsx-quotes": 0,
+    "react/jsx-no-undef": 1,
+    "react/jsx-sort-props": 0,
+    "react/jsx-sort-prop-types": 0,
+    "react/jsx-uses-react": 1,
+    "react/jsx-uses-vars": 1,
+    "react/no-did-mount-set-state": 1,
+    "react/no-did-update-set-state": 1,
+    "react/no-multi-comp": 0,
+    "react/no-unknown-property": 1,
+    "react/prop-types": 1,
+    "react/react-in-jsx-scope": 1,
+    "react/self-closing-comp": 0,
+    "react/wrap-multilines": 1,
+    "react/no-danger": 0
   }
 }

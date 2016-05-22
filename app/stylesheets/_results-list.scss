@@ -1,5 +1,5 @@
 .result-summary {
-  margin: 0 0 20px 0;
+  margin: 0 0 20px;
 }
 
 .results-list {
@@ -14,9 +14,8 @@
       margin-top: 0;
     }
 
-    h3 {
-      font-size: em(23);
-      font-weight: 400;
+    .result-title {
+      @include core-19;
       margin: 0 0 em(5);
       padding: 0;
       text-transform: capitalize;

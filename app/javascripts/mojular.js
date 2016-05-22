@@ -27,10 +27,10 @@ module.exports = {
   use: function(modules) {
     if (isArray(modules)) {
       transform(modules, extend, this.Modules);
-    } else if(isPlainObject(modules)) {
+    } else if (isPlainObject(modules)) {
       extend(this.Modules, modules);
     } else {
-      throw('Pass either single module or an array of modules.\ne.g. `.use(require(\'./modules/some-module\')`');
+      throw ('Pass either single module or an array of modules.\ne.g. `.use(require(\'./modules/some-module\')`');
     }
     return this;
   }

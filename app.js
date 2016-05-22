@@ -5,7 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const config = require('./config');
 const companyViewController = require('./app/controller/companycontroller');
-const searchController = require('./app/controller/searchcontroller');
+const apiController = require('./app/controller/apicontroller');
 const nunjucks = require('express-nunjucks');
 const filters = require('./app/lib/filters');
 const compression = require('compression');
@@ -43,7 +43,7 @@ app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`));
 
-app.get('/search?', searchController.get);
+app.get('/api/search?', apiController.search);
 app.get('/companies/:id?', companyViewController.get);
 app.post('/companies/:id?', companyViewController.post);
 
@@ -51,7 +51,8 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.listen(config.port);
+app.get('/search?', function(req, res) {
+  res.render('search');
+});
 
-console.log(`Application running on port ${config.port}`);
-console.log(`To view it visit http://localhost:${config.port}`);
+app.listen(config.port);

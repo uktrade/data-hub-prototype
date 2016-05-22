@@ -27,7 +27,7 @@ filter.newDate = function date(d) {
  * @param  {string} f moment.js format string (to override the default if needed)
  * @return {string} date string as per the current gov.uk standard 09/12/1981 -> 09 December 1981
  */
-filter.formatDate = function(d,f) {
+filter.formatDate = function(d, f) {
   return moment(filter.newDate(d)).locale('en-gb').format(f ? f : 'LL');
 };
 
@@ -49,8 +49,9 @@ filter.log = function log(a) {
  * @example {{ "Hello There" | toCamelCase }} // helloThere
  */
 filter.toCamelCase = function toCamelCase(s) {
-  return s.trim().split(/-| /).reduce(function (pw, cw, i) {
-    return pw += (i === 0 ? cw[0].toLowerCase() : cw[0].toUpperCase()) + cw.slice(1);
+  return s.trim().split(/-| /).reduce(function(pw, cw, i) {
+    pw += (i === 0 ? cw[0].toLowerCase() : cw[0].toUpperCase()) + cw.slice(1);
+    return pw;
   }, '');
 };
 

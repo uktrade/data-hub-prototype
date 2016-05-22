@@ -1,9 +1,9 @@
 .dashboard-section {
   border-top: 5px solid $black;
 
-  h2.dashboard-section-title {
+  .dashboard-section-title {
+    @include core-24;
     margin: 20px 0;
-    font-size: em(24);
   }
 
 }

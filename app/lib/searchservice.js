@@ -1,31 +1,35 @@
 'use strict';
 
-let companiesHouseApi = require('./companieshouseapiservice');
-const companyRepository = require('../repository/companyrepository');
+let companiesHouseApi = require('./companieshouseapis');
+const companyRepository = require('./companyrepository');
 const lunr = require('lunr');
+const possibleFacets = ['type', 'sectors', 'status'];
+
 
 let searchHistory = [];
 let index;
 
 function searchLunr(term) {
+
   return index.search(term).map((result) => {
     let expandedResult;
 
     if (result.ref.charAt(0) === 'C') {
       expandedResult = companyRepository.getCompany(result.ref.slice(1));
-      expandedResult.type = 'COMPANY';
+      expandedResult.type = 'Company';
     } else if (result.ref.charAt(0) === 'P') {
       const parts = result.ref.split('-');
       const contactId = parts[0].slice(1);
       const companyId = parts[1];
       expandedResult = companyRepository.getCompanyContact(companyId, contactId);
-      expandedResult.type = 'CONTACT';
+      expandedResult.type = 'Contact';
     }
 
     expandedResult.score = result.score;
 
     return expandedResult;
   });
+
 }
 
 function indexCHRecord(company) {
@@ -67,13 +71,17 @@ function search(term) {
       companiesHouseApi.findCompanies(term)
         .then((result) => {
           addCHRecords(result.items);
-          fulfill(searchLunr(term));
+          let results = searchLunr(term);
+          let facets = calculateFacets(results);
+          fulfill({results, facets});
         })
         .catch((error) => {
           reject(error);
         });
     } else {
-      fulfill(searchLunr(term));
+      let results = searchLunr(term);
+      let facets = calculateFacets(results);
+      fulfill({results, facets});
     }
 
   });
@@ -87,6 +95,39 @@ function reset() {
     this.field('address');
   });
 }
+
+function calculateFacets(results) {
+
+  let facets = {};
+
+  for (const possibleFacet of possibleFacets) {
+    facets[possibleFacet] = {};
+  }
+
+  for (let result of results) {
+
+    for (let possibleFacet of possibleFacets) {
+      let resultFacetValues = result[possibleFacet]; // result type value
+      if (!Array.isArray(resultFacetValues)) {
+        resultFacetValues = [resultFacetValues];
+      }
+
+      for (let resultFacetValue of resultFacetValues) {
+        if (!facets[possibleFacet][resultFacetValue]) {
+          facets[possibleFacet][resultFacetValue] = 1;
+        } else {
+          facets[possibleFacet][resultFacetValue] += 1;
+        }
+      }
+
+    }
+
+  }
+
+  return facets;
+}
+
+
 
 reset();
 
