@@ -1,23 +1,32 @@
-<h3 class="heading-medium">Companies house</h3>
-<table class="table-detail">
+{{ company | log | safe }}
+<table class="table-detail table-detail--readonly">
   <tbody>
-  <tr>
-    <th width="30%">Region</th>
-    <td>South West</td>
+  <tr class="table-detail--readonly__section">
+    <td rowspan="6" class="spacer">&nbsp;</td>
+    <th width="30%">Company number</th>
+    <td class="data">{{ company.company_number }}</td>
+  </tr>
+  <tr class="table-detail--readonly__section">
+    <th>Registerd office address</th>
+    <td>{{ company.registered_office_address.address_line_1 }},
+      {{ company.registered_office_address.address_line_2 }},
+      {{ company.registered_office_address.locality }},
+      {{ company.registered_office_address.postal_code }}
+    </td>
   </tr>
   <tr>
     <th>Company type</th>
     <td>{{ company.type }}</td>
   </tr>
-  <tr>
+  <tr class="table-detail--readonly__section">
     <th>Company status</th>
     <td>{{ company.company_status }}</td>
   </tr>
-  <tr>
+  <tr class="table-detail--readonly__section">
     <th>Nature of business (SIC)</th>
     <td>
       {% for sic_code in company.sic_codes %}
-        {{ sic_code.code }} - {{ sic_code.title }}
+        {{ sic_code.code }} - {{ sic_code.description }}
       {% endfor %}
     </td>
   </tr>

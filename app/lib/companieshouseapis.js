@@ -16,7 +16,9 @@ function search(endpoint, params) {
   return new Promise(function(fulfill, reject) {
     rp(options)
       .then(fulfill)
-      .catch(reject);
+      .catch((error) => {
+        reject(error);
+      });
   });
 }
 

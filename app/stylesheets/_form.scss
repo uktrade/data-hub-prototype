@@ -5,11 +5,7 @@
 }
 
 .form-control {
-  width: 100%;
 
-  @include media(desktop) {
-    width: 50%;
-  }
 
   + p {
     margin-top: em(5);
@@ -21,10 +17,4 @@
   }
 }
 
-.form-group {
-  &.inline {
-    @include media(desktop) {
-      width: 50%;
-    }
-  }
-}
+

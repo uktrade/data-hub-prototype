@@ -6,6 +6,7 @@
 
 {% block head %}
   <link href="{{ asset_path }}stylesheets//application.css?{{ startTime }}" rel="stylesheet" type="text/css">
+  <script src="{{ asset_path }}javascripts/vendor.bundle.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -24,6 +25,6 @@
 {% endblock %}
 
 {% block body_end %}
-  <script src="{{ asset_path }}javascripts/vendor.bundle.js"></script>
+
   <script src="{{ asset_path }}javascripts/app.bundle.js"></script>
 {% endblock %}
