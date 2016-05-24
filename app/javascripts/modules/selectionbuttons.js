@@ -11,7 +11,7 @@ exports.SelectionButtons = {
     this.selectedClass = 'selected';
     this.focusedClass = 'focused';
     this.$elms = $(this.el);
-    
+
     this.selector = this.el;
     this.setInitialState($(this.el));
 
@@ -53,13 +53,11 @@ exports.SelectionButtons = {
         .parent('label')
         .removeClass(this.selectedClass);
       $elm.parent('label').addClass(this.selectedClass);
-    } else { // checkbox
-      if ($elm.is(':checked')) {
+    } else if ($elm.is(':checked')) {
         $elm.parent('label').addClass(this.selectedClass);
       } else {
         $elm.parent('label').removeClass(this.selectedClass);
       }
-    }
   },
 
   addElementLevelEvents: function() {

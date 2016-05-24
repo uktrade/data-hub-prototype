@@ -1,6 +1,6 @@
 'use strict';
 
-const companyRepository = require('../lib/companyrepository');
+let companyRepository = require('../lib/companyrepository');
 
 function get(req, res) {
   let companyNum = req.params.id;
@@ -24,40 +24,76 @@ function post(req, res) {
   let data = req.body;
   let query = req.query.query || '';
 
-  handleFormPostFields(companyNum, data)
+  companyRepository.getCompany(companyNum)
+    .then((currentCompany) => {
+      return applyFormFieldsToCompany(currentCompany, data);
+    })
+    .then((newCompany) => {
+      return companyRepository.updateCompany(newCompany);
+    })
     .then(() => {
       res.redirect(`/companies/${companyNum}?query=${query}`);
     })
-    .catch((company, errors) => {
+    .catch((error) => {
       res.render('company/company', {
         query: query,
-        company: company,
+        company: error.company || {},
         searchSearch: true,
-        errors: errors});
+        errors: error.errors || {}
+      });
     });
 
 }
 
 
-function handleFormPostFields(id, data) {
-  // Get the existing company;
+function applyFormFieldsToCompany(company, formData) {
 
-  //uktiCompanyData[companyNum] = {
-  //  website: req.body.website,
-  //  businessDescription: req.body.businessDescription,
-  //  countryOfInterest: req.body.countryOfInterest
-  //};
+  return new Promise((fulfill) => {
 
-  console.log(data);
-  return companyRepository.getCompany(id);
+    let newCompany = Object.assign({}, company);
 
-  // Then merge the form data over the top of the company
+    if (Array.isArray(formData.sectors)) {
+      newCompany.sectors = formData.sectors;
+    } else {
+      newCompany.sectors = [formData.sectors];
+    }
 
+    newCompany.website = formData.website;
+    newCompany.businessDescription = formData.businessDescription;
+    newCompany.region = formData.region;
 
-  // Then save it back to the store.
+    if (formData.hasOperatingAddress === 'Yes') {
+      newCompany.operatingAddress = {
+        address1: formData.operatingAddress_address1,
+        address2: formData.operatingAddress_aaddress2,
+        city: formData.operatingAddress_city,
+        postcode: formData.operatingAddress_postcode
+      };
+    } else if (newCompany.operatingAddress) {
+      delete newCompany.operatingAddress;
+    }
 
-  // Later add validation and return errors.
+    if (formData.hasAccountManager === 'Yes' && formData.accountManager != '') {
+      newCompany.accountManager = formData.accountManager;
+    } else if (newCompany.accountManager) delete newCompany.accountManager;
 
+    newCompany.currentlyExporting = formData.currentlyExporting === 'Yes';
+
+    if (Array.isArray(formData.countryOfInterest)) {
+      newCompany.countryOfInterest = formData.countryOfInterest;
+    } else {
+      newCompany.countryOfInterest = [formData.countryOfInterest];
+    }
+
+    if (Array.isArray(formData.connections)) {
+      newCompany.connections = formData.connections;
+    } else {
+      newCompany.connections = [formData.connections];
+    }
+
+    fulfill(newCompany);
+
+  });
 
 }
 
@@ -65,5 +101,5 @@ function handleFormPostFields(id, data) {
 module.exports = {
   get: get,
   post: post,
-  handleFormPostFields: handleFormPostFields
+  applyFormFieldsToCompany: applyFormFieldsToCompany,
 };

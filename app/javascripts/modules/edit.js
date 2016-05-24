@@ -2,45 +2,49 @@
 
 const $ = require('jquery');
 
-exports.Edit = {
-  el: '.js-hidden-edit',
+class Edit {
 
-  init: function() {
-    this.cacheEls();
+  constructor(element) {
+    this.cacheEls(element);
     this.bindEvents();
     this.showDataView();
-  },
+  }
 
-  cacheEls: function() {
-    this.wrapper = $(this.el);
-    this.dataView = this.wrapper.find('.data-view');
-    this.editView = this.wrapper.find('.edit-view');
-    this.editbutton = this.wrapper.find('.edit-button');
-    this.cancelButton = this.wrapper.find('.cancel-button');
-  },
+  cacheEls(element) {
+    this.wrapper = $(element);
+    this.dataView = this.wrapper.find('.js-view-data');
+    this.editView = this.wrapper.find('.js-view-edit');
+    this.editbutton = this.wrapper.find('.js-button-edit');
+    this.cancelButton = this.wrapper.find('.js-button-cancel');
+  }
 
-  bindEvents: function() {
-    this.editbutton.on('click', (event) => {
-      event.preventDefault();
-      this.showEditView();
-    });
+  bindEvents() {
+    this.editbutton.on('click', this.showEditView);
+    this.cancelButton.on('click', this.showDataView);
+  }
 
-    this.cancelButton.on('click', (event) => {
-      event.preventDefault();
-      this.showDataView();
-    });
-  },
-
-  showDataView: function() {
+  showDataView = (event) => {
+    if (event) event.preventDefault();
     this.editView.hide();
     this.dataView.show();
-  },
+    $('html, body').scrollTop(0);
+  }
 
-  showEditView: function() {
+  showEditView = (event) => {
+    if (event) event.preventDefault();
     this.dataView.hide();
     this.editView.show();
     this.editView.find('.form-control:first').focus();
   }
 
-};
+}
 
+exports .Edit = {
+  el: '.js-hidden-edit',
+
+  init: function() {
+    $(this.el).each((index, element) => {
+      new Edit(element);
+    });
+  }
+};

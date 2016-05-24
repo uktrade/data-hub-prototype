@@ -59,7 +59,7 @@
     "key-spacing": [2, { "beforeColon": false, "afterColon": true }],
     "new-cap": 2,
     "new-parens": 2,
-    "quotes": [2, "single"],
+    "quotes": [0, "single"],
     "semi": 2,
     "semi-spacing": [2, {"before": false, "after": true}],
     "space-infix-ops": 2,

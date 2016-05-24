@@ -10,14 +10,14 @@ const interactionsData = require('../../data/interactions.json');
 let data = {};
 
 function expandSicCodes(company) {
+  if (company.sic_codes) {
+    const expandedCodes = company.sic_codes.map((sic_code) => {
+      return sicLookup(sic_code);
+    });
 
-  const expandedCodes = company.sic_codes.map((sic_code) => {
-    return sicLookup(sic_code);
-  });
-
-  delete company.sic_codes;
-  company.sic_codes = expandedCodes;
-
+    delete company.sic_codes;
+    company.sic_codes = expandedCodes;
+  }
 }
 
 function sicLookup(code) {
@@ -106,20 +106,8 @@ function addUKTIData(company) {
   addStatus(company);
 
   Object.assign(company, {
-    website: '',
-    businessDescription: '',
     countryOfInterest: ['Argentina', 'Greece'],
     interactions: interactionsData.slice(0),
-    region: '',
-    accountManager: '',
-    operatingAddress: {
-      address1: '',
-      address2: '',
-      town: '',
-      postcode: ''
-    },
-    currentlyExporting: false,
-    connections: [],
     uktidata: true
   });
 }
@@ -143,7 +131,7 @@ function getCompanyContact(companyId, contactId) {
 
   const company = data[companyId];
   if (!company) {
-    return;
+    return null;
   }
 
   let contacts = company.contacts;

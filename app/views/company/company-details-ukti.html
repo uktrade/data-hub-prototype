@@ -24,7 +24,7 @@
     <td>
       {{ company.operatingAddress.address1 }}<br/>
       {{ company.operatingAddress.address2 }}<br/>
-      {{ company.operatingAddress.town }}<br/>
+      {{ company.operatingAddress.city }}<br/>
       {{ company.operatingAddress.postcode }}
     </td>
   </tr>
@@ -48,7 +48,11 @@
   </tr>
   <tr>
     <th>Company connections</th>
-    <td>{{ company.connections }}</td>
+    <td>
+      {% for connection in company.connections %}
+        <div>{{ connection }}</div>
+      {% endfor %}
+    </td>
   </tr>
   </tbody>
 </table>
