@@ -3,7 +3,15 @@
 {% block main %}
   <a class="back-link" href='/search?query={{query}}'>Back to company search</a>
 
-  <h1 class="heading-xlarge">{{ company.company_name }}</h1>
+  <h1 class="heading-xlarge record-title">
+    {{ company.company_name }}
+    {% if company.uktiStatus != '' %}
+    <span
+      class="status-badge {% if company.uktiStatus == 'Prospect' %} status-badge--prospect{% endif %}">
+      {{ company.uktiStatus}}
+    </span>
+    {% endif %}
+  </h1>
   <div class="tabs tabs--inline js-tabs">
     <nav class="tabs-nav">
       <ul class="tabs-list">

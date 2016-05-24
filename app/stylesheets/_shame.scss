@@ -101,3 +101,18 @@
 #content {
   min-height: 600px;
 }
+
+.form-group__checkbox-group {
+  .form-label {
+    margin-bottom: 3px;
+  }
+}
+
+.js-radiohide-content {
+  @extend %contain-floats;
+  clear: both;
+  padding-top: 20px;
+  padding-left: 10px;
+  border-left: 5px solid $border-colour;
+  margin-top: 10px;
+}

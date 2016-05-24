@@ -1,17 +1,124 @@
 <form method="post">
+
+  <fieldset class="fieldset-group form-group js-add-another">
+    {% if company.sectors %}
+      {% for sector in company.sectors %}
+      <div class="form-group form-group--compact">
+        <label class="form-label" for="sector-{{ loop.index }}">Sector</label>
+        <input class="form-control"
+               id="sector-{{ loop.index }}"
+               name="sectors"
+               type="text"
+               value="{{ sector }}" />
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="form-group form-group--compact">
+        <label class="form-label" for="sector-1">Sector</label>
+        <input class="form-control"
+               id="sector-1"
+               name="sectors"
+               type="text"
+               value="" />
+      </div>
+      {% endif %}
+      <a class="add-another-button" href="#">Add another sector</a>
+  </fieldset>
   <div class="form-group">
     <label class="form-label" for="website">Website</label>
     <input id="website" class="form-control" name="website" value="{{ company.website }}" />
   </div>
   <div class="form-group">
     <label class="form-label" for="description">Business description</label>
-    <input id="description" class="form-control" name="businessDescription" value="{{ company.businessDescription }}" />
+    <textarea id="description" class="form-control" name="businessDescription">{{ company.businessDescription }}</textarea>
   </div>
+  <div class="form-group">
+    <label class="form-label" for="website">Region</label>
+    <input id="region " class="form-control" name="region" value="{{ company.region }}" />
+  </div>
+
+  <fieldset class="inline form-group form-group__checkbox-group js-radiohide">
+
+    <legend class="form-label">Is the operating address different from Companies House registered office address?</legend>
+
+    <label class="block-label" for="hasOperatingAddressYes">
+      <input id="hasOperatingAddressYes"
+             type="radio"
+             name="hasOperatingAddress"
+             value="Yes" {% if company.operatingAddress and company.operatingadress.address1 != '' %}checked="true"{% endif %}>
+      Yes
+    </label>
+    <label class="block-label" for="hasOperatingAddressNo">
+      <input id="hasOperatingAddressNo"
+             type="radio"
+             name="hasOperatingAddress"
+             {% if not company.operatingAddress or company.operatingadress.address1 == '' %}checked="true"{% endif %}value="No">
+      No
+    </label>
+
+    <div class="js-radiohide-content">
+      <div class="form-group">
+        <label class="form-label" for="operatingAddress1">Operating address</label>
+        <input id="operatingAddress1" class="form-control" name="operatingAddress_address1" value="{{ company.operatingAddress.address1 }}" />
+        <input id="operatingAddress2" class="form-control" name="operatingAddress_aaddress2" value="{{ company.operatingAddress.address2 }}" />
+        <input id="operatingCity" class="form-control" name="operatingAddress_city" value="{{ company.operatingAddress.city }}" />
+        <input id="operatingPostcode" class="form-control" name="operatingAddress_postcode" value="{{ company.operatingAddress.postcode }}" />
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="inline form-group form-group__checkbox-group js-radiohide">
+
+    <legend class="form-label">Is there an agreed UKTI account manager for this company?</legend>
+
+    <label class="block-label" for="accountManagerYes">
+      <input id="accountManagerYes"
+             type="radio"
+             name="hasAccountManager"
+             value="Yes" {% if company.accountManager and company.accountManager != '' %}checked="true"{% endif %}>
+      Yes
+    </label>
+    <label class="block-label" for="accountManagerNo">
+      <input id="accountManagerNo"
+             type="radio"
+             name="hasAccountManager"
+             value="No" {% if company.accountManger or company.accontManager == '' %}checked="true"{% endif %}>
+      No
+    </label>
+
+    <div class="js-radiohide-content">
+      <div class="form-group">
+        <label class="form-label" for="accountManager">Account manager</label>
+        <input id="accountManager" class="form-control" name="accountManager" value="{{ company.accountManager }}" />
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="inline form-group form-group__checkbox-group">
+    <legend class="form-label">Is this company curently exporting to a market?</legend>
+    <label class="block-label" for="exportingyes">
+      <input id="exportingyes"
+             type="radio"
+             name="currentlyExporting"
+             value="Yes" {% if company.currentlyExporting == true %}checked="true"{% endif %} >
+      Yes
+    </label>
+    <label class="block-label" for="exportingno">
+      <input id="exportingno"
+             type="radio"
+             name="currentlyExporting"
+             value="No" {% if company.currentlyExporting == false %}checked="true"{% endif %}>
+      No
+    </label>
+  </fieldset>
+
   <fieldset class="fieldset-group form-group js-add-another">
-    {% if company.countryOfInterest %}
+    {% if company.countryOfInterest and company.countryOfInterest.length > 0 %}
       {% for countryOfInterest in company.countryOfInterest %}
         <div class="form-group form-group--compact">
-          <label class="form-label" for="country-of-interest-{{ loop.index }}">Country of interest</label>
+          <label class="form-label" for="country-of-interest-{{ loop.index }}">Future countries of interest(optional)</label>
           <input class="form-control"
                  id="country-of-interest-{{ loop.index }}"
                  name="countryOfInterest"
@@ -23,16 +130,44 @@
       <div class="form-group form-group--compact">
         <label class="form-label" for="country-of-interest-1">Country of interest</label>
         <input class="form-control"
-               id="country-of-interest-{{ loop.index }}"
+               id="country-of-interest-1"
                name="countryOfInterest"
                type="text"
-               value="{{ countryOfInterest }}" />
+               value="" />
       </div>
     {% endif %}
     <a class="add-another-button" href="#">Add another country</a>
   </fieldset>
-  <div class="form-group">
-    <button class="button button-primary save-button" type="submit">Save</button>
-    <a class="cancel-button" href="#">Cancel</a>
+
+  <fieldset class="fieldset-group form-group js-add-another">
+    {% if company.connections and company.connections.length > 0 %}
+      {% for connection in company.connections %}
+      <div class="form-group form-group--compact">
+        <label class="form-label" for="connection-{{ loop.index }}">Company connections(optional)</label>
+        <input class="form-control"
+               id="connection-{{ loop.index }}"
+               name="connections"
+               type="text"
+               value="{{ connection }}" />
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="form-group form-group--compact">
+        <label class="form-label" for="connection-1">Company connections(optional)</label>
+        <input class="form-control"
+               id="connection-1"
+               name="connections"
+               type="text"
+               value="" />
+      </div>
+    {% endif %}
+    <a class="add-another-button" href="#">Add another company connection</a>
+  </fieldset>
+
+  <div class="button-bar">
+    <button class="button button--save" type="submit">Save</button>
+    <a class="button-link button--cancel js-button-cancel" href="#">Cancel</a>
   </div>
 </form>
+
+

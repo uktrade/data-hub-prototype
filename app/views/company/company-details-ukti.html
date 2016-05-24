@@ -1,7 +1,14 @@
 <table class="table-detail">
   <tbody>
   <tr>
-    <th width="30%">Website</th>
+    <th width="30%">Sectors</th>
+    <td>{% for sector in company.sectors %}
+      <div>{{ sector }}</div>
+      {% endfor %}</td>
+  </tr>
+  <tr>
+  <tr>
+    <th>Website</th>
     <td>{{ company.website }}</td>
   </tr>
   <tr>
@@ -9,25 +16,42 @@
     <td>{{ company.businessDescription }}</td>
   </tr>
   <tr>
-    <th>Export experience</th>
+    <th>Region</th>
+    <td>{{ company.region }}</td>
+  </tr>
+  <tr>
+    <th>Operating address</th>
     <td>
-      {% if company.exportExperience %}
-        {% for experience in company.exportExperience  %}
-          <div>
-            <a href="#">{{ experience.year }} - {{ experience.country }}</a>
-          </div>
-        {% endfor %}
-      {% endif %}
+      {{ company.operatingAddress.address1 }}<br/>
+      {{ company.operatingAddress.address2 }}<br/>
+      {{ company.operatingAddress.city }}<br/>
+      {{ company.operatingAddress.postcode }}
     </td>
   </tr>
   <tr>
-    <th>Countries of interest</th>
+    <th>Account manager</th>
+    <td>{{ company.accountManager }}</td>
+  </tr>
+  <tr>
+    <th>Is the company currently <br/>exporting to a market?</th>
+    <td>{% if company.currentlyExporting %}Yes{% else %}No{% endif %}</td>
+  </tr>
+  <tr>
+    <th>Future countries of interest</th>
     <td>
       {% if company.countryOfInterest %}
         {% for countryOfInterest in company.countryOfInterest %}
           <div>{{ countryOfInterest }}</div>
         {% endfor %}
       {% endif %}
+    </td>
+  </tr>
+  <tr>
+    <th>Company connections</th>
+    <td>
+      {% for connection in company.connections %}
+        <div>{{ connection }}</div>
+      {% endfor %}
     </td>
   </tr>
   </tbody>

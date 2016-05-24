@@ -1,17 +1,6 @@
 'use strict';
 
-const _ = require('lodash');
-const api = require('../lib/companieshouseapis');
-const interactionsData = require('../../data/interactions.json');
-const sicCodes = require('../../data/sic-codes.json');
-
-let uktiCompanyData = {};
-const defaultExtraData = {
-  website: '',
-  businessDescription: '',
-  countryOfInterest: ['Argentina', 'Greece']
-};
-
+let companyRepository = require('../lib/companyrepository');
 
 function get(req, res) {
   let companyNum = req.params.id;
@@ -21,81 +10,96 @@ function get(req, res) {
     res.redirect('/');
   }
 
-  api
-    .findCompany(companyNum)
+  companyRepository.getCompany(companyNum)
     .then((company) => {
-
-      addUktiDataToCompany(company);
-      expandSicCodes(company);
-
-      res.render('company/company', {
-        query,
-        company,
-        showSearch: true,
-        interactions: _.slice(interactionsData, 0, 5),
-      });
+      res.render('company/company', {query, company, searchSearch: true});
     })
     .catch((error) => {
-      res.render('company/company', {
-        error
-      });
+      res.render('error', {error});
     });
 }
 
 function post(req, res) {
   let companyNum = req.params.id;
-
-  uktiCompanyData[companyNum] = {
-    website: req.body.website,
-    businessDescription: req.body.businessDescription,
-    countryOfInterest: req.body.countryOfInterest
-  };
-
+  let data = req.body;
   let query = req.query.query || '';
 
-  res.redirect(`/companies/${companyNum}?query=${query}`);
+  companyRepository.getCompany(companyNum)
+    .then((currentCompany) => {
+      return applyFormFieldsToCompany(currentCompany, data);
+    })
+    .then((newCompany) => {
+      return companyRepository.updateCompany(newCompany);
+    })
+    .then(() => {
+      res.redirect(`/companies/${companyNum}?query=${query}`);
+    })
+    .catch((error) => {
+      res.render('company/company', {
+        query: query,
+        company: error.company || {},
+        searchSearch: true,
+        errors: error.errors || {}
+      });
+    });
 
 }
 
-function addUktiDataToCompany(company) {
-  const exportExperience = [
-    {
-      year: '2012',
-      country: 'Arentina'
-    },
-    {
-      year: '2010',
-      country: 'Brazil'
+
+function applyFormFieldsToCompany(company, formData) {
+
+  return new Promise((fulfill) => {
+
+    let newCompany = Object.assign({}, company);
+
+    if (Array.isArray(formData.sectors)) {
+      newCompany.sectors = formData.sectors;
+    } else {
+      newCompany.sectors = [formData.sectors];
     }
-  ];
-  const extraData = uktiCompanyData[company.company_number] || defaultExtraData;
-  _.extend(company, {exportExperience}, extraData);
-}
 
-function expandSicCodes(company) {
+    newCompany.website = formData.website;
+    newCompany.businessDescription = formData.businessDescription;
+    newCompany.region = formData.region;
 
-  const expandedCodes = company.sic_codes.map((sic_code) => {
-    return {
-      code: sic_code,
-      title: sicLookup(sic_code)
-    };
+    if (formData.hasOperatingAddress === 'Yes') {
+      newCompany.operatingAddress = {
+        address1: formData.operatingAddress_address1,
+        address2: formData.operatingAddress_aaddress2,
+        city: formData.operatingAddress_city,
+        postcode: formData.operatingAddress_postcode
+      };
+    } else if (newCompany.operatingAddress) {
+      delete newCompany.operatingAddress;
+    }
+
+    if (formData.hasAccountManager === 'Yes' && formData.accountManager != '') {
+      newCompany.accountManager = formData.accountManager;
+    } else if (newCompany.accountManager) delete newCompany.accountManager;
+
+    newCompany.currentlyExporting = formData.currentlyExporting === 'Yes';
+
+    if (Array.isArray(formData.countryOfInterest)) {
+      newCompany.countryOfInterest = formData.countryOfInterest;
+    } else {
+      newCompany.countryOfInterest = [formData.countryOfInterest];
+    }
+
+    if (Array.isArray(formData.connections)) {
+      newCompany.connections = formData.connections;
+    } else {
+      newCompany.connections = [formData.connections];
+    }
+
+    fulfill(newCompany);
+
   });
 
-  delete company.sic_codes;
-  company.sic_codes = expandedCodes;
-
 }
 
-function sicLookup(code) {
-  let sicCode = _.find(sicCodes, { code });
-
-  if (!sicCode) {
-    return code;
-  }
-  return sicCode.description;
-}
 
 module.exports = {
   get: get,
-  post: post
+  post: post,
+  applyFormFieldsToCompany: applyFormFieldsToCompany,
 };

@@ -1,17 +1,10 @@
 'use strict';
 
 const $ = require('jquery');
-exports.AddAnother = {
 
-  el: '.js-add-another',
-
-  init: function() {
-    this.cacheEls();
-    this.bindEvents();
-  },
-
-  cacheEls: function() {
-    this.element = $(this.el);
+class AddAnother {
+  constructor(element) {
+    this.element = $(element);
     const fieldGroups = this.element.find('.form-group');
 
     this.fieldCount = fieldGroups.length;
@@ -19,13 +12,11 @@ exports.AddAnother = {
     this.originalField = this.firstGroup.find('input.form-control');
     this.fieldName = this.originalField.attr('name');
     this.buttonElement = this.element.find('.add-another-button');
-  },
 
-  bindEvents: function() {
-    this.buttonElement.on('click', $.proxy(this.addField, this));
-  },
+    this.buttonElement.on('click', this.addField);
+  }
 
-  addField: function(event) {
+  addField = (event) => {
     event.preventDefault();
 
     this.fieldCount += 1;
@@ -47,5 +38,16 @@ exports.AddAnother = {
 
     newInput.focus();
   }
+}
 
+
+exports.AddAnother = {
+
+  el: '.js-add-another',
+
+  init: function() {
+    $(this.el).each((index, element) => {
+      new AddAnother(element);
+    });
+  }
 };

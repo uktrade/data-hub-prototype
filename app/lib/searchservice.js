@@ -3,7 +3,7 @@
 let companiesHouseApi = require('./companieshouseapis');
 const companyRepository = require('./companyrepository');
 const lunr = require('lunr');
-const possibleFacets = ['type', 'sectors', 'status'];
+const possibleFacets = ['type', 'sectors', 'uktiStatus'];
 
 
 let searchHistory = [];
@@ -15,7 +15,7 @@ function searchLunr(term) {
     let expandedResult;
 
     if (result.ref.charAt(0) === 'C') {
-      expandedResult = companyRepository.getCompany(result.ref.slice(1));
+      expandedResult = companyRepository.getCompanySummary(result.ref.slice(1));
       expandedResult.type = 'Company';
     } else if (result.ref.charAt(0) === 'P') {
       const parts = result.ref.split('-');
@@ -69,8 +69,8 @@ function search(term) {
     if (!searchHistory.find((item) => item === lowerTerm)) {
       searchHistory.push(lowerTerm);
       companiesHouseApi.findCompanies(term)
-        .then((result) => {
-          addCHRecords(result.items);
+        .then((companies) => {
+          addCHRecords(companies.items);
           let results = searchLunr(term);
           let facets = calculateFacets(results);
           fulfill({results, facets});
