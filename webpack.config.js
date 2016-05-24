@@ -1,12 +1,10 @@
 const webpack = require('webpack');
-const path = require('path');
-var paths = require('./gulp/paths');
-const nodeEnv = process.env.NODE_ENV || 'development';
-const isProd = nodeEnv === 'production';
+const paths = require('./gulp/paths');
+const prod = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
-  context: path.join(__dirname, './client'),
+  devtool: prod ? 'hidden-source-map' : 'cheap-module-source-map',
+
   entry: {
     app: `${paths.sourceJS}/main.js`,
     search: `${paths.sourceJS}/search.js`
@@ -24,27 +22,22 @@ module.exports = {
           // 'react-hot',
           'babel-loader'
         ]
-      },
-    ],
+      }
+    ]
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
     modules: [
       paths.sourceJS,
-      'node_modules',
-      'node_modules/mojular/node_modules'
+      'node_modules'
     ]
   },
-  plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-      filename: 'vendor.bundle.js'
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false
-    }),
+
+  plugins: prod ? [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }}),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
@@ -52,10 +45,17 @@ module.exports = {
       output: {
         comments: false
       },
-      sourceMap: false
-    }),
-    new webpack.DefinePlugin({
-      'process.env': { NODE_ENV: JSON.stringify(nodeEnv) }
-    })
+      sourceMap: false }),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: Infinity,
+      filename: 'vendor.bundle.js'})
+  ] : [
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: Infinity,
+      filename: 'vendor.bundle.js' })
   ]
 };
