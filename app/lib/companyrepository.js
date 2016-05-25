@@ -48,10 +48,11 @@ function addRandomPeople(company) {
   company.contacts = [];
   for (let pos = 5; pos > 0; pos -= 1) {
     const randindex = Math.round(Math.random() * (contactsData.length - 1));
-    let randomContact = contactsData[randindex];
+    let randomContact = Object.assign({}, contactsData[randindex]);
     randomContact.id = `${randomContact.id}`;
     company.contacts.push(randomContact);
   }
+  company.contacts[0].primaryContact = true;
 }
 
 function getCompanySummary(id) {

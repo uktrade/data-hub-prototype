@@ -27,13 +27,18 @@
 }
 
 .contact-list__heading {
-  font-size: em(19);
-  font-weight: 700;
+  @include bold-19();
   margin: 0 0 em(12);
+  padding-top: 2px;
+  position: relative;
+
+  .status-badge {
+    top: 0;
+  }
 }
 
 .contact-list__meta {
-  font-size: em(19);
+  @include core-19();
   margin: 0;
 
   &.contact-list__meta--inline {
@@ -43,7 +48,6 @@
 }
 
 .contact-list__date {
-  font-size: em(24);
-  font-weight: 700;
+  @include bold-24();
   margin: 0 0 em(5);
 }
