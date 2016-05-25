@@ -46,7 +46,7 @@ function indexCompanyContacts(company) {
     company.contacts.forEach((contact) => {
       index.add({
         id: `P${contact.id}-${company.id}`,
-        title: `${contact.title} ${contact.givenname} ${contact.surname}`,
+        title: `${contact.title} ${contact.name}`,
         address: `${contact.streetaddress}, ${contact.city}, ${contact.zipcode}`
       });
     });

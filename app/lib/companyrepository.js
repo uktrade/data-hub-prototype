@@ -33,7 +33,7 @@ function sicLookup(code) {
 
 function addSectors(company) {
   company.sectors = [];
-  for (let pos = Math.round(Math.random() * 5); pos > 0; pos -= 1) {
+  for (let pos = Math.round(Math.random() * 3); pos > 0; pos -= 1) {
     company.sectors.push(sectors[Math.round(Math.random() * (sectors.length - 1))]);
   }
 }
@@ -49,7 +49,10 @@ function addRandomPeople(company) {
   for (let pos = 5; pos > 0; pos -= 1) {
     const randindex = Math.round(Math.random() * (contactsData.length - 1));
     let randomContact = Object.assign({}, contactsData[randindex]);
-    randomContact.id = `${randomContact.id}`;
+    randomContact.name = `${randomContact.givenname} ${randomContact.surname}`;
+    delete randomContact.surname;
+    delete randomContact.givenname;
+    randomContact.id = `${pos}${company.id}`;
     company.contacts.push(randomContact);
   }
   company.contacts[0].primaryContact = true;
@@ -145,7 +148,38 @@ function getCompanyContact(companyId, contactId) {
       };
       contact.sectors = company.sectors;
       contact.uktiStatus = company.uktiStatus;
+      contact.interactions = company.interactions;
       return contact;
+    }
+  }
+
+  return null;
+}
+
+function setCompanyContact(companyId, updatedContact) {
+
+  const company = data[companyId];
+  if (!company) {
+    return null;
+  }
+
+  // Add new contacts, that have no id
+  if (!updatedContact.id) {
+    updatedContact.id = `${company.contacts.length + 1}${company.id}`;
+    updatedContact.company = {
+      title: company.title,
+      id: company.id
+    };
+    company.contacts.push(updatedContact);
+    return updatedContact;
+  }
+
+  // Update contacts that exist
+  let contacts = company.contacts;
+  for (let pos = 0; pos < contacts.length; pos += 1) {
+    if (contacts[pos].id === updatedContact.id) {
+      company.contacts[pos] = updatedContact;
+      return company.contacts[pos];
     }
   }
 
@@ -157,5 +191,6 @@ module.exports = {
   getCompanySummary,
   addCompany,
   updateCompany,
-  getCompanyContact
+  getCompanyContact,
+  setCompanyContact
 };

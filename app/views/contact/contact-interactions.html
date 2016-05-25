@@ -1,0 +1,52 @@
+<div class="grid-row">
+  <div class="column-one-third">
+    <div class="data">
+      <h2 class="bold-xlarge data__title">3</h2>
+      <p class="bold-xsmall data__description">months since last interaction with UKTI</p>
+    </div>
+  </div>
+  <div class="column-one-third">
+    <div class="data">
+      <h2 class="bold-xlarge data__title">8</h2>
+      <p class="bold-xsmall data__description">interactions added in the last 12 months.</p>
+    </div>
+  </div>
+  <div class="column-one-third">
+    <p class="actions">
+      <a class="button button-secondary" href="#">Add new interaction</a>
+    </p>
+  </div>
+</div>
+
+<ol class="contact-list">
+  {% for interaction in contact.interactions %}
+    <li class="contact-list__item">
+      <h3 class="contact-list__heading">
+        <a href="#">{{ interaction.subject }}</a>
+      </h3>
+      <div class="grid-row">
+        <div class="column-two-thirds">
+          <dl>
+            <dd>Company contact:</dd>
+            <dt><a href="#">{{ interaction.contact }}</a></dt>
+            <dd>UKTI advisor</dd>
+            <dt>{{ interaction.advisor }}</dt>
+          </dl>
+        </div>
+        <div class="column-one-third u-align-right">
+          <p class="contact-list__date">{{ interaction.date }}</p>
+          <p class="contact-list__meta">{{ interaction.type }}</p>
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+</ol>
+<a href="#">View more interactions</a>
+
+
+<div> Questions
+  <ul>
+    <li>Is the UKTI advisor this contact? if so why are we showing it?</li>
+    <li>Confirm that we are only displaying interactions that involve this contact</li>
+  </ul>
+</div>

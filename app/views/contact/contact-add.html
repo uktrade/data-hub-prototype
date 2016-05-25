@@ -1,0 +1,16 @@
+{% extends "../layouts/ukti-search-header.html" %}
+
+{% block main %}
+
+  <a class="back-link" href="/companies/{{ contact.company.id }}?query={{ query }}#contacts">Back to contacts</a>
+
+  <h1 class="heading-xlarge record-title">Add new contact</h1>
+
+  <h2 class="heading-small">Company</h2>
+  <p>
+    <a href="/companies/{{ contact.company.id }}?query={{ query }}">{{ contact.company.title }}</a>
+  </p>
+  {% set backUrl = "/companies/" + contact.company.id + "?query=" +  query +"#contacts" %}
+  {% include './contact-form.html' %}
+
+{% endblock %}
