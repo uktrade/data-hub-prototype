@@ -8,6 +8,9 @@
       <h3 class="contact-list__heading">
         <a href="#">{{ contact.givenname }} {{ contact.surname }}</a>
         {{ contact.occupation }}
+        {% if contact.primaryContact %}
+          <span class="status-badge status-badge--primary-contact">Primary</span>
+        {% endif %}
       </h3>
       <div class="grid-row">
         <div class="column-half">
@@ -15,7 +18,7 @@
         </div>
         <div class="column-half">
           <p class="contact-list__meta contact-list__meta--inline">Email:
-            <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+            <a href="mailto:{{ contact.emailaddress }}">{{ contact.emailaddress }}</a>
           </p>
         </div>
       </div>
