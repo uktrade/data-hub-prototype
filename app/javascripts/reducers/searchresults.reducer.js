@@ -8,7 +8,7 @@ const defaultStatus = {
   filters: {
     type: [],
     sectors: [],
-    status: []
+    uktiStatus: []
   }
 };
 
