@@ -12,7 +12,7 @@ function get(req, res) {
 
   companyRepository.getCompany(companyNum)
     .then((company) => {
-      res.render('company/company', {query, company, searchSearch: true});
+      res.render('company/company', {query, company});
     })
     .catch((error) => {
       res.render('error', {error});

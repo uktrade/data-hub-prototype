@@ -12,13 +12,12 @@ export default class SearchResultContact extends Component {
     const result = this.props.result;
     const name = `${result.title} ${result.givenname} ${result.surname}`;
     const query = this.props.query;
+    const linkUrl = `/companies/${result.company.id}/contact/${result.id}?query=${query}`;
 
     return (
       <li className="results-list__result">
         <h3 className="result-title">
-          <a href='#' dangerouslySetInnerHTML={{__html: highlightQuery(name, query)}}>
-
-            </a>
+          <a href={linkUrl} dangerouslySetInnerHTML={{__html: highlightQuery(name, query)}}></a>
         </h3>
         <div className="meta">{result.company.title} - {result.occupation}</div>
 

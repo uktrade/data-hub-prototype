@@ -1,15 +1,16 @@
 {% extends "../layouts/ukti-search-header.html" %}
 
 {% block main %}
-  <a class="back-link" href='/search?query={{query}}'>Back to search</a>
+  {% if referer.indexOf('search') != -1 %}
+    <a class="back-link" href="/search?query={{ query }}">Back to search</a>
+  {% else %}
+    <a class="back-link" href="/companies/{{ contact.company.id }}?query={{query}}#contacts">Back to company</a>
+  {% endif %}
 
   <h1 class="heading-xlarge record-title">
-    {{ company.company_name }}
-    {% if company.uktiStatus != '' %}
-    <span
-      class="status-badge {% if company.uktiStatus == 'Prospect' %} status-badge--prospect{% endif %}">
-      {{ company.uktiStatus}}
-    </span>
+    {{ contact.givenname }} {{ contact.surname }}
+    {% if contact.primaryContact %}
+      <span class="status-badge status-badge--primary-contact">Primary</span>
     {% endif %}
   </h1>
   <div class="tabs tabs--inline js-tabs">
@@ -19,9 +20,6 @@
           <a class="is-selected" id="tab-details" href="#tab-content-details">Details</a>
         </li>
         <li>
-          <a id="tab-contacts" href="#tab-content-contacts">Contacts</a>
-        </li>
-        <li>
           <a id="tab-interactions" href="#tab-content-interactions">Interactions</a>
         </li>
       </ul>
@@ -29,17 +27,13 @@
     <div class="tabs-content">
       <div id="tab-content-details" class="tabs-panel">
         <div class="tabs-panel-inner">
-          {% include "company/company-details.html" %}
+          {% include "contact/contact-details.html" %}
         </div>
       </div>
-      <div id="tab-content-contacts" class="tabs-panel">
-        <div class="tabs-panel-inner">
-          {% include "company/company-contacts.html" %}
-        </div>
-      </div>
+
       <div id="tab-content-interactions" class="tabs-panel">
         <div class="tabs-panel-inner">
-          {% include "company/company-interactions.html" %}
+          {% include "contact/contact-interactions.html" %}
         </div>
       </div>
     </div>
