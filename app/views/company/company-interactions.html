@@ -1,8 +1,14 @@
 <div class="grid-row">
-  <div class="column-two-thirds">
-    <div class="data data-smaller">
-      <div class="data-title bold-xlarge">3 months</div>
-      <div class="data-subtitle bold-xsmall">since last interaction</div>
+  <div class="column-one-third">
+    <div class="data">
+      <h2 class="bold-xlarge data__title">3</h2>
+      <p class="bold-xsmall data__description">months since last interaction with UKTI</p>
+    </div>
+  </div>
+  <div class="column-one-third">
+    <div class="data">
+      <h2 class="bold-xlarge data__title">8</h2>
+      <p class="bold-xsmall data__description">interactions added in the last 12 months.</p>
     </div>
   </div>
   <div class="column-one-third">
@@ -13,7 +19,7 @@
 </div>
 
 <ol class="contact-list">
-  {% for interaction in interactions %}
+  {% for interaction in company.interactions %}
     <li class="contact-list__item">
       <h3 class="contact-list__heading">
         <a href="#">{{ interaction.subject }}</a>
@@ -21,10 +27,10 @@
       <div class="grid-row">
         <div class="column-two-thirds">
           <dl>
+            <dd>Company contact:</dd>
+            <dt><a href="#">{{ interaction.contact }}</a></dt>
             <dd>UKTI advisor</dd>
             <dt>{{ interaction.advisor }}</dt>
-            <dd>Company contact:</dd>
-            <dt>{{ interaction.contact }}</dt>
           </dl>
         </div>
         <div class="column-one-third u-align-right">
@@ -35,3 +41,4 @@
     </li>
   {% endfor %}
 </ol>
+<a href="#">View more interactions</a>

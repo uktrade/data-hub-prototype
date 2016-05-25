@@ -65,10 +65,6 @@
   }
 }
 
-.data-smaller {
-  padding-top: em(20);
-}
-
 #global-header .header-wrapper .header-global .header-logo {
   display: none;
 }
@@ -115,4 +111,10 @@
   padding-left: 10px;
   border-left: 5px solid $border-colour;
   margin-top: 10px;
+}
+
+.data {
+  .data__description {
+    max-width: 200px;
+  }
 }
