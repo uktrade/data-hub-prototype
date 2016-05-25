@@ -1,0 +1,46 @@
+<form method="post">
+
+  <div class="form-group">
+    <label class="form-label" for="title">Title (optional)</label>
+    <input id="title" class="form-control" name="title" value="{{ contact.title }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="name">Full name</label>
+    <input id="name" class="form-control" name="name" value="{{ contact.name }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="occupation">Role</label>
+    <input id="occupation" class="form-control" name="occupation" value="{{ contact.occupation }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="telephonenumber">Phone</label>
+    <input id="telephonenumber" class="form-control" name="telephonenumber" value="{{ contact.telephonenumber }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="emailaddress">Email</label>
+    <input id="emailaddress" class="form-control" name="emailaddress" value="{{ contact.emailaddress }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="streetaddress">Address</label>
+    <input id="streetaddress" class="form-control" name="streetaddress" value="{{ contact.streetaddress }}" />
+    <input id="city" class="form-control" name="city" value="{{ contact.city }}" />
+    <input id="zipcode" class="form-control" name="zipcode" value="{{ contact.zipcode }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="alternativeTelephonenumber">Alternative phone</label>
+    <input id="alternativeTelephonenumber" class="form-control" name="alternativeTelephonenumber" value="{{ contact.alternativeTelephonenumber }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="alternativeEmailaddress">Alternative email</label>
+    <input id="alternativeEmailaddress" class="form-control" name="alternativeEmailaddress" value="{{ contact.alternativeEmailaddress }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="notes">Notes</label>
+    <textarea id="notes" class="form-control" name="notes" rows="5">{{ company.notes }}</textarea>
+  </div>
+
+  <div class="button-bar">
+    <button class="button button--save" type="submit">Save</button>
+    <a class="button-link button--cancel js-button-cancel" href="{{ backUrl }}">Cancel</a>
+  </div>
+</form>

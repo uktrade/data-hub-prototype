@@ -48,7 +48,13 @@ app.get('/api/search?', apiController.search);
 app.get('/companies/:id?', companyViewController.get);
 app.post('/companies/:id?', companyViewController.post);
 
-app.get('/companies/:companyId/contact/:contactId?', contactViewController.get);
+app.get('/companies/:companyId/contact/view/:contactId?', contactViewController.get);
+
+app.get('/companies/:companyId/contact/edit/:contactId?', contactViewController.edit);
+app.post('/companies/:companyId/contact/edit/:contactId?', contactViewController.editPost);
+
+app.get('/companies/:companyId/contact/add?', contactViewController.add);
+app.post('/companies/:companyId/contact/add?', contactViewController.addPost);
 
 app.get('/', function(req, res) {
   res.render('index');

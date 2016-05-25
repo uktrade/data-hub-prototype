@@ -1,12 +1,12 @@
 <p class="actions">
-  <a class="button button-secondary" href="#">Add new contact</a>
+  <a class="button button-secondary" href="/companies/{{ company.id }}/contact/add">Add new contact</a>
 </p>
 
 <ol class="contact-list">
   {% for contact in company.contacts %}
     <li class="contact-list__item">
       <h3 class="contact-list__heading">
-        <a href="/companies/{{ company.id }}/contact/{{ contact.id}}?query={{ query }}">{{ contact.givenname }} {{ contact.surname }}</a>
+        <a href="/companies/{{ company.id }}/contact/view/{{ contact.id}}?query={{ query }}">{{ contact.name }}</a>
         - {{ contact.occupation }}
         {% if contact.primaryContact %}
           <span class="status-badge status-badge--primary-contact">Primary</span>
