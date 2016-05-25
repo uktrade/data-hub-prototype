@@ -4,16 +4,19 @@
 
 
 .tabs.tabs--inline {
-  margin-bottom: 1.05263em; // 20px
+  margin-bottom: 20px;
 
   // Tab list
   .tabs-nav {
+    @extend %contain-floats;
     border-top: 1px solid $grey-2;
     list-style: none;
     margin: 0;
 
     @include media(tablet) {
       border-top: 0 none;
+      border-bottom: 1px solid $grey-2;
+      margin-bottom: 40px;
     }
 
     li {
@@ -73,9 +76,7 @@
   .tabs-content {
     clear: both;
 
-    @include media(tablet) {
-      border-top: 1px solid $grey-2;
-    }
+
 
     &[aria-hidden='true'] {
       display: none;
