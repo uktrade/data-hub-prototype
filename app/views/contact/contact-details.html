@@ -1,0 +1,52 @@
+<div class="js-hidden-edit">
+  <div class="js-view-data">
+    <table class="table-detail">
+      <tbody>
+        <tr>
+          <th width="30%">Company</th>
+          <td><a href="/companies/{{ contact.company.id }}?query={{ query }}">{{ contact.company.title }}</a></td>
+        </tr>
+        <tr>
+        <tr>
+          <th>Title</th>
+          <td>{{ contact.title }}</td>
+        </tr>
+        <tr>
+          <th>Role</th>
+          <td>{{ contact.occupation }}</td>
+        </tr>
+        <tr>
+          <th>Phone number</th>
+          <td>{{ contact.telephonenumber }}</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>{{ contact.emailaddress }}</td>
+        </tr>
+        <tr>
+          <th>Address</th>
+          <td>
+            {{ contact.streetaddress }}, {{ contact.city }}, {{ contact.zipcode }}
+          </td>
+        </tr>
+        <tr>
+          <th>Alternative phone</th>
+          <td>{{ contact.alternativeTelephonenumber }}</td>
+        </tr>
+        <tr>
+          <th>Alternative email</th>
+          <td>{{ contact.alternativeEmailaddress }}</td>
+        </tr>
+        <tr>
+          <th>Notes</th>
+          <td>{{ contact.notes }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <a href="#" class="button button-secondary js-button-edit">Edit contact details</a>
+  </div>
+  <div class="js-view-edit">
+    EDIT
+  </div>
+</div>

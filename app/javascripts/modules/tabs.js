@@ -12,7 +12,13 @@ exports.Tabs = {
     this.cacheEls();
     this.bindEvents();
 
-    this.toggleTab(this.$tabs.filter('.is-selected'));
+    let hash = window.location.hash.substring(1);
+
+    if (hash) {
+      this.toggleTab(this.$tabs.filter(`#tab-${hash}`));
+    } else {
+      this.toggleTab(this.$tabs.filter('.is-selected'));
+    }
   },
 
   bindEvents: function() {
