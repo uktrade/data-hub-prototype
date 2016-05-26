@@ -1,0 +1,81 @@
+{% extends "../layouts/ukti-search-header.html" %}
+
+{% block main %}
+  {% if referer.indexOf('contact') != -1 %}
+    <a class="back-link" href="/companies/{{ interaction.company.id }}/contact/view/{{ interaction.contact.id }}?query={{ query }}#interactions">Back to contact</a>
+  {% else %}
+    <a class="back-link" href="/companies/{{ interaction.company.id }}?query={{query}}#interactions">Back to company</a>
+  {% endif %}
+
+  <h1 class="heading-xlarge record-title">
+    Interaction details
+  </h1>
+
+  <table class="table-detail">
+    <tbody>
+    <tr>
+      <th width="30%">Company</th>
+      <td>
+        <a href="/companies/{{ interaction.company.id }}?query={{query}}">
+        {{ interaction.company.title }}
+      </td>
+    </tr>
+    <tr>
+      <th width="30%">Interaction type</th>
+      <td>{{ interaction.type }}</td>
+    </tr>
+    <tr>
+    <tr>
+      <th>Subject</th>
+      <td>{{ interaction.subject }}</td>
+    </tr>
+    <tr>
+      <th>Date of interaction</th>
+      <td>{{ interaction.date }}</td>
+    </tr>
+    <tr>
+      <th>Company contact</th>
+      <td><a href="/companies/{{ interaction.company.id }}/contact/view/{{ interaction.contact.id }}?query={{ query }}">{{ interaction.contact.name }}</td>
+    </tr>
+    <tr>
+      <th>UKTI advisor</th>
+      <td>{{ interaction.advisor }}</td>
+    </tr>
+    <tr>
+      <th>Interaction notes</th>
+      <td>{{ interaction.notes }}</td>
+    </tr>
+    <tr>
+      <th>Service offer</th>
+      <td>{{ interaction.serviceOffer }}</td>
+    </tr>
+    <tr>
+      <th>Service provider</th>
+      <td><a href="#">{{ interaction.serviceProvider }}</a></td>
+    </tr>
+
+
+    <tr>
+      <th>Created on</th>
+      <td>{{ interaction.createdOn }}</td>
+    </tr>
+    <tr>
+      <th>Created by</th>
+      <td><a href="#">{{ interaction.createdBy }}</a></td>
+    </tr>
+    <tr>
+      <th>Updated on</th>
+      <td>{{ interaction.updatedOn }}</td>
+    </tr>
+    <tr>
+      <th>Updated by</th>
+      <td><a href="#">{{ interaction.updatedBy }}</a></td>
+    </tr>
+
+
+    </tbody>
+  </table>
+
+  <a href="/companies/{{ interaction.company.id }}/interaction/edit/{{ interaction.id }}?query={{ query }}"
+     class="button button-secondary">Edit interaction details</a>
+{% endblock %}

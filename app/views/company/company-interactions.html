@@ -22,13 +22,13 @@
   {% for interaction in company.interactions %}
     <li class="contact-list__item">
       <h3 class="contact-list__heading">
-        <a href="#">{{ interaction.subject }}</a>
+        <a href="/companies/{{ company.id }}/interaction/view/{{ interaction.id }}?query={{ query }}">{{ interaction.subject }}</a>
       </h3>
       <div class="grid-row">
         <div class="column-two-thirds">
           <dl>
             <dd>Company contact:</dd>
-            <dt><a href="#">{{ interaction.contact }}</a></dt>
+            <dt><a href="/companies/{{ company.id }}/contact/view/{{ interaction.contact.id }}?query={{ query }}">{{ interaction.contact.name }}</a></dt>
             <dd>UKTI advisor</dd>
             <dt>{{ interaction.advisor }}</dt>
           </dl>

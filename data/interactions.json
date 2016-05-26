@@ -1,11 +1,17 @@
 [
   {
     "type": "Face to face",
-    "date": "6 February 2016",
+    "date": "6 Feb 2016",
     "subject": "Planning session for company's new export goals",
     "advisor": "Peck Copeland",
     "contact": "Medina Colon",
-    "_id": "573069c830424863b9abddad"
+    "serviceOffer": "Account management",
+    "serviceProvider": "London International Trade Team",
+    "id": "573069c830424863b9abddad",
+    "createdOn": "25 Feb 2015",
+    "createdBy": "Bobbie Smith",
+    "updatedOn": "02 Mar 2016",
+    "updatedBy": "Lee Walker"
   },
   {
     "type": "Email",
@@ -13,7 +19,13 @@
     "subject": "Details about UKTI services for new exports",
     "advisor": "Rios Olson",
     "contact": "Aguirre Bryant",
-    "_id": "573069c8f650e8367a0644f8"
+    "serviceOffer": "Account management",
+    "serviceProvider": "London International Trade Team",
+    "id": "573069c8f650e8367a0644f8",
+    "createdOn": "25 Feb 2015",
+    "createdBy": "Bobbie Smith",
+    "updatedOn": "02 Mar 2016",
+    "updatedBy": "Lee Walker"
   },
   {
     "type": "Email",
@@ -21,7 +33,13 @@
     "subject": "Introduction to UKTI and our team",
     "advisor": "Booker Villarreal",
     "contact": "Campbell Myers",
-    "_id": "573069c8d8641b0e47fdd1b3"
+    "serviceOffer": "Account management",
+    "serviceProvider": "London International Trade Team",
+    "id": "573069c8d8641b0e47fdd1b3",
+    "createdOn": "25 Feb 2015",
+    "createdBy": "Bobbie Smith",
+    "updatedOn": "02 Mar 2016",
+    "updatedBy": "Lee Walker"
   },
   {
     "type": "Face to face",
@@ -29,7 +47,13 @@
     "subject": "Introduction to UKTI and our team",
     "advisor": "Larson Bright",
     "contact": "Snyder Cabrera",
-    "_id": "573069c8643194ef9223c88d"
+    "serviceOffer": "Account management",
+    "serviceProvider": "London International Trade Team",
+    "id": "573069c8643194ef9223c88d",
+    "createdOn": "25 Feb 2015",
+    "createdBy": "Bobbie Smith",
+    "updatedOn": "02 Mar 2016",
+    "updatedBy": "Lee Walker"
   },
   {
     "type": "Email",
@@ -37,6 +61,12 @@
     "subject": "Advise on company stand at Paris Technology Show 2016",
     "advisor": "Lindsay Avery",
     "contact": "Francesca Bernard",
-    "_id": "573069c8a1dcebc25cdf8e15"
+    "serviceOffer": "Account management",
+    "serviceProvider": "London International Trade Team",
+    "id": "573069c8a1dcebc25cdf8e15",
+    "createdOn": "25 Feb 2015",
+    "createdBy": "Bobbie Smith",
+    "updatedOn": "02 Mar 2016",
+    "updatedBy": "Lee Walker"
   }
 ]
