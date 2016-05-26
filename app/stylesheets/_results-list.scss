@@ -1,5 +1,15 @@
 .result-summary {
+  @include core-19();
   margin: 0 0 20px;
+
+  .result-summary--result-count {
+    @include bold-27();
+  }
+
+  .result-summary--result-query {
+    @include bold-19();
+  }
+
 }
 
 .results-list {

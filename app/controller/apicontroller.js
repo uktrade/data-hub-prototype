@@ -19,7 +19,7 @@ function search(req, res) {
     .then((results) => {
       let totalResults = 0;
       if (results.results && results.results.length > 0) {
-        totalResults = results.length;
+        totalResults = results.results.length;
       }
 
       if (!results.facets.type.Company) results.facets.type.Company = 0;
@@ -29,7 +29,7 @@ function search(req, res) {
         query,
         results: results.results,
         facets: results.facets,
-        totalResults
+        totalResults: totalResults
       });
     })
     .catch((error) => {
