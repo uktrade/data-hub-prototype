@@ -22,6 +22,9 @@ function search(req, res) {
         totalResults = results.length;
       }
 
+      if (!results.facets.type.Company) results.facets.type.Company = 0;
+      if (!results.facets.type.Contact) results.facets.type.Contact = 0;
+
       res.json({
         query,
         results: results.results,

@@ -18,8 +18,10 @@ class SearchResults extends Component {
   render() {
 
     var resultElements;
-    if (this.props.results.results) {
+    if (this.props.results.results && this.props.results.results.length > 0) {
       resultElements = this.props.results.results.map(this.renderResult);
+    } else {
+      return <h1>No results</h1>;
     }
 
     return (
