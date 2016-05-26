@@ -17,18 +17,18 @@
     </p>
   </div>
 </div>
-
+{% if contact.interactions.length > 0 %}
 <ol class="contact-list">
   {% for interaction in contact.interactions %}
     <li class="contact-list__item">
       <h3 class="contact-list__heading">
-        <a href="#">{{ interaction.subject }}</a>
+        <a href="/companies/{{ contact.company.id }}/interaction/view/{{ interaction.id }}?query={{ query }}">{{ interaction.subject }}</a>
       </h3>
       <div class="grid-row">
         <div class="column-two-thirds">
           <dl>
             <dd>Company contact:</dd>
-            <dt><a href="#">{{ interaction.contact }}</a></dt>
+            <dt><a href="#">{{ interaction.contact.name }}</a></dt>
             <dd>UKTI advisor</dd>
             <dt>{{ interaction.advisor }}</dt>
           </dl>
@@ -42,11 +42,6 @@
   {% endfor %}
 </ol>
 <a href="#">View more interactions</a>
-
-
-<div> Questions
-  <ul>
-    <li>Is the UKTI advisor this contact? if so why are we showing it?</li>
-    <li>Confirm that we are only displaying interactions that involve this contact</li>
-  </ul>
-</div>
+{% else %}
+  <h2 class="heading-medium">This contact has no interactions</h2>
+{% endif %}

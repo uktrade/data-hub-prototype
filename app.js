@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const config = require('./config');
 const companyViewController = require('./app/controller/companycontroller');
 const contactViewController = require('./app/controller/contactcontroller');
+const interactionViewcController = require('./app/controller/interactioncontroller');
 const apiController = require('./app/controller/apicontroller');
 const nunjucks = require('express-nunjucks');
 const filters = require('./app/lib/filters');
@@ -55,6 +56,9 @@ app.post('/companies/:companyId/contact/edit/:contactId?', contactViewController
 
 app.get('/companies/:companyId/contact/add?', contactViewController.add);
 app.post('/companies/:companyId/contact/add?', contactViewController.addPost);
+
+app.get('/companies/:companyId/interaction/view/:interactionId?', interactionViewcController.get);
+
 
 app.get('/', function(req, res) {
   res.render('index');

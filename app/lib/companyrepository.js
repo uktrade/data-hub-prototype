@@ -58,6 +58,16 @@ function addRandomPeople(company) {
   company.contacts[0].primaryContact = true;
 }
 
+function addInteractionData(company) {
+  // Allocate a random contact from the company
+  company.interactions = interactionsData.map((interaction) => {
+    let newInteraction = Object.assign({}, interaction);
+    const randindex = Math.round(Math.random() * (company.contacts.length - 1));
+    newInteraction.contact = Object.assign({}, company.contacts[randindex]);
+    return newInteraction;
+  });
+}
+
 function getCompanySummary(id) {
   return data[id];
 }
@@ -108,10 +118,10 @@ function addUKTIData(company) {
   addRandomPeople(company);
   addSectors(company);
   addStatus(company);
+  addInteractionData(company);
 
   Object.assign(company, {
     countryOfInterest: ['Argentina', 'Greece'],
-    interactions: interactionsData.slice(0),
     uktidata: true
   });
 }
@@ -148,12 +158,18 @@ function getCompanyContact(companyId, contactId) {
       };
       contact.sectors = company.sectors;
       contact.uktiStatus = company.uktiStatus;
-      contact.interactions = company.interactions;
+      contact.interactions = getInteractionsForContact(company, contact);
       return contact;
     }
   }
 
   return null;
+}
+
+function getInteractionsForContact(company, contact) {
+  return company.interactions.filter((interaction) => {
+    return interaction.contact.id === contact.id;
+  });
 }
 
 function setCompanyContact(companyId, updatedContact) {
@@ -186,11 +202,32 @@ function setCompanyContact(companyId, updatedContact) {
   return null;
 }
 
+function getCompanyInteraction(companyId, interactionId) {
+  let company = data[companyId];
+  if (!company) {
+    return null;
+  }
+
+  for (let interaction of company.interactions) {
+    if (interaction.id === interactionId) {
+      let newInteraction = Object.assign({}, interaction);
+      newInteraction.company = {
+        title: company.title,
+        id: company.id
+      };
+      return newInteraction;
+    }
+  }
+
+  return null;
+}
+
 module.exports = {
   getCompany,
   getCompanySummary,
   addCompany,
   updateCompany,
   getCompanyContact,
-  setCompanyContact
+  setCompanyContact,
+  getCompanyInteraction
 };
