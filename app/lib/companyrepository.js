@@ -222,6 +222,31 @@ function getCompanyInteraction(companyId, interactionId) {
   return null;
 }
 
+function setCompanyInteraction(companyId, updatedInteraction) {
+  const company = data[companyId];
+  if (!company) {
+    return null;
+  }
+
+  // Add new interactions, that have no id  more todo later
+  if (!updatedInteraction.id) {
+    updatedInteraction.id = `${company.interactions.length + 1}${company.id}`;
+    company.interactions.push(updatedInteraction);
+    return updatedInteraction;
+  }
+
+  // Update contacts that exist
+  let interactions = company.interactions;
+  for (let pos = 0; pos < interactions.length; pos += 1) {
+    if (interactions[pos].id === updatedInteraction.id) {
+      company.interactions[pos] = updatedInteraction;
+      return company.interactions[pos];
+    }
+  }
+
+  return null;
+}
+
 module.exports = {
   getCompany,
   getCompanySummary,
@@ -229,5 +254,6 @@ module.exports = {
   updateCompany,
   getCompanyContact,
   setCompanyContact,
-  getCompanyInteraction
+  getCompanyInteraction,
+  setCompanyInteraction
 };
