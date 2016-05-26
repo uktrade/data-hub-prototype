@@ -1,0 +1,43 @@
+<form method="post">
+  <div class="form-group">
+    <label class="form-label" for="type">Company</label>
+    <input id="type" class="form-control" name="type" value="{{ interaction.company.title }}" disabled="true"/>
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="type">Interaction type</label>
+    <input id="type" class="form-control" name="type" value="{{ interaction.type }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="subject">Subject</label>
+    <input id="subject" class="form-control" name="subject" value="{{ interaction.subject }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="date">Date of interaction</label>
+    <input id="date" class="form-control" name="date" value="{{ interaction.date }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="contact">Company contact</label>
+    <input id="contact" class="form-control" name="contactName" value="{{ interaction.contact.name }}" />
+  </div>
+  <input type="hidden" name="contactId" value="{{ interaction.contact.id }}"/>
+  <div class="form-group">
+    <label class="form-label" for="advisor">UKTI advisor</label>
+    <input id="advisor" class="form-control" name="advisor" value="{{ interaction.advisor }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="notes">Interaction notes</label>
+    <textarea id="notes" class="form-control" name="notes" rows="5">{{ interaction.notes }}</textarea>
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="serviceOffer">Service offer</label>
+    <input id="serviceOffer" class="form-control" name="serviceOffer" value="{{ interaction.serviceOffer }}" />
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="serviceProvider">Service provider</label>
+    <input id="serviceProvider" class="form-control" name="serviceProvider" value="{{ interaction.serviceProvider }}" />
+  </div>
+  <div class="button-bar">
+    <button class="button button--save" type="submit">Save</button>
+    <a class="button-link button--cancel js-button-cancel" href="{{ backUrl }}">Cancel</a>
+  </div>
+</form>

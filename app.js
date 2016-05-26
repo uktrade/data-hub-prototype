@@ -58,7 +58,12 @@ app.get('/companies/:companyId/contact/add?', contactViewController.add);
 app.post('/companies/:companyId/contact/add?', contactViewController.addPost);
 
 app.get('/companies/:companyId/interaction/view/:interactionId?', interactionViewcController.get);
-
+app.get('/companies/:companyId/interaction/edit/:interactionId?', interactionViewcController.edit);
+app.post('/companies/:companyId/interaction/edit/:interactionId?', interactionViewcController.editPost);
+app.get('/companies/:companyId/contact/:contactId/interaction/add?', interactionViewcController.add);
+app.get('/companies/:companyId/interaction/add?', interactionViewcController.add);
+app.post('/companies/:companyId/contact/:contactId/interaction/add?', interactionViewcController.addPost);
+app.post('/companies/:companyId/interaction/add?', interactionViewcController.addPost);
 
 app.get('/', function(req, res) {
   res.render('index');

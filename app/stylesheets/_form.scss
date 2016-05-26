@@ -15,8 +15,9 @@
     display: block;
     margin-top: em(10);
   }
+
+  @include media(tablet) {
+    width: 66%;
+  }
 }
 
-.save-section {
-
-}
