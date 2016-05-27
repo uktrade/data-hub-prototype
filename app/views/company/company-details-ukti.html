@@ -22,10 +22,10 @@
   <tr>
     <th>Operating address</th>
     <td>
-      {{ company.operatingAddress.address1 }}<br/>
-      {{ company.operatingAddress.address2 }}<br/>
-      {{ company.operatingAddress.city }}<br/>
-      {{ company.operatingAddress.postcode }}
+      {% if company.operatingAddress.address1.length > 0 %}{{ company.operatingAddress.address1 }},{% endif %}
+      {% if company.operatingAddress.address2.length > 0 %}{{ company.operatingAddress.address2 }},{% endif %}
+      {% if company.operatingAddress.city.length > 0 %}{{ company.operatingAddress.city }},{% endif %}
+      {% if company.operatingAddress.postcode.length > 0 %}{{ company.operatingAddress.postcode }}{% endif %}
     </td>
   </tr>
   <tr>

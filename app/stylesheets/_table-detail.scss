@@ -22,33 +22,34 @@
   border-left: 10px solid $grey-2;
 
   tbody {
-
-
     tr {
-      td, th {
-        border-bottom: 0;
+      td,
+      th {
+        border-bottom: 1px solid $grey-2;
         color: $grey-1;
       }
 
+      th {
+        padding-left: 15px;
+      }
+
       &:nth-child(even) {
-        td, th {
+        td,
+        th {
           background: $white;
         }
       }
-    }
-
-    tr.table-detail--readonly__section  {
-      td, th {
-        border-bottom: 1px solid $grey-2;
-      }
-      td.spacer {
-        border-bottom: 0;
-      }
 
       &:last-child {
-        td, th {
+        td,
+        th {
           border-bottom: 0;
         }
+      }
+
+      .spacer {
+        border-bottom: 0;
+        padding-right: 5px;
       }
     }
   }

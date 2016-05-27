@@ -21,7 +21,7 @@ class SearchResults extends Component {
       return <h1>No results</h1>;
     }
 
-    if (this.props.results.results.length >0 && this.props.results.query.length > 0) {
+    if (this.props.results.results.length > 0 && this.props.results.query.length > 0) {
       let resultElements = this.props.results.results.map(this.renderResult);
       return (
         <div>

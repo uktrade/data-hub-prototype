@@ -32,14 +32,14 @@
 }
 
 .contact-list__heading {
-  @include bold-19();
+  @include bold-19;
   margin: 0 0 em(12);
   padding-top: 2px;
   position: relative;
 }
 
 .contact-list__meta {
-  @include core-19();
+  @include core-19;
   margin: 0;
 
   &.contact-list__meta--inline {
@@ -49,6 +49,6 @@
 }
 
 .contact-list__date {
-  @include bold-24();
+  @include bold-24;
   margin: 0 0 em(5);
 }
