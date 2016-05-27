@@ -1,4 +1,4 @@
-@charset 'utf-8';
+@charset "utf-8";
 $images-dir: '/images/';
 $gt-big-phone: '>414px';
 
@@ -18,3 +18,4 @@ $gt-big-phone: '>414px';
 @import 'table';
 @import 'table-detail';
 @import 'option-select';
+@import 'status-badge';

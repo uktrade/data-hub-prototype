@@ -57,29 +57,3 @@
 .record-title {
   position: relative;
 }
-.status-badge {
-  display: inline-block;
-  font-weight: normal;
-  border: 2px solid $black;
-  padding: 0 5px;
-  position: absolute;
-  margin-left: 10px;
-  white-space: nowrap;
-
-  &--prospect {
-    color: $turquoise;
-    border-color: $turquoise;
-  }
-
-  &--primary-contact {
-    color: $fuschia;
-    border-color: $fuschia;
-  }
-
-}
-
-.record-title {
-  .status-badge {
-    @include core-14(1.5);
-  }
-}
