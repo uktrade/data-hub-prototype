@@ -17,6 +17,9 @@ export default class SearchResultCompany extends Component {
       <li className="results-list__result">
         <h3 className="result-title">
           <a href={linkUrl} dangerouslySetInnerHTML={{__html: highlightQuery(result.title, query)}}></a>
+          { result.uktiStatus === 'Prospect' &&
+            <span className="status-badge status-badge--prospect">Prospect</span>
+          }
         </h3>
         <div className="meta meta--ch">{result.description}</div>
         <div className="meta meta--address">

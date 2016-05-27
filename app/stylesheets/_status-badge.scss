@@ -1,0 +1,21 @@
+
+.status-badge {
+  @include core-16;
+  display: inline-block;
+  font-weight: normal;
+  border: 2px solid $black;
+  padding: 0 5px;
+  position: absolute;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.status-badge--prospect {
+  color: $turquoise;
+  border-color: $turquoise;
+}
+
+.status-badge--primary-contact {
+  color: $fuschia;
+  border-color: $fuschia;
+}
