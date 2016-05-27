@@ -1,13 +1,13 @@
 .result-summary {
-  @include core-19();
+  @include core-19;
   margin: 0 0 20px;
 
   .result-summary--result-count {
-    @include bold-27();
+    @include bold-27;
   }
 
   .result-summary--result-query {
-    @include bold-19();
+    @include bold-19;
   }
 
 }
@@ -25,7 +25,7 @@
     }
 
     .result-title {
-      @include core-19;
+      @include core;
       margin: 0 0 em(5);
       padding: 0;
       text-transform: capitalize;

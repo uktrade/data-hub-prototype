@@ -55,7 +55,6 @@ function indexCompanyContacts(company) {
 
 function addCHRecords(companies) {
   companies.forEach((company) => {
-    console.log(company);
     if (company.company_status === 'active') {
       company = companyRepository.addCompany(company);
       indexCHRecord(company);
