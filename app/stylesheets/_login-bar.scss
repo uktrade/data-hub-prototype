@@ -1,0 +1,5 @@
+.login-bar {
+  @include core-19(1.8);
+  border-bottom: 1px solid $border-colour;
+  text-align: right;
+}
