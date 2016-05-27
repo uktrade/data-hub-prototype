@@ -5,11 +5,8 @@
 
   <h1 class="heading-xlarge record-title">
     {{ company.company_name }}
-    {% if company.uktiStatus != '' %}
-    <span
-      class="status-badge {% if company.uktiStatus == 'Prospect' %} status-badge--prospect{% endif %}">
-      {{ company.uktiStatus}}
-    </span>
+    {% if company.uktiStatus  == 'Prospect' %}
+      <span class="status-badge status-badge--prospect">Prospect</span>
     {% endif %}
   </h1>
   <div class="tabs tabs--inline js-tabs">
