@@ -3,7 +3,7 @@
 let companiesHouseApi = require('./companieshouseapis');
 const companyRepository = require('./companyrepository');
 const lunr = require('lunr');
-const possibleFacets = ['type', 'sectors', 'uktiStatus'];
+const possibleFacets = ['type', 'sectors', 'status'];
 
 
 let searchHistory = [];
@@ -55,6 +55,7 @@ function indexCompanyContacts(company) {
 
 function addCHRecords(companies) {
   companies.forEach((company) => {
+    console.log(company);
     if (company.company_status === 'active') {
       company = companyRepository.addCompany(company);
       indexCHRecord(company);

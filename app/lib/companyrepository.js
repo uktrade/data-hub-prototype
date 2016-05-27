@@ -40,7 +40,7 @@ function addSectors(company) {
 
 function addStatus(company) {
   const randindex = Math.round(Math.random() * (statusOptions.length - 1));
-  company.uktiStatus = statusOptions[randindex];
+  company.status = statusOptions[randindex];
 
 }
 
@@ -95,6 +95,7 @@ function getCompany(id) {
     api.findCompany(id)
       .then((chCompany) => {
 
+        delete chCompany.status;
         Object.assign(company, chCompany);
         company.containsExpandedData = true;
         expandSicCodes(company);
@@ -157,7 +158,7 @@ function getCompanyContact(companyId, contactId) {
         id: company.id
       };
       contact.sectors = company.sectors;
-      contact.uktiStatus = company.uktiStatus;
+      contact.status = company.status;
       contact.interactions = getInteractionsForContact(company, contact);
       return contact;
     }
