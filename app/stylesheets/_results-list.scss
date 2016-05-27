@@ -25,7 +25,7 @@
     }
 
     .result-title {
-      @include core;
+      @include core-19;
       margin: 0 0 em(5);
       padding: 0;
       text-transform: capitalize;
