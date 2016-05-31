@@ -83,7 +83,15 @@ function applyFormFieldsToCompany(company, formData) {
       newCompany.accountManager = formData.accountManager;
     } else if (newCompany.accountManager) delete newCompany.accountManager;
 
-    newCompany.currentlyExporting = formData.currentlyExporting === 'Yes';
+    if (formData.isCurrentlyExporting == 'Yes') {
+      if (Array.isArray(formData.exportingMarkets)) {
+        newCompany.exportingMarkets = formData.exportingMarkets;
+      } else {
+        newCompany.exportingMarkets = [formData.exportingMarkets];
+      }
+    } else {
+      delete newCompany.exportingMarkets;
+    }
 
     if (Array.isArray(formData.countryOfInterest)) {
       newCompany.countryOfInterest = formData.countryOfInterest;
