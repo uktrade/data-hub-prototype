@@ -11,6 +11,10 @@
     Add interaction details
   </h1>
 
+  <h2 class="heading-small">Company</h2>
+  <p>
+    <a href="/companies/{{ interaction.company.id }}?query={{ query }}">{{ interaction.company.title }}</a>
+  </p>
   {%  include './interaction-form.html' %}
 
 {% endblock %}
