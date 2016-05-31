@@ -22,8 +22,8 @@ function search(req, res) {
         totalResults = results.results.length;
       }
 
-      if (!results.facets.type.Company) results.facets.type.Company = 0;
-      if (!results.facets.type.Contact) results.facets.type.Contact = 0;
+      if (!results.facets.type.Company) results.facets.type.Company = { total: 0 };
+      if (!results.facets.type.Contact) results.facets.type.Contact = { total: 0 };
 
       res.json({
         query,

@@ -3,7 +3,7 @@
 let companiesHouseApi = require('./companieshouseapis');
 const companyRepository = require('./companyrepository');
 const lunr = require('lunr');
-const possibleFacets = ['type', 'sectors', 'status'];
+const facetTitles = ['type', 'sectors', 'status'];
 
 
 let searchHistory = [];
@@ -100,39 +100,40 @@ function calculateFacets(results) {
 
   let facets = {};
 
-  for (const possibleFacet of possibleFacets) {
+  for (const possibleFacet of facetTitles) {
     facets[possibleFacet] = {};
   }
 
   for (let result of results) {
 
-    for (let possibleFacet of possibleFacets) {
-      let resultFacetValues = result[possibleFacet]; // result type value
-      if (!Array.isArray(resultFacetValues)) {
-        resultFacetValues = [resultFacetValues];
+    for (let facetTitle of facetTitles) {
+      let facetOptions = result[facetTitle];
+      if (!Array.isArray(facetOptions)) {
+        facetOptions = [facetOptions];
       }
 
-      for (let resultFacetValue of resultFacetValues) {
-        if (!facets[possibleFacet][resultFacetValue]) {
-          facets[possibleFacet][resultFacetValue] = 1;
-        } else {
-          facets[possibleFacet][resultFacetValue] += 1;
+      for (let facetOption of facetOptions) {
+        if (facetOption) {
+          if (!facets[facetTitle][facetOption]) {
+            facets[facetTitle][facetOption] = {
+              total: 1
+            };
+          } else {
+            facets[facetTitle][facetOption].total += 1;
+          }
         }
       }
-
     }
-
   }
 
   return facets;
 }
 
 
-
 reset();
 
 module.exports = {
-  search: search,
-  companiesHouseApi: companiesHouseApi, // Used only for testing.
-  reset: reset
+  search,
+  companiesHouseApi,
+  reset
 };
