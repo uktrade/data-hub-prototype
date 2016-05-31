@@ -105,6 +105,7 @@ function applyFormFieldsToContact(contact, formData){
   newContact.title = formData.title;
   newContact.name = formData.name;
   newContact.occupation = formData.occupation;
+  newContact.primaryContact = formData.primaryContact === 'Yes';
   newContact.telephonenumber = formData.telephonenumber;
   newContact.emailaddress = formData.emailaddress;
   newContact.streetaddress = formData.streetaddress;
