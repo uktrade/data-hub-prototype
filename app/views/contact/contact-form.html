@@ -12,6 +12,27 @@
     <label class="form-label" for="occupation">Role</label>
     <input id="occupation" class="form-control" name="occupation" value="{{ contact.occupation }}" />
   </div>
+
+  <fieldset class="inline form-group form-group__checkbox-group">
+
+    <legend class="form-label">Is this person a primary contact?</legend>
+
+    <label class="block-label" for="isPrimaryContactYes">
+      <input id="isPrimaryContactYes"
+             type="radio"
+             name="primaryContact"
+             value="Yes" {% if contact.primaryContact %}checked="true"{% endif %}>
+      Yes
+    </label>
+    <label class="block-label" for="isPrimaryContactNo">
+      <input id="isPrimaryContactNo"
+             type="radio"
+             name="primaryContact"
+             {% if not contact.primaryContact %}checked="true"{% endif %}value="No">
+      No
+    </label>
+  </fieldset>
+
   <div class="form-group">
     <label class="form-label" for="telephonenumber">Phone</label>
     <input id="telephonenumber" class="form-control" name="telephonenumber" value="{{ contact.telephonenumber }}" />

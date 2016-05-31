@@ -12,7 +12,8 @@ let formData = {
   operatingAddress_postcode: 'postcode',
   hasAccountManager: 'Yes',
   accountManager: 'Fred Smith',
-  currentlyExporting: 'Yes',
+  isCurrentlyExporting: 'Yes',
+  exportingMarkets: 'Brazil',
   countryOfInterest: [ 'Argentina', 'Greece', 'France' ],
   connections: 'connection'
 };
@@ -152,7 +153,7 @@ let existingCompany = {
   region: '',
   accountManager: '',
   operatingAddress: { address1: '', address2: '', city: '', postcode: '' },
-  currentlyExporting: false,
+  exportingMarkets: [],
   connections: [],
   uktidata: true
 };
@@ -292,7 +293,7 @@ let expectedUpdatedCompany = {
   region: 'region',
   accountManager: 'Fred Smith',
   operatingAddress: { address1: 'addr1', address2: 'addr2', city: 'city', postcode: 'postcode' },
-  currentlyExporting: true,
+  exportingMarkets: ['Brazil'],
   connections: ['connection'],
   uktidata: true
 };
@@ -327,12 +328,3 @@ describe('save company update', () => {
 
 
 });
-
-// save all
-
-// remove account manager
-
-// remove operating address
-
-
-

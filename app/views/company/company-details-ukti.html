@@ -34,7 +34,16 @@
   </tr>
   <tr>
     <th>Is the company currently <br/>exporting to a market?</th>
-    <td>{% if company.currentlyExporting %}Yes{% else %}No{% endif %}</td>
+    <td>
+      {% if company.exportingMarkets and company.exportingMarkets.length > 0 %}
+        Yes.
+        {% for exportingMarket in company.exportingMarkets %}
+          {{ exportingMarket }}
+        {% endfor %}
+      {% else %}
+        No
+      {% endif %}
+    </td>
   </tr>
   <tr>
     <th>Future countries of interest</th>

@@ -96,22 +96,44 @@
 
   </fieldset>
 
-  <fieldset class="inline form-group form-group__checkbox-group">
+  <fieldset class="inline form-group form-group__checkbox-group js-radiohide">
     <legend class="form-label">Is this company curently exporting to a market?</legend>
     <label class="block-label" for="exportingyes">
       <input id="exportingyes"
              type="radio"
-             name="currentlyExporting"
-             value="Yes" {% if company.currentlyExporting == true %}checked="true"{% endif %} >
+             name="isCurrentlyExporting"
+             value="Yes" {% if company.exportingMarkets and company.exportingMarkets.length > 0 %}checked="true"{% endif %} >
       Yes
     </label>
     <label class="block-label" for="exportingno">
       <input id="exportingno"
              type="radio"
-             name="currentlyExporting"
-             value="No" {% if company.currentlyExporting == false %}checked="true"{% endif %}>
+             name="isCurrentlyExporting"
+             value="No" {% if not company.exportingMarkets or company.exportingMarkets == 0 %}checked="true"{% endif %}>
       No
     </label>
+    <div class="js-radiohide-content js-add-another">
+      {% if company.exportingMarkets and company.exportingMarkets.length > 0 %}
+        {% for exportingMarket in company.exportingMarkets %}
+          <div class="form-group form-group--compact">
+            <input class="form-control"
+                   id="exportingMarket-{{ loop.index }}"
+                   name="exportingMarkets"
+                   type="text"
+                   value="{{ exportingMarket }}" />
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="form-group form-group--compact">
+          <input class="form-control"
+                 id="exportingMarket-1"
+                 name="exportingMarkets"
+                 type="text"
+                 value="" />
+        </div>
+      {% endif %}
+      <a class="add-another-button" href="#">Add another country</a>
+    </div>
   </fieldset>
 
   <fieldset class="fieldset-group form-group js-add-another">
