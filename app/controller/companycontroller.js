@@ -13,7 +13,8 @@ function get(req, res) {
 
   companyRepository.getCompany(companyNum)
     .then((company) => {
-      if (company.type) {
+
+      if (company.type && companyTypes[company.type]) {
         company.type = companyTypes[company.type];
       }
 
