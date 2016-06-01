@@ -1,7 +1,7 @@
 <form method="post">
 
   <fieldset class="fieldset-group form-group js-add-another">
-    {% if company.sectors %}
+    {% if company.sectors and company.sectors.length > 0 %}
       {% for sector in company.sectors %}
       <div class="form-group form-group--compact">
         <label class="form-label" for="sector-{{ loop.index }}">Sector</label>
