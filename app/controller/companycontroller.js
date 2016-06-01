@@ -1,7 +1,7 @@
 'use strict';
 
 let companyRepository = require('../lib/companyrepository');
-let companyTypes = require('../../data/companytype.json');
+
 
 function get(req, res) {
   let companyNum = req.params.id;
@@ -13,11 +13,6 @@ function get(req, res) {
 
   companyRepository.getCompany(companyNum)
     .then((company) => {
-
-      if (company.type && companyTypes[company.type]) {
-        company.type = companyTypes[company.type];
-      }
-
       res.render('company/company', {query, company});
     })
     .catch((error) => {
