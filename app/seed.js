@@ -3,6 +3,28 @@
 const companyRepository = require('./lib/companyrepository');
 const searchService = require('./lib/searchservice');
 
+function cleanContactDetails(company, domain) {
+
+  let streetAddress = company.registered_office_address.address_line_1;
+  let city = company.registered_office_address.locality;
+  let postcode = company.registered_office_address.zipcode;
+
+  for (let contact of company.contacts) {
+    contact.streetAddress = streetAddress;
+    contact.city = city;
+    contact.postcode = postcode;
+    contact.emailaddress = `${contact.name.replace(/ /g,"_")}@${domain}`;
+  }
+
+}
+
+function cleanInteractions(company) {
+
+  for (let interaction of company.interactions) {
+    interaction.advisor = company.accountManager;
+  }
+
+}
 
 function seedUktiCustomers() {
 
@@ -23,6 +45,9 @@ function seedUktiCustomers() {
       company.accountManager = 'Jasper Spencer';
       company.exportingMarkets = ['Spain'];
       company.countryOfInterest = ['Greece'];
+
+      cleanContactDetails(company, 'sasie.co.uk');
+      cleanInteractions(company);
 
       console.log('update Sasie');
       companyRepository.updateCompany(company);
@@ -46,6 +71,9 @@ function seedUktiCustomers() {
       company.exportingMarkets = null;
       company.countryOfInterest = ['Portugal'];
 
+      cleanContactDetails(company, 'greenfs.co.uk');
+      cleanInteractions(company);
+
       console.log('update Green footprint');
       companyRepository.updateCompany(company);
       console.log(`Added Company: ${company.id} - ${company.title} - ${company.website}`);
@@ -67,6 +95,9 @@ function seedUktiCustomers() {
       company.accountManager = 'Julia Patrick';
       company.exportingMarkets = ['Germany'];
       company.countryOfInterest = ['Spain'];
+
+      cleanContactDetails(company, 'freewatt.co.uk');
+      cleanInteractions(company);
 
       console.log('update Freewatt');
       companyRepository.updateCompany(company);
@@ -90,10 +121,57 @@ function seedUktiCustomers() {
       company.exportingMarkets = null;
       company.countryOfInterest = ['Greece'];
 
+      cleanContactDetails(company, 'ecoheatwise.co.uk');
+      cleanInteractions(company);
+
       console.log('update eco heat');
       companyRepository.updateCompany(company);
       console.log(`Added Company: ${company.id} - ${company.title} - ${company.website}`);
     });
+
+  // Enhanced Solr Ltd.
+  console.log('Search for Enhanced Solar')
+  searchService.search('enhanced solar')
+    .then(() => {
+      console.log('Get enhanced solar details');
+      return companyRepository.getCompany('10045359');
+    })
+    .then((company) => {
+      company.sectors = null;
+
+      company.exportingMarkets = null;
+      company.countryOfInterest = null;
+      company.contacts = [];
+      company.interactions = [];
+      company.status = 'Prospect';
+
+      console.log('update enhanced solar');
+      companyRepository.updateCompany(company);
+      console.log(`Added Company: ${company.id} - ${company.title}`);
+    });
+
+
+  // Prescient power
+  console.log('Search for Prescient')
+  searchService.search('prescient power')
+    .then(() => {
+      console.log('Get Prescient details');
+      return companyRepository.getCompany('06840312');
+    })
+    .then((company) => {
+      company.sectors = null;
+
+      company.exportingMarkets = null;
+      company.countryOfInterest = null;
+      company.contacts = [];
+      company.interactions = [];
+      company.status = 'Prospect';
+
+      console.log('update Prescient');
+      companyRepository.updateCompany(company);
+      console.log(`Added Company: ${company.id} - ${company.title}`);
+    });
+
 }
 
 

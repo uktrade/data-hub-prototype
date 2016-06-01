@@ -1,3 +1,4 @@
+{% if company.interactions and company.interactions.length > 0 %}
 <div class="grid-row">
   <div class="column-one-third">
     <div class="data">
@@ -17,6 +18,11 @@
     </p>
   </div>
 </div>
+{% else %}
+  <p class="actions">
+    <a class="button button-secondary" href="/companies/{{ company.id }}/interaction/add?query={{ query }}">Add new interaction</a>
+  </p>
+{% endif %}
 
 <ol class="contact-list">
   {% for interaction in company.interactions %}
