@@ -45,6 +45,7 @@ function seedUktiCustomers() {
       company.accountManager = 'Jasper Spencer';
       company.exportingMarkets = ['Spain'];
       company.countryOfInterest = ['Greece'];
+      company.status = null;
 
       cleanContactDetails(company, 'sasie.co.uk');
       cleanInteractions(company);
@@ -70,6 +71,7 @@ function seedUktiCustomers() {
       company.accountManager = 'Daniel Wright';
       company.exportingMarkets = null;
       company.countryOfInterest = ['Portugal'];
+      company.status = null;
 
       cleanContactDetails(company, 'greenfs.co.uk');
       cleanInteractions(company);
@@ -95,6 +97,7 @@ function seedUktiCustomers() {
       company.accountManager = 'Julia Patrick';
       company.exportingMarkets = ['Germany'];
       company.countryOfInterest = ['Spain'];
+      company.status = null;
 
       cleanContactDetails(company, 'freewatt.co.uk');
       cleanInteractions(company);
@@ -120,6 +123,7 @@ function seedUktiCustomers() {
       company.accountManager = 'Fuad Hamzeh';
       company.exportingMarkets = null;
       company.countryOfInterest = ['Greece'];
+      company.status = null;
 
       cleanContactDetails(company, 'ecoheatwise.co.uk');
       cleanInteractions(company);

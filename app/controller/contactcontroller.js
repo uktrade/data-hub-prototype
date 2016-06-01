@@ -59,8 +59,8 @@ function editPost(req, res) {
     companyRepository.setCompanyContact(companyId, updatedContact);
     res.redirect(`/companies/${companyId}/contact/view/${contactId}?query=${query}`);
   })
-    .catch((updatedContact, errors) => {
-      res.render('contact/contact-add', {query, updatedContact, errors});
+    .catch(({updatedContact, errors}) => {
+      res.render('contact/contact-add', {query, contact: updatedContact, errors});
     });
 
 }
@@ -95,13 +95,13 @@ function addPost(req, res) {
   }
 
   applyFormFieldsToContact({}, req.body).
-    then((newContact) => {
-      companyRepository.setCompanyContact(companyId, newContact);
+    then((updatedContact) => {
+      companyRepository.setCompanyContact(companyId, updatedContact);
       res.redirect(`/companies/${companyId}/?query=${query}#contacts`);
     })
-    .catch(({newContact, errors}) => {
+    .catch(({updatedContact, errors}) => {
       let company = companyRepository.getCompanySummary(companyId);
-      res.render('contact/contact-add', {query, company, contact: newContact, errors});
+      res.render('contact/contact-add', {query, company, contact: updatedContact, errors});
     });
 
 }
@@ -110,55 +110,55 @@ function addPost(req, res) {
 
 function applyFormFieldsToContact(contact, formData){
 
-  let newContact = Object.assign({}, contact);
+  let updatedContact = Object.assign({}, contact);
   let errors = {};
 
   return new Promise((accept, reject) => {
 
-    newContact.title = formData.title;
+    updatedContact.title = formData.title;
 
     if (!formData.name || formData.name.length === 0) {
       errors.name = 'You must enter the contact name';
     } else {
-      newContact.name = formData.name;
+      updatedContact.name = formData.name;
     }
 
     if (!formData.occupation || formData.occupation.length === 0) {
       errors.occupation = 'You must enter the contact occupation';
     } else {
-      newContact.occupation = formData.occupation;
+      updatedContact.occupation = formData.occupation;
     }
 
-    newContact.primaryContact = formData.primaryContact === 'Yes';
+    updatedContact.primaryContact = formData.primaryContact === 'Yes';
 
     if (!formData.telephonenumber || formData.telephonenumber.length === 0) {
       errors.telephonenumber = 'You must enter a phone number for the contact.'
     } else {
-      newContact.telephonenumber = formData.telephonenumber;
+      updatedContact.telephonenumber = formData.telephonenumber;
     }
 
     if (!formData.emailaddress || formData.emailaddress.length === 0) {
       errors.emailaddress = 'You must provide an email address for this contact';
     } else {
-      newContact.emailaddress = formData.emailaddress;
+      updatedContact.emailaddress = formData.emailaddress;
     }
 
     if (!formData.streetaddress || formData.streetaddress.length === 0) {
       errors.streetaddress = 'You must provide an address for this contact';
     } else {
-      newContact.streetaddress = formData.streetaddress;
+      updatedContact.streetaddress = formData.streetaddress;
     }
 
-    newContact.city = formData.city;
-    newContact.zipcode = formData.zipcode;
-    newContact.alternativeTelephonenumber = formData.alternativeTelephonenumber;
-    newContact.alternativeEmailaddress = formData.alternativeEmailaddress;
-    newContact.notes = formData.notes;
+    updatedContact.city = formData.city;
+    updatedContact.zipcode = formData.zipcode;
+    updatedContact.alternativeTelephonenumber = formData.alternativeTelephonenumber;
+    updatedContact.alternativeEmailaddress = formData.alternativeEmailaddress;
+    updatedContact.notes = formData.notes;
 
     if (Object.keys(errors).length > 0) {
-      reject({newContact, errors});
+      reject({updatedContact, errors});
     } else {
-      accept(newContact);
+      accept(updatedContact);
     }
   });
 

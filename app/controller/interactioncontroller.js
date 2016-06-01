@@ -53,11 +53,16 @@ function editPost(req, res) {
   }
 
   let interaction = companyRepository.getCompanyInteraction(companyId, interactionId);
-  let updatedInteraction = applyFormFieldsToInteraction(interaction, req.body);
+  applyFormFieldsToInteraction(interaction, req.body)
+    .then((updatedInteraction) => {
+      companyRepository.setCompanyInteraction(companyId, updatedInteraction);
+      res.redirect(`/companies/${companyId}/interaction/view/${interactionId}?query=${query}`);
+    })
+    .catch(({updatedInteraction, errors}) => {
+      let backUrl = `/companies/${companyId}?query=${query}`;
+      res.render('interaction/interaction-edit', {query, interaction: updatedInteraction, backUrl, errors});
+    });
 
-  companyRepository.setCompanyInteraction(companyId, updatedInteraction);
-
-  res.redirect(`/companies/${companyId}/interaction/view/${interactionId}?query=${query}`);
 }
 
 function add(req, res) {
@@ -103,46 +108,100 @@ function addPost(req, res) {
   let companyId = req.params.companyId;
   let contactId = req.params.contactId;
   let query = req.query.query || '';
+  let referer = req.headers.referer;
 
   if (!companyId) {
     res.redirect('/');
   }
 
-  let updatedInteraction = applyFormFieldsToInteraction({}, req.body);
-  companyRepository.setCompanyInteraction(companyId, updatedInteraction);
-
-
-  // decide to go back to contact or company
-  let referer = req.headers.referer;
-
+  let backUrl;
   if (referer.indexOf('contact') !== -1) {
-    res.redirect(`/companies/${companyId}/contact/view/${contactId}?query=${query}#interactions`);
+    backUrl = `/companies/${companyId}/contact/view/${contactId}?query=${query}#interactions`;
   } else {
-    res.redirect(`/companies/${companyId}/?query=${query}#interactions`);
+    backUrl = `/companies/${companyId}/?query=${query}#interactions`;
   }
+
+  applyFormFieldsToInteraction({}, req.body)
+    .then((updatedInteraction) => {
+      companyRepository.setCompanyInteraction(companyId, updatedInteraction);
+
+      if (referer.indexOf('contact') !== -1) {
+        res.redirect(backUrl);
+      } else {
+        res.redirect(backUrl);
+      }
+
+    })
+    .catch(({updatedInteraction, errors}) => {
+      res.render('interaction/interaction-edit', {query, interaction: updatedInteraction, backUrl, errors});
+    });
 
 }
 
 
 function applyFormFieldsToInteraction(interaction, formData) {
 
-  let newInteraction = Object.assign({}, interaction);
+  let updatedInteraction = Object.assign({}, interaction);
+  let errors = {};
 
-  if (!newInteraction.contact) {
-    newInteraction.contact = {};
-  }
+  return new Promise((accept, reject) => {
 
-  newInteraction.type = formData.type;
-  newInteraction.subject = formData.subject;
-  newInteraction.date = formData.date;
-  newInteraction.contact.name = formData.contactName;
-  newInteraction.contact.id = formData.contactId;
-  newInteraction.advisor = formData.advisor;
-  newInteraction.notes = formData.notes;
-  newInteraction.serviceOffer = formData.serviceOffer;
-  newInteraction.serviceProvider = formData.serviceProvider;
+    if (!updatedInteraction.contact) {
+      updatedInteraction.contact = {};
+    }
 
-  return newInteraction;
+    if (!formData.type || formData.type.length === 0) {
+      errors.type = 'You must enter an interaction type';
+    } else {
+      updatedInteraction.type = formData.type;
+    }
+
+    if (!formData.subject || formData.subject.length === 0) {
+      errors.subject = 'You must provide a subject for this interaction';
+    } else {
+      updatedInteraction.subject = formData.subject;
+    }
+
+    if (!formData.date || formData.date === 0) {
+      errors.date = 'You must enter the date of the interaction';
+    } else {
+      updatedInteraction.date = formData.date;
+    }
+
+    if (!formData.contactName || formData.contactName.length === 0) {
+      errors.contactName = 'Enter a contact name at the company';
+    } else {
+      updatedInteraction.contact.name = formData.contactName;
+      updatedInteraction.contact.id = formData.contactId;
+    }
+
+    if (!formData.advisor || formData.advisor.length === 0) {
+      errors.advisor = 'Enter the name of the advisor working for UKTI';
+    } else {
+      updatedInteraction.advisor = formData.advisor;
+    }
+
+    updatedInteraction.notes = formData.notes;
+
+    if (!formData.serviceOffer || formData.serviceOffer.length === 0) {
+      errors.serviceOffer = 'You must enter a service offer for this interaction';
+    } else {
+      updatedInteraction.serviceOffer = formData.serviceOffer;
+    }
+
+    if (!formData.serviceProvider || formData.serviceProvider.length === 0) {
+      errors.serviceProvider = 'You must enter the service provider';
+    } else {
+      updatedInteraction.serviceProvider = formData.serviceProvider;
+    }
+
+    if (Object.keys(errors).length > 0) {
+      reject({updatedInteraction, errors});
+    } else {
+      accept(updatedInteraction);
+    }
+
+  });
 
 }
 
