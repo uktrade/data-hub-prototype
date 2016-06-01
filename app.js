@@ -11,6 +11,7 @@ const apiController = require('./app/controller/apicontroller');
 const nunjucks = require('express-nunjucks');
 const filters = require('./app/lib/filters');
 const compression = require('compression');
+const seed = require('./app/seed');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
@@ -74,3 +75,5 @@ app.get('/search?', function(req, res) {
 });
 
 app.listen(config.port);
+
+seed.seedUktiCustomers();
