@@ -4,12 +4,18 @@
     <label class="form-label" for="title">Title (optional)</label>
     <input id="title" class="form-control" name="title" value="{{ contact.title }}" />
   </div>
-  <div class="form-group">
-    <label class="form-label" for="name">Full name</label>
+  <div class="form-group{% if errors and errors.name %} error{% endif %}" id="name-wrapper">
+    <label class="form-label" for="name">
+      Full name
+      {% if errors and errors.name %}<span class="error-message">{{ errors.name }}</span>{% endif %}
+    </label>
     <input id="name" class="form-control" name="name" value="{{ contact.name }}" />
   </div>
-  <div class="form-group">
-    <label class="form-label" for="occupation">Role</label>
+  <div class="form-group{% if errors and errors.occupation %} error{% endif %}" id="occupation-wrapper">
+    <label class="form-label" for="occupation">
+      Role
+      {% if errors and errors.occupation %}<span class="error-message">{{ errors.occupation }}</span>{% endif %}
+    </label>
     <input id="occupation" class="form-control" name="occupation" value="{{ contact.occupation }}" />
   </div>
 
@@ -33,30 +39,39 @@
     </label>
   </fieldset>
 
-  <div class="form-group">
-    <label class="form-label" for="telephonenumber">Phone</label>
+  <div class="form-group{% if errors and errors.telephonenumber %} error{% endif %}" id="telephonenumber-wrapper">
+    <label class="form-label" for="telephonenumber">
+      Phone
+      {% if errors and errors.telephonenumber %}<span class="error-message">{{ errors.telephonenumber }}</span>{% endif %}
+    </label>
     <input id="telephonenumber" class="form-control" name="telephonenumber" value="{{ contact.telephonenumber }}" />
   </div>
-  <div class="form-group">
-    <label class="form-label" for="emailaddress">Email</label>
+  <div class="form-group{% if errors and errors.emailaddress %} error{% endif %}" id="emailaddress-wrapper">
+    <label class="form-label" for="emailaddress">
+      Email
+      {% if errors and errors.emailaddress %}<span class="error-message">{{ errors.emailaddress }}</span>{% endif %}
+    </label>
     <input id="emailaddress" class="form-control" name="emailaddress" value="{{ contact.emailaddress }}" />
   </div>
-  <div class="form-group">
-    <label class="form-label" for="streetaddress">Address</label>
+  <div class="form-group{% if errors and errors.streetaddress %} error{% endif %}" id="streetaddress-wrapper">
+    <label class="form-label" for="streetaddress">
+      Address
+      {% if errors and errors.streetaddress %}<span class="error-message">{{ errors.streetaddress }}</span>{% endif %}
+    </label>
     <input id="streetaddress" class="form-control" name="streetaddress" value="{{ contact.streetaddress }}" />
     <input id="city" class="form-control" name="city" value="{{ contact.city }}" />
     <input id="zipcode" class="form-control" name="zipcode" value="{{ contact.zipcode }}" />
   </div>
   <div class="form-group">
-    <label class="form-label" for="alternativeTelephonenumber">Alternative phone</label>
+    <label class="form-label" for="alternativeTelephonenumber">Alternative phone (optional)</label>
     <input id="alternativeTelephonenumber" class="form-control" name="alternativeTelephonenumber" value="{{ contact.alternativeTelephonenumber }}" />
   </div>
   <div class="form-group">
-    <label class="form-label" for="alternativeEmailaddress">Alternative email</label>
+    <label class="form-label" for="alternativeEmailaddress">Alternative email (optional)</label>
     <input id="alternativeEmailaddress" class="form-control" name="alternativeEmailaddress" value="{{ contact.alternativeEmailaddress }}" />
   </div>
   <div class="form-group">
-    <label class="form-label" for="notes">Notes</label>
+    <label class="form-label" for="notes">Notes (optional)</label>
     <textarea id="notes" class="form-control" name="notes" rows="5">{{ company.notes }}</textarea>
   </div>
 

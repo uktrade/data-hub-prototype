@@ -4,12 +4,24 @@
 
   <a class="back-link" href="/companies/{{ contact.company.id }}/contact/view/{{ contact.id }}?query={{ query }}">Back to contact</a>
 
+  {% if errors %}
+    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+        Incomplete Information
+      </h1>
+
+      <ul class="error-summary-list">
+        {% for name, item in errors %}
+          <li>
+            <a href="#{{ name }}-wrapper">{{ item }}</a></li>
+        {% endfor %}
+      </ul>
+
+    </div>
+  {% endif %}
+
   <h1 class="heading-xlarge record-title">Edit contact details</h1>
 
-  <h2 class="heading-small">Company</h2>
-  <p>
-    <a href="/companies/{{ contact.company.id }}?query={{ query }}">{{ contact.company.title }}</a>
-  </p>
   {%  set backUrl = "/companies/" + contact.company.id + "/contact/view/" + contact.id + "?query=" +  query %}
   {%  include './contact-form.html' %}
 {% endblock %}
