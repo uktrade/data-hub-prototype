@@ -15,64 +15,90 @@ function clearEmptyLists(formData) {
 }
 
 function applyFormFieldsToCompany(company, formData) {
+  return new Promise((fulfill, reject) => {
 
-  return new Promise((fulfill) => {
-
-    let newCompany = Object.assign({}, company);
+    let updatedCompany = Object.assign({}, company);
+    let errors = {};
 
     clearEmptyLists(formData);
 
-    if (Array.isArray(formData.sectors)) {
-      newCompany.sectors = formData.sectors;
+    if (!formData.sectors || formData.sectors.length === 0) {
+      errors.sectors = 'You must provide at least one sector for this company';
+      updatedCompany.sectors = [];
+    } else if (Array.isArray(formData.sectors)) {
+      updatedCompany.sectors = formData.sectors;
     } else {
-      newCompany.sectors = [formData.sectors];
+      updatedCompany.sectors = [formData.sectors];
     }
 
-    newCompany.website = formData.website;
-    newCompany.businessDescription = formData.businessDescription;
-    newCompany.region = formData.region;
+    if (!formData.website || formData.website.length === 0) {
+      errors.website = 'Please provide the url for the company website.';
+    } else {
+      updatedCompany.website = formData.website;
+    }
+
+    updatedCompany.businessDescription = formData.businessDescription;
+
+    if (!formData.region || formData.region.length === 0) {
+      errors.region = 'Enter the correct region for the company';
+    } else {
+      updatedCompany.region = formData.region;
+    }
 
     if (formData.hasOperatingAddress === 'Yes') {
-      newCompany.operatingAddress = {
-        address1: formData.operatingAddress_address1,
-        address2: formData.operatingAddress_aaddress2,
-        city: formData.operatingAddress_city,
-        postcode: formData.operatingAddress_postcode
-      };
-    } else if (newCompany.operatingAddress) {
-      delete newCompany.operatingAddress;
+      if (!formData.operatingAddress_address1 || formData.operatingAddress_address1.length === 0) {
+        errors.operatingAddress_address1 = 'Provide the company operating address';
+        updatedCompany.operatingAddress_address1 = '';
+      } else {
+        updatedCompany.operatingAddress = {
+          address1: formData.operatingAddress_address1,
+          address2: formData.operatingAddress_aaddress2,
+          city: formData.operatingAddress_city,
+          postcode: formData.operatingAddress_postcode
+        };
+      }
+    } else if (updatedCompany.operatingAddress) {
+      delete updatedCompany.operatingAddress;
     }
 
-    if (formData.hasAccountManager === 'Yes' && formData.accountManager != '') {
-      newCompany.accountManager = formData.accountManager;
-    } else if (newCompany.accountManager) delete newCompany.accountManager;
+    if (formData.hasAccountManager === 'Yes') {
+      if (!formData.accountManager || formData.accountManager.length === 0) {
+        errors.accountManager = 'Enter the name of the UKTI Account manager for this compamy';
+      }
+      updatedCompany.accountManager = formData.accountManager;
+    } else if (updatedCompany.accountManager) delete updatedCompany.accountManager;
 
     if (formData.isCurrentlyExporting == 'Yes') {
-      if (Array.isArray(formData.exportingMarkets)) {
-        newCompany.exportingMarkets = formData.exportingMarkets;
+      if (!formData.exportingMarkets || formData.exportingMarkets.length === 0) {
+        errors.exportingMarkets = 'Provide at least one value or current exporting markets.';
+      } else if (Array.isArray(formData.exportingMarkets)) {
+        updatedCompany.exportingMarkets = formData.exportingMarkets;
       } else {
-        newCompany.exportingMarkets = [formData.exportingMarkets];
+        updatedCompany.exportingMarkets = [formData.exportingMarkets];
       }
     } else {
-      delete newCompany.exportingMarkets;
+      delete updatedCompany.exportingMarkets;
     }
 
     if (Array.isArray(formData.countryOfInterest)) {
-      newCompany.countryOfInterest = formData.countryOfInterest;
+      updatedCompany.countryOfInterest = formData.countryOfInterest;
     } else {
-      newCompany.countryOfInterest = [formData.countryOfInterest];
+      updatedCompany.countryOfInterest = [formData.countryOfInterest];
     }
 
     if (Array.isArray(formData.connections)) {
-      newCompany.connections = formData.connections;
+      updatedCompany.connections = formData.connections;
     } else {
-      newCompany.connections = [formData.connections];
+      updatedCompany.connections = [formData.connections];
     }
 
-    fulfill(newCompany);
+    if (Object.keys(errors).length > 0) {
+      reject({updatedCompany, errors});
+    } else {
+      fulfill({updatedCompany});
+    }
 
   });
-
 }
 
 function get(req, res) {
@@ -102,18 +128,17 @@ function post(req, res) {
     .then((currentCompany) => {
       return applyFormFieldsToCompany(currentCompany, data);
     })
-    .then((newCompany) => {
-      return companyRepository.updateCompany(newCompany);
+    .then(({updatedCompany}) => {
+      return companyRepository.updateCompany(updatedCompany);
     })
     .then(() => {
       res.redirect(`/companies/${companyNum}?query=${query}`);
     })
-    .catch((error) => {
+    .catch(({updatedCompany, errors}) => {
       res.render('company/company', {
         query: query,
-        company: error.company || {},
-        searchSearch: true,
-        errors: error.errors || {}
+        company: updatedCompany || {},
+        errors: errors || {}
       });
     });
 

@@ -7,7 +7,11 @@ class Edit {
   constructor(element) {
     this.cacheEls(element);
     this.bindEvents();
-    this.showDataView();
+    if (this.wrapper.hasClass('js-hidden-edit-open')) {
+      this.showEditView();
+    } else {
+      this.showDataView();
+    }
   }
 
   cacheEls(element) {

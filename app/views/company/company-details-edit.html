@@ -1,10 +1,13 @@
 <form method="post">
 
-  <fieldset class="fieldset-group form-group js-add-another">
+  <fieldset class="fieldset-group form-group js-add-another{% if errors and errors.sectors %} error{% endif %}" id="sectors-wrapper">
     {% if company.sectors and company.sectors.length > 0 %}
       {% for sector in company.sectors %}
       <div class="form-group form-group--compact">
-        <label class="form-label" for="sector-{{ loop.index }}">Sector</label>
+        <label class="form-label" for="sector-{{ loop.index }}">
+          Sector
+          {% if errors and errors.sectors %}<span class="error-message">{{ errors.sectors }}</span>{% endif %}
+        </label>
         <input class="form-control"
                id="sector-{{ loop.index }}"
                name="sectors"
@@ -14,7 +17,10 @@
       {% endfor %}
     {% else %}
       <div class="form-group form-group--compact">
-        <label class="form-label" for="sector-1">Sector</label>
+        <label class="form-label" for="sector-1">
+          Sector
+          {% if errors and errors.sectors %}<span class="error-message">{{ errors.sectors }}</span>{% endif %}
+        </label>
         <input class="form-control"
                id="sector-1"
                name="sectors"
@@ -24,20 +30,31 @@
       {% endif %}
       <a class="add-another-button" href="#">Add another sector</a>
   </fieldset>
-  <div class="form-group">
-    <label class="form-label" for="website">Website</label>
+
+  <div class="form-group{% if errors and errors.website %} error{% endif %}" id="website-wrapper">
+    <label class="form-label" for="website">
+      Website
+      {% if errors and errors.website %}<span class="error-message">{{ errors.website }}</span>{% endif %}
+    </label>
     <input id="website" class="form-control" name="website" value="{{ company.website }}" />
   </div>
-  <div class="form-group">
-    <label class="form-label" for="description">Business description</label>
+
+  <div class="form-group" id="businessDescription-wrapper">
+    <label class="form-label" for="description">Business description (optional)</label>
     <textarea id="description" class="form-control" name="businessDescription" rows="5">{{ company.businessDescription }}</textarea>
   </div>
-  <div class="form-group">
-    <label class="form-label" for="website">Region</label>
+
+  <div class="form-group{% if errors and errors.region %} error{% endif %}" id="region-wrapper">
+    <label class="form-label" for="website">
+      Region
+      {% if errors and errors.region %}<span class="error-message">{{ errors.region }}</span>{% endif %}
+    </label>
     <input id="region " class="form-control" name="region" value="{{ company.region }}" />
   </div>
 
-  <fieldset class="inline form-group form-group__checkbox-group js-radiohide">
+  <fieldset
+    class="inline form-group form-group__checkbox-group js-radiohide{% if errors and errors.operatingAddress_address1 %} error{% endif %}"
+    id="operatingAddress_address1-wrapper">
 
     <legend class="form-label">Is the operating address different from Companies House registered office address?</legend>
 
@@ -45,20 +62,23 @@
       <input id="hasOperatingAddressYes"
              type="radio"
              name="hasOperatingAddress"
-             value="Yes" {% if company.operatingAddress and company.operatingadress.address1 != '' %}checked="true"{% endif %}>
+             value="Yes" {% if company.operatingAddress and company.operatingadress.address1 != '' or errors.operatingAddress_address1 %}checked="true"{% endif %}>
       Yes
     </label>
     <label class="block-label" for="hasOperatingAddressNo">
       <input id="hasOperatingAddressNo"
              type="radio"
              name="hasOperatingAddress"
-             {% if not company.operatingAddress or company.operatingadress.address1 == '' %}checked="true"{% endif %}value="No">
+             {% if not company.operatingAddress and not errors.operatingAddress_address1 or company.operatingadress.address1 == '' and not errors.operatingAddress_address1 %}checked="true"{% endif %}value="No">
       No
     </label>
 
     <div class="js-radiohide-content">
       <div class="form-group">
-        <label class="form-label" for="operatingAddress1">Operating address</label>
+        <label class="form-label" for="operatingAddress1">
+          Operating address
+          {% if errors and errors.operatingAddress_address1 %}<span class="error-message">{{ errors.operatingAddress_address1 }}</span>{% endif %}
+        </label>
         <input id="operatingAddress1" class="form-control" name="operatingAddress_address1" value="{{ company.operatingAddress.address1 }}" />
         <input id="operatingAddress2" class="form-control" name="operatingAddress_aaddress2" value="{{ company.operatingAddress.address2 }}" />
         <input id="operatingCity" class="form-control" name="operatingAddress_city" value="{{ company.operatingAddress.city }}" />
@@ -68,51 +88,62 @@
 
   </fieldset>
 
-  <fieldset class="inline form-group form-group__checkbox-group js-radiohide">
+
+  <fieldset class="inline form-group form-group__checkbox-group js-radiohide{% if errors and errors.accountManager %} error{% endif %}" id="accountManager-wrapper">
 
     <legend class="form-label">Is there an agreed UKTI account manager for this company?</legend>
 
+    {% if company.accountManager and company.accountManager.length > 0 or errors.accountManager %}
+      {% set managerCheck = 'Yes' %}
+    {% else %}
+      {% set managerCheck = 'No' %}
+    {% endif %}
+    
     <label class="block-label" for="accountManagerYes">
       <input id="accountManagerYes"
              type="radio"
              name="hasAccountManager"
-             value="Yes" {% if company.accountManager and company.accountManager != '' %}checked="true"{% endif %}>
+             value="Yes" {% if managerCheck == 'Yes' %}checked="true"{% endif %}>
       Yes
     </label>
     <label class="block-label" for="accountManagerNo">
       <input id="accountManagerNo"
              type="radio"
              name="hasAccountManager"
-             value="No" {% if company.accountManger or company.accontManager == '' %}checked="true"{% endif %}>
+             value="No" {% if managerCheck == 'No' %}checked="true"{% endif %}>
       No
     </label>
 
     <div class="js-radiohide-content">
       <div class="form-group">
-        <label class="form-label" for="accountManager">Account manager</label>
+        <label class="form-label" for="accountManager">
+          Account manager
+          {% if errors and errors.accountManager %}<span class="error-message">{{ errors.accountManager }}</span>{% endif %}
+        </label>
         <input id="accountManager" class="form-control" name="accountManager" value="{{ company.accountManager }}" />
       </div>
     </div>
 
   </fieldset>
 
-  <fieldset class="inline form-group form-group__checkbox-group js-radiohide">
+  <fieldset class="inline form-group form-group__checkbox-group js-radiohide{% if errors and errors.exportingMarkets %} error{% endif %}" id="exportingMarkets-wrapper">
     <legend class="form-label">Is this company curently exporting to a market?</legend>
     <label class="block-label" for="exportingyes">
       <input id="exportingyes"
              type="radio"
              name="isCurrentlyExporting"
-             value="Yes" {% if company.exportingMarkets and company.exportingMarkets.length > 0 %}checked="true"{% endif %} >
+             value="Yes" {% if company.exportingMarkets and company.exportingMarkets.length > 0 or errors.exportingMarkets%}checked="true"{% endif %} >
       Yes
     </label>
     <label class="block-label" for="exportingno">
       <input id="exportingno"
              type="radio"
              name="isCurrentlyExporting"
-             value="No" {% if not company.exportingMarkets or company.exportingMarkets == 0 %}checked="true"{% endif %}>
+             value="No" {% if not company.exportingMarkets and not errors.exportingMarkets or company.exportingMarkets == 0 and not errors.exportingMarkets %}checked="true"{% endif %}>
       No
     </label>
     <div class="js-radiohide-content js-add-another">
+      {% if errors and errors.exportingMarkets %}<span class="error-message">{{ errors.exportingMarkets }}</span>{% endif %}
       {% if company.exportingMarkets and company.exportingMarkets.length > 0 %}
         {% for exportingMarket in company.exportingMarkets %}
           <div class="form-group form-group--compact">
@@ -191,5 +222,3 @@
     <a class="button-link button--cancel js-button-cancel" href="#">Cancel</a>
   </div>
 </form>
-
-
