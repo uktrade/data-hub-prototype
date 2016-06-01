@@ -1,6 +1,6 @@
 {% include "./company-details-ch.html" %}
 <hr/>
-<div class="js-hidden-edit">
+<div class="js-hidden-edit{% if errors %} js-hidden-edit-open{% endif %}">
   <div class="js-view-data">
     {% include "./company-details-ukti.html" %}
     <a href="#" class="button button-secondary js-button-edit">Edit company details</a>

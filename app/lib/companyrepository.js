@@ -98,7 +98,6 @@ function getCompany(id) {
 
         delete chCompany.status;
         company.companyType = companyTypes[chCompany.type];
-        console.log(`${company.companyType} - ${chCompany.type}`);
         Object.assign(company, chCompany);
         company.containsExpandedData = true;
         expandSicCodes(company);
