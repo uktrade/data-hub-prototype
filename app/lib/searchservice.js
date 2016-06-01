@@ -16,7 +16,6 @@ function searchLunr(term) {
 
     if (result.ref.charAt(0) === 'C') {
       expandedResult = companyRepository.getCompanySummary(result.ref.slice(1));
-      expandedResult.type = 'Company';
     } else if (result.ref.charAt(0) === 'P') {
       const parts = result.ref.split('-');
       const contactId = parts[0].slice(1);

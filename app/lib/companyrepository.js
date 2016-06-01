@@ -6,6 +6,7 @@ const statusOptions = ['Prospect', 'UKTI Customer', ''];
 const api = require('../lib/companieshouseapis');
 const sicCodes = require('../../data/sic-codes.json');
 const interactionsData = require('../../data/interactions.json');
+const companyTypes = require('../../data/companytype.json');
 
 let data = {};
 
@@ -96,6 +97,7 @@ function getCompany(id) {
       .then((chCompany) => {
 
         delete chCompany.status;
+        company.type = companyTypes[company.type];
         Object.assign(company, chCompany);
         company.containsExpandedData = true;
         expandSicCodes(company);
