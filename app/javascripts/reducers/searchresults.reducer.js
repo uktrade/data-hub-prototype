@@ -4,24 +4,25 @@ const defaultStatus = {
   query: '',
   results: [],
   totalResults: 0,
-  facets: {},
-  filters: {
-    type: [],
-    sectors: [],
-    status: []
-  }
+  facets: {}
+};
+const defaultFilters = {
+  type: [],
+  sectors: [],
+  status: []
 };
 
+let filters = Object.assign({}, defaultFilters);
 let unfilteredResults = [];
 
 function addFilter(filter, state) {
 
   let newState = Object.assign({}, state);
-  let currentFilterValues = newState.filters[filter.field];
+  let currentFilterValues = filters[filter.field];
   const index = currentFilterValues.findIndex((item) => { return item === filter.field.value; });
 
   if (index === -1) {
-    newState.filters[filter.field].push(filter.value);
+    filters[filter.field].push(filter.value);
   }
 
   return applyFilters(newState);
@@ -30,13 +31,11 @@ function addFilter(filter, state) {
 
 function removeFilter(filter, state) {
   let newState = Object.assign({}, state);
-  newState.filters[filter.field] = newState.filters[filter.field].filter(item => item !== filter.value);
+  filters[filter.field] = filters[filter.field].filter(item => item !== filter.value);
   return applyFilters(newState);
 }
 
-
-// Pass in 2 arrays and says if any items in the
-// desired array appear in the values array
+// Pass in 2 arrays and look for the intersect
 function findOne(values, desired) {
   return desired.some((v) => {
     return values.indexOf(v) >= 0;
@@ -65,7 +64,6 @@ function applyFilter(field, desiredValue, results) {
 
 function applyFilters(newState) {
 
-  const filters = newState.filters;
   let results = unfilteredResults;
 
   for (let key in filters) {
@@ -86,6 +84,7 @@ export default function(state = defaultStatus, action) {
   switch (action.type) {
     case SEARCH:
       unfilteredResults = action.payload.data.results;
+      filters = Object.assign({}, defaultFilters);
       return Object.assign({}, state, action.payload.data);
     case ADD_FILTER:
       return addFilter(action.payload, state);

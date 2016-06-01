@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { search } from '../actions/search.actions';
+import { search, updateTerm } from '../actions/search.actions';
 
 class SearchBar extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = { query: props.query };
-  }
-
   onInputChange = (event) => {
-    this.setState({ query: event.target.value });
+    this.props.updateTerm(event.target.value);
+  };
+
+  onFormSubmit = (event) => {
+    event.preventDefault();
+    this.props.search(this.props.term);
   };
 
   render() {
@@ -28,7 +28,7 @@ class SearchBar extends Component {
                  autoComplete="off"
                  placeholder = "Search for company name or contact"
                  onChange={this.onInputChange}
-                 value={this.state.query} />
+                 value={this.props.term} />
 
           <input className="searchbar__submit" type="submit" value="Search" />
         </div>
@@ -40,12 +40,17 @@ class SearchBar extends Component {
 
 
 SearchBar.propTypes = {
-  search: React.PropTypes.func,
-  query: React.PropTypes.string
+  search: React.PropTypes.func.isRequired,
+  term: React.PropTypes.string.isRequired,
+  updateTerm: React.PropTypes.func.isRequired
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ search }, dispatch);
+  return bindActionCreators({ search, updateTerm }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(SearchBar);
+function mapStateToProps({ term }) {
+  return { term };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

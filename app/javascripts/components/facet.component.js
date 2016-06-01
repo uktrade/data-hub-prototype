@@ -1,23 +1,43 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { addFilter, removeFilter } from '../actions/search.actions';
-
 
 class Facet extends Component {
 
-  filterChange = (event) => {
-    if (event.target.checked) {
-      this.props.addFilter(event.target.name, event.target.value);
-    } else {
-      this.props.removeFilter(event.target.name, event.target.value);
-    }
-  };
+  renderOption = (optionKey) => {
 
+    let option = this.props.options[optionKey];
+
+    if (option.checked) {
+      return (
+        <label key={optionKey}>
+          <input
+            name={this.props.name}
+            type="checkbox"
+            value={optionKey}
+            onChange={this.props.onChange}
+            checked="true"
+          />
+          {optionKey}
+        </label>
+      );
+    }
+
+    return (
+      <label key={optionKey}>
+        <input
+          name={this.props.name}
+          type="checkbox"
+          value={optionKey}
+          onChange={this.props.onChange}
+        />
+        {optionKey}
+      </label>
+    );
+  }
 
   render() {
+    let keys = Object.keys(this.props.options);
 
-    if (this.props.options.length > 1) {
+    if (keys.length > 1) {
 
       return (
         <div className="govuk-option-select js-collapsible">
@@ -26,26 +46,7 @@ class Facet extends Component {
           </button>
           <div className="options-container">
             <div className="js-auto-height-inner">
-              {this.props.options.map((option, index) => {
-                if (option != '') {
-                  return (
-                    <div key={index}>
-                      <label>
-                        <input
-                          name={this.props.name}
-                          type="checkbox"
-                          value={option}
-                          onChange={this.filterChange}
-                        />
-                        {option}
-                      </label>
-                    </div>
-                  );
-                }
-
-                return '';
-
-              })}
+              {keys.map(this.renderOption)}
             </div>
           </div>
         </div>
@@ -58,22 +59,11 @@ class Facet extends Component {
 
 }
 
-
 Facet.propTypes = {
-  addFilter: React.PropTypes.func.isRequired,
-  removeFilter: React.PropTypes.func.isRequired,
-  filters: React.PropTypes.object.isRequired,
   name: React.PropTypes.string.isRequired,
   title: React.PropTypes.string.isRequired,
-  options: React.PropTypes.array.isRequired
+  options: React.PropTypes.object.isRequired,
+  onChange: React.PropTypes.func.isRequired
 };
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addFilter, removeFilter }, dispatch);
-}
-
-function mapStateToProps({ results }) {
-  return { filters: results.filters };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Facet);
+export default Facet;

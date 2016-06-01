@@ -12,20 +12,24 @@ import { getQueryParamValue } from '../lib/query';
 class SearchApp extends Component {
 
   componentWillMount() {
+    let searchAction = this.props.search;
+
+    window.onpopstate = function(event) {
+      searchAction(event.state.query, false);
+    };
+
     let query = getQueryParamValue('query');
     if (query) {
-      this.props.search(query);
+      searchAction(query);
     }
   }
 
   render() {
 
-    let query = getQueryParamValue('query');
-
     return (
       <div>
         <a className="back-link" href='/'>Back to homepage</a>
-        <SearchBar query={query} />
+        <SearchBar/>
         <div className="grid-row">
           <div className="column-one-third">
             <div className="filters">
