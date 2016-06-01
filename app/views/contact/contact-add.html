@@ -2,7 +2,23 @@
 
 {% block main %}
 
-  <a class="back-link" href="/companies/{{ contact.company.id }}?query={{ query }}#contacts">Back to contacts</a>
+  <a class="back-link" href="/companies/{{ company.id }}?query={{ query }}#contacts">Back to contacts</a>
+
+  {% if errors %}
+    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+        Incomplete Information
+      </h1>
+
+      <ul class="error-summary-list">
+        {% for name, item in errors %}
+          <li>
+            <a href="#{{ name }}-wrapper">{{ item }}</a></li>
+        {% endfor %}
+      </ul>
+
+    </div>
+  {% endif %}
 
   <h1 class="heading-xlarge record-title">Add new contact</h1>
 
