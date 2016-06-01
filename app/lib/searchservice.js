@@ -55,7 +55,8 @@ function indexCompanyContacts(company) {
 
 function addCHRecords(companies) {
   companies.forEach((company) => {
-    if (company.company_status === 'active') {
+    let existingRecord = companyRepository.getCompanySummary(company.company_number);
+    if (!existingRecord && company.company_status === 'active') {
       company = companyRepository.addCompany(company);
       indexCHRecord(company);
       indexCompanyContacts(company);
