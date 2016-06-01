@@ -1,47 +1,51 @@
-<div class="grid-row">
-  <div class="column-one-third">
-    <div class="data">
-      <h2 class="bold-xlarge data__title">3</h2>
-      <p class="bold-xsmall data__description">months since last interaction with UKTI</p>
-    </div>
-  </div>
-  <div class="column-one-third">
-    <div class="data">
-      <h2 class="bold-xlarge data__title">8</h2>
-      <p class="bold-xsmall data__description">interactions added in the last 12 months.</p>
-    </div>
-  </div>
-  <div class="column-one-third">
-    <p class="actions">
-      <a class="button button-secondary" href="/companies/{{ contact.company.id }}/contact/{{ contact.id }}/interaction/add?query={{ query }}">Add new interaction</a>
-    </p>
-  </div>
-</div>
 {% if contact.interactions.length > 0 %}
-<ol class="contact-list">
-  {% for interaction in contact.interactions %}
-    <li class="contact-list__item">
-      <h3 class="contact-list__heading">
-        <a href="/companies/{{ contact.company.id }}/interaction/view/{{ interaction.id }}?query={{ query }}">{{ interaction.subject }}</a>
-      </h3>
-      <div class="grid-row">
-        <div class="column-two-thirds">
-          <dl>
-            <dd>Company contact:</dd>
-            <dt><a href="#">{{ interaction.contact.name }}</a></dt>
-            <dd>UKTI advisor</dd>
-            <dt>{{ interaction.advisor }}</dt>
-          </dl>
-        </div>
-        <div class="column-one-third u-align-right">
-          <p class="contact-list__date">{{ interaction.date }}</p>
-          <p class="contact-list__meta">{{ interaction.type }}</p>
-        </div>
+  <div class="grid-row">
+    <div class="column-one-third">
+      <div class="data">
+        <h2 class="bold-xlarge data__title">3</h2>
+        <p class="bold-xsmall data__description">months since last interaction with UKTI</p>
       </div>
-    </li>
-  {% endfor %}
-</ol>
-<a href="#">View more interactions</a>
+    </div>
+    <div class="column-one-third">
+      <div class="data">
+        <h2 class="bold-xlarge data__title">8</h2>
+        <p class="bold-xsmall data__description">interactions added in the last 12 months.</p>
+      </div>
+    </div>
+    <div class="column-one-third">
+      <p class="actions">
+        <a class="button button-secondary" href="/companies/{{ contact.company.id }}/contact/{{ contact.id }}/interaction/add?query={{ query }}">Add new interaction</a>
+      </p>
+    </div>
+  </div>
+
+  <ol class="contact-list">
+    {% for interaction in contact.interactions %}
+      <li class="contact-list__item">
+        <h3 class="contact-list__heading">
+          <a href="/companies/{{ contact.company.id }}/interaction/view/{{ interaction.id }}?query={{ query }}">{{ interaction.subject }}</a>
+        </h3>
+        <div class="grid-row">
+          <div class="column-two-thirds">
+            <dl>
+              <dd>Company contact:</dd>
+              <dt><a href="#">{{ interaction.contact.name }}</a></dt>
+              <dd>UKTI advisor</dd>
+              <dt>{{ interaction.advisor }}</dt>
+            </dl>
+          </div>
+          <div class="column-one-third u-align-right">
+            <p class="contact-list__date">{{ interaction.date }}</p>
+            <p class="contact-list__meta">{{ interaction.type }}</p>
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ol>
+  <a href="#">View more interactions</a>
 {% else %}
+  <p class="actions">
+    <a class="button button-secondary" href="/companies/{{ contact.company.id }}/contact/{{ contact.id }}/interaction/add?query={{ query }}">Add new interaction</a>
+  </p>
   <h2 class="heading-medium">This contact has no interactions</h2>
 {% endif %}

@@ -1,11 +1,13 @@
 {% extends "../layouts/ukti-search-header.html" %}
 
 {% block main %}
-  {% if referer.indexOf('contact') != -1 %}
+  {% if interaction.contact and interaction.contact.id %}
     <a class="back-link" href="/companies/{{ interaction.company.id }}/contact/view/{{ interaction.contact.id }}?query={{ query }}#interactions">Back to contact</a>
   {% else %}
     <a class="back-link" href="/companies/{{ interaction.company.id }}?query={{query}}#interactions">Back to company</a>
   {% endif %}
+
+  {% include '../components/errors.html' %}
 
   <h1 class="heading-xlarge record-title">
     Add interaction details
