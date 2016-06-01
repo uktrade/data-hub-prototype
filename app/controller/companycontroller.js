@@ -2,57 +2,25 @@
 
 let companyRepository = require('../lib/companyrepository');
 
+function clearEmptyLists(formData) {
 
-function get(req, res) {
-  let companyNum = req.params.id;
-  let query = req.query.query;
+  let keys = Object.keys(formData);
 
-  if (!companyNum) {
-    res.redirect('/');
+  for (let key of keys) {
+    if (Array.isArray(formData[key])) {
+      formData[key] = formData[key].filter((item) => item.length > 0);
+    }
   }
 
-  companyRepository.getCompany(companyNum)
-    .then((company) => {
-      res.render('company/company', {query, company});
-    })
-    .catch((error) => {
-      res.render('error', {error});
-    });
-
 }
-
-function post(req, res) {
-  let companyNum = req.params.id;
-  let data = req.body;
-  let query = req.query.query || '';
-
-  companyRepository.getCompany(companyNum)
-    .then((currentCompany) => {
-      return applyFormFieldsToCompany(currentCompany, data);
-    })
-    .then((newCompany) => {
-      return companyRepository.updateCompany(newCompany);
-    })
-    .then(() => {
-      res.redirect(`/companies/${companyNum}?query=${query}`);
-    })
-    .catch((error) => {
-      res.render('company/company', {
-        query: query,
-        company: error.company || {},
-        searchSearch: true,
-        errors: error.errors || {}
-      });
-    });
-
-}
-
 
 function applyFormFieldsToCompany(company, formData) {
 
   return new Promise((fulfill) => {
 
     let newCompany = Object.assign({}, company);
+
+    clearEmptyLists(formData);
 
     if (Array.isArray(formData.sectors)) {
       newCompany.sectors = formData.sectors;
@@ -107,9 +75,48 @@ function applyFormFieldsToCompany(company, formData) {
 
 }
 
+function get(req, res) {
+  let companyNum = req.params.id;
+  let query = req.query.query;
 
-module.exports = {
-  get: get,
-  post: post,
-  applyFormFieldsToCompany: applyFormFieldsToCompany,
-};
+  if (!companyNum) {
+    res.redirect('/');
+  }
+
+  companyRepository.getCompany(companyNum)
+    .then((company) => {
+      res.render('company/company', {query, company});
+    })
+    .catch((error) => {
+      res.render('error', {error});
+    });
+
+}
+
+function post(req, res) {
+  let companyNum = req.params.id;
+  let data = req.body;
+  let query = req.query.query || '';
+
+  companyRepository.getCompany(companyNum)
+    .then((currentCompany) => {
+      return applyFormFieldsToCompany(currentCompany, data);
+    })
+    .then((newCompany) => {
+      return companyRepository.updateCompany(newCompany);
+    })
+    .then(() => {
+      res.redirect(`/companies/${companyNum}?query=${query}`);
+    })
+    .catch((error) => {
+      res.render('company/company', {
+        query: query,
+        company: error.company || {},
+        searchSearch: true,
+        errors: error.errors || {}
+      });
+    });
+
+}
+
+module.exports = { get, post, applyFormFieldsToCompany };
