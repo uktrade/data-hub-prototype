@@ -9,7 +9,11 @@
   <tr>
   <tr>
     <th>Website</th>
-    <td>{{ company.website }}</td>
+    <td>
+      {% if company.website %}
+        <a href="{{ company.website }}">{{ company.website }}</a>
+      {% endif %}
+    </td>
   </tr>
   <tr>
     <th>Business description</th>
