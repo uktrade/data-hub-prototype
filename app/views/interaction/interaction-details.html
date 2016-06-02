@@ -2,9 +2,9 @@
 
 {% block main %}
   {% if referer.indexOf('contact') != -1 %}
-    <a class="back-link" href="/companies/{{ interaction.company.id }}/contact/view/{{ interaction.contact.id }}?query={{ query }}#interactions">Back to contact</a>
+    <a class="back-link" href="/companies/{{ company.id }}/contact/view/{{ interaction.contactId }}?query={{ query }}#interactions">Back to contact</a>
   {% else %}
-    <a class="back-link" href="/companies/{{ interaction.company.id }}?query={{query}}#interactions">Back to company</a>
+    <a class="back-link" href="/companies/{{ company.id }}?query={{query}}#interactions">Back to company</a>
   {% endif %}
 
   <h1 class="heading-xlarge record-title">
@@ -16,8 +16,8 @@
     <tr>
       <th width="30%">Company</th>
       <td>
-        <a href="/companies/{{ interaction.company.id }}?query={{query}}">
-        {{ interaction.company.title }}
+        <a href="/companies/{{ company.id }}?query={{query}}">
+        {{ company.title }}
       </td>
     </tr>
     <tr>
@@ -35,7 +35,7 @@
     </tr>
     <tr>
       <th>Company contact</th>
-      <td><a href="/companies/{{ interaction.company.id }}/contact/view/{{ interaction.contact.id }}?query={{ query }}">{{ interaction.contact.name }}</td>
+      <td><a href="/companies/{{ company.id }}/contact/view/{{ interaction.contactId }}?query={{ query }}">{{ contact.name }}</td>
     </tr>
     <tr>
       <th>UKTI advisor</th>
@@ -76,6 +76,6 @@
     </tbody>
   </table>
 
-  <a href="/companies/{{ interaction.company.id }}/interaction/edit/{{ interaction.id }}?query={{ query }}"
+  <a href="/companies/{{ company.id }}/interaction/edit/{{ interaction.id }}?query={{ query }}"
      class="button button-secondary">Edit interaction details</a>
 {% endblock %}

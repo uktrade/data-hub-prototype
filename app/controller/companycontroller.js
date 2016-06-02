@@ -101,6 +101,19 @@ function applyFormFieldsToCompany(company, formData) {
   });
 }
 
+function expandInteractions(company) {
+
+  if (!company.interactions) {
+    return null;
+  }
+
+  return company.interactions.map((interaction) => {
+    let contact = company.contacts.find((companyContact) => companyContact.id === interaction.contactId);
+    return Object.assign({}, interaction, { contact });
+  });
+
+}
+
 function get(req, res) {
   let companyNum = req.params.id;
   let query = req.query.query;
@@ -111,12 +124,12 @@ function get(req, res) {
 
   companyRepository.getCompany(companyNum)
     .then((company) => {
-      res.render('company/company', {query, company});
+      let expandedInteractions = expandInteractions(company);
+      res.render('company/company', {query, company, expandedInteractions});
     })
     .catch((error) => {
       res.render('error', {error});
     });
-
 }
 
 function post(req, res) {

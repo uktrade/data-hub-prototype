@@ -4,7 +4,12 @@
       Interaction type
       {% if errors and errors.type %}<span class="error-message">{{ errors.type }}</span>{% endif %}
     </label>
-    <input id="type" class="form-control" name="type" value="{{ interaction.type }}" />
+    <select id="type" class="form-control" name="type">
+      <option value="">Select a interaction type</option>
+      {% for interactionType in INTERACTION_TYPES  %}
+        <option value="{{ interactionType }}" {% if interactionType == interaction.type %}selected="selected"{% endif %}>{{ interactionType }}</option>
+      {% endfor %}
+    </select>
   </div>
   <div class="form-group{% if errors and errors.subject %} error{% endif %}" id="subject-wrapper">
     <label class="form-label" for="subject">
@@ -25,17 +30,26 @@
       Company contact
       {% if errors and errors.contactName %}<span class="error-message">{{ errors.contactName }}</span>{% endif %}
     </label>
-    <input id="contact" class="form-control" name="contactName" value="{{ interaction.contact.name }}" />
+    <select id="contact" class="form-control" name="contactId">
+      <option value="">Select a company contact</option>
+      {% for contact in company.contacts  %}
+        <option value="{{ contact.id }}" {% if contact.id == interaction.contactId %}selected="selected"{% endif %}>{{ contact.name }}</option>
+      {% endfor %}
+    </select>
   </div>
-  <input type="hidden" name="contactId" value="{{ interaction.contact.id }}"/>
   <div class="form-group{% if errors and errors.advisor %} error{% endif %}" id="advisor-wrapper">
     <label class="form-label" for="advisor">
       UKTI advisor
       {% if errors and errors.advisor %}<span class="error-message">{{ errors.advisor }}</span>{% endif %}
     </label>
-    <input id="advisor" class="form-control" name="advisor" value="{{ interaction.advisor }}" />
+    <select id="advisor" class="form-control" name="advisor">
+      <option value="">Please select the UKTI advisor</option>
+      {% for advisor in ADVISORS %}
+        <option value="{{ advisor }}" {% if advisor == interaction.advisor %}selected="selected"{% endif %}>{{ advisor }}</option>
+      {% endfor %}
+    </select>
   </div>
-  <div class="form-group">
+  <div class="form-group" id="notes-wrapper">
     <label class="form-label" for="notes">Interaction notes (optional)</label>
     <textarea id="notes" class="form-control" name="notes" rows="5">{{ interaction.notes }}</textarea>
   </div>

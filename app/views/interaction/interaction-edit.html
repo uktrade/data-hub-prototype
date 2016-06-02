@@ -1,11 +1,7 @@
 {% extends "../layouts/ukti-search-header.html" %}
 
 {% block main %}
-  {% if interaction.contact and interaction.contact.id %}
-    <a class="back-link" href="/companies/{{ interaction.company.id }}/contact/view/{{ interaction.contact.id }}?query={{ query }}#interactions">Back to contact</a>
-  {% else %}
-    <a class="back-link" href="/companies/{{ interaction.company.id }}?query={{query}}#interactions">Back to company</a>
-  {% endif %}
+  <a class="back-link" href="/companies/{{ company.id }}/interaction/view/{{ interaction.id }}?query={{ query }}">Back to interaction</a>
 
   {% include '../components/errors.html' %}
 
@@ -15,7 +11,7 @@
 
   <h2 class="heading-small">Company</h2>
   <p>
-    <a href="/companies/{{ interaction.company.id }}?query={{ query }}">{{ interaction.company.title }}</a>
+    <a href="/companies/{{ company.id }}?query={{ query }}">{{ company.title }}</a>
   </p>
   {%  include './interaction-form.html' %}
 

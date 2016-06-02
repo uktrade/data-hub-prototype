@@ -20,7 +20,7 @@
   </div>
 
   <ol class="contact-list">
-    {% for interaction in company.interactions %}
+    {% for interaction in expandedInteractions %}
       <li class="contact-list__item">
         <h3 class="contact-list__heading">
           <a href="/companies/{{ company.id }}/interaction/view/{{ interaction.id }}?query={{ query }}">{{ interaction.subject }}</a>

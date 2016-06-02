@@ -7,8 +7,9 @@ const api = require('../lib/companieshouseapis');
 const sicCodes = require('../../data/sic-codes.json');
 const interactionsData = require('../../data/interactions.json');
 const companyTypes = require('../../data/companytype.json');
+const advisors = require('../../data/advisors.json');
 
-let data = {};
+var data = {};
 
 function expandSicCodes(company) {
   if (company.sic_codes) {
@@ -63,57 +64,12 @@ function addInteractionData(company) {
   // Allocate a random contact from the company
   company.interactions = interactionsData.map((interaction) => {
     let newInteraction = Object.assign({}, interaction);
-    const randindex = Math.round(Math.random() * (company.contacts.length - 1));
-    newInteraction.contact = Object.assign({}, company.contacts[randindex]);
+
+    let randindex = Math.round(Math.random() * (company.contacts.length - 1));
+    newInteraction.contactId = company.contacts[randindex].id;
+    newInteraction.advisor = advisors[randindex];
+
     return newInteraction;
-  });
-}
-
-function getCompanySummary(id) {
-  return data[id];
-}
-
-function getCompany(id) {
-  return new Promise((fulfill, reject) => {
-
-    // Look for the company in local cached data,
-    // if not there then created an empty one to populate
-    let company = data[id];
-    if (!company) {
-      company = {
-        company_number: id,
-        id: id
-      };
-    }
-
-    // if the cached record is a detailed one, return it
-    if (company.containsExpandedData) {
-      fulfill(company);
-      return;
-    }
-
-    // If the cachced record isn't complete, goto CH API and get it's details
-    api.findCompany(id)
-      .then((chCompany) => {
-
-        delete chCompany.status;
-        company.companyType = companyTypes[chCompany.type];
-        Object.assign(company, chCompany);
-        company.containsExpandedData = true;
-        expandSicCodes(company);
-
-        // Add it back into the local DB. it will override the existing one
-        // and add the contacts and stuff if we had to get a fresh copy
-        // because of a restart
-        company = addCompany(company);
-
-        fulfill(company);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-
-
   });
 }
 
@@ -127,21 +83,6 @@ function addUKTIData(company) {
     countryOfInterest: ['Argentina', 'Greece'],
     uktidata: true
   });
-}
-
-function addCompany(company) {
-  if (!company.id && company.company_number) {
-    company.id = company.company_number;
-  }
-  if (!company.uktidata) {
-    addUKTIData(company);
-  }
-  data[company.id] = company;
-  return company;
-}
-
-function updateCompany(company) {
-  data[company.id] = company;
 }
 
 function getCompanyContact(companyId, contactId) {
@@ -161,7 +102,6 @@ function getCompanyContact(companyId, contactId) {
       };
       contact.sectors = company.sectors;
       contact.status = company.status;
-      contact.interactions = getInteractionsForContact(company, contact);
       return contact;
     }
   }
@@ -169,10 +109,14 @@ function getCompanyContact(companyId, contactId) {
   return null;
 }
 
-function getInteractionsForContact(company, contact) {
-  return company.interactions.filter((interaction) => {
-    return interaction.contact.id === contact.id;
-  });
+function getInteractionsForContact(companyId, contactId) {
+  const company = data[companyId];
+
+  if (!company) {
+    return [];
+  }
+
+  return company.interactions.filter((interaction) => interaction.contactId === contactId);
 }
 
 function setCompanyContact(companyId, updatedContact) {
@@ -213,12 +157,7 @@ function getCompanyInteraction(companyId, interactionId) {
 
   for (let interaction of company.interactions) {
     if (interaction.id === interactionId) {
-      let newInteraction = Object.assign({}, interaction);
-      newInteraction.company = {
-        title: company.title,
-        id: company.id
-      };
-      return newInteraction;
+      return Object.assign({}, interaction);
     }
   }
 
@@ -250,6 +189,75 @@ function setCompanyInteraction(companyId, updatedInteraction) {
   return null;
 }
 
+
+function getCompanySummary(id) {
+  if (data[id]) {
+    return Object.assign({}, data[id]);
+  }
+
+  return null;
+}
+
+function getCompany(id) {
+  return new Promise((fulfill, reject) => {
+
+    // Look for the company in local cached data,
+    // if not there then created an empty one to populate
+    let company = data[id];
+    if (!company) {
+      company = {
+        company_number: id,
+        id: id
+      };
+    }
+
+    // if the cached record is a detailed one, return it
+    if (company.containsExpandedData) {
+      fulfill(Object.assign({}, company));
+      return;
+    }
+
+    // If the cachced record isn't complete, goto CH API and get it's details
+    api.findCompany(id)
+      .then((chCompany) => {
+
+        delete chCompany.status;
+        company.companyType = companyTypes[chCompany.type];
+        Object.assign(company, chCompany);
+        company.containsExpandedData = true;
+        expandSicCodes(company);
+
+        // Add it back into the local DB. it will override the existing one
+        // and add the contacts and stuff if we had to get a fresh copy
+        // because of a restart
+        company = addCompany(company);
+
+        fulfill(Object.assign({}, company));
+      })
+      .catch((error) => {
+        reject(error);
+      });
+
+
+  });
+}
+
+function addCompany(company) {
+  if (!company.id && company.company_number) {
+    company.id = company.company_number;
+  }
+  if (!company.uktidata) {
+    addUKTIData(company);
+  }
+  data[company.id] = company;
+  return company;
+}
+
+function updateCompany(company) {
+  data[company.id] = company;
+}
+
+
 module.exports = {
   getCompany,
   getCompanySummary,
@@ -258,5 +266,6 @@ module.exports = {
   getCompanyContact,
   setCompanyContact,
   getCompanyInteraction,
-  setCompanyInteraction
+  setCompanyInteraction,
+  getInteractionsForContact
 };
