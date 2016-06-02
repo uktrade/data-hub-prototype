@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const expressValidator = require('express-validator');
 const app = express();
 const bodyParser = require('body-parser');
 const config = require('./config');
@@ -14,6 +15,7 @@ const compression = require('compression');
 const seed = require('./app/seed');
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(expressValidator());
 app.use(compression());
 
 let nunjucksConfig = {
