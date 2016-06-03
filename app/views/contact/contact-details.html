@@ -24,7 +24,7 @@
     <tr>
       <th>Address</th>
       <td>
-        {{ contact.streetaddress }}, {{ contact.city }}, {{ contact.zipcode }}
+        {{ contact.address.address1 }}, {% if contact.address.address2 %}{{ contact.address.address2 }},{% endif %} {{ contact.address.city }}, {{ contact.address.postcode }}
       </td>
     </tr>
     <tr>

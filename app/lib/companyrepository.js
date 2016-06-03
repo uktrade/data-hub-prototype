@@ -51,11 +51,21 @@ function addRandomPeople(company) {
   for (let pos = 5; pos > 0; pos -= 1) {
     const randindex = Math.round(Math.random() * (contactsData.length - 1));
     let randomContact = Object.assign({}, contactsData[randindex]);
-    randomContact.name = `${randomContact.givenname} ${randomContact.surname}`;
-    delete randomContact.surname;
-    delete randomContact.givenname;
-    randomContact.id = `${pos}${company.id}`;
-    company.contacts.push(randomContact);
+    let newContact = {
+      id: `${pos}${company.id}`,
+      title: randomContact.title,
+      name: `${randomContact.givenname} ${randomContact.surname}`,
+      occupation: randomContact.occupation,
+      telephonenumber: randomContact.telephonenumber,
+      emailaddress: randomContact.emailaddress,
+      address: {
+        address1: randomContact.streetaddress,
+        address2: '',
+        city: randomContact.city,
+        postcode: randomContact.zipcode
+      }
+    };
+    company.contacts.push(newContact);
   }
   company.contacts[0].primaryContact = true;
 }

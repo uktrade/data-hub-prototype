@@ -1,0 +1,150 @@
+{% macro textbox(name, label, value='', error) %}
+  <div class="form-group{% if error %} error{% endif %}" id="{{ name }}-wrapper">
+    <label class="form-label" for="{{ name }}">
+      {{ label }}
+      {% if error %}<span class="error-message">{{ error }}</span>{% endif %}
+    </label>
+    <input id="{{ name }}" class="form-control" name="{{ name }}" value="{{ value }}" />
+  </div>
+{% endmacro %}
+
+{% macro textarea(name, label, value='', error) %}
+  <div class="form-group{% if error %} error{% endif %}" id="{{ name }}-wrapper">
+    <label class="form-label" for="{{ name }}">
+      {{ label }}
+      {% if error %}<span class="error-message">{{ error }}</span>{% endif %}
+    </label>
+    <textarea id="{{ name }}" class="form-control" name="{{ name }}" rows="5">{{ value }}</textarea>
+  </div>
+{% endmacro %}
+
+{% macro addAnother(name, label, addLabel='', values=[], error) %}
+  <fieldset class="fieldset-group form-group js-add-another{% if error %} error{% endif %}" id="{{ name }}-wrapper">
+    {% if values and values.length > 0 %}
+      {% for value in values %}
+        <div class="form-group form-group--compact">
+          <label class="form-label" for="{{ name }}-{{ loop.index }}">
+            {{ label }}
+            {% if error %}<span class="error-message">{{ error }}</span>{% endif %}
+          </label>
+          <input class="form-control"
+                 id="{{ name }}-{{ loop.index }}"
+                 name="{{ name }}"
+                 type="text"
+                 value="{{ value }}" />
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="form-group form-group--compact">
+        <label class="form-label" for="{{ name }}-1">
+          {{ label }}
+          {% if error %}<span class="error-message">{{ error }}</span>{% endif %}
+        </label>
+        <input class="form-control"
+               id="{{ name }}-1"
+               name="{{ name }}"
+               type="text"
+               value="" />
+      </div>
+    {% endif %}
+    <a class="add-another-button" href="#">Add another {{ addLabel }}</a>
+  </fieldset>
+{% endmacro %}
+
+{% macro address(name, label, value, error) %}
+  <div class="form-group{% if error %} error{% endif %}" id="{{ name }}_address1-wrapper">
+    <label class="form-label" for="{{ name }}_address1">
+      {{ label }}
+      {% if error %}<span class="error-message">{{ error }}</span>{% endif %}
+    </label>
+    <label class="form-label hidden" for="{{ name }}_address2">Address 2</label>
+    <label class="form-label hidden" for="{{ name }}_city">City</label>
+    <label class="form-label hidden" for="{{ name }}_postcode">Postcode</label>
+    <input id="{{ name }}_address1" class="form-control" name="{{ name }}_address1" value="{{ value.address1 }}" />
+    <input id="{{ name }}_address2" class="form-control" name="{{ name }}_address2" value="{{ value.address2 }}" />
+    <input id="{{ name }}_city" class="form-control" name="{{ name }}_city" value="{{ value.city }}" />
+    <input id="{{ name }}_postcode" class="form-control" name="{{ name }}_postcode" value="{{ value.postcode }}" />
+  </div>
+{% endmacro %}
+
+{% macro yesNo(name, label, radioValue='no', error) %}
+  <fieldset
+    class="inline form-group form-group__checkbox-group" id="{{ name }}-wrapper">
+
+    <legend class="form-label">{{ label }}</legend>
+
+    <label class="block-label" for="{{ name }}-yes">
+      <input id="{{ name }}-yes"
+             type="radio"
+             name="{{ name }}"
+             value="Yes"
+             {% if radioValue == 'yes' or radioValue == true %}checked="checked"{% endif %} />
+      Yes
+    </label>
+    <label class="block-label" for="{{ name }}-no">
+      <input id="{{ name }}-no"
+             type="radio"
+             name="{{ name }}"
+             value="No"
+             {% if radioValue == 'no' or radioValue == false or not radioValue %}checked="checked"{% endif %} />
+      No
+    </label>
+  </fieldset>
+{% endmacro %}
+
+{% macro yesNoHidden(name, label, radioValue='no', error) %}
+
+  {% if radioValue == 'Yes' or radioValue == true or error %}
+    {% set yesno = 'Yes' %}
+  {% else %}
+    {% set yesno = 'No' %}
+  {% endif %}
+  <fieldset
+    class="inline form-group form-group__checkbox-group js-radiohide"
+    id="{{ name }}-wrapper">
+    <legend class="form-label">{{ label }}</legend>
+
+    <label class="block-label" for="{{ name }}-yes">
+      <input id="{{ name }}-yes"
+             type="radio"
+             name="{{ name }}"
+             value="Yes"
+             {% if yesno == 'Yes' %}checked="checked"{% endif %} />
+      Yes
+    </label>
+    <label class="block-label" for="{{ name }}-no">
+      <input id="{{ name }}-no"
+             type="radio"
+             name="{{ name }}"
+             value="No"
+             {% if yesno == 'No' %}checked="checked"{% endif %} />
+      No
+    </label>
+
+    <div class="js-radiohide-content">
+      {{ caller() }}
+    </div>
+
+  </fieldset>
+
+
+{% endmacro %}
+
+{% macro dropdown(name, label, emptyLabel, value, options, error) %}
+  <div class="form-group{% if error %} error{% endif %}" id="{{ name }}-wrapper">
+    <label class="form-label" for="{{ name }}">
+      {{ label }}
+      {% if error %}<span class="error-message">{{ error }}</span>{% endif %}
+    </label>
+    <select id="{{ name }}" class="form-control" name="{{ name }}">
+      {% if emptyLabel %}<option value="">{{ emptyLabel }}</option>{% endif %}
+      {% for option in options  %}
+        {% if option.label %}
+          <option value="{{ option.value }}" {% if option.value == value %}selected="selected"{% endif %}>{{ option.label }}</option>
+        {% else %}
+          <option value="{{ option }}" {% if option == value %}selected="selected"{% endif %}>{{ option }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+{% endmacro %}
