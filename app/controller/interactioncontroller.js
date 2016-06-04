@@ -39,6 +39,7 @@ function edit(req, res) {
   const company = companyRepository.getCompanySummary(companyId);
   const interaction = companyRepository.getCompanyInteraction(companyId, interactionId);
   const backUrl = `/companies/${companyId}/interaction/view/${interactionId}?query=${query}`;
+  const contactOptions = getCompanyContactOptions(company);
 
   if (interaction) {
     res.render('interaction/interaction-edit', {
@@ -46,6 +47,7 @@ function edit(req, res) {
       interaction,
       company,
       backUrl,
+      contactOptions,
       INTERACTION_TYPES,
       ADVISORS
     });
@@ -68,8 +70,20 @@ function editPost(req, res) {
   let errors = validateForm(req);
 
   if (errors) {
+    const company = companyRepository.getCompanySummary(companyId);
+    const contactOptions = getCompanyContactOptions(company);
     let backUrl = `/companies/${companyId}?query=${query}`;
-    res.render('interaction/interaction-edit', {query, interaction: req.body, backUrl, errors});
+    res.render('interaction/interaction-edit', {
+      query,
+      interaction: req.body,
+      company,
+      backUrl,
+      contactOptions,
+      INTERACTION_TYPES,
+      ADVISORS,
+      errors
+    });
+
     return;
   }
 
@@ -98,6 +112,8 @@ function add(req, res) {
   } else {
     backUrl = `/companies/${companyId}/?query=${query}#interactions`;
   }
+
+  console.log(INTERACTION_TYPES);
 
   res.render('interaction/interaction-add', {
     query,
@@ -130,7 +146,17 @@ function addPost(req, res) {
   let errors = validateForm(req);
 
   if (errors) {
-    res.render('interaction/interaction-edit', {query, company, interaction: req.body, backUrl, errors});
+    const contactOptions = getCompanyContactOptions(company);
+    res.render('interaction/interaction-add', {
+      query,
+      interaction: req.body,
+      company,
+      backUrl,
+      contactOptions,
+      INTERACTION_TYPES,
+      ADVISORS,
+      errors
+    });
     return;
   }
 
@@ -185,6 +211,12 @@ function validateForm(req) {
 
 function applyFormFieldsToInteraction(interaction, formData) {
   return Object.assign(interaction, formData);
+}
+
+function getCompanyContactOptions(company) {
+  return company.contacts.map((contact) => {
+    return { label: contact.name, value: contact.id };
+  });
 }
 
 

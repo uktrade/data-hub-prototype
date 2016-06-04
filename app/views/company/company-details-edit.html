@@ -1,221 +1,41 @@
+{% import "../components/forms.html" as forms %}
+
 <form method="post">
+  {{ forms.addAnother('sectors', label="Sector", addLabel="sector", values=company.sectors, error=errors.sectors) }}
+  {{ forms.textbox('website', label="Website", value=company.website, error=errors.website) }}
+  {{ forms.textarea('businessDescription', label="Business description (optional)", value=company.businessDescription, error=errors.businessDescription) }}
+  {{ forms.textbox('region', label="Region", value=company.website, error=errors.region) }}
 
-  <fieldset class="fieldset-group form-group js-add-another{% if errors and errors.sectors %} error{% endif %}" id="sectors-wrapper">
-    {% if company.sectors and company.sectors.length > 0 %}
-      {% for sector in company.sectors %}
-      <div class="form-group form-group--compact">
-        <label class="form-label" for="sector-{{ loop.index }}">
-          Sector
-          {% if errors and errors.sectors %}<span class="error-message">{{ errors.sectors }}</span>{% endif %}
-        </label>
-        <input class="form-control"
-               id="sector-{{ loop.index }}"
-               name="sectors"
-               type="text"
-               value="{{ sector }}" />
-      </div>
-      {% endfor %}
-    {% else %}
-      <div class="form-group form-group--compact">
-        <label class="form-label" for="sector-1">
-          Sector
-          {% if errors and errors.sectors %}<span class="error-message">{{ errors.sectors }}</span>{% endif %}
-        </label>
-        <input class="form-control"
-               id="sector-1"
-               name="sectors"
-               type="text"
-               value="" />
-      </div>
-      {% endif %}
-      <a class="add-another-button" href="#">Add another sector</a>
-  </fieldset>
+  {% if company.operatingAddress and company.operatingAddress.address1 and company.operatingAddress.address1.length > 0 or errors.errors.operatingAddress_address1 %}
+    {% set hasOperatingAddress = 'Yes' %}
+  {% else %}
+    {% set hasOperatingAddress = 'No' %}
+  {% endif %}
+  {% call forms.yesNoHidden('hasOperatingAddress', label="Is the operating address different from Companies House registered office address?", radioValue=hasOperatingAddress, error=errors.operatingAddress_address1) -%}
+    {{ forms.address('operatingAddress', label="Operating address", value=company.operatingAddress, error=errors.operatingAddress_address1) }}
+  {%- endcall %}
 
-  <div class="form-group{% if errors and errors.website %} error{% endif %}" id="website-wrapper">
-    <label class="form-label" for="website">
-      Website
-      {% if errors and errors.website %}<span class="error-message">{{ errors.website }}</span>{% endif %}
-    </label>
-    <input id="website" class="form-control" name="website" value="{{ company.website }}" />
-  </div>
-
-  <div class="form-group" id="businessDescription-wrapper">
-    <label class="form-label" for="description">Business description (optional)</label>
-    <textarea id="description" class="form-control" name="businessDescription" rows="5">{{ company.businessDescription }}</textarea>
-  </div>
-
-  <div class="form-group{% if errors and errors.region %} error{% endif %}" id="region-wrapper">
-    <label class="form-label" for="website">
-      Region
-      {% if errors and errors.region %}<span class="error-message">{{ errors.region }}</span>{% endif %}
-    </label>
-    <input id="region " class="form-control" name="region" value="{{ company.region }}" />
-  </div>
-
-  <fieldset
-    class="inline form-group form-group__checkbox-group js-radiohide{% if errors and errors.operatingAddress_address1 %} error{% endif %}"
-    id="operatingAddress_address1-wrapper">
-
-    <legend class="form-label">Is the operating address different from Companies House registered office address?</legend>
-
-    <label class="block-label" for="hasOperatingAddressYes">
-      <input id="hasOperatingAddressYes"
-             type="radio"
-             name="hasOperatingAddress"
-             value="Yes" {% if company.operatingAddress and company.operatingadress.address1 != '' or errors.operatingAddress_address1 %}checked="true"{% endif %}>
-      Yes
-    </label>
-    <label class="block-label" for="hasOperatingAddressNo">
-      <input id="hasOperatingAddressNo"
-             type="radio"
-             name="hasOperatingAddress"
-             {% if not company.operatingAddress and not errors.operatingAddress_address1 or company.operatingadress.address1 == '' and not errors.operatingAddress_address1 %}checked="true"{% endif %}value="No">
-      No
-    </label>
-
-    <div class="js-radiohide-content">
-      <div class="form-group">
-        <label class="form-label" for="operatingAddress1">
-          Operating address
-          {% if errors and errors.operatingAddress_address1 %}<span class="error-message">{{ errors.operatingAddress_address1 }}</span>{% endif %}
-        </label>
-        <input id="operatingAddress1" class="form-control" name="operatingAddress_address1" value="{{ company.operatingAddress.address1 }}" />
-        <input id="operatingAddress2" class="form-control" name="operatingAddress_aaddress2" value="{{ company.operatingAddress.address2 }}" />
-        <input id="operatingCity" class="form-control" name="operatingAddress_city" value="{{ company.operatingAddress.city }}" />
-        <input id="operatingPostcode" class="form-control" name="operatingAddress_postcode" value="{{ company.operatingAddress.postcode }}" />
-      </div>
-    </div>
-
-  </fieldset>
+  {% if company.accountManager and company.accountManager.length > 0 or errors.accountManager %}
+    {% set hasManager = 'Yes' %}
+  {% else %}
+    {% set hasManager = 'No' %}
+  {% endif %}
+  {% call forms.yesNoHidden('hasAccountManager', label="Is there an agreed UKTI account manager for this company?", radioValue=hasManager, error=errors.accountManager) -%}
+    {{ forms.textbox('accountManager', label="Account manager", value=company.accountManager, error=errors.accountManager) }}
+  {%- endcall %}
 
 
-  <fieldset class="inline form-group form-group__checkbox-group js-radiohide{% if errors and errors.accountManager %} error{% endif %}" id="accountManager-wrapper">
+  {% if company.exportingMarkets and company.exportingMarkets.length > 0 or errors.exportingMarkets %}
+    {% set hasExportingMarkets = 'Yes' %}
+  {% else %}
+    {% set hasExportingMarkets = 'No' %}
+  {% endif %}
+  {% call forms.yesNoHidden('hasExportingMarkets', label="Is this company curently exporting to a market?", radioValue=hasExportingMarkets, error=errors.exportingMarkets) -%}
+    {{ forms.addAnother('exportingMarkets', label="Export market", addLabel="country", values=company.exportingMarkets, error=errors.exportingMarkets) }}
+  {%- endcall %}
 
-    <legend class="form-label">Is there an agreed UKTI account manager for this company?</legend>
-
-    {% if company.accountManager and company.accountManager.length > 0 or errors.accountManager %}
-      {% set managerCheck = 'Yes' %}
-    {% else %}
-      {% set managerCheck = 'No' %}
-    {% endif %}
-    
-    <label class="block-label" for="accountManagerYes">
-      <input id="accountManagerYes"
-             type="radio"
-             name="hasAccountManager"
-             value="Yes" {% if managerCheck == 'Yes' %}checked="true"{% endif %}>
-      Yes
-    </label>
-    <label class="block-label" for="accountManagerNo">
-      <input id="accountManagerNo"
-             type="radio"
-             name="hasAccountManager"
-             value="No" {% if managerCheck == 'No' %}checked="true"{% endif %}>
-      No
-    </label>
-
-    <div class="js-radiohide-content">
-      <div class="form-group">
-        <label class="form-label" for="accountManager">
-          Account manager
-          {% if errors and errors.accountManager %}<span class="error-message">{{ errors.accountManager }}</span>{% endif %}
-        </label>
-        <input id="accountManager" class="form-control" name="accountManager" value="{{ company.accountManager }}" />
-      </div>
-    </div>
-
-  </fieldset>
-
-  <fieldset class="inline form-group form-group__checkbox-group js-radiohide{% if errors and errors.exportingMarkets %} error{% endif %}" id="exportingMarkets-wrapper">
-    <legend class="form-label">Is this company curently exporting to a market?</legend>
-    <label class="block-label" for="exportingyes">
-      <input id="exportingyes"
-             type="radio"
-             name="isCurrentlyExporting"
-             value="Yes" {% if company.exportingMarkets and company.exportingMarkets.length > 0 or errors.exportingMarkets%}checked="true"{% endif %} >
-      Yes
-    </label>
-    <label class="block-label" for="exportingno">
-      <input id="exportingno"
-             type="radio"
-             name="isCurrentlyExporting"
-             value="No" {% if not company.exportingMarkets and not errors.exportingMarkets or company.exportingMarkets == 0 and not errors.exportingMarkets %}checked="true"{% endif %}>
-      No
-    </label>
-    <div class="js-radiohide-content js-add-another">
-      {% if errors and errors.exportingMarkets %}<span class="error-message">{{ errors.exportingMarkets }}</span>{% endif %}
-      {% if company.exportingMarkets and company.exportingMarkets.length > 0 %}
-        {% for exportingMarket in company.exportingMarkets %}
-          <div class="form-group form-group--compact">
-            <input class="form-control"
-                   id="exportingMarket-{{ loop.index }}"
-                   name="exportingMarkets"
-                   type="text"
-                   value="{{ exportingMarket }}" />
-          </div>
-        {% endfor %}
-      {% else %}
-        <div class="form-group form-group--compact">
-          <input class="form-control"
-                 id="exportingMarket-1"
-                 name="exportingMarkets"
-                 type="text"
-                 value="" />
-        </div>
-      {% endif %}
-      <a class="add-another-button" href="#">Add another country</a>
-    </div>
-  </fieldset>
-
-  <fieldset class="fieldset-group form-group js-add-another">
-    {% if company.countryOfInterest and company.countryOfInterest.length > 0 %}
-      {% for countryOfInterest in company.countryOfInterest %}
-        <div class="form-group form-group--compact">
-          <label class="form-label" for="country-of-interest-{{ loop.index }}">Future countries of interest(optional)</label>
-          <input class="form-control"
-                 id="country-of-interest-{{ loop.index }}"
-                 name="countryOfInterest"
-                 type="text"
-                 value="{{ countryOfInterest }}" />
-        </div>
-      {% endfor %}
-    {% else %}
-      <div class="form-group form-group--compact">
-        <label class="form-label" for="country-of-interest-1">Country of interest</label>
-        <input class="form-control"
-               id="country-of-interest-1"
-               name="countryOfInterest"
-               type="text"
-               value="" />
-      </div>
-    {% endif %}
-    <a class="add-another-button" href="#">Add another country</a>
-  </fieldset>
-
-  <fieldset class="fieldset-group form-group js-add-another">
-    {% if company.connections and company.connections.length > 0 %}
-      {% for connection in company.connections %}
-      <div class="form-group form-group--compact">
-        <label class="form-label" for="connection-{{ loop.index }}">Company connections(optional)</label>
-        <input class="form-control"
-               id="connection-{{ loop.index }}"
-               name="connections"
-               type="text"
-               value="{{ connection }}" />
-      </div>
-      {% endfor %}
-    {% else %}
-      <div class="form-group form-group--compact">
-        <label class="form-label" for="connection-1">Company connections(optional)</label>
-        <input class="form-control"
-               id="connection-1"
-               name="connections"
-               type="text"
-               value="" />
-      </div>
-    {% endif %}
-    <a class="add-another-button" href="#">Add another company connection</a>
-  </fieldset>
+  {{ forms.addAnother('countryOfInterest', label="Future countries of interest (optional)", addLabel="country", values=company.countryOfInterest, error=errors.countryOfInterest) }}
+  {{ forms.addAnother('connections', label="Company connections (optional)", addLabel="company connection", values=company.connections, error=errors.connections) }}
 
   <div class="button-bar">
     <button class="button button--save" type="submit">Save</button>

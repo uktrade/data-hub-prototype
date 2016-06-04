@@ -61,7 +61,7 @@ function editPost(req, res) {
 
   if (errors) {
     let company = companyRepository.getCompanySummary(companyId);
-    res.render('contact/contact-add', {query, company, contact: req.body, errors});
+    res.render('contact/contact-edit', {query, company, contact: req.body, errors});
     return;
   }
 
@@ -141,7 +141,7 @@ function validateForm(req) {
         errorMessage: 'Invalid Email'
       }
     },
-    'streetaddress': {
+    'address_address1': {
       notEmpty: {
         errorMessage: 'You must enter an address for this contact.'
       }
@@ -153,7 +153,23 @@ function validateForm(req) {
 }
 
 function applyFormFieldsToContact(contact, formData){
-  return Object.assign(contact, formData);
+  let address = {
+    address1: formData.address_address1,
+    address2: formData.address_address2,
+    city: formData.address_city,
+    postcode: formData.address_postcode
+  };
+
+  delete formData.address_address1;
+  delete formData.address_address2;
+  delete formData.address_city;
+  delete formData.address_postcode;
+
+  formData.primaryContact = formData.primaryContact === 'Yes';
+
+  let newContact = Object.assign(contact, formData);
+  newContact.address = address;
+  return newContact;
 }
 
 

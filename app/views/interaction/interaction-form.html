@@ -1,72 +1,36 @@
+{% import "../components/forms.html" as forms %}
+{{ INTERACTION_TYPES | log | safe }}
 <form method="post">
-  <div class="form-group{% if errors and errors.type %} error{% endif %}" id="type-wrapper">
-    <label class="form-label" for="type">
-      Interaction type
-      {% if errors and errors.type %}<span class="error-message">{{ errors.type }}</span>{% endif %}
-    </label>
-    <select id="type" class="form-control" name="type">
-      <option value="">Select a interaction type</option>
-      {% for interactionType in INTERACTION_TYPES  %}
-        <option value="{{ interactionType }}" {% if interactionType == interaction.type %}selected="selected"{% endif %}>{{ interactionType }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="form-group{% if errors and errors.subject %} error{% endif %}" id="subject-wrapper">
-    <label class="form-label" for="subject">
-      Subject
-      {% if errors and errors.subject %}<span class="error-message">{{ errors.subject }}</span>{% endif %}
-    </label>
-    <input id="subject" class="form-control" name="subject" value="{{ interaction.subject }}" />
-  </div>
-  <div class="form-group{% if errors and errors.date %} error{% endif %}" id="date-wrapper">
-    <label class="form-label" for="date">
-      Date of interaction
-      {% if errors and errors.date %}<span class="error-message">{{ errors.date }}</span>{% endif %}
-    </label>
-    <input id="date" class="form-control" name="date" value="{{ interaction.date }}" />
-  </div>
-  <div class="form-group{% if errors and errors.contactName %} error{% endif %}" id="contactName-wrapper">
-    <label class="form-label" for="contact">
-      Company contact
-      {% if errors and errors.contactName %}<span class="error-message">{{ errors.contactName }}</span>{% endif %}
-    </label>
-    <select id="contact" class="form-control" name="contactId">
-      <option value="">Select a company contact</option>
-      {% for contact in company.contacts  %}
-        <option value="{{ contact.id }}" {% if contact.id == interaction.contactId %}selected="selected"{% endif %}>{{ contact.name }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="form-group{% if errors and errors.advisor %} error{% endif %}" id="advisor-wrapper">
-    <label class="form-label" for="advisor">
-      UKTI advisor
-      {% if errors and errors.advisor %}<span class="error-message">{{ errors.advisor }}</span>{% endif %}
-    </label>
-    <select id="advisor" class="form-control" name="advisor">
-      <option value="">Please select the UKTI advisor</option>
-      {% for advisor in ADVISORS %}
-        <option value="{{ advisor }}" {% if advisor == interaction.advisor %}selected="selected"{% endif %}>{{ advisor }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="form-group" id="notes-wrapper">
-    <label class="form-label" for="notes">Interaction notes (optional)</label>
-    <textarea id="notes" class="form-control" name="notes" rows="5">{{ interaction.notes }}</textarea>
-  </div>
-  <div class="form-group{% if errors and errors.serviceOffer %} error{% endif %}" id="serviceOffer-wrapper">
-    <label class="form-label" for="serviceOffer">
-      Service offer
-      {% if errors and errors.serviceOffer %}<span class="error-message">{{ errors.serviceOffer }}</span>{% endif %}
-    </label>
-    <input id="serviceOffer" class="form-control" name="serviceOffer" value="{{ interaction.serviceOffer }}" />
-  </div>
-  <div class="form-group{% if errors and errors.serviceProvider %} error{% endif %}" id="serviceProvider-wrapper">
-    <label class="form-label" for="serviceProvider">
-      Service provider
-      {% if errors and errors.serviceProvider %}<span class="error-message">{{ errors.serviceProvider }}</span>{% endif %}
-    </label>
-    <input id="serviceProvider" class="form-control" name="serviceProvider" value="{{ interaction.serviceProvider }}" />
-  </div>
+  {{ forms.dropdown('type',
+    label="InteractionType",
+    emptyLabel="Select an interaction type",
+    value=interaction.type,
+    options=INTERACTION_TYPES,
+    error=errors.type) }}
+
+  {{ forms.textbox('subject', label="Subject", value=interaction.subject, error=errors.subject) }}
+  {{ forms.textbox('date', label="Date of interaction", value=interaction.date, error=errors.date) }}
+
+  {{ forms.dropdown('contactId',
+    label="Company contact",
+    emptyLabel="Select a company contact",
+    value=interaction.contactId,
+    options=contactOptions,
+    error=errors.contactId
+  ) }}
+
+  {{ forms.dropdown('advisor',
+    label="UKTI advisor",
+    emptyLabel="Please select the UKTI advisor",
+    value=interaction.advisor,
+    options=ADVISORS,
+    error=errors.advisor
+  ) }}
+
+  {{ forms.textarea('notes', label="Interaction notes (optional)", value=interaction.notes, error=errors.notes) }}
+  {{ forms.textbox('serviceOffer', label="Service offer", value=interaction.serviceOffer, error=errors.serviceOffer) }}
+  {{ forms.textbox('serviceProvider', label="Service provider", value=interaction.serviceProvider, error=errors.serviceProvider) }}
+
   <div class="button-bar">
     <button class="button button--save" type="submit">Save</button>
     <a class="button-link button--cancel js-button-cancel" href="{{ backUrl }}">Cancel</a>
