@@ -4,7 +4,7 @@
   {{ forms.addAnother('sectors', label="Sector", addLabel="sector", values=company.sectors, error=errors.sectors) }}
   {{ forms.textbox('website', label="Website", value=company.website, error=errors.website) }}
   {{ forms.textarea('businessDescription', label="Business description (optional)", value=company.businessDescription, error=errors.businessDescription) }}
-  {{ forms.textbox('region', label="Region", value=company.website, error=errors.region) }}
+  {{ forms.textbox('region', label="Region", value=company.region, error=errors.region) }}
 
   {% if company.operatingAddress and company.operatingAddress.address1 and company.operatingAddress.address1.length > 0 or errors.errors.operatingAddress_address1 %}
     {% set hasOperatingAddress = 'Yes' %}
