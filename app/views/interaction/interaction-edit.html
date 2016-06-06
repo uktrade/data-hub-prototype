@@ -1,18 +1,59 @@
 {% extends "../layouts/ukti-search-header.html" %}
+  {% import "../components/forms.html" as forms %}
 
 {% block main %}
-  <a class="back-link" href="/companies/{{ company.id }}/interaction/view/{{ interaction.id }}?query={{ query }}">Back to interaction</a>
 
-  {% include '../components/errors.html' %}
-
-  <h1 class="heading-xlarge record-title">
-    Edit interaction details
-  </h1>
+  {% if interactionId %}
+    <a class="back-link" href="{{ backUrl }}">Back to interaction</a>
+    {% include '../components/errors.html' %}
+    <h1 class="heading-xlarge record-title">Edit interaction details</h1>
+  {% else %}
+    <a class="back-link" href="{{ backUrl }}">Back</a>
+    {% include '../components/errors.html' %}
+    <h1 class="heading-xlarge record-title">Add interaction</h1>
+  {% endif %}
 
   <h2 class="heading-small">Company</h2>
   <p>
     <a href="/companies/{{ company.id }}?query={{ query }}">{{ company.title }}</a>
   </p>
-  {%  include './interaction-form.html' %}
+
+  <form method="post">
+    {{ forms.dropdown('type',
+    label="InteractionType",
+    emptyLabel="Select an interaction type",
+    value=interaction.type,
+    options=INTERACTION_TYPES,
+    error=errors.type) }}
+
+    {{ forms.textbox('subject', label="Subject", value=interaction.subject, error=errors.subject) }}
+    {{ forms.textbox('date', label="Date of interaction", value=interaction.date, error=errors.date) }}
+
+    {{ forms.dropdown('contactId',
+    label="Company contact",
+    emptyLabel="Select a company contact",
+    value=interaction.contactId,
+    options=contactOptions,
+    error=errors.contactId
+    ) }}
+
+    {{ forms.dropdown('advisor',
+    label="UKTI advisor",
+    emptyLabel="Please select the UKTI advisor",
+    value=interaction.advisor,
+    options=ADVISORS,
+    error=errors.advisor
+    ) }}
+
+    {{ forms.textarea('notes', label="Interaction notes (optional)", value=interaction.notes, error=errors.notes) }}
+    {{ forms.textbox('serviceOffer', label="Service offer", value=interaction.serviceOffer, error=errors.serviceOffer) }}
+    {{ forms.textbox('serviceProvider', label="Service provider", value=interaction.serviceProvider, error=errors.serviceProvider) }}
+
+    <div class="button-bar">
+      <button class="button button--save" type="submit">Save</button>
+      <a class="button-link button--cancel js-button-cancel" href="{{ backUrl }}">Cancel</a>
+    </div>
+  </form>
+
 
 {% endblock %}

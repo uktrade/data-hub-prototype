@@ -1,13 +1,36 @@
 {% extends "../layouts/ukti-search-header.html" %}
+{% import "../components/forms.html" as forms %}
 
 {% block main %}
 
-  <a class="back-link" href="/companies/{{ contact.company.id }}/contact/view/{{ contact.id }}?query={{ query }}">Back to contact</a>
+  {% if contact.id %}
+    {% set backUrl = "/companies/" + company.id + "/contact/view/" + contact.id + "?query=" + query %}
+    <a class="back-link" href="{{ backUrl }}">Back to contact</a>
+    {% include '../components/errors.html' %}
+    <h1 class="heading-xlarge record-title">Edit contact details</h1>
+  {% else %}
+    {% set backUrl = "/companies/" +  company.id + "?query=" + query + "#contacts" %}
+    <a class="back-link" href="{{ backUrl }}">Back to company</a>
+    {% include '../components/errors.html' %}
+    <h1 class="heading-xlarge record-title">Add contact</h1>
+  {% endif %}
 
-  {% include '../components/errors.html' %}
+  <form method="post">
+    {{ forms.textbox('title', label="Title (optional)", value=contact.title, error=errors.title) }}
+    {{ forms.textbox('name', label="Full name", value=contact.name, error=errors.name) }}
+    {{ forms.textbox('occupation', label="Role", value=contact.occupation, error=errors.occupation) }}
+    {{ forms.yesNo('primaryContact', label="Is this person a primary contact?", radioValue=contact.primaryContact, error=errors.primaryContact) }}
+    {{ forms.textbox('telephonenumber', label="Phone", value=contact.telephonenumber, error=errors.telephonenumber) }}
+    {{ forms.textbox('emailaddress', label="Email address", value=contact.emailaddress, error=errors.emailaddress) }}
+    {{ forms.address('address', label="Address", value=contact.address, error=errors.address_address1) }}
+    {{ forms.textbox('alternativeTelephonenumber', label="Alternative phone (optional)", value=contact.alternativeTelephonenumber, error=errors.alternativeTelephonenumber) }}
+    {{ forms.textbox('alternativeEmailaddress', label="Alternative email (optional)", value=contact.alternativeEmailaddress, error=errors.alternativeEmailaddress) }}
+    {{ forms.textarea('notes', label="Notes (optional)", value=contact.notes, error=errors.notes) }}
 
-  <h1 class="heading-xlarge record-title">Edit contact details</h1>
-
-  {%  set backUrl = "/companies/" + contact.company.id + "/contact/view/" + contact.id + "?query=" +  query %}
-  {%  include './contact-form.html' %}
+    <div class="button-bar">
+      <button class="button button--save" type="submit">Save</button>
+      <a class="button-link button--cancel js-button-cancel" href="{{ backUrl }}">Cancel</a>
+    </div>
+  </form>
 {% endblock %}
+X

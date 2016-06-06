@@ -6,36 +6,36 @@
   {{ forms.textarea('businessDescription', label="Business description (optional)", value=company.businessDescription, error=errors.businessDescription) }}
   {{ forms.textbox('region', label="Region", value=company.region, error=errors.region) }}
 
-  {% if company.operatingAddress and company.operatingAddress.address1 and company.operatingAddress.address1.length > 0 or errors.errors.operatingAddress_address1 %}
+  {% if formData.operatingAddress and formData.operatingAddress.address1 and formData.operatingAddress.address1.length > 0 or errors.errors.operatingAddress_address1 %}
     {% set hasOperatingAddress = 'Yes' %}
   {% else %}
     {% set hasOperatingAddress = 'No' %}
   {% endif %}
   {% call forms.yesNoHidden('hasOperatingAddress', label="Is the operating address different from Companies House registered office address?", radioValue=hasOperatingAddress, error=errors.operatingAddress_address1) -%}
-    {{ forms.address('operatingAddress', label="Operating address", value=company.operatingAddress, error=errors.operatingAddress_address1) }}
+    {{ forms.address('operatingAddress', label="Operating address", value=formData.operatingAddress, error=errors.operatingAddress_address1) }}
   {%- endcall %}
 
-  {% if company.accountManager and company.accountManager.length > 0 or errors.accountManager %}
+  {% if formData.accountManager and formData.accountManager.length > 0 or errors.accountManager %}
     {% set hasManager = 'Yes' %}
   {% else %}
     {% set hasManager = 'No' %}
   {% endif %}
   {% call forms.yesNoHidden('hasAccountManager', label="Is there an agreed UKTI account manager for this company?", radioValue=hasManager, error=errors.accountManager) -%}
-    {{ forms.textbox('accountManager', label="Account manager", value=company.accountManager, error=errors.accountManager) }}
+    {{ forms.textbox('accountManager', label="Account manager", value=formData.accountManager, error=errors.accountManager) }}
   {%- endcall %}
 
 
-  {% if company.exportingMarkets and company.exportingMarkets.length > 0 or errors.exportingMarkets %}
+  {% if formData.exportingMarkets and formData.exportingMarkets.length > 0 or errors.exportingMarkets %}
     {% set hasExportingMarkets = 'Yes' %}
   {% else %}
     {% set hasExportingMarkets = 'No' %}
   {% endif %}
   {% call forms.yesNoHidden('hasExportingMarkets', label="Is this company curently exporting to a market?", radioValue=hasExportingMarkets, error=errors.exportingMarkets) -%}
-    {{ forms.addAnother('exportingMarkets', label="Export market", addLabel="country", values=company.exportingMarkets, error=errors.exportingMarkets) }}
+    {{ forms.addAnother('exportingMarkets', label="Export market", addLabel="country", values=formData.exportingMarkets, error=errors.exportingMarkets) }}
   {%- endcall %}
 
-  {{ forms.addAnother('countryOfInterest', label="Future countries of interest (optional)", addLabel="country", values=company.countryOfInterest, error=errors.countryOfInterest) }}
-  {{ forms.addAnother('connections', label="Company connections (optional)", addLabel="company connection", values=company.connections, error=errors.connections) }}
+  {{ forms.addAnother('countryOfInterest', label="Future countries of interest (optional)", addLabel="country", values=formData.countryOfInterest, error=errors.countryOfInterest) }}
+  {{ forms.addAnother('connections', label="Company connections (optional)", addLabel="company connection", values=formData.connections, error=errors.connections) }}
 
   <div class="button-bar">
     <button class="button button--save" type="submit">Save</button>

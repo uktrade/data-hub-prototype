@@ -1,104 +1,55 @@
 'use strict';
 
 let companyRepository = require('../lib/companyrepository');
+const transformErrors = require('../lib/controllerutils').transformErrors;
 
-function clearEmptyLists(formData) {
+function sanitizeForm(req) {
+  req.sanitize('sectors').trimArray();
+  req.sanitize('exportingMarkets').trimArray();
+  req.sanitize('countryOfInterest').trimArray();
+  req.sanitize('connections').trimArray();
+}
 
-  let keys = Object.keys(formData);
+function validateForm(req) {
 
-  for (let key of keys) {
-    if (Array.isArray(formData[key])) {
-      formData[key] = formData[key].filter((item) => item.length > 0);
-    }
+  req.check('sectors', 'You must provide at least one sector').hasOneOrMoreValues();
+  req.check('website', 'Enter the company website address, e.g. http://www.test.com').isURL();
+  req.check('region', 'You must provide the region for this company').notEmpty();
+
+  if (req.body.hasOperatingAddress === 'Yes') {
+    req.check('operatingAddress_address1', 'Provide the company operating address').notEmpty();
   }
+
+  if (req.body.hasAccountManager === 'Yes') {
+    req.check('accountManager', 'Enter the name of the UKTI Account manager for this company').notEmpty();
+  }
+
+  if (req.body.isCurrentlyExporting === 'Yes') {
+    req.check('exportingMarkets', 'Provide at least one value for current exporting markets.').hasOneOrMoreValues();
+  }
+
+  return transformErrors(req.validationErrors());
 
 }
 
+function convertAddress(formData) {
+  let address = {
+    address1: formData.operatingAddress_address1,
+    address2: formData.operatingAddress_address2,
+    city: formData.operatingAddress_city,
+    postcode: formData.operatingAddress_postcode
+  };
+
+  delete formData.operatingAddress_address1;
+  delete formData.operatingAddress_address1;
+  delete formData.operatingAddress_city;
+  delete formData.operatingAddress_postcode;
+
+  formData.operatingAddress = address;
+}
+
 function applyFormFieldsToCompany(company, formData) {
-  return new Promise((fulfill, reject) => {
-
-    let updatedCompany = Object.assign({}, company);
-    let errors = {};
-
-    clearEmptyLists(formData);
-
-    if (!formData.sectors || formData.sectors.length === 0) {
-      errors.sectors = 'You must provide at least one sector for this company';
-      updatedCompany.sectors = [];
-    } else if (Array.isArray(formData.sectors)) {
-      updatedCompany.sectors = formData.sectors;
-    } else {
-      updatedCompany.sectors = [formData.sectors];
-    }
-
-    if (!formData.website || formData.website.length === 0) {
-      errors.website = 'Please provide the url for the company website.';
-    } else {
-      updatedCompany.website = formData.website;
-    }
-
-    updatedCompany.businessDescription = formData.businessDescription;
-
-    if (!formData.region || formData.region.length === 0) {
-      errors.region = 'Enter the correct region for the company';
-    } else {
-      updatedCompany.region = formData.region;
-    }
-
-    if (formData.hasOperatingAddress === 'Yes') {
-      if (!formData.operatingAddress_address1 || formData.operatingAddress_address1.length === 0) {
-        errors.operatingAddress_address1 = 'Provide the company operating address';
-        updatedCompany.operatingAddress_address1 = '';
-      } else {
-        updatedCompany.operatingAddress = {
-          address1: formData.operatingAddress_address1,
-          address2: formData.operatingAddress_aaddress2,
-          city: formData.operatingAddress_city,
-          postcode: formData.operatingAddress_postcode
-        };
-      }
-    } else if (updatedCompany.operatingAddress) {
-      delete updatedCompany.operatingAddress;
-    }
-
-    if (formData.hasAccountManager === 'Yes') {
-      if (!formData.accountManager || formData.accountManager.length === 0) {
-        errors.accountManager = 'Enter the name of the UKTI Account manager for this compamy';
-      }
-      updatedCompany.accountManager = formData.accountManager;
-    } else if (updatedCompany.accountManager) delete updatedCompany.accountManager;
-
-    if (formData.isCurrentlyExporting == 'Yes') {
-      if (!formData.exportingMarkets || formData.exportingMarkets.length === 0) {
-        errors.exportingMarkets = 'Provide at least one value or current exporting markets.';
-      } else if (Array.isArray(formData.exportingMarkets)) {
-        updatedCompany.exportingMarkets = formData.exportingMarkets;
-      } else {
-        updatedCompany.exportingMarkets = [formData.exportingMarkets];
-      }
-    } else {
-      delete updatedCompany.exportingMarkets;
-    }
-
-    if (Array.isArray(formData.countryOfInterest)) {
-      updatedCompany.countryOfInterest = formData.countryOfInterest;
-    } else {
-      updatedCompany.countryOfInterest = [formData.countryOfInterest];
-    }
-
-    if (Array.isArray(formData.connections)) {
-      updatedCompany.connections = formData.connections;
-    } else {
-      updatedCompany.connections = [formData.connections];
-    }
-
-    if (Object.keys(errors).length > 0) {
-      reject({updatedCompany, errors});
-    } else {
-      fulfill({updatedCompany});
-    }
-
-  });
+  return Object.assign({}, company, formData);
 }
 
 function expandInteractions(company) {
@@ -114,6 +65,20 @@ function expandInteractions(company) {
 
 }
 
+function populateFormDataWithCompany(company){
+  return {
+    sectors: company.sectors,
+    website: company.website,
+    businessDescription: company.businessDescription,
+    region: company.region,
+    operatingAddress: company.operatingAddress,
+    accountManager: company.accountManager,
+    exportingMarkets: company.exportingMarkets,
+    countryOfInterest: company.countryOfInterest,
+    connections: company.connections
+  };
+}
+
 function get(req, res) {
   let companyNum = req.params.id;
   let query = req.query.query;
@@ -125,7 +90,23 @@ function get(req, res) {
   companyRepository.getCompany(companyNum)
     .then((company) => {
       let expandedInteractions = expandInteractions(company);
-      res.render('company/company', {query, company, expandedInteractions});
+      let formData;
+
+      if (req.body && Object.keys(req.body).length > 0) {
+        formData = req.body;
+      } else {
+        formData = populateFormDataWithCompany(company);
+      }
+
+      const errors = req.validationErrors();
+
+      res.render('company/company', {
+        query,
+        company,
+        expandedInteractions,
+        formData,
+        errors: transformErrors(errors)
+      });
     })
     .catch((error) => {
       res.render('error', {error});
@@ -134,27 +115,30 @@ function get(req, res) {
 
 function post(req, res) {
   let companyNum = req.params.id;
-  let data = req.body;
-  let query = req.query.query || '';
+  let query = req.query.query;
+
+  sanitizeForm(req);
+  let errors = validateForm(req);
+  convertAddress(req.body);
+
+  if (errors) {
+    get(req, res);
+    return;
+  }
 
   companyRepository.getCompany(companyNum)
     .then((currentCompany) => {
-      return applyFormFieldsToCompany(currentCompany, data);
-    })
-    .then(({updatedCompany}) => {
-      return companyRepository.updateCompany(updatedCompany);
-    })
-    .then(() => {
+      let updatedCompany = applyFormFieldsToCompany(currentCompany, req.body);
+      companyRepository.updateCompany(updatedCompany);
       res.redirect(`/companies/${companyNum}?query=${query}`);
-    })
-    .catch(({updatedCompany, errors}) => {
-      res.render('company/company', {
-        query: query,
-        company: updatedCompany || {},
-        errors: errors || {}
-      });
     });
 
 }
 
 module.exports = { get, post, applyFormFieldsToCompany };
+
+
+// todo
+// in the get method, look for req.body and if it is there, set formData to that
+// When you post and it fails then before you would have called the applyform fields method
+// call the get method instead, with the req and res
