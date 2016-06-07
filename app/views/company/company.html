@@ -13,6 +13,54 @@
   {% include '../components/errors.html' %}
 
   <div class="tabs tabs--inline js-tabs">
+    {% if company.status == 'Prospect' and not company.website and company.contacts.length == 0 %}
+      <div id="tab-error-contacts" class="tabs-errors">
+        <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+          <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+            Complete company profile details before adding a new contact
+          </h1>
+          <p>
+            You need to add required details to company profile before adding a new contact
+          </p>
+          <ul class="error-summary-list">
+            <li>
+            <li><a href="/companies/{{ company.id }}?query={{ query }}">Add company details</a></li>
+            </li>
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if company.status == 'Prospect' and not company.website and company.interactions.length == 0 %}
+      <div id="tab-error-interactions" class="tabs-errors">
+        <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+          <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+            Complete company profile details before adding a new interaction
+          </h1>
+          <p>You need to add required details to company profile before adding a new contact</p>
+          <ul class="error-summary-list">
+            <li><a href="#tab-content-details">Add company details</a></li>
+          </ul>
+        </div>
+      </div>
+    {% elif company.status == 'Prospect' and company.website.length > 0 and company.contacts.length == 0 and company.interactions.length == 0 %}
+      <div id="tab-error-interactions" class="tabs-errors">
+        <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+          <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+            Add related company contacts before adding a new interaction
+          </h1>
+          <p>
+            you need to add the related contacts from the company under contacts section before
+            adding a new interaction
+          </p>
+          <ul class="error-summary-list">
+            <li>
+              <a href="/companies/{{ company.id }}/contact/add?query={{ query }}">Add new contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    {% endif %}
     <nav class="tabs-nav">
       <ul class="tabs-list">
         <li>

@@ -39,6 +39,7 @@ exports.Tabs = {
       .addClass('is-selected');
 
     this.$panels.hide();
+    this.$errors.hide();
 
     if ($tab.length < 1) {
       return;
@@ -46,11 +47,13 @@ exports.Tabs = {
 
     let activePanelId = $tab.attr('href').split('#')[1];
     $('#' + activePanelId).addClass('is-selected').show();
+    $('#tab-error-' + activePanelId.substr(12)).addClass('is-selected').show();
   },
 
   cacheEls: function() {
     this.$el = $(this.el);
     this.$tabs = this.$el.find('.tabs-nav a');
     this.$panels = this.$el.find('.tabs-panel');
+    this.$errors = this.$el.find('.tabs-errors');
   }
 };
