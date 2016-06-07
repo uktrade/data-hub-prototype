@@ -32,68 +32,38 @@ function edit(req, res) {
 
   let query = req.query.query || '';
 
-  if (!contactId || !companyId) {
-    res.redirect('/');
-  }
-
-  let contact = companyRepository.getCompanyContact(companyId, contactId);
-
-  if (contact) {
-    res.render('contact/contact-edit', {query, contact});
-  } else {
-    res.render('error', {error: 'Cannot find contact'});
-  }
-}
-
-function editPost(req, res) {
-  let contactId = req.params.contactId;
-  let companyId = req.params.companyId;
-
-  let query = req.query.query || '';
-
-  if (!contactId || !companyId) {
-    res.redirect('/');
-  }
-
-  let contact = companyRepository.getCompanyContact(companyId, contactId);
-
-  let errors = validateForm(req);
-
-  if (errors) {
-    let company = companyRepository.getCompanySummary(companyId);
-    res.render('contact/contact-edit', {query, company, contact: req.body, errors});
-    return;
-  }
-
-  let updatedContact = applyFormFieldsToContact(contact, req.body);
-  companyRepository.setCompanyContact(companyId, updatedContact);
-  res.redirect(`/companies/${companyId}/contact/view/${contactId}?query=${query}`);
-
-}
-
-function add(req, res) {
-  let companyId = req.params.companyId;
-
-  let query = req.query.query || '';
-
   if (!companyId) {
     res.redirect('/');
   }
 
   let company = companyRepository.getCompanySummary(companyId);
-  let contact = {
-    company: {
-      title: company.title,
-      id: company.id
-    }
-  };
 
-  res.render('contact/contact-add', {query, contact, company});
+  let contact;
+
+  if (req.body && Object.keys(req.body).length > 0) {
+    contact = req.body;
+  } else if (contactId) {
+    contact = companyRepository.getCompanyContact(companyId, contactId);
+
+  } else {
+    contact = {};
+  }
+
+  const errors = req.validationErrors();
+
+  res.render('contact/contact-edit', {
+    query,
+    contact,
+    company,
+    errors: transformErrors(errors)
+  });
 
 }
 
-function addPost(req, res) {
+function post(req, res) {
+  let contactId = req.params.contactId;
   let companyId = req.params.companyId;
+
   let query = req.query.query || '';
 
   if (!companyId) {
@@ -102,18 +72,20 @@ function addPost(req, res) {
 
   let errors = validateForm(req);
 
+  convertAddress(req.body);
+
   if (errors) {
-    let company = companyRepository.getCompanySummary(companyId);
-    res.render('contact/contact-add', {query, company, contact: req.body, errors});
+    edit(req, res);
     return;
   }
 
-  let updatedContact = applyFormFieldsToContact({}, req.body);
-  companyRepository.setCompanyContact(companyId, updatedContact);
-  res.redirect(`/companies/${companyId}/?query=${query}#contacts`);
+
+  let contact = contactId ? companyRepository.getCompanyContact(companyId, contactId) : {};
+  let updatedContact = applyFormFieldsToContact(contact, req.body);
+  updatedContact = companyRepository.setCompanyContact(companyId, updatedContact);
+  res.redirect(`/companies/${companyId}/contact/view/${updatedContact.id}?query=${query}`);
 
 }
-
 
 function validateForm(req) {
 
@@ -152,7 +124,7 @@ function validateForm(req) {
 
 }
 
-function applyFormFieldsToContact(contact, formData){
+function convertAddress(formData) {
   let address = {
     address1: formData.address_address1,
     address2: formData.address_address2,
@@ -165,18 +137,17 @@ function applyFormFieldsToContact(contact, formData){
   delete formData.address_city;
   delete formData.address_postcode;
 
-  formData.primaryContact = formData.primaryContact === 'Yes';
+  formData.address = address;
+}
 
-  let newContact = Object.assign(contact, formData);
-  newContact.address = address;
-  return newContact;
+function applyFormFieldsToContact(contact, formData){
+  formData.primaryContact = formData.primaryContact === 'Yes';
+  return Object.assign(contact, formData);
 }
 
 
 module.exports = {
   get,
   edit,
-  add,
-  addPost,
-  editPost
+  post
 };

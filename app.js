@@ -15,7 +15,33 @@ const compression = require('compression');
 const seed = require('./app/seed');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(expressValidator());
+app.use(expressValidator({
+  customValidators: {
+    hasOneOrMoreValues: (value) => {
+      if (!value || value.length === 0) {
+        return false;
+      }
+
+      if (Array.isArray(value)) {
+        for (let item of value) {
+          if (item.length === 0) return false;
+        }
+      }
+
+      return true;
+    }
+  },
+  customSanitizers: {
+    trimArray: (value) => {
+      if (Array.isArray(value)) {
+        return value.filter((item) => item.length > 0);
+      } else if (value && value.length > 0) {
+        return [value];
+      }
+      return null;
+    }
+  }
+}));
 app.use(compression());
 
 let nunjucksConfig = {
@@ -49,24 +75,33 @@ app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`));
 
 app.get('/api/search?', apiController.search);
+
 app.get('/companies/:id?', companyViewController.get);
 app.post('/companies/:id?', companyViewController.post);
 
 app.get('/companies/:companyId/contact/view/:contactId?', contactViewController.get);
-
-app.get('/companies/:companyId/contact/edit/:contactId?', contactViewController.edit);
-app.post('/companies/:companyId/contact/edit/:contactId?', contactViewController.editPost);
-
-app.get('/companies/:companyId/contact/add?', contactViewController.add);
-app.post('/companies/:companyId/contact/add?', contactViewController.addPost);
+app.get([
+  '/companies/:companyId/contact/edit/:contactId?',
+  '/companies/:companyId/contact/add?'],
+  contactViewController.edit);
+app.post([
+  '/companies/:companyId/contact/edit/:contactId?',
+  '/companies/:companyId/contact/add?'],
+  contactViewController.post);
 
 app.get('/companies/:companyId/interaction/view/:interactionId?', interactionViewcController.get);
-app.get('/companies/:companyId/interaction/edit/:interactionId?', interactionViewcController.edit);
-app.post('/companies/:companyId/interaction/edit/:interactionId?', interactionViewcController.editPost);
-app.get('/companies/:companyId/contact/:contactId/interaction/add?', interactionViewcController.add);
-app.get('/companies/:companyId/interaction/add?', interactionViewcController.add);
-app.post('/companies/:companyId/contact/:contactId/interaction/add?', interactionViewcController.addPost);
-app.post('/companies/:companyId/interaction/add?', interactionViewcController.addPost);
+
+app.get([
+  '/companies/:companyId/interaction/edit/:interactionId?',
+  '/companies/:companyId/contact/:contactId/interaction/add?',
+  '/companies/:companyId/interaction/add?'],
+  interactionViewcController.edit);
+
+app.post([
+  '/companies/:companyId/interaction/edit/:interactionId?',
+  '/companies/:companyId/contact/:contactId/interaction/add?',
+  '/companies/:companyId/interaction/add?'],
+  interactionViewcController.post);
 
 app.get('/', function(req, res) {
   res.render('index');
