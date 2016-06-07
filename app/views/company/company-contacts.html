@@ -2,10 +2,10 @@
   <a class="button button-secondary" href="/companies/{{ company.id }}/contact/add?query={{ query }}">Add new contact</a>
 </p>
 
-<ol class="contact-list">
+<ol class="lined-list">
   {% for contact in company.contacts %}
-    <li class="contact-list__item">
-      <h3 class="contact-list__heading">
+    <li class="lined-list__item">
+      <h3 class="badged-heading">
         <a href="/companies/{{ company.id }}/contact/view/{{ contact.id}}?query={{ query }}">{{ contact.name }}</a>
         - {{ contact.occupation }}
         {% if contact.primaryContact %}
@@ -14,12 +14,18 @@
       </h3>
       <div class="grid-row">
         <div class="column-half">
-          <p class="contact-list__meta contact-list__meta--inline">Phone: {{ contact.telephonenumber }}</p>
+          <dl class="fieldvalue">
+            <dt class="fieldvalue__title">Phone:</dt>
+            <dd class="fieldvalue__value">{{ contact.telephonenumber }}</dd>
+          </dl>
         </div>
         <div class="column-half">
-          <p class="contact-list__meta contact-list__meta--inline">Email:
-            <a href="mailto:{{ contact.emailaddress }}">{{ contact.emailaddress }}</a>
-          </p>
+          <dl class="fieldvalue">
+            <dt class="fieldvalue__title">Email:</dt>
+            <dd class="fieldvalue__value">
+              <a href="mailto:{{ contact.emailaddress }}">{{ contact.emailaddress }}</a>
+            </dd>
+          </dl>
         </div>
       </div>
     </li>
