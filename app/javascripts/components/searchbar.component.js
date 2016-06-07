@@ -25,7 +25,6 @@ class SearchBar extends Component {
                  type="search"
                  id="search-main"
                  name="query"
-                 autoComplete="off"
                  placeholder = "Search for company name or contact"
                  onChange={this.onInputChange}
                  value={this.props.term} />
