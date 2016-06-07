@@ -20,6 +20,10 @@
   border-color: $fuschia;
 }
 
+.status-badge--small {
+  @include core-16
+}
+
 .badged-heading {
   @include bold-19;
   padding: 4px 0 2px;
