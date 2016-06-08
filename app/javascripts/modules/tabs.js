@@ -48,6 +48,7 @@ exports.Tabs = {
     let activePanelId = $tab.attr('href').split('#')[1];
     $('#' + activePanelId).addClass('is-selected').show();
     $('#tab-error-' + activePanelId.substr(12)).addClass('is-selected').show();
+    this.updateUrl(activePanelId.substr(12));
   },
 
   cacheEls: function() {
@@ -55,5 +56,15 @@ exports.Tabs = {
     this.$tabs = this.$el.find('.tabs-nav a');
     this.$panels = this.$el.find('.tabs-panel');
     this.$errors = this.$el.find('.tabs-errors');
+  },
+
+  updateUrl: function(tab) {
+    if (typeof window.history.pushState === 'function') {
+      const fullUrl = window.location.href;
+      let pos = fullUrl.indexOf('#');
+      if (pos == -1) pos = fullUrl.length;
+      const newUrl = fullUrl.substring(0, pos) + '#' + tab;
+      window.history.pushState(null, null, newUrl);
+    }
   }
 };

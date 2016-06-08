@@ -7,7 +7,7 @@ export const UPDATE_TERM = 'UPDATE_TERM';
 
 export function search(term, updateHistory = true) {
 
-  if (updateHistory) {
+  if (updateHistory && typeof window.history.pushState === 'function') {
     window.history.pushState({query: term}, `Search ${term}`, `/search?query=${term}`);
   }
 
