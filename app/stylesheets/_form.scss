@@ -1,7 +1,5 @@
-.form-group--compact {
-  + .form-group--compact {
-    margin-top: em(12);
-  }
+.form-group.form-group--compact {
+  margin-bottom: 10px;
 }
 
 .form-control {
@@ -20,13 +18,8 @@
   }
 }
 
-
-.form-group.form-group--compact {
-  margin-bottom: 10px;
-}
-
 .fieldset-group {
-  margin-top: em(22);
+  margin: 20px 0 40px 0;
   float: left;
   width: 100%;
 

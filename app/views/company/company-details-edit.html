@@ -1,10 +1,24 @@
 {% import "../components/forms.html" as forms %}
 
 <form method="post">
-  {{ forms.addAnother('sectors', label="Sector", addLabel="sector", values=company.sectors, error=errors.sectors) }}
+  {{ forms.addAnotherDropdown('sectors',
+    label="Sector",
+    addLabel="sector",
+    emptyLabel="Select sector to add",
+    values=company.sectors,
+    options=SECTOR_OPTIONS,
+    error=errors.sectors)
+  }}
   {{ forms.textbox('website', label="Website", value=company.website, error=errors.website) }}
   {{ forms.textarea('businessDescription', label="Business description (optional)", value=company.businessDescription, error=errors.businessDescription) }}
-  {{ forms.textbox('region', label="Region", value=company.region, error=errors.region) }}
+
+  {{ forms.dropdown('region',
+    label="Region",
+    emptyLabel="Select a region",
+    value=company.region,
+    options=REGION_OPTIONS,
+    error=errors.region)
+  }}
 
   {% if formData.operatingAddress and formData.operatingAddress.address1 and formData.operatingAddress.address1.length > 0 or errors.errors.operatingAddress_address1 %}
     {% set hasOperatingAddress = 'Yes' %}
