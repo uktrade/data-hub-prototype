@@ -1,8 +1,9 @@
 {% extends "layouts/govuk_template.html" %}
 
-{% block inside_header %}
-  <div class="project-name"><a href="/">Datahub</a></div>
-{% endblock %}
+{% set global_header_text="Datahub" %}
+{% set homepage_url = "/" %}
+{% set logo_link_title = "Go to Datahub homepage" %}
+
 
 {% block head %}
   <link href="{{ asset_path }}stylesheets//application.css?{{ startTime }}" rel="stylesheet" type="text/css">
