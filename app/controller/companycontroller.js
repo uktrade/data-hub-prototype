@@ -2,6 +2,8 @@
 
 let companyRepository = require('../lib/companyrepository');
 const transformErrors = require('../lib/controllerutils').transformErrors;
+const SECTOR_OPTIONS = require('../../data/sectors.json');
+const REGION_OPTIONS = require('../../data/regions.json');
 
 function sanitizeForm(req) {
   req.sanitize('sectors').trimArray();
@@ -105,6 +107,8 @@ function get(req, res) {
         company,
         expandedInteractions,
         formData,
+        SECTOR_OPTIONS,
+        REGION_OPTIONS,
         errors: transformErrors(errors)
       });
     })

@@ -5,11 +5,11 @@ const $ = require('jquery');
 class AddAnother {
   constructor(element) {
     this.element = $(element);
-    const fieldGroups = this.element.find('.form-group');
+    const formGroups = this.element.find('.form-group');
 
-    this.fieldCount = fieldGroups.length;
-    this.firstGroup = fieldGroups.filter(':first');
-    this.originalField = this.firstGroup.find('input.form-control');
+    this.fieldCount = formGroups.length;
+    this.firstGroup = formGroups.filter(':first');
+    this.originalField = this.firstGroup.find('.form-control');
     this.fieldName = this.originalField.attr('name');
     this.buttonElement = this.element.find('.add-another-button');
 
@@ -18,19 +18,18 @@ class AddAnother {
 
   addField = (event) => {
     event.preventDefault();
-
     this.fieldCount += 1;
 
     // Create a new copy of the field
     const newFormGroup = this.firstGroup.clone();
-    const newInput = newFormGroup.find(`input[name='${this.fieldName}']`);
+    const newInput = newFormGroup.find(`[name='${this.fieldName}']`);
 
     // Give the field a new ID and the label point to it too
     const newId = `${this.fieldName}-${this.fieldCount}`;
     newInput.val('').attr('id', newId);
     newFormGroup.find('label').attr('for', newId);
 
-    const lastField = this.element.find(`input[name='${this.fieldName}']`)
+    const lastField = this.element.find(`[name='${this.fieldName}']`)
       .filter(':last')
       .parent();
 
