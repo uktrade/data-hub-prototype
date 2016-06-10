@@ -1,24 +1,8 @@
-@charset "utf-8";
 $images-dir: '/images/';
-$gt-big-phone: '>414px';
-
-@import 'govuk-elements';
+@import 'govstrap';
 
 // application specific
-@import 'button-bar';
-@import 'lined-list';
 @import 'dashboard';
 @import 'event-list';
-@import 'form';
-@import 'horizontal-tabs';
-@import 'plain-list';
-@import 'results-list';
-@import 'searchbar';
+@import '_login-bar.scss';
 @import 'shame';
-@import 'table';
-@import 'table-detail';
-@import 'option-select';
-@import 'status-badge';
-@import 'login-bar';
-@import 'field-value';
-@import 'radio-hide';

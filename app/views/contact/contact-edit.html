@@ -1,17 +1,17 @@
 {% extends "../layouts/ukti-search-header.html" %}
-{% import "../components/forms.html" as forms %}
+{% import "macros/forms.html" as forms %}
 
 {% block main %}
 
   {% if contact.id %}
     {% set backUrl = "/companies/" + company.id + "/contact/view/" + contact.id + "?query=" + query %}
     <a class="back-link" href="{{ backUrl }}">Back to contact</a>
-    {% include '../components/errors.html' %}
+    {{ forms.errorPanel(errors) }}
     <h1 class="heading-xlarge record-title">Edit contact details</h1>
   {% else %}
     {% set backUrl = "/companies/" +  company.id + "?query=" + query + "#contacts" %}
     <a class="back-link" href="{{ backUrl }}">Back to company</a>
-    {% include '../components/errors.html' %}
+    {{ forms.errorPanel(errors) }}
     <h1 class="heading-xlarge record-title">Add contact</h1>
   {% endif %}
 
@@ -27,10 +27,8 @@
     {{ forms.textbox('alternativeEmailaddress', label="Alternative email (optional)", value=contact.alternativeEmailaddress, error=errors.alternativeEmailaddress) }}
     {{ forms.textarea('notes', label="Notes (optional)", value=contact.notes, error=errors.notes) }}
 
-    <div class="button-bar">
-      <button class="button button--save" type="submit">Save</button>
-      <a class="button-link button--cancel js-button-cancel" href="{{ backUrl }}">Cancel</a>
-    </div>
+    {{ forms.save(backUrl=backUrl) }}
+
   </form>
 {% endblock %}
 X

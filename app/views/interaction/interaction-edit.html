@@ -1,15 +1,15 @@
 {% extends "../layouts/ukti-search-header.html" %}
-  {% import "../components/forms.html" as forms %}
+{% import "macros/forms.html" as forms %}
 
 {% block main %}
 
   {% if interactionId %}
     <a class="back-link" href="{{ backUrl }}">Back to interaction</a>
-    {% include '../components/errors.html' %}
+    {{ forms.errorPanel(errors) }}
     <h1 class="heading-xlarge record-title">Edit interaction details</h1>
   {% else %}
     <a class="back-link" href="{{ backUrl }}">Back</a>
-    {% include '../components/errors.html' %}
+    {{ forms.errorPanel(errors) }}
     <h1 class="heading-xlarge record-title">Add interaction</h1>
   {% endif %}
 
@@ -49,10 +49,8 @@
     {{ forms.textbox('serviceOffer', label="Service offer", value=interaction.serviceOffer, error=errors.serviceOffer) }}
     {{ forms.textbox('serviceProvider', label="Service provider", value=interaction.serviceProvider, error=errors.serviceProvider) }}
 
-    <div class="button-bar">
-      <button class="button button--save" type="submit">Save</button>
-      <a class="button-link button--cancel js-button-cancel" href="{{ backUrl }}">Cancel</a>
-    </div>
+    {{ forms.save(backUrl=backUrl) }}
+
   </form>
 
 

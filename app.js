@@ -55,7 +55,8 @@ if (config.env !== 'production') {
 app.set('view engine', 'html');
 app.set('views', [
   `${__dirname}/app/views`,
-  `${__dirname}/node_modules/govuk_template_jinja/views`
+  `${__dirname}/node_modules/govuk_template_jinja/views`,
+  `${__dirname}/node_modules/govstrap/nunjucks`
 ]);
 
 nunjucks.setup(nunjucksConfig, app);
@@ -69,7 +70,9 @@ nunjucks.ready(function(nj) {
 
 // Insert usefull variables into response for all controllers
 app.use(require(`${__dirname}/app/middleware/locals`));
-
+app.use('/images', express.static(`${__dirname}/node_modules/govuk_frontend_toolkit/images`));
+app.use('/images', express.static(`${__dirname}/node_modules/govstrap/images`));
+app.use('/fonts', express.static(`${__dirname}/node_modules/govuk_template_mustache/assets/stylesheets`));
 app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`));
