@@ -1,8 +1,10 @@
 {% extends "layouts/ukti.html" %}
+{% import "macros/search.html" as search %}
 
 {% block main %}
 
-  {% include "components/searchbar.html" %}
+  {{ search.searchbar('query', label="Search for company name or contact", value=query) }}
+
 
   <div class="grid-row dashboard">
     <div class="column-half">

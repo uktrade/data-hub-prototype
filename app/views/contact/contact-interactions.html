@@ -19,24 +19,24 @@
     </div>
   </div>
 
-  <ol class="contact-list">
+  <ol class="lined-list">
     {% for interaction in interactions %}
-      <li class="contact-list__item">
-        <h3 class="contact-list__heading">
+      <li class="lined-list__item">
+        <h3 class="badged-heading">
           <a href="/companies/{{ company.id }}/interaction/view/{{ interaction.id }}?query={{ query }}">{{ interaction.subject }}</a>
         </h3>
         <div class="grid-row">
           <div class="column-two-thirds">
-            <dl>
-              <dd>Company contact:</dd>
-              <dt><a href="#">{{ contact.name }}</a></dt>
-              <dd>UKTI advisor</dd>
-              <dt>{{ interaction.advisor }}</dt>
+            <dl class="fieldvalue">
+              <dt class="fieldvalue__title">Company contact:</dt>
+              <dd class="fieldvalue__value"><a href="/companies/{{ company.id }}/contact/view/{{ interaction.contact.id }}?query={{ query }}">{{ interaction.contact.name }}</a></dd>
+              <dt class="fieldvalue__title">UKTI advisor:</dt>
+              <dd class="fieldvalue__value">{{ interaction.advisor }}</dd>
             </dl>
           </div>
           <div class="column-one-third u-align-right">
-            <p class="contact-list__date">{{ interaction.date }}</p>
-            <p class="contact-list__meta">{{ interaction.type }}</p>
+            <div>{{ interaction.date }}</div>
+            <div>{{ interaction.type }}</div>
           </div>
         </div>
       </li>

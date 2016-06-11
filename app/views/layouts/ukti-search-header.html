@@ -1,11 +1,10 @@
 {% extends "./ukti.html" %}
+{% import "macros/search.html" as search %}
 
 {% block header_class %}with-proposition{% endblock %}
 
-
 {% block proposition_header %}
-  {% set searchbarType = "header" %}
   <div class="header-proposition">
-    {% include "../components/searchbar.html" %}
+    {{ search.searchbar('query', label="Search companies and contacts", value="", type="header") }}
   </div>
 {% endblock %}

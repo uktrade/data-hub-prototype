@@ -1,4 +1,5 @@
 {% extends "../layouts/ukti-search-header.html" %}
+{% import "macros/forms.html" as forms %}
 
 {% block main %}
   <a class="back-link" href='/search?query={{query}}'>Back to search</a>
@@ -10,7 +11,7 @@
     {% endif %}
   </h1>
 
-  {% include '../components/errors.html' %}
+  {{ forms.errorPanel(errors) }}
 
   <div class="tabs tabs--inline js-tabs">
     {% if company.status == 'Prospect' and not company.website and company.contacts.length == 0 %}

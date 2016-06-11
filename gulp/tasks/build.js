@@ -4,5 +4,5 @@ const gulp = require('gulp');
 const gulpSequence = require('gulp-sequence');
 
 gulp.task('build', (done) => {
-  gulpSequence('clean', 'css', 'images', 'fonts', 'webpack', done);
+  gulpSequence('clean', 'css', 'webpack', done);
 });
