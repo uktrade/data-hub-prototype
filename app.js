@@ -10,7 +10,7 @@ const contactViewController = require('./app/controller/contactcontroller');
 const interactionViewcController = require('./app/controller/interactioncontroller');
 const apiController = require('./app/controller/apicontroller');
 const nunjucks = require('express-nunjucks');
-const filters = require('./app/lib/filters');
+const filters = require('./node_modules/govstrap/nunjucks/filters');
 const compression = require('compression');
 const seed = require('./app/seed');
 
@@ -62,8 +62,8 @@ app.set('views', [
 nunjucks.setup(nunjucksConfig, app);
 
 // Add extra filters to nunjucks
-nunjucks.ready(function(nj) {
-  Object.keys(filters).forEach(function(filterName) {
+nunjucks.ready((nj) => {
+  Object.keys(filters).forEach((filterName) => {
     nj.addFilter(filterName, filters[filterName]);
   });
 });
