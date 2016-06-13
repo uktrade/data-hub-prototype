@@ -72,6 +72,7 @@ nunjucks.ready((nj) => {
 app.use(require(`${__dirname}/app/middleware/locals`));
 app.use('/images', express.static(`${__dirname}/node_modules/govuk_frontend_toolkit/images`));
 app.use('/images', express.static(`${__dirname}/node_modules/govstrap/images`));
+app.use('/javascripts', express.static(`${__dirname}/node_modules/govstrap/public/javascripts`));
 app.use('/fonts', express.static(`${__dirname}/node_modules/govuk_template_mustache/assets/stylesheets`));
 app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
