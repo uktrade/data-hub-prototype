@@ -6,7 +6,6 @@ module.exports = {
   devtool: prod ? 'hidden-source-map' : 'cheap-module-source-map',
 
   entry: {
-    app: `${paths.sourceJS}/main.js`,
     search: `${paths.sourceJS}/search.js`
   },
   output: {
@@ -46,16 +45,8 @@ module.exports = {
         comments: false
       },
       sourceMap: false }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-      filename: 'vendor.bundle.js'})
+    new webpack.optimize.DedupePlugin()
   ] : [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-      filename: 'vendor.bundle.js' })
+    new webpack.optimize.DedupePlugin()
   ]
 };
