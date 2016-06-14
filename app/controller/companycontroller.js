@@ -22,7 +22,6 @@ function sanitizeForm(req) {
 function validateForm(req) {
 
   req.check('sectors', 'You must provide at least one sector').hasOneOrMoreValues();
-  req.check('website', 'Enter the company website address, e.g. http://www.test.com').isURL();
   req.check('region', 'You must provide the region for this company').notEmpty();
 
   if (req.body.hasOperatingAddress === 'Yes') {
