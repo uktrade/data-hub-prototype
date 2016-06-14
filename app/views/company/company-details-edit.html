@@ -35,7 +35,12 @@
     {% set hasManager = 'No' %}
   {% endif %}
   {% call forms.yesNoHidden('hasAccountManager', label="Is there an agreed UKTI account manager for this company?", radioValue=hasManager, error=errors.accountManager) -%}
-    {{ forms.textbox('accountManager', label="Account manager", value=formData.accountManager, error=errors.accountManager) }}
+    {{ forms.autocomplete('accountManager',
+      label="Account manager",
+      value=formData.accountManager,
+      options=ADVISOR_OPTIONS,
+      error=errors.accountManager
+    ) }}
   {%- endcall %}
 
 
@@ -45,11 +50,30 @@
     {% set hasExportingMarkets = 'No' %}
   {% endif %}
   {% call forms.yesNoHidden('hasExportingMarkets', label="Is this company curently exporting to a market?", radioValue=hasExportingMarkets, error=errors.exportingMarkets) -%}
-    {{ forms.addAnother('exportingMarkets', label="Export market", addLabel="country", values=formData.exportingMarkets, error=errors.exportingMarkets) }}
+    {{ forms.addAnotherAutocomplete('exportingMarkets',
+      label="Export market",
+      addLabel="country",
+      values=formData.exportingMarkets,
+      options=countrys,
+      error=errors.exportingMarkets
+    ) }}
   {%- endcall %}
 
-  {{ forms.addAnother('countryOfInterest', label="Future countries of interest (optional)", addLabel="country", values=formData.countryOfInterest, error=errors.countryOfInterest) }}
-  {{ forms.addAnother('connections', label="Company connections (optional)", addLabel="company connection", values=formData.connections, error=errors.connections) }}
+  {{ forms.addAnotherAutocomplete('countryOfInterest',
+    label="Future countries of interest (optional)",
+    addLabel="country",
+    values=formData.countryOfInterest,
+    options=countrys,
+    error=errors.countryOfInterest
+  ) }}
+
+  {{ forms.addAnotherAutocomplete('connections',
+    label="Company connections (optional)",
+    addLabel="company connection",
+    values=formData.connections,
+    options_url="/api/suggest?query=",
+    error=errors.connections
+  ) }}
 
   {{ forms.save(backUrl="#") }}
 

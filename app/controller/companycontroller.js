@@ -4,6 +4,13 @@ let companyRepository = require('../lib/companyrepository');
 const transformErrors = require('../lib/controllerutils').transformErrors;
 const SECTOR_OPTIONS = require('../../data/sectors.json');
 const REGION_OPTIONS = require('../../data/regions.json');
+const ADVISOR_OPTIONS = require('../../data/advisors.json');
+const countryKeysValues = require('../../data/countrys.json');
+
+let countrys = [];
+for (let country in countryKeysValues) {
+  countrys.push(countryKeysValues[country]);
+}
 
 function sanitizeForm(req) {
   req.sanitize('sectors').trimArray();
@@ -109,6 +116,8 @@ function get(req, res) {
         formData,
         SECTOR_OPTIONS,
         REGION_OPTIONS,
+        ADVISOR_OPTIONS,
+        countrys,
         errors: transformErrors(errors)
       });
     })
