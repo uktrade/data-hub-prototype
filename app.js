@@ -79,6 +79,7 @@ app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`));
 
 app.get('/api/search?', apiController.search);
+app.get('/api/suggest?', apiController.suggest);
 
 app.get('/companies/:id?', companyViewController.get);
 app.post('/companies/:id?', companyViewController.post);

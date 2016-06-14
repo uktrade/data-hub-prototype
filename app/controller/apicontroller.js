@@ -38,6 +38,29 @@ function search(req, res) {
 
 }
 
+function suggest(req, res) {
+
+  if (!req.query.query || req.query.query === '') {
+    res.json([]);
+    return;
+  }
+
+  let query = req.query.query;
+
+  searchService.search(query)
+    .then((results) => {
+      let suggestions = results.results
+        .filter((result) => result.type === 'Company')
+        .map((result) => result.title);
+
+      res.json(suggestions);
+    })
+    .catch((error) => {
+      res.json({error});
+    });
+}
+
 module.exports = {
-  search
+  search,
+  suggest
 };
