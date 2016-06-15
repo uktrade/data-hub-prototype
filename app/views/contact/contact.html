@@ -8,7 +8,7 @@
   {% endif %}
 
   <h1 class="heading-xlarge record-title">
-    {{ contact.name }}
+    {{ contact.firstname }} {{ contact.lastname }}
     {% if contact.primaryContact %}
       <span class="status-badge status-badge--primary-contact">Primary</span>
     {% endif %}

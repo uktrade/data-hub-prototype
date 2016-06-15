@@ -7,7 +7,7 @@
   {% for contact in company.contacts %}
     <li class="lined-list__item">
       <h3 class="badged-heading">
-        <a href="/companies/{{ company.id }}/contact/view/{{ contact.id}}?query={{ query }}">{{ contact.name }}</a>
+        <a href="/companies/{{ company.id }}/contact/view/{{ contact.id}}?query={{ query }}">{{ contact.firstname }} {{ contact.lastname }}</a>
         - {{ contact.occupation }}
         {% if contact.primaryContact %}
           <span class="status-badge status-badge--primary-contact">Primary</span>

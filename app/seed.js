@@ -13,7 +13,7 @@ function cleanContactDetails(company, domain) {
     contact.streetAddress = streetAddress;
     contact.city = city;
     contact.postcode = postcode;
-    contact.emailaddress = `${contact.name.replace(/ /g,"_")}@${domain}`;
+    contact.emailaddress = `${contact.firstname}_${contact.lastname}${domain}`;
   }
 
 }

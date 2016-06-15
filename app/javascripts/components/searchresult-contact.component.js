@@ -10,7 +10,7 @@ export default class SearchResultContact extends Component {
 
   render() {
     const result = this.props.result;
-    const name = `${result.title} ${result.name}`;
+    const name = `${result.title} ${result.firstname} ${result.lastname}`;
     const query = this.props.query;
     const linkUrl = `/companies/${result.company.id}/contact/view/${result.id}?query=${query}`;
 
