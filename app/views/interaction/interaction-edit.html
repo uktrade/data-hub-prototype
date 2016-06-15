@@ -45,7 +45,7 @@
     error=errors.advisor
     ) }}
 
-    {{ forms.textarea('notes', label="Interaction notes (optional)", value=interaction.notes, error=errors.notes) }}
+    {{ forms.textarea('notes', label="Interaction notes", value=interaction.notes, error=errors.notes) }}
     {{ forms.textbox('serviceOffer', label="Service offer", value=interaction.serviceOffer, error=errors.serviceOffer) }}
     {{ forms.textbox('serviceProvider', label="Service provider", value=interaction.serviceProvider, error=errors.serviceProvider) }}
 
