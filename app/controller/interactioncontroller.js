@@ -79,7 +79,7 @@ function post(req, res) {
     res.redirect('/');
   }
 
-  let backUrl = getBackUrl(req);
+  sanitizeForm(req);
   let errors = validateForm(req);
 
   if (errors) {
@@ -87,6 +87,7 @@ function post(req, res) {
     return;
   }
 
+  const backUrl = getBackUrl(req);
   const interaction = interactionId ? companyRepository.getCompanyInteraction(companyId, interactionId) : {};
   let updatedInteraction = applyFormFieldsToInteraction(interaction, req.body);
   companyRepository.setCompanyInteraction(companyId, updatedInteraction);
@@ -134,6 +135,9 @@ function validateForm(req) {
     'date': {
       notEmpty: {
         errorMessage: 'You must provide a date the interaction took place.'
+      },
+      isDate: {
+        errorMessage: 'You must provide a valid date.'
       }
     },
     'contactId': {
@@ -171,6 +175,17 @@ function getCompanyContactOptions(company) {
   });
 }
 
+function sanitizeForm(req) {
+  // join date parts
+  try {
+    req.body.date = `${req.body.date_day}/${req.body.date_month}/${req.body.date_year}`;
+    delete req.body.date_day;
+    delete req.body.date_month;
+    delete req.body.date_year;
+  } catch (err) {
+    console.warn('Error handling date');
+  }
+}
 
 module.exports = {
   get,
