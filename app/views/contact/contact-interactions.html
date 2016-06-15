@@ -29,7 +29,7 @@
           <div class="column-two-thirds">
             <dl class="fieldvalue">
               <dt class="fieldvalue__title">Company contact:</dt>
-              <dd class="fieldvalue__value"><a href="/companies/{{ company.id }}/contact/view/{{ interaction.contact.id }}?query={{ query }}">{{ interaction.contact.name }}</a></dd>
+              <dd class="fieldvalue__value"><a href="/companies/{{ company.id }}/contact/view/{{ interaction.contact.id }}?query={{ query }}">{{ interaction.contact.firstname }} {{ interaction.contact.lastname }}</a></dd>
               <dt class="fieldvalue__title">UKTI advisor:</dt>
               <dd class="fieldvalue__value">{{ interaction.advisor }}</dd>
             </dl>

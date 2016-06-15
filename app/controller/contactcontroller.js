@@ -90,9 +90,14 @@ function post(req, res) {
 function validateForm(req) {
 
   req.checkBody({
-    'name': {
+    'firstname': {
       notEmpty: {
-        errorMessage: 'You must enter a name for this contact.'
+        errorMessage: 'You must enter a first name for this contact.'
+      }
+    },
+    'lastname': {
+      notEmpty: {
+        errorMessage: 'You must enter a last name for this contact.'
       }
     },
     'occupation': {

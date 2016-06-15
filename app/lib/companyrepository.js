@@ -54,7 +54,8 @@ function addRandomPeople(company) {
     let newContact = {
       id: `${pos}${company.id}`,
       title: randomContact.title,
-      name: `${randomContact.givenname} ${randomContact.surname}`,
+      firstname: randomContact.givenname,
+      lastname: randomContact.surname,
       occupation: randomContact.occupation,
       telephonenumber: randomContact.telephonenumber,
       emailaddress: randomContact.emailaddress,

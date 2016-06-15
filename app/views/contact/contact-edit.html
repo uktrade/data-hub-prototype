@@ -17,7 +17,8 @@
 
   <form method="post">
     {{ forms.textbox('title', label="Title (optional)", value=contact.title, error=errors.title) }}
-    {{ forms.textbox('name', label="Full name", value=contact.name, error=errors.name) }}
+    {{ forms.textbox('firstname', label="First name", value=contact.firstname, error=errors.firstname) }}
+    {{ forms.textbox('lastname', label="Last name", value=contact.lastname, error=errors.lastname) }}
     {{ forms.textbox('occupation', label="Role", value=contact.occupation, error=errors.occupation) }}
     {{ forms.yesNo('primaryContact', label="Is this person a primary contact?", radioValue=contact.primaryContact, error=errors.primaryContact) }}
     {{ forms.textbox('telephonenumber', label="Phone", value=contact.telephonenumber, error=errors.telephonenumber) }}

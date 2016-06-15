@@ -167,7 +167,7 @@ function applyFormFieldsToInteraction(interaction, formData) {
 
 function getCompanyContactOptions(company) {
   return company.contacts.map((contact) => {
-    return { label: contact.name, value: contact.id };
+    return { label: `${contact.firstname} ${contact.lastname}`, value: contact.id };
   });
 }
 
