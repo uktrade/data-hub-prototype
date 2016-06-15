@@ -31,7 +31,7 @@
     </tr>
     <tr>
       <th>Date of interaction</th>
-      <td>{{ interaction.date }}</td>
+      <td>{{ interaction.date | formatDate('DD MMM YYYY') }}</td>
     </tr>
     <tr>
       <th>Company contact</th>
@@ -57,7 +57,7 @@
 
     <tr>
       <th>Created on</th>
-      <td>{{ interaction.createdOn }}</td>
+      <td>{{ interaction.createdOn | formatDate('DD MMM YYYY') }}</td>
     </tr>
     <tr>
       <th>Created by</th>
@@ -65,7 +65,7 @@
     </tr>
     <tr>
       <th>Updated on</th>
-      <td>{{ interaction.updatedOn }}</td>
+      <td>{{ interaction.updatedOn | formatDate('DD MMM YYYY') }}</td>
     </tr>
     <tr>
       <th>Updated by</th>

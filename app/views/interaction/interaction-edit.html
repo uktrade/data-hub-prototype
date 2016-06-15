@@ -27,7 +27,7 @@
     error=errors.type) }}
 
     {{ forms.textbox('subject', label="Subject", value=interaction.subject, error=errors.subject) }}
-    {{ forms.textbox('date', label="Date of interaction", value=interaction.date, error=errors.date) }}
+    {{ forms.date(name='date', label='Date of interaction', value=interaction.date, error=errors.date) }}
 
     {{ forms.dropdown('contactId',
     label="Company contact",
