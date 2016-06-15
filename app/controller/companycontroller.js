@@ -141,6 +141,7 @@ function post(req, res) {
   companyRepository.getCompany(companyNum)
     .then((currentCompany) => {
       let updatedCompany = applyFormFieldsToCompany(currentCompany, req.body);
+      updatedCompany.uktidata = true;
       companyRepository.updateCompany(updatedCompany);
       res.redirect(`/companies/${companyNum}?query=${query}`);
     });

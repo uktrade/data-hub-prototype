@@ -2,7 +2,6 @@
 
 const sectors = require('../../data/sectors.json');
 const contactsData = require('../../data/fakenames.json');
-const statusOptions = ['Prospect', 'UKTI Customer', ''];
 const api = require('../lib/companieshouseapis');
 const sicCodes = require('../../data/sic-codes.json');
 const interactionsData = require('../../data/interactions.json');
@@ -38,12 +37,6 @@ function addSectors(company) {
   for (let pos = Math.round(Math.random() * 3); pos > 0; pos -= 1) {
     company.sectors.push(sectors[Math.round(Math.random() * (sectors.length - 1))]);
   }
-}
-
-function addStatus(company) {
-  const randindex = Math.round(Math.random() * (statusOptions.length - 1));
-  company.status = statusOptions[randindex];
-
 }
 
 function addRandomPeople(company) {
@@ -87,9 +80,7 @@ function addInteractionData(company) {
 function addUKTIData(company) {
   addRandomPeople(company);
   addSectors(company);
-  addStatus(company);
   addInteractionData(company);
-
   Object.assign(company, {
     countryOfInterest: ['Argentina', 'Greece'],
     uktidata: true
@@ -123,7 +114,7 @@ function getCompanyContact(companyId, contactId) {
 function getInteractionsForContact(companyId, contactId) {
   const company = data[companyId];
 
-  if (!company) {
+  if (!company || !company.interactions) {
     return [];
   }
 
@@ -135,6 +126,10 @@ function setCompanyContact(companyId, updatedContact) {
   const company = data[companyId];
   if (!company) {
     return null;
+  }
+
+  if (!company.contacts) {
+    company.contacts = [];
   }
 
   // Add new contacts, that have no id
@@ -179,6 +174,10 @@ function setCompanyInteraction(companyId, updatedInteraction) {
   const company = data[companyId];
   if (!company) {
     return null;
+  }
+
+  if (!company.interactions) {
+    company.interactions = [];
   }
 
   // Add new interactions, that have no id  more todo later
@@ -257,9 +256,14 @@ function addCompany(company) {
   if (!company.id && company.company_number) {
     company.id = company.company_number;
   }
-  if (!company.uktidata) {
+
+  //randomly add ukti data
+  let rand = Math.round(Math.random() * 10);
+  console.log(rand);
+  if (rand === 5 && !company.uktidata ) {
     addUKTIData(company);
   }
+
   data[company.id] = company;
   return company;
 }
