@@ -132,6 +132,11 @@ function validateForm(req) {
         errorMessage: 'Please provide a brief subject for this interaction'
       }
     },
+    'notes': {
+      notEmpty: {
+        errorMessage: 'You must provide notes, describing the interaction'
+      }
+    },
     'date': {
       notEmpty: {
         errorMessage: 'You must provide a date the interaction took place.'

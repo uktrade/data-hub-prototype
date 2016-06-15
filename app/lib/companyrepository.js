@@ -259,7 +259,6 @@ function addCompany(company) {
 
   //randomly add ukti data
   let rand = Math.round(Math.random() * 10);
-  console.log(rand);
   if (rand === 5 && !company.uktidata ) {
     addUKTIData(company);
   }
