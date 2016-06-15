@@ -44,7 +44,7 @@
         {% for exportingMarket in company.exportingMarkets %}
           {{ exportingMarket }}
         {% endfor %}
-      {% elif company.status != 'Prospect' %}
+      {% elif company.uktidata %}
         No
       {% endif %}
     </td>

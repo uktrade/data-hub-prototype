@@ -147,7 +147,6 @@ function seedUktiCustomers() {
       company.countryOfInterest = null;
       company.contacts = [];
       company.interactions = [];
-      company.status = 'Prospect';
 
       console.log('update enhanced solar');
       companyRepository.updateCompany(company);
@@ -169,7 +168,6 @@ function seedUktiCustomers() {
       company.countryOfInterest = null;
       company.contacts = [];
       company.interactions = [];
-      company.status = 'Prospect';
 
       console.log('update Prescient');
       companyRepository.updateCompany(company);

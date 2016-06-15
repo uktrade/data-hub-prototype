@@ -9,7 +9,7 @@
     options=SECTOR_OPTIONS,
     error=errors.sectors)
   }}
-  {{ forms.textbox('website', label="Website", value=company.website, error=errors.website) }}
+  {{ forms.textbox('website', label="Website (optional)", value=company.website, error=errors.website) }}
   {{ forms.textarea('businessDescription', label="Business description (optional)", value=company.businessDescription, error=errors.businessDescription) }}
 
   {{ forms.dropdown('region',

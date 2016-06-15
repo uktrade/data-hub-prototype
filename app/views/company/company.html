@@ -2,19 +2,20 @@
 {% import "macros/forms.html" as forms %}
 
 {% block main %}
+  {{  company | log | safe }}
   <a class="back-link" href='/search?query={{query}}'>Back to search</a>
 
   <h1 class="heading-xlarge record-title">
     {{ company.company_name }}
-    {% if company.status  == 'Prospect' %}
-      <span class="status-badge status-badge--prospect">Prospect</span>
+    {% if company.uktidata %}
+      <span class="status-badge status-badge--prospect">UKTI</span>
     {% endif %}
   </h1>
 
   {{ forms.errorPanel(errors) }}
 
   <div class="tabs tabs--inline js-tabs">
-    {% if company.status == 'Prospect' and not company.website and company.contacts.length == 0 %}
+    {% if not company.uktidata %}
       <div id="tab-error-contacts" class="tabs-errors">
         <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
           <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
@@ -30,21 +31,25 @@
           </ul>
         </div>
       </div>
-    {% endif %}
-
-    {% if company.status == 'Prospect' and not company.website and company.interactions.length == 0 %}
       <div id="tab-error-interactions" class="tabs-errors">
         <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
           <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
-            Complete company profile details before adding a new interaction
+            Add related company contacts before adding a new interaction
           </h1>
-          <p>You need to add required details to company profile before adding a new contact</p>
+          <p>
+            you need to add the related contacts from the company under contacts section before
+            adding a new interaction
+          </p>
           <ul class="error-summary-list">
-            <li><a href="#tab-content-details">Add company details</a></li>
+            <li>
+              <a href="/companies/{{ company.id }}/contact/add?query={{ query }}">Add new contact</a>
+            </li>
           </ul>
         </div>
       </div>
-    {% elif company.status == 'Prospect' and company.website.length > 0 and company.contacts.length == 0 and company.interactions.length == 0 %}
+    {% endif %}
+
+    {% if company.uktidata == true and not company.contacts %}
       <div id="tab-error-interactions" class="tabs-errors">
         <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
           <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
