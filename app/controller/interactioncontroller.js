@@ -140,9 +140,6 @@ function validateForm(req) {
     'date': {
       notEmpty: {
         errorMessage: 'You must provide a date the interaction took place.'
-      },
-      isDate: {
-        errorMessage: 'You must provide a valid date.'
       }
     },
     'contactId': {
@@ -175,9 +172,14 @@ function applyFormFieldsToInteraction(interaction, formData) {
 }
 
 function getCompanyContactOptions(company) {
-  return company.contacts.map((contact) => {
-    return { label: `${contact.firstname} ${contact.lastname}`, value: contact.id };
-  });
+  let result = {};
+
+  let contacts = company.contacts;
+  for (let contact of contacts) {
+    result[contact.id] = `${contact.firstname} ${contact.lastname}`;
+  }
+
+  return result;
 }
 
 function sanitizeForm(req) {

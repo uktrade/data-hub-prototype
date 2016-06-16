@@ -171,6 +171,7 @@ function getCompanyInteraction(companyId, interactionId) {
 }
 
 function setCompanyInteraction(companyId, updatedInteraction) {
+  const moment = require('moment');
   const company = data[companyId];
   if (!company) {
     return null;
@@ -180,9 +181,17 @@ function setCompanyInteraction(companyId, updatedInteraction) {
     company.interactions = [];
   }
 
+  let now = moment().format('DD/MM/YYYY');
+
+  updatedInteraction.updatedBy = 'Test user';
+  updatedInteraction.updatedOn = now;
+
+
   // Add new interactions, that have no id  more todo later
   if (!updatedInteraction.id) {
     updatedInteraction.id = `${company.interactions.length + 1}${company.id}`;
+    updatedInteraction.createdBy = 'Test user';
+    updatedInteraction.createdOn = now;
     company.interactions.push(updatedInteraction);
     return updatedInteraction;
   }
