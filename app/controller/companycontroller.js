@@ -24,8 +24,8 @@ function validateForm(req) {
   req.check('sectors', 'You must provide at least one sector').hasOneOrMoreValues();
   req.check('region', 'You must provide the region for this company').notEmpty();
 
-  if (req.body.hasOperatingAddress === 'Yes') {
-    req.check('operatingAddress_address1', 'Provide the company operating address').notEmpty();
+  if (req.body.useCompaniesHouseAddress === 'No') {
+    req.check('operatingAddress.country', 'Provide the company operating address').notEmpty();
   }
 
   if (req.body.hasAccountManager === 'Yes') {
@@ -42,16 +42,20 @@ function validateForm(req) {
 
 function convertAddress(formData) {
   let address = {
-    address1: formData.operatingAddress_address1,
-    address2: formData.operatingAddress_address2,
-    city: formData.operatingAddress_city,
-    postcode: formData.operatingAddress_postcode
+    address1: formData['operatingAddress.address1'],
+    address2: formData['operatingAddress.address2'],
+    city: formData['operatingAddress.city'],
+    county: formData['operatingAddress.county'],
+    postcode: formData['operatingAddress.postcode'],
+    country: formData['operatingAddress.country']
   };
 
-  delete formData.operatingAddress_address1;
-  delete formData.operatingAddress_address1;
-  delete formData.operatingAddress_city;
-  delete formData.operatingAddress_postcode;
+  delete formData['operatingAddress.address1'];
+  delete formData['operatingAddress.address1'];
+  delete formData['operatingAddress.city'];
+  delete formData['operatingAddress.county'];
+  delete formData['operatingAddress.postcode'];
+  delete formData['operatingAddress.country'];
 
   formData.operatingAddress = address;
 }
@@ -149,9 +153,3 @@ function post(req, res) {
 }
 
 module.exports = { get, post, applyFormFieldsToCompany };
-
-
-// todo
-// in the get method, look for req.body and if it is there, set formData to that
-// When you post and it fails then before you would have called the applyform fields method
-// call the get method instead, with the req and res
