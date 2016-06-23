@@ -116,6 +116,8 @@ app.get('/search?', function(req, res) {
   res.render('search');
 });
 
+app.get('/postcodelookup/:postcode', apiController.postcodelookup);
+
 app.listen(config.port);
 
 seed.seedUktiCustomers();

@@ -6,6 +6,9 @@
     "NODE_MODULES_CACHE": "false",
     "COMPANY_KEY": {
       "required": true
+    },
+    "POSTCODE_KEY": {
+      "required": true
     }
   },
   "addons":[]

@@ -20,13 +20,13 @@
     error=errors.region)
   }}
 
-  {% if formData.operatingAddress and formData.operatingAddress.address1 and formData.operatingAddress.address1.length > 0 or errors.errors.operatingAddress_address1 %}
-    {% set hasOperatingAddress = 'Yes' %}
+  {% if formData.operatingAddress and formData.operatingAddress.country and formData.operatingAddress.country.length > 0 or errors.errors.operatingAddress_country %}
+    {% set useCompaniesHouseAddress = 'No' %}
   {% else %}
-    {% set hasOperatingAddress = 'No' %}
+    {% set useCompaniesHouseAddress = 'Yes' %}
   {% endif %}
-  {% call forms.yesNoHidden('hasOperatingAddress', label="Is the operating address different from Companies House registered office address?", radioValue=hasOperatingAddress, error=errors.operatingAddress_address1) -%}
-    {{ forms.address('operatingAddress', label="Operating address", value=formData.operatingAddress, error=errors.operatingAddress_address1) }}
+  {% call forms.yesNoHidden('useCompaniesHouseAddress', label="Is the trading address the same as the registered office address?", radioValue=useCompaniesHouseAddress, revealFor="No", error=errors.operatingAddress) -%}
+    {{ forms.address('operatingAddress', label="Trading address", value=formData.operatingAddress, optionalNonUk='yes', error=errors.operatingAddress_address1) }}
   {%- endcall %}
 
   {% if formData.accountManager and formData.accountManager.length > 0 or errors.accountManager %}
