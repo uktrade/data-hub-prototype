@@ -6,6 +6,7 @@ const SECTOR_OPTIONS = require('../../data/sectors.json');
 const REGION_OPTIONS = require('../../data/regions.json');
 const ADVISOR_OPTIONS = require('../../data/advisors.json');
 const countryKeysValues = require('../../data/countrys.json');
+const searchService = require('../lib/searchservice');
 
 let countrys = [];
 for (let country in countryKeysValues) {
@@ -87,7 +88,8 @@ function populateFormDataWithCompany(company){
     accountManager: company.accountManager,
     exportingMarkets: company.exportingMarkets,
     countryOfInterest: company.countryOfInterest,
-    connections: company.connections
+    connections: company.connections,
+    tradingName: company.tradingName
   };
 }
 
@@ -147,6 +149,8 @@ function post(req, res) {
       let updatedCompany = applyFormFieldsToCompany(currentCompany, req.body);
       updatedCompany.uktidata = true;
       companyRepository.updateCompany(updatedCompany);
+      searchService.removeCHRecord(updatedCompany);
+      searchService.indexCHRecord(updatedCompany);
       res.redirect(`/companies/${companyNum}?query=${query}`);
     });
 

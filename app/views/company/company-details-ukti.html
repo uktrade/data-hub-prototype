@@ -1,6 +1,10 @@
 <table class="table-detail">
   <tbody>
   <tr>
+    <th>Trading name</th>
+    <td>{{ company.tradingName }}</td>
+  </tr>
+  <tr>
     <th width="30%">Sectors</th>
     <td>{% for sector in company.sectors %}
       <div>{{ sector }}</div>

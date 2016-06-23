@@ -41,5 +41,5 @@ function findOfficers(q) {
 module.exports = {
   findCompanies,
   findCompany,
-  findOfficers,
+  findOfficers
 };

@@ -33,12 +33,23 @@ function searchLunr(term) {
 }
 
 function indexCHRecord(company) {
-  index.add({
+  let doc = {
     id: `C${company.id}`,
     title: company.title,
     description: company.description,
     address: company.address.postal_code
-  });
+  };
+
+
+  if (company.tradingName) {
+    doc.tradingName = company.tradingName;
+  }
+
+  index.add(doc);
+}
+
+function removeCHRecord(company) {
+  index.remove({ id: `C${company.id}`});
 }
 
 function indexCompanyContacts(company) {
@@ -92,6 +103,7 @@ function reset() {
   searchHistory = [];
   index = lunr(function() {
     this.field('title', { boost: 10 });
+    this.field('tradingName', { boost: 10 });
     this.field('description');
     this.field('address');
   });
@@ -135,6 +147,8 @@ reset();
 
 module.exports = {
   search,
+  indexCHRecord,
+  removeCHRecord,
   companiesHouseApi,
   reset
 };

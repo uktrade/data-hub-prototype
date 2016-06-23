@@ -21,6 +21,9 @@ export default class SearchResultCompany extends Component {
             <span className="status-badge status-badge--prospect status-badge--small">UKTI</span>
           }
         </h3>
+        { result.tradingName &&
+          <div className="meta meta--trading">Trading name: <span dangerouslySetInnerHTML={{__html: highlightQuery(result.tradingName, query)}}></span></div>
+        }
         <div className="meta meta--ch">{result.description}</div>
         <div className="meta meta--address">
           {result.address.address_line_1},
