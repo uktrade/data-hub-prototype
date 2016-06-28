@@ -5,7 +5,7 @@
   {{ forms.textbox('tradingName',
     label="Trading name (optional)",
     hint="Provide the name the company trades as if this differs from it’s registered name.",
-    value=company.tradingName,
+    value=formData.tradingName,
     error=errors.tradingName)
   }}
 
@@ -13,28 +13,28 @@
     label="Sector",
     addLabel="sector",
     emptyLabel="Select sector to add",
-    values=company.sectors,
+    values=formData.sectors,
     options=SECTOR_OPTIONS,
     error=errors.sectors)
   }}
-  {{ forms.textbox('website', label="Website (optional)", value=company.website, error=errors.website) }}
-  {{ forms.textarea('businessDescription', label="Business description (optional)", value=company.businessDescription, error=errors.businessDescription) }}
+  {{ forms.textbox('website', label="Website (optional)", value=formData.website, error=errors.website) }}
+  {{ forms.textarea('businessDescription', label="Business description (optional)", value=formData.businessDescription, error=errors.businessDescription) }}
 
   {{ forms.dropdown('region',
     label="Region",
     emptyLabel="Select a region",
-    value=company.region,
+    value=formData.region,
     options=REGION_OPTIONS,
     error=errors.region)
   }}
 
-  {% if formData.operatingAddress and formData.operatingAddress.country and formData.operatingAddress.country.length > 0 or errors.errors.operatingAddress_country %}
+  {% if formData.operatingAddress and formData.operatingAddress.country and formData.operatingAddress.country.length > 0 or errors.tradingAddress %}
     {% set useCompaniesHouseAddress = 'No' %}
   {% else %}
     {% set useCompaniesHouseAddress = 'Yes' %}
   {% endif %}
-  {% call forms.yesNoHidden('useCompaniesHouseAddress', label="Is the trading address the same as the registered office address?", radioValue=useCompaniesHouseAddress, revealFor="No", error=errors.operatingAddress) -%}
-    {{ forms.address('operatingAddress', label="Trading address", value=formData.operatingAddress, optionalNonUk='yes', optional='yes', error=errors.operatingAddress_address1) }}
+  {% call forms.yesNoHidden('useCompaniesHouseAddress', label="Is the trading address the same as the registered office address?", radioValue=useCompaniesHouseAddress, revealFor="No") -%}
+    {{ forms.address('operatingAddress', label="Trading address", value=formData.operatingAddress, optionalNonUk='yes', optional='yes', error=errors.tradingAddress) }}
   {%- endcall %}
 
   {% if formData.accountManager and formData.accountManager.length > 0 or errors.accountManager %}

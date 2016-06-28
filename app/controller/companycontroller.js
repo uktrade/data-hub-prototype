@@ -27,6 +27,11 @@ function validateForm(req) {
 
   if (req.body.useCompaniesHouseAddress === 'No') {
     req.check('operatingAddress.country', 'Provide the company operating address').notEmpty();
+
+    if (req.body['operatingAddress.country'] && req.body['operatingAddress.country'].toLocaleLowerCase() === 'united kingdom') {
+      req.check('operatingAddress.address1', 'Provide the company operating address').notEmpty();
+      req.check('operatingAddress.city', 'Provide the company operating address').notEmpty();
+    }
   }
 
   if (req.body.hasAccountManager === 'Yes') {
@@ -52,7 +57,7 @@ function convertAddress(formData) {
   };
 
   delete formData['operatingAddress.address1'];
-  delete formData['operatingAddress.address1'];
+  delete formData['operatingAddress.address2'];
   delete formData['operatingAddress.city'];
   delete formData['operatingAddress.county'];
   delete formData['operatingAddress.postcode'];
@@ -93,6 +98,32 @@ function populateFormDataWithCompany(company){
   };
 }
 
+function transformAddressErrors(convertedErrors) {
+  if (convertedErrors && convertedErrors.hasOwnProperty('operatingAddress.country') ||
+    convertedErrors && convertedErrors.hasOwnProperty('operatingAddress.address1') ||
+    convertedErrors && convertedErrors.hasOwnProperty('operatingAddress.city')) {
+
+    convertedErrors.tradingAddress = {
+      message: 'Incomplete address'
+    };
+
+    if (convertedErrors['operatingAddress.country']) {
+      convertedErrors.tradingAddress.country = convertedErrors['operatingAddress.country'];
+      delete convertedErrors['operatingAddress.country'];
+    }
+
+    if (convertedErrors['operatingAddress.address1']) {
+      convertedErrors.tradingAddress.address1 = convertedErrors['operatingAddress.address1'];
+      delete convertedErrors['operatingAddress.address1'];
+    }
+
+    if (convertedErrors['operatingAddress.city']) {
+      convertedErrors.tradingAddress.city = convertedErrors['operatingAddress.city'];
+      delete convertedErrors['operatingAddress.city'];
+    }
+  }
+}
+
 function get(req, res) {
   let companyNum = req.params.id;
   let query = req.query.query;
@@ -113,6 +144,8 @@ function get(req, res) {
       }
 
       const errors = req.validationErrors();
+      let convertedErrors = transformErrors(errors);
+      transformAddressErrors(convertedErrors);
 
       res.render('company/company', {
         query,
@@ -123,7 +156,7 @@ function get(req, res) {
         REGION_OPTIONS,
         ADVISOR_OPTIONS,
         countrys,
-        errors: transformErrors(errors)
+        errors: convertedErrors
       });
     })
     .catch((error) => {
