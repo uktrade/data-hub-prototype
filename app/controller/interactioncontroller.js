@@ -140,6 +140,9 @@ function validateForm(req) {
     'date': {
       notEmpty: {
         errorMessage: 'You must provide a date the interaction took place.'
+      },
+      validUkDateString: {
+        errorMessage: 'You must provide a valid date'
       }
     },
     'contactId': {
@@ -185,6 +188,15 @@ function getCompanyContactOptions(company) {
 function sanitizeForm(req) {
   // join date parts
   try {
+
+    if (req.body.date_day && req.body.date_day.length === 1) {
+      req.body.date_day = `0${req.body.date_day}`;
+    }
+
+    if (req.body.date_month && req.body.date_month.length === 1) {
+      req.body.date_month = `0${req.body.date_month}`;
+    }
+
     req.body.date = `${req.body.date_day}/${req.body.date_month}/${req.body.date_year}`;
     delete req.body.date_day;
     delete req.body.date_month;
