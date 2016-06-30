@@ -13,35 +13,12 @@ const nunjucks = require('express-nunjucks');
 const filters = require('./node_modules/govstrap/nunjucks/filters');
 const compression = require('compression');
 const seed = require('./app/seed');
+const customValidators = require('./app/lib/validators');
+const customSanitizers = require('./app/lib/sanitizers');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(expressValidator({
-  customValidators: {
-    hasOneOrMoreValues: (value) => {
-      if (!value || value.length === 0) {
-        return false;
-      }
+app.use(expressValidator({ customValidators, customSanitizers }));
 
-      if (Array.isArray(value)) {
-        for (let item of value) {
-          if (item.length === 0) return false;
-        }
-      }
-
-      return true;
-    }
-  },
-  customSanitizers: {
-    trimArray: (value) => {
-      if (Array.isArray(value)) {
-        return value.filter((item) => item.length > 0);
-      } else if (value && value.length > 0) {
-        return [value];
-      }
-      return null;
-    }
-  }
-}));
 app.use(compression());
 
 let nunjucksConfig = {
