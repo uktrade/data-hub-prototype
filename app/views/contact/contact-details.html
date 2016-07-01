@@ -13,6 +13,16 @@
       <th>Role</th>
       <td>{{ contact.occupation }}</td>
     </tr>
+    {% if contact.primaryContactTeam %}
+      <tr>
+        <th>Teams</th>
+        <td>
+          {% for primaryTeam in contact.primaryContactTeam %}
+            <div>{{ primaryTeam }}</div>
+          {% endfor %}
+        </td>
+      </tr>
+    {% endif %}
     <tr>
       <th>Phone number</th>
       <td>{{ contact.telephonenumber }}</td>

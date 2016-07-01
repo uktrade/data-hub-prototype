@@ -1,7 +1,8 @@
 'use strict';
 
-let companyRepository = require('../lib/companyrepository');
+const companyRepository = require('../lib/companyrepository');
 const transformErrors = require('../lib/controllerutils').transformErrors;
+const TEAM_OPTIONS = require('../../data/teams.json');
 
 function get(req, res) {
 
@@ -55,6 +56,7 @@ function edit(req, res) {
     query,
     contact,
     company,
+    TEAM_OPTIONS,
     errors: transformErrors(errors)
   });
 
@@ -70,6 +72,7 @@ function post(req, res) {
     res.redirect('/');
   }
 
+  sanitizeForm(req);
   let errors = validateForm(req);
 
   convertAddress(req.body);
@@ -85,6 +88,10 @@ function post(req, res) {
   updatedContact = companyRepository.setCompanyContact(companyId, updatedContact);
   res.redirect(`/companies/${companyId}/contact/view/${updatedContact.id}?query=${query}`);
 
+}
+
+function sanitizeForm(req) {
+  req.sanitize('primaryContactTeam').trimArray();
 }
 
 function validateForm(req) {
@@ -118,12 +125,16 @@ function validateForm(req) {
         errorMessage: 'Invalid Email'
       }
     },
-    'address_address1': {
+    'address.address1': {
       notEmpty: {
         errorMessage: 'You must enter an address for this contact.'
       }
     }
   });
+
+  if (req.body.primaryContact.toLocaleLowerCase() === 'yes') {
+    req.check('primaryContactTeam', 'You must select a team for primary contact').notEmpty();
+  }
 
   return transformErrors(req.validationErrors());
 
@@ -131,16 +142,20 @@ function validateForm(req) {
 
 function convertAddress(formData) {
   let address = {
-    address1: formData.address_address1,
-    address2: formData.address_address2,
-    city: formData.address_city,
-    postcode: formData.address_postcode
+    address1: formData['address.address1'],
+    address2: formData['address.address2'],
+    city: formData['address.city'],
+    county: formData['address.county'],
+    postcode: formData['address.postcode'],
+    country: formData['address.country']
   };
 
-  delete formData.address_address1;
-  delete formData.address_address2;
-  delete formData.address_city;
-  delete formData.address_postcode;
+  delete formData['address.address1'];
+  delete formData['address.address2'];
+  delete formData['address.city'];
+  delete formData['address.county'];
+  delete formData['address.postcode'];
+  delete formData['address.country'];
 
   formData.address = address;
 }

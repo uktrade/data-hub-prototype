@@ -56,6 +56,8 @@ function addRandomPeople(company) {
         address1: randomContact.streetaddress,
         address2: '',
         city: randomContact.city,
+        county: '',
+        country: 'United Kingdom',
         postcode: randomContact.zipcode
       }
     };
