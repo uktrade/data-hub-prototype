@@ -1,5 +1,10 @@
 .login-bar {
-  @include core-19(1.8);
+  @include core-19();
+  line-height: 2.0;
   border-bottom: 1px solid $border-colour;
   text-align: right;
+
+  @include media(tablet) {
+    line-height: 1.8;
+  }
 }

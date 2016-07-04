@@ -1,0 +1,9 @@
+.grid-row > .column-one-third > .filters {
+
+  display: none;
+
+  @include media(tablet) {
+    display: block;
+  }
+
+}

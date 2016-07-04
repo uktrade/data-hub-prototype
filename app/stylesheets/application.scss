@@ -3,6 +3,7 @@ $images-dir: '/images/';
 
 // application specific
 @import 'dashboard';
+@import 'search';
 @import 'event-list';
 @import '_login-bar.scss';
 @import 'shame';
