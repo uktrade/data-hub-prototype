@@ -66,5 +66,9 @@ and set an environment variable so the server can use it, e.g.
 export COMPANY_KEY=12312_123123_123_123123
 ```
 
-## Data
-Dummy data from http://beta.json-generator.com/EkcMaAFy-
+## Browser Testing
+
+There are notes in the readme file in the test folder to describe the best way to run regular tests and how to attempt to run those same tests with a real browser via browserstack.
+
+With special thanks to [BrowserStack](https://www.browserstack.com) for providing cross browser testing.
+
