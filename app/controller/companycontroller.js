@@ -8,6 +8,20 @@ const ADVISOR_OPTIONS = require('../../data/advisors.json');
 const countryKeysValues = require('../../data/countrys.json');
 const searchService = require('../lib/searchservice');
 
+const EMPLOYEE_OPTIONS = [
+  '1 to 9',
+  '10 to 49',
+  '50 to 249',
+  '250 to 499',
+  '500+'
+];
+const TURNOVER_OPTIONS = [
+  '£0 to £1.34M',
+  '£1.34M to £6.7M',
+  '£6.7M to £33.5M',
+  '£33.5M +'
+];
+
 let countrys = [];
 for (let country in countryKeysValues) {
   countrys.push(countryKeysValues[country]);
@@ -66,10 +80,6 @@ function convertAddress(formData) {
   formData.operatingAddress = address;
 }
 
-function applyFormFieldsToCompany(company, formData) {
-  return Object.assign({}, company, formData);
-}
-
 function expandInteractions(company) {
 
   if (!company.interactions) {
@@ -81,21 +91,6 @@ function expandInteractions(company) {
     return Object.assign({}, interaction, { contact });
   });
 
-}
-
-function populateFormDataWithCompany(company){
-  return {
-    sectors: company.sectors,
-    website: company.website,
-    businessDescription: company.businessDescription,
-    region: company.region,
-    operatingAddress: company.operatingAddress,
-    accountManager: company.accountManager,
-    exportingMarkets: company.exportingMarkets,
-    countryOfInterest: company.countryOfInterest,
-    connections: company.connections,
-    tradingName: company.tradingName
-  };
 }
 
 function transformAddressErrors(convertedErrors) {
@@ -140,7 +135,7 @@ function get(req, res) {
       if (req.body && Object.keys(req.body).length > 0) {
         formData = req.body;
       } else {
-        formData = populateFormDataWithCompany(company);
+        formData = Object.assign({}, company);
       }
 
       const errors = req.validationErrors();
@@ -155,6 +150,8 @@ function get(req, res) {
         SECTOR_OPTIONS,
         REGION_OPTIONS,
         ADVISOR_OPTIONS,
+        EMPLOYEE_OPTIONS,
+        TURNOVER_OPTIONS,
         countrys,
         errors: convertedErrors
       });
@@ -179,7 +176,7 @@ function post(req, res) {
 
   companyRepository.getCompany(companyNum)
     .then((currentCompany) => {
-      let updatedCompany = applyFormFieldsToCompany(currentCompany, req.body);
+      let updatedCompany = Object.assign({}, currentCompany, req.body);
       updatedCompany.uktidata = true;
       companyRepository.updateCompany(updatedCompany);
       searchService.removeCHRecord(updatedCompany);
@@ -189,4 +186,4 @@ function post(req, res) {
 
 }
 
-module.exports = { get, post, applyFormFieldsToCompany };
+module.exports = { get, post };

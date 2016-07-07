@@ -24,8 +24,12 @@
     <td>{{ company.businessDescription }}</td>
   </tr>
   <tr>
-    <th>Region</th>
-    <td>{{ company.region }}</td>
+    <th>Number of emplyees</th>
+    <td>{{ company.employees }}</td>
+  </tr>
+  <tr>
+    <th>Annual turnover</th>
+    <td>{{ company.turnover }}</td>
   </tr>
   <tr>
     <th>Trading address</th>
@@ -35,6 +39,10 @@
       {% if company.operatingAddress.city.length > 0 %}{{ company.operatingAddress.city }},{% endif %}
       {% if company.operatingAddress.postcode.length > 0 %}{{ company.operatingAddress.postcode }}{% endif %}
     </td>
+  </tr>
+  <tr>
+    <th>Region</th>
+    <td>{{ company.region }}</td>
   </tr>
   <tr>
     <th>Account manager</th>
