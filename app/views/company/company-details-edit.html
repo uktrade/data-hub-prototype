@@ -20,12 +20,20 @@
   {{ forms.textbox('website', label="Website (optional)", value=formData.website, error=errors.website) }}
   {{ forms.textarea('businessDescription', label="Business description (optional)", value=formData.businessDescription, error=errors.businessDescription) }}
 
-  {{ forms.dropdown('region',
-    label="Region",
-    emptyLabel="Select a region",
+  {{ forms.dropdown('employees',
+    label="Number of employees (optional)",
+    emptyLabel="Select a value",
+    value=formData.employees,
+    options=EMPLOYEE_OPTIONS,
+    error=errors.employees)
+  }}
+
+  {{ forms.dropdown('turnover',
+    label="Annual turnover (optional)",
+    emptyLabel="Select a value",
     value=formData.region,
-    options=REGION_OPTIONS,
-    error=errors.region)
+    options=TURNOVER_OPTIONS,
+    error=errors.turnover)
   }}
 
   {% if formData.operatingAddress and formData.operatingAddress.country and formData.operatingAddress.country.length > 0 or errors.tradingAddress %}
@@ -34,8 +42,17 @@
     {% set useCompaniesHouseAddress = 'Yes' %}
   {% endif %}
   {% call forms.yesNoHidden('useCompaniesHouseAddress', label="Is the trading address the same as the registered office address?", radioValue=useCompaniesHouseAddress, revealFor="No") -%}
-    {{ forms.address('operatingAddress', label="Trading address", value=formData.operatingAddress, optionalNonUk='yes', optional='yes', error=errors.tradingAddress) }}
+  {{ forms.address('operatingAddress', label="Trading address", value=formData.operatingAddress, optionalNonUk='yes', optional='yes', error=errors.tradingAddress) }}
   {%- endcall %}
+
+  {{ forms.dropdown('region',
+    label="Region",
+    emptyLabel="Select a region",
+    value=formData.region,
+    options=REGION_OPTIONS,
+    error=errors.region)
+  }}
+
 
   {% if formData.accountManager and formData.accountManager.length > 0 or errors.accountManager %}
     {% set hasManager = 'Yes' %}
