@@ -16,28 +16,32 @@
   {% endif %}
 
   <form method="post">
-    {{ forms.textbox('title', label="Title (optional)", value=contact.title, error=errors.title) }}
-    {{ forms.textbox('firstname', label="First name", value=contact.firstname, error=errors.firstname) }}
-    {{ forms.textbox('lastname', label="Last name", value=contact.lastname, error=errors.lastname) }}
-    {{ forms.textbox('occupation', label="Role", value=contact.occupation, error=errors.occupation) }}
-    {% call forms.yesNoHidden('primaryContact', label="Is this person a primary contact?", radioValue=contact.primaryContact, error=errors.primaryContact) -%}
-      {{ forms.addAnotherDropdown('primaryContactTeam',
-        label="Team name",
-        addLabel="team",
-        hint="Provide the name of the team for which this contact is listed as a primary contact",
-        emptyLabel="Select a team",
-        values=contact.primaryContactTeam,
-        options=TEAM_OPTIONS,
-        error=errors.primaryContactTeam)
-      }}
-    {%- endcall %}
-    {{ forms.textbox('telephonenumber', label="Phone", value=contact.telephonenumber, error=errors.telephonenumber) }}
-    {{ forms.textbox('emailaddress', label="Email address", value=contact.emailaddress, error=errors.emailaddress) }}
-    {{ forms.address('address', label="Address", value=contact.address, error=errors.address) }}
-    {{ forms.textbox('alternativeTelephonenumber', label="Alternative phone (optional)", value=contact.alternativeTelephonenumber, error=errors.alternativeTelephonenumber) }}
-    {{ forms.textbox('alternativeEmailaddress', label="Alternative email (optional)", value=contact.alternativeEmailaddress, error=errors.alternativeEmailaddress) }}
-    {{ forms.textarea('notes', label="Notes (optional)", value=contact.notes, error=errors.notes) }}
-
+    <div class="form-section form-section--compact">{{ forms.textbox('title', label="Title (optional)", value=contact.title, error=errors.title) }}
+      {{ forms.textbox('firstname', label="First name", value=contact.firstname, error=errors.firstname) }}
+      {{ forms.textbox('lastname', label="Last name", value=contact.lastname, error=errors.lastname) }}
+      {{ forms.textbox('occupation', label="Role", value=contact.occupation, error=errors.occupation) }}
+      {% call forms.yesNoHidden('primaryContact', label="Is this person a primary contact?", radioValue=contact.primaryContact, error=errors.primaryContact) -%}
+        {{ forms.addAnotherDropdown('primaryContactTeam',
+          label="Team name",
+          addLabel="team",
+          hint="Provide the name of the team for which this contact is listed as a primary contact",
+          emptyLabel="Select a team",
+          values=contact.primaryContactTeam,
+          options=TEAM_OPTIONS,
+          error=errors.primaryContactTeam)
+        }}
+      {%- endcall %}
+      {{ forms.textbox('telephonenumber', label="Phone", value=contact.telephonenumber, error=errors.telephonenumber) }}
+      {{ forms.textbox('emailaddress', label="Email address", value=contact.emailaddress, error=errors.emailaddress) }}
+    </div>
+    <div class="form-section form-section--compact">
+      {{ forms.address('address', value=contact.address, error=errors.address) }}
+    </div>
+    <div class="form-section form-section--compact">
+      {{ forms.textbox('alternativeTelephonenumber', label="Alternative phone (optional)", value=contact.alternativeTelephonenumber, error=errors.alternativeTelephonenumber) }}
+      {{ forms.textbox('alternativeEmailaddress', label="Alternative email (optional)", value=contact.alternativeEmailaddress, error=errors.alternativeEmailaddress) }}
+      {{ forms.textarea('notes', label="Notes (optional)", value=contact.notes, error=errors.notes) }}
+    </div>
     {{ forms.save(backUrl=backUrl) }}
 
   </form>
