@@ -31,12 +31,14 @@
       <th>Email</th>
       <td>{{ contact.emailaddress }}</td>
     </tr>
-    <tr>
-      <th>Address</th>
-      <td>
-        {{ contact.address.address1 }}, {% if contact.address.address2 %}{{ contact.address.address2 }},{% endif %} {{ contact.address.city }}, {{ contact.address.postcode }}
-      </td>
-    </tr>
+    {% if contact.address %}
+      <tr>
+        <th>Address</th>
+        <td>
+          {{ contact.address.address1 }}, {% if contact.address.address2 %}{{ contact.address.address2 }},{% endif %} {{ contact.address.city }}, {{ contact.address.postcode }}
+        </td>
+      </tr>
+    {% endif %}
     <tr>
       <th>Alternative phone</th>
       <td>{{ contact.alternativeTelephonenumber }}</td>

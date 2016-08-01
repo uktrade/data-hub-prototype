@@ -124,11 +124,6 @@ function validateForm(req) {
       isEmail: {
         errorMessage: 'Invalid Email'
       }
-    },
-    'address.address1': {
-      notEmpty: {
-        errorMessage: 'You must enter an address for this contact.'
-      }
     }
   });
 
@@ -136,19 +131,27 @@ function validateForm(req) {
     req.check('primaryContactTeam', 'You must select a team for primary contact').notEmpty();
   }
 
+  if (req.body.useCompanyAddress.toLocaleLowerCase() === 'no') {
+    req.check('address.country', 'You must enter a the country for the contact address').notEmpty();
+  }
+
   return transformErrors(req.validationErrors());
 
 }
 
 function convertAddress(formData) {
-  let address = {
-    address1: formData['address.address1'],
-    address2: formData['address.address2'],
-    city: formData['address.city'],
-    county: formData['address.county'],
-    postcode: formData['address.postcode'],
-    country: formData['address.country']
-  };
+
+  if (formData.useCompanyAddress.toLocaleLowerCase() === 'no') {
+    let address = {
+      address1: formData['address.address1'],
+      address2: formData['address.address2'],
+      city: formData['address.city'],
+      county: formData['address.county'],
+      postcode: formData['address.postcode'],
+      country: formData['address.country']
+    };
+    formData.address = address;
+  }
 
   delete formData['address.address1'];
   delete formData['address.address2'];
@@ -157,12 +160,17 @@ function convertAddress(formData) {
   delete formData['address.postcode'];
   delete formData['address.country'];
 
-  formData.address = address;
 }
 
 function applyFormFieldsToContact(contact, formData){
   formData.primaryContact = formData.primaryContact === 'Yes';
-  return Object.assign(contact, formData);
+  let updatedContact = Object.assign(contact, formData);
+
+  if (!formData.address) {
+    delete updatedContact.address;
+  }
+
+  return updatedContact;
 }
 
 
