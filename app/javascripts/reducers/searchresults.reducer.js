@@ -8,8 +8,8 @@ const defaultStatus = {
 };
 const defaultFilters = {
   type: [],
-  sectors: [],
-  status: []
+  company_status: [],
+  source: []
 };
 
 let filters = Object.assign({}, defaultFilters);

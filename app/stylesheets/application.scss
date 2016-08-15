@@ -3,7 +3,9 @@ $images-dir: '/images/';
 
 // application specific
 @import 'dashboard';
+@import 'datahub_badges';
 @import 'search';
 @import 'event-list';
-@import '_login-bar.scss';
+@import 'login-bar.scss';
 @import 'shame';
+

@@ -11,20 +11,34 @@ export default class SearchResultCompany extends Component {
   render() {
     const result = this.props.result;
     const query = this.props.query;
-    const linkUrl = `/companies/${result.company_number}?query=${query}`;
+    const linkUrl = `/companies/${result.id}?query=${query}`;
+    let resultType;
+    let resultClass = 'status-badge status-badge--small';
+
+    if (result.source === 'Department of International Trade') {
+      resultType = 'DIT';
+      resultClass += ' status-badge--dit';
+    }
+
+    if (result.source == 'Companies House') {
+      resultType = 'CH';
+      resultClass += ' status-badge--ch';
+    }
 
     return (
       <li className="results-list__result">
-        <h3 className="result-title">
+        <h3 className="result-title" data-company-number={result.company_number} data-uktidata={result.uktidata}>
           <a href={linkUrl} dangerouslySetInnerHTML={{__html: highlightQuery(result.title, query)}}></a>
-          { result.uktidata === true &&
-            <span className="status-badge status-badge--prospect status-badge--small">UKTI</span>
+          { resultType &&
+            <span className={resultClass}>{ resultType }</span>
           }
         </h3>
         { result.tradingName &&
           <div className="meta meta--trading">Trading name: <span dangerouslySetInnerHTML={{__html: highlightQuery(result.tradingName, query)}}></span></div>
         }
-        <div className="meta meta--ch">{result.description}</div>
+        { (resultType !== 'DIT') &&
+          <div className="meta meta--ch">{result.description}</div>
+        }
         <div className="meta meta--address">
           {result.address.address_line_1},
           {result.address.address_line_2},
