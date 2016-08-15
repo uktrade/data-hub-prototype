@@ -1,9 +1,37 @@
 .dashboard-section {
+
   border-top: 5px solid $black;
 
+  &:first-child {
+    border-top: 0;
+  }
+
   .dashboard-section-title {
-    @include core-24;
+    @include bold-24;
     margin: 20px 0;
+  }
+
+}
+
+.event-day {
+
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid $border-colour;
+
+  &:first-child {
+    border-top: 0;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  .event-date {
+    @include bold-24;
+    margin-bottom: 10px;
+  }
+  .event-list {
+    margin-left: 20px;
+    list-style: disc;
   }
 
 }
