@@ -120,14 +120,14 @@ function transformAddressErrors(convertedErrors) {
 }
 
 function get(req, res) {
-  let companyNum = req.params.id;
+  let companyId = req.params.id;
   let query = req.query.query;
 
-  if (!companyNum) {
+  if (!companyId) {
     res.redirect('/');
   }
 
-  companyRepository.getCompany(companyNum)
+  companyRepository.getCompany(companyId)
     .then((company) => {
       let expandedInteractions = expandInteractions(company);
       let formData;

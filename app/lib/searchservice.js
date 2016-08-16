@@ -3,7 +3,7 @@
 let companiesHouseApi = require('./companieshouseapis');
 const companyRepository = require('./companyrepository');
 const lunr = require('lunr');
-const facetTitles = ['type', 'sectors', 'status'];
+const facetTitles = ['type', 'company_status', 'source'];
 
 
 let searchHistory = [];

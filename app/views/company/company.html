@@ -5,9 +5,12 @@
   <a class="back-link" href='/search?query={{query}}'>Back to search</a>
 
   <h1 class="heading-xlarge record-title">
-    {{ company.company_name }}
-    {% if company.uktidata %}
-      <span class="status-badge status-badge--prospect">UKTI</span>
+    {{ company.title }}
+    {% if company.source == 'Department of International Trade' %}
+      <span class="status-badge status-badge--dit">DIT</span>
+    {% endif %}
+    {% if company.source == 'Companies House' %}
+      <span class="status-badge status-badge--ch">CH</span>
     {% endif %}
   </h1>
 

@@ -22,24 +22,17 @@ class Facets extends Component {
       return (<div></div>);
     }
 
-    if (facets.type.Company && facets.type.Company.checked) {
-      return keys.map((facetKey) => {
-        return (
-          <Facet
-            name={facetKey}
-            title={facetKey}
-            options={facets[facetKey]}
-            key={facetKey}
-            onChange={this.filterChange} />
-        );
-      });
-    }
+    return keys.map((facetKey) => {
+      return (
+        <Facet
+          name={facetKey}
+          title={facetKey}
+          options={facets[facetKey]}
+          key={facetKey}
+          onChange={this.filterChange} />
+      );
+    });
 
-    return (<Facet
-      name='type'
-      title='Type'
-      options={facets.type}
-      onChange={this.filterChange} />);
   };
 
   render() {

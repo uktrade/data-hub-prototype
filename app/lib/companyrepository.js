@@ -227,13 +227,12 @@ function getCompany(id) {
     let company = data[id];
     if (!company) {
       company = {
-        company_number: id,
         id: id
       };
     }
 
     // if the cached record is a detailed one, return it
-    if (company.containsExpandedData) {
+    if (company.containsExpandedData || !company.company_number) {
       fulfill(Object.assign({}, company));
       return;
     }
@@ -268,10 +267,18 @@ function addCompany(company) {
     company.id = company.company_number;
   }
 
-  //randomly add ukti data
+  // randomly add ukti data to make a combined record or
+  // add ukti and then remove CH data
   let rand = Math.round(Math.random() * 10);
-  if (rand === 5 && !company.uktidata ) {
+  if (rand > 8 && !company.uktidata ) {
     addUKTIData(company);
+    company.source = 'Combined';
+  } else if (rand < 3 && !company.uktidata) {
+    addUKTIData(company);
+    delete company.company_number;
+    company.source = 'Department of International Trade';
+  } else {
+    company.source = 'Companies House';
   }
 
   data[company.id] = company;

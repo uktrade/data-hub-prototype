@@ -32,10 +32,10 @@ class Facet extends Component {
         {optionKey}
       </label>
     );
-  }
+  };
 
   render() {
-    let keys = Object.keys(this.props.options);
+    let keys = Object.keys(this.props.options).sort();
 
     if (keys.length > 1) {
 
