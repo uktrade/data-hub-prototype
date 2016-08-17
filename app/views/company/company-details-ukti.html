@@ -1,5 +1,21 @@
 <table class="table-detail">
   <tbody>
+
+  {% if company.ukbased %}
+    <tr>
+      <th>UK Based</th>
+      <td>{{ company.ukbased }}</td>
+    </tr>
+  {% endif %}
+
+  {% if company.typeOfBusiness %}
+    <tr>
+      <th>Type of business</th>
+      <td>{{ company.typeOfBusiness }}</td>
+    </tr>
+  {% endif %}
+
+
   <tr>
     <th>Trading name</th>
     <td>{{ company.tradingName }}</td>

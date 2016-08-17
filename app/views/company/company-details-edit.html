@@ -2,6 +2,33 @@
 
 <form method="post">
 
+  {% if company.source == 'Department of International Trade' %}
+
+    {{ forms.yesNo('ukbased',
+    label="Is the business based in the UK?",
+    radioValue=formData.ukbased,
+    error=errors.ukbased)
+    }}
+
+    {{ forms.dropdown('typeOfBusiness',
+    label="Type of business",
+    emptyLabel="Select a value",
+    value=formData.typeOfBusiness,
+    options=TYPES_OF_BUSINESS,
+    error=errors.typeOfBusiness)
+    }}
+
+    {{ forms.textbox('title',
+    label="Registered business name",
+    hint="Provide the registered name of the company.",
+    value=formData.title,
+    error=errors.title)
+    }}
+  {% else %}
+    <input type="hidden" name="title" value="{{ company.title }}"/>
+  {% endif %}
+
+
   {{ forms.textbox('tradingName',
     label="Trading name (optional)",
     hint="Provide the name the company trades as if this differs from it’s registered name.",
@@ -59,7 +86,7 @@
   {% else %}
     {% set hasManager = 'No' %}
   {% endif %}
-  {% call forms.yesNoHidden('hasAccountManager', label="Is there an agreed UKTI account manager for this company?", radioValue=hasManager, error=errors.accountManager) -%}
+  {% call forms.yesNoHidden('hasAccountManager', label="Is there an agreed DIT account manager for this company?", radioValue=hasManager, error=errors.accountManager) -%}
     {{ forms.autocomplete('accountManager',
       label="Account manager",
       value=formData.accountManager,

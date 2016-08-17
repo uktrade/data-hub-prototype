@@ -38,6 +38,7 @@ class Facets extends Component {
   render() {
     return (
       <div>
+        <h3 className="heading-small filter-title">Filter by:</h3>
         {this.makeFacetList(this.props.facets)}
       </div>
     );
