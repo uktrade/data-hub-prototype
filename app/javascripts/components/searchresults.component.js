@@ -25,6 +25,9 @@ class SearchResults extends Component {
       let resultElements = this.props.results.results.map(this.renderResult);
       return (
         <div>
+          <div className="button-bar button-bar--top">
+            <a className="button button-secondary" href={(`/companies/add?query=${this.props.results.query}`)}>Add new company</a>
+          </div>
           <div className="result-summary">
             <span className="result-summary--result-count">{this.props.results.totalResults}</span> results found
             containing <span className="result-summary--result-query">{this.props.results.query}</span>

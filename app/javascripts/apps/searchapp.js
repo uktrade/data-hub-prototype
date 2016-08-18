@@ -30,6 +30,7 @@ class SearchApp extends Component {
       <div>
         <a className="back-link" href='/'>Back to homepage</a>
         <SearchBar/>
+
         <div className="grid-row">
           <div className="column-one-third">
             <div className="filters">

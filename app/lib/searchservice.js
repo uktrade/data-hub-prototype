@@ -33,6 +33,14 @@ function searchLunr(term) {
 }
 
 function indexCHRecord(company) {
+  if (!company.address){
+    company.address = {};
+  }
+
+  if (!company.address.postal_code) {
+    company.address.postal_code = '';
+  }
+
   let doc = {
     id: `C${company.id}`,
     title: company.title,

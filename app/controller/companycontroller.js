@@ -21,6 +21,12 @@ const TURNOVER_OPTIONS = [
   '£6.7M to £33.5M',
   '£33.5M +'
 ];
+const TYPES_OF_BUSINESS = [
+  'Business partnership',
+  'Private limited company',
+  'Public limited company',
+  'Sole trader'
+];
 
 let countrys = [];
 for (let country in countryKeysValues) {
@@ -35,9 +41,11 @@ function sanitizeForm(req) {
 }
 
 function validateForm(req) {
-
+  req.check('title', 'You must provide the registered company name').notEmpty();
   req.check('sectors', 'You must provide at least one sector').hasOneOrMoreValues();
-  req.check('region', 'You must provide the region for this company').notEmpty();
+  if (req.body.hasOwnProperty('ukbased') && req.body.ukbased.toLowerCase() === 'yes') {
+    req.check('region', 'You must provide the region for this company').notEmpty();
+  }
 
   if (req.body.useCompaniesHouseAddress === 'No') {
     req.check('operatingAddress.country', 'Provide the company operating address').notEmpty();
@@ -119,6 +127,58 @@ function transformAddressErrors(convertedErrors) {
   }
 }
 
+function add(req, res) {
+  let query = req.query.query;
+  let formData;
+
+  if (req.body && Object.keys(req.body).length > 0) {
+    formData = req.body;
+  } else {
+    formData = {
+      ukbased: 'Yes'
+    };
+  }
+
+  const errors = req.validationErrors();
+  let convertedErrors = transformErrors(errors);
+  transformAddressErrors(convertedErrors);
+
+  res.render('company/company-add', {
+    query,
+    formData,
+    SECTOR_OPTIONS,
+    REGION_OPTIONS,
+    ADVISOR_OPTIONS,
+    EMPLOYEE_OPTIONS,
+    TURNOVER_OPTIONS,
+    TYPES_OF_BUSINESS,
+    countrys,
+    errors: convertedErrors
+  });
+}
+
+function addPost(req, res) {
+
+  let query = req.query.query;
+
+  sanitizeForm(req);
+  let errors = validateForm(req);
+  convertAddress(req.body);
+
+  if (errors) {
+    add(req, res);
+    return;
+  }
+
+  let company = req.body;
+  company.uktidata = true;
+  company.source = 'Department of International Trade';
+  companyRepository.addCompany(company);
+  searchService.indexCHRecord(company);
+
+  res.redirect(`/companies/${company.id}?query=${query}`);
+}
+
 function get(req, res) {
   let companyId = req.params.id;
   let query = req.query.query;
@@ -152,6 +212,7 @@ function get(req, res) {
         ADVISOR_OPTIONS,
         EMPLOYEE_OPTIONS,
         TURNOVER_OPTIONS,
+        TYPES_OF_BUSINESS,
         countrys,
         errors: convertedErrors
       });
@@ -178,6 +239,7 @@ function post(req, res) {
     .then((currentCompany) => {
       let updatedCompany = Object.assign({}, currentCompany, req.body);
       updatedCompany.uktidata = true;
+      updatedCompany.source = 'Combined';
       companyRepository.updateCompany(updatedCompany);
       searchService.removeCHRecord(updatedCompany);
       searchService.indexCHRecord(updatedCompany);
@@ -186,4 +248,4 @@ function post(req, res) {
 
 }
 
-module.exports = { get, post };
+module.exports = { get, post, add, addPost };

@@ -10,6 +10,16 @@ const advisors = require('../../data/advisors.json');
 
 var data = {};
 
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
+
 function expandSicCodes(company) {
   if (company.sic_codes) {
     const expandedCodes = company.sic_codes.map((sic_code) => {
@@ -263,23 +273,30 @@ function getCompany(id) {
 }
 
 function addCompany(company) {
-  if (!company.id && company.company_number) {
-    company.id = company.company_number;
+  if (!company.id) {
+    if (company.company_number) {
+      company.id = company.company_number;
+    } else {
+      company.id = guid();
+    }
   }
 
   // randomly add ukti data to make a combined record or
-  // add ukti and then remove CH data
-  let rand = Math.round(Math.random() * 10);
-  if (rand > 8 && !company.uktidata ) {
-    addUKTIData(company);
-    company.source = 'Combined';
-  } else if (rand < 3 && !company.uktidata) {
-    addUKTIData(company);
-    delete company.company_number;
-    company.source = 'Department of International Trade';
-  } else {
-    company.source = 'Companies House';
+  // add ukti and then remove CH data - (it will not bother if it's already a CDMS record
+  if (!company.uktidata) {
+    let rand = Math.round(Math.random() * 10);
+    if (rand > 8) {
+      addUKTIData(company);
+      company.source = 'Combined';
+    } else if (rand < 3 && !company.uktidata) {
+      addUKTIData(company);
+      delete company.company_number;
+      company.source = 'Department of International Trade';
+    } else {
+      company.source = 'Companies House';
+    }
   }
+
 
   data[company.id] = company;
   return company;

@@ -1,0 +1,178 @@
+{% extends "../layouts/ukti-search-header.html" %}
+{% import "macros/forms.html" as forms %}
+
+{% block main %}
+  <a class="back-link" href='/search?query={{query}}'>Back to search</a>
+
+  {{ forms.errorPanel(errors) }}
+
+  <h1 class="heading-xlarge">
+    Add new company
+  </h1>
+
+  <p class="lede text">
+    You can add any type of business except UK based private and public limited companies.
+    These companies are already in Data Hub as it uses Companies House data. Search for
+    these companies on Data Hub to edit their details.
+  </p>
+
+  <form method="post">
+
+    {{ forms.yesNo('ukbased',
+      label="Is the business based in the UK?",
+      radioValue=formData.ukbased,
+      error=errors.ukbased)
+    }}
+
+    {{ forms.dropdown('typeOfBusiness',
+    label="Type of business",
+    emptyLabel="Select a value",
+    value=formData.typeOfBusiness,
+    options=TYPES_OF_BUSINESS,
+    error=errors.typeOfBusiness)
+    }}
+
+    {{ forms.textbox('title',
+    label="Registered business name",
+    hint="Provide the registered name of the company.",
+    value=formData.title,
+    error=errors.title)
+    }}
+
+    {{ forms.textbox('tradingName',
+    label="Trading name (optional)",
+    hint="Provide the name the company trades as if this differs from it’s registered name.",
+    value=formData.tradingName,
+    error=errors.tradingName)
+    }}
+
+    {{ forms.addAnotherDropdown('sectors',
+    label="Sector",
+    addLabel="sector",
+    emptyLabel="Select sector to add",
+    values=formData.sectors,
+    options=SECTOR_OPTIONS,
+    error=errors.sectors)
+    }}
+    {{ forms.textbox('website', label="Website (optional)", value=formData.website, error=errors.website) }}
+    {{ forms.textarea('businessDescription', label="Business description (optional)", value=formData.businessDescription, error=errors.businessDescription) }}
+
+    {{ forms.dropdown('employees',
+    label="Number of employees (optional)",
+    emptyLabel="Select a value",
+    value=formData.employees,
+    options=EMPLOYEE_OPTIONS,
+    error=errors.employees)
+    }}
+
+    {{ forms.dropdown('turnover',
+    label="Annual turnover (optional)",
+    emptyLabel="Select a value",
+    value=formData.region,
+    options=TURNOVER_OPTIONS,
+    error=errors.turnover)
+    }}
+
+    {{ forms.address('operatingAddress', label="Trading address", value=formData.operatingAddress, optionalNonUk='yes', optional='yes', error=errors.tradingAddress) }}
+
+
+    {{ forms.dropdown('region',
+    label="Region",
+    emptyLabel="Select a region",
+    value=formData.region,
+    options=REGION_OPTIONS,
+    error=errors.region)
+    }}
+
+
+    {% if formData.accountManager and formData.accountManager.length > 0 or errors.accountManager %}
+      {% set hasManager = 'Yes' %}
+    {% else %}
+      {% set hasManager = 'No' %}
+    {% endif %}
+    {% call forms.yesNoHidden('hasAccountManager', label="Is there an agreed DIT account manager for this company?", radioValue=hasManager, error=errors.accountManager) -%}
+    {{ forms.autocomplete('accountManager',
+    label="Account manager",
+    value=formData.accountManager,
+    options=ADVISOR_OPTIONS,
+    error=errors.accountManager
+    ) }}
+    {%- endcall %}
+
+
+    {% if formData.exportingMarkets and formData.exportingMarkets.length > 0 or errors.exportingMarkets %}
+      {% set hasExportingMarkets = 'Yes' %}
+    {% else %}
+      {% set hasExportingMarkets = 'No' %}
+    {% endif %}
+    {% call forms.yesNoHidden('hasExportingMarkets', label="Is this company curently exporting to a market?", radioValue=hasExportingMarkets, error=errors.exportingMarkets) -%}
+    {{ forms.addAnotherAutocomplete('exportingMarkets',
+    label="Export market",
+    addLabel="country",
+    values=formData.exportingMarkets,
+    options=countrys,
+    error=errors.exportingMarkets
+    ) }}
+    {%- endcall %}
+
+    {{ forms.addAnotherAutocomplete('countryOfInterest',
+    label="Future countries of interest (optional)",
+    addLabel="country",
+    values=formData.countryOfInterest,
+    options=countrys,
+    error=errors.countryOfInterest
+    ) }}
+
+    {{ forms.addAnotherAutocomplete('connections',
+    label="Company connections (optional)",
+    addLabel="company connection",
+    values=formData.connections,
+    options_url="/api/suggest?query=",
+    error=errors.connections
+    ) }}
+
+    {{ forms.save(backUrl="#") }}
+
+  </form>
+
+  <script>
+    (function() {
+      var isUKBasedRadios = document.querySelectorAll('[name="ukbased"]');
+      var regionFormGroup = document.getElementById('region-wrapper');
+      var ltdElement = document.querySelector('[value="Private limited company"]');
+      var plcElement = document.querySelector('[value="Public limited company"]');
+
+      function getSelectedRadio() {
+        for (var iPos = 0; iPos < isUKBasedRadios.length; iPos += 1) {
+          if (isUKBasedRadios[iPos].checked === true) {
+            return isUKBasedRadios[iPos].value;
+          }
+        }
+      }
+
+      function handleCountryChangeUK() {
+
+        var value = getSelectedRadio().toLowerCase();
+
+        if (value === 'yes') {
+          ltdElement.disabled = true;
+          plcElement.disabled = true;
+          regionFormGroup.className = 'form-group';
+        } else {
+          ltdElement.disabled = false;
+          plcElement.disabled = false;
+          regionFormGroup.className = 'form-group hidden';
+
+        }
+      }
+
+      for (var iPos = 0; iPos < isUKBasedRadios.length; iPos += 1) {
+        isUKBasedRadios[iPos].addEventListener('click', handleCountryChangeUK);
+      }
+
+      handleCountryChangeUK();
+
+    })();
+  </script>
+
+{% endblock %}
