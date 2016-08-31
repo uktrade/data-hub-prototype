@@ -43,6 +43,7 @@ nunjucks.ready((nj) => {
   Object.keys(filters).forEach((filterName) => {
     nj.addFilter(filterName, filters[filterName]);
   });
+  nj.addFilter('stringify', JSON.stringify);
 });
 
 // Insert usefull variables into response for all controllers

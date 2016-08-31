@@ -55,6 +55,7 @@ function addRandomPeople(company) {
     const randindex = Math.round(Math.random() * (contactsData.length - 1));
     let randomContact = Object.assign({}, contactsData[randindex]);
     let newContact = {
+      creationdate: new Date().getTime(),
       id: `${pos}${company.id}`,
       title: randomContact.title,
       firstname: randomContact.givenname,
