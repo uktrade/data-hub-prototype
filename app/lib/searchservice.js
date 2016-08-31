@@ -3,7 +3,7 @@
 let companiesHouseApi = require('./companieshouseapis');
 const companyRepository = require('./companyrepository');
 const lunr = require('lunr');
-const facetTitles = ['type', 'company_status', 'source'];
+const facetTitles = ['type', 'company_status'];
 
 
 let searchHistory = [];
@@ -144,6 +144,14 @@ function calculateFacets(results) {
           }
         }
       }
+    }
+  }
+
+  // Strip out facets that would only have one option.
+  for (let facetName in facets) {
+    let facetKeys = Object.keys(facets[facetName]);
+    if (facetKeys.length < 2) {
+      delete facets[facetName];
     }
   }
 
