@@ -1,34 +1,54 @@
 {% if company.uktidata == true %}
-<p class="actions">
-  <a class="button button-secondary" href="/companies/{{ company.id }}/contact/add?query={{ query }}">Add new contact</a>
-</p>
-{% endif %}
-<ol class="lined-list">
-  {% for contact in company.contacts %}
-    <li class="lined-list__item">
-      <h3 class="badged-heading">
-        <a href="/companies/{{ company.id }}/contact/view/{{ contact.id}}?query={{ query }}">{{ contact.firstname }} {{ contact.lastname }}</a>
-        - {{ contact.occupation }}
-        {% if contact.primaryContact %}
-          <span class="status-badge status-badge--primary-contact">Primary</span>
-        {% endif %}
-      </h3>
-      <div class="grid-row">
-        <div class="column-half">
-          <dl class="fieldvalue">
-            <dt class="fieldvalue__title">Phone:</dt>
-            <dd class="fieldvalue__value">{{ contact.telephonenumber }}</dd>
-          </dl>
-        </div>
-        <div class="column-half">
-          <dl class="fieldvalue">
-            <dt class="fieldvalue__title">Email:</dt>
-            <dd class="fieldvalue__value">
-              <a href="mailto:{{ contact.emailaddress }}">{{ contact.emailaddress }}</a>
-            </dd>
-          </dl>
-        </div>
+  <div class="grid-row">
+    <div class="column-one-third">
+      <div class="data">
+        <h2 class="bold-xlarge data__title">3</h2>
+        <p class="bold-xsmall data__description">months since last new contact entry</p>
       </div>
-    </li>
-  {% endfor %}
-</ol>
+    </div>
+    <div class="column-one-third">
+      <div class="data">
+        <h2 class="bold-xlarge data__title">2</h2>
+        <p class="bold-xsmall data__description">contacts added in the last 12 months</p>
+      </div>
+    </div>
+    <div class="column-one-third">
+      <p class="actions">
+        <a class="button button-secondary" href="/companies/{{ company.id }}/contact/add?query={{ query }}">Add new contact</a>
+      </p>
+    </div>
+  </div>
+  <div id="contact-table-wrapper"></div>
+  <br/><br/>
+  <table class="data-table contact-table">
+    <thead>
+      <tr class="spacer-row">
+        <th colspan="5">Archived contacts</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="creationdate">01 Jun 15</td>
+        <td class="name">John Smith</td>
+        <td class="title">CEO</td>
+        <td class="phone">44 7815 013 555</td>
+        <td class="email"><a href="mailto:fsmith@company.org">jsmith@company.org</a></td>
+      </tr>
+      <tr>
+        <td class="creationdate">02 Jun 12</td>
+        <td class="name">Wilma James</td>
+        <td class="title">MD</td>
+        <td class="phone">44 7815 013 553</td>
+        <td class="email"><a href="mailto:fsmith@company.org">wj@company.org</a></td>
+      </tr>
+      <tr>
+        <td class="creationdate">01 Jan 01</td>
+        <td class="name">Lee Spoke</td>
+        <td class="title">Sales manager</td>
+        <td class="phone">44 7815 013 555</td>
+        <td class="email"><a href="mailto:fsmith@company.org">ls@company.org</a></td>
+      </tr>
+    </tbody>
+  </table>
+{% endif %}
+

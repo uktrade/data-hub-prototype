@@ -28,7 +28,7 @@
           </p>
           <ul class="error-summary-list">
             <li>
-            <li><a href="/companies/{{ company.id }}?query={{ query }}">Add company details</a></li>
+            <a href="/companies/{{ company.id }}?query={{ query }}">Add company details</a>
             </li>
           </ul>
         </div>
@@ -100,4 +100,12 @@
       </div>
     </div>
   </div>
+
+  <script>
+    var company = {{ company|stringify|safe }};
+    var query = {{ query|stringify|safe }};
+    var interactions = {{ expandedInteractions|stringify|safe }}
+  </script>
+  <script src="{{ asset_path }}javascripts/common.js"></script>
+  <script src="{{ asset_path }}javascripts/company.bundle.js"></script>
 {% endblock %}

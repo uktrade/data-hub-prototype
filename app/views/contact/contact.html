@@ -38,4 +38,12 @@
       </div>
     </div>
   </div>
+
+  <script>
+    var company = {{ company|stringify|safe }};
+    var query = {{ query|stringify|safe }};
+    var interactions = {{ interactions|stringify|safe }}
+  </script>
+  <script src="{{ asset_path }}javascripts/common.js"></script>
+  <script src="{{ asset_path }}javascripts/contact.bundle.js"></script>
 {% endblock %}

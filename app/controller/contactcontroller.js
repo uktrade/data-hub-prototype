@@ -4,6 +4,13 @@ const companyRepository = require('../lib/companyrepository');
 const transformErrors = require('../lib/controllerutils').transformErrors;
 const TEAM_OPTIONS = require('../../data/teams.json');
 
+function expandInteractions(interactions, contact) {
+  return interactions.map((interaction) => {
+    return Object.assign({}, interaction, { contact });
+  });
+}
+
+
 function get(req, res) {
 
   let contactId = req.params.contactId;
@@ -18,9 +25,10 @@ function get(req, res) {
   let company = companyRepository.getCompanySummary(companyId);
   let contact = companyRepository.getCompanyContact(companyId, contactId);
   let interactions = companyRepository.getInteractionsForContact(companyId, contactId);
+  let expandedInteractions = expandInteractions(interactions, contact);
 
   if (contact) {
-    res.render('contact/contact', {query, contact, company, interactions});
+    res.render('contact/contact', {query, contact, company, interactions: expandedInteractions});
   } else {
     res.render('error', {error: 'Cannot find contact'});
   }
