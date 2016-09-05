@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 import SearchBar from '../components/searchbar.component.js';
 import SearchResults from '../components/searchresults.component.js';
 import Facets from '../components/facets.component.js';
+import Pagination from '../components/pagination.component.js';
+
 
 import { search } from '../actions/search.actions';
 import { getQueryParamValue } from '../lib/query';
@@ -40,6 +42,9 @@ class SearchApp extends Component {
           <div className="column-two-thirds">
             <SearchResults/>
           </div>
+        </div>
+        <div className="grid-row">
+          <Pagination/>
         </div>
       </div>
     );
