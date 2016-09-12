@@ -1,0 +1,20 @@
+{% import "search/result.html" as resultTypes %}
+
+<div class="result-summary">
+  <span class="result-summary--result-count">
+    {{result.total}}</span> results found containing
+    <span class="result-summary--result-query">{{ result.term }}
+  </span>
+</div>
+<ol class="results-list">
+  {% for hit in result.hits %}
+    {% if hit._source.result_type == 'CONTACT' %}
+      {{ resultTypes.contactresult(hit._source, result.term) }}
+    {% else %}
+      {{ resultTypes.companyresult(hit._source, result.term) }}
+    {% endif %}
+  {% endfor %}
+</ol>
+
+
+

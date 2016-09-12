@@ -1,213 +1,171 @@
-'use strict';
+/* eslint new-cap: 0 */
 
-let companyRepository = require('../lib/companyrepository');
-const transformErrors = require('../lib/controllerutils').transformErrors;
+'use strict';
+const express = require('express');
+const router = express.Router();
+const contactRepository = require('../repository/contactrepository');
+const companyRepository = require('../repository/companyrepository');
+const interactionRepository = require('../repository/interactionrepository');
 const INTERACTION_TYPES = require('../../data/interactiontypes.json');
 const ADVISORS = require('../../data/advisors.json');
 
-function get(req, res) {
-  let companyId = req.params.companyId;
-  let interactionId = req.params.interactionId;
 
-  let query = req.query.query || '';
+function view(req, res) {
+  let interaction_id = req.params.interaction_id;
 
-  if (!interactionId || !companyId) {
+  if (!interaction_id) {
     res.redirect('/');
   }
 
-  const interaction = companyRepository.getCompanyInteraction(companyId, interactionId);
-  const contact = companyRepository.getCompanyContact(companyId, interaction.contactId);
-  const company = companyRepository.getCompanySummary(companyId);
+  interactionRepository.getInteraction(interaction_id)
+    .then((interaction) => {
+      res.render('interaction/interaction-details', {
+        interaction
+      });
 
-  if (interaction) {
-    res.render('interaction/interaction-details', {query, interaction, contact, company});
-  } else {
-    res.render('error', {error: 'Cannot find interaction'});
-  }
+    })
+    .catch((error) => {
+      res.render('error', {error});
+    });
+
 }
 
 function edit(req, res) {
-  const companyId = req.params.companyId;
-  const interactionId = req.params.interactionId;
-  const contactId = req.params.contactId;
-  const query = req.query.query || '';
+  const interactionId = req.params.interaction_id;
 
-  if (!companyId) {
-    res.redirect('/');
+  interactionRepository.getInteraction(interactionId)
+    .then((interaction) => {
+      // Convert YYYY-MM-DD format to dd/mm/yyyy format expected by date control.
+      if (interaction.date_of_interaction && interaction.date_of_interaction.length > 0) {
+        let splitDate = interaction.date_of_interaction.split('-');
+        interaction.date_of_interaction = `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
+      }
+
+      contactRepository.getContactsForCompany(interaction.company.id)
+        .then((contacts) => {
+          res.render('interaction/interaction-edit', {
+            interaction: interaction,
+            contactOptions: getCompanyContactOptions(contacts),
+            errors: req.errors,
+            INTERACTION_TYPES,
+            ADVISORS
+          });
+        });
+    });
+}
+
+function add(req, res) {
+
+  const companyId = req.query.company_id;
+  const contactId = req.query.contact_id;
+
+  if (contactId) {
+    let result = {};
+    contactRepository.getContact(contactId)
+      .then((contact) => {
+        result.contact = contact;
+        result.company = contact.company;
+        return contactRepository.getContactsForCompany(contact.company.id);
+      })
+      .then((contacts) => {
+        result.contacts = contacts;
+        res.render('interaction/interaction-edit', {
+          interaction: {
+            contact: result.contact,
+            company: result.company
+          },
+          contactOptions: getCompanyContactOptions(contacts),
+          errors: req.errors,
+          INTERACTION_TYPES,
+          ADVISORS
+        });
+      });
+  } else if (companyId) {
+    companyRepository.getDitCompany(companyId)
+      .then((company) => {
+        res.render('interaction/interaction-edit', {
+          interaction: {
+            company: company,
+            contact: {
+              id: null
+            }
+          },
+          contactOptions: getCompanyContactOptions(company.contacts),
+          errors: req.errors,
+          INTERACTION_TYPES,
+          ADVISORS
+        });
+      });
   }
-  const company = companyRepository.getCompanySummary(companyId);
-
-  let interaction;
-  if (req.body && Object.keys(req.body).length > 0) {
-    interaction = req.body;
-  } else if (interactionId) {
-    interaction = companyRepository.getCompanyInteraction(companyId, interactionId);
-  } else {
-    interaction = {};
-  }
-
-  let contact;
-  if (interaction && interaction.contactId) {
-    contact = companyRepository.getCompanyContact(companyId, interaction.contactId);
-  } else if (contactId) {
-    contact = companyRepository.getCompanyContact(companyId, contactId);
-  }
-
-  const backUrl = getBackUrl(req);
-  const contactOptions = getCompanyContactOptions(company);
-  const errors = req.validationErrors();
-
-  res.render('interaction/interaction-edit', {
-    query,
-    interaction,
-    company,
-    contact,
-    backUrl,
-    contactOptions,
-    errors: transformErrors(errors),
-    INTERACTION_TYPES,
-    ADVISORS
-  });
-
 }
 
 function post(req, res) {
-  const companyId = req.params.companyId;
-  const interactionId = req.params.interactionId;
-
-  if (!companyId) {
-    res.redirect('/');
-  }
 
   sanitizeForm(req);
-  let errors = validateForm(req);
 
-  if (errors) {
-    edit(req, res);
-    return;
-  }
+  interactionRepository.saveInteraction(req.body)
+    .then((savedInteraction) => {
 
-  const backUrl = getBackUrl(req);
-  const interaction = interactionId ? companyRepository.getCompanyInteraction(companyId, interactionId) : {};
-  let updatedInteraction = applyFormFieldsToInteraction(interaction, req.body);
-  companyRepository.setCompanyInteraction(companyId, updatedInteraction);
-  res.redirect(backUrl);
-
-}
-
-function getBackUrl(req) {
-
-  const companyId = req.params.companyId;
-  const interactionId = req.params.interactionId;
-  const contactId = req.params.contactId;
-  const query = req.query.query || '';
-  let backUrl;
-
-  // if adding a  new interaction,
-  // go back to company interactions or contact interaction
-  if (!interactionId) {
-    if (!contactId) {
-      backUrl = `/companies/${companyId}/?query=${query}#interactions`;
-    } else {
-      backUrl = `/companies/${companyId}/contact/view/${contactId}?query=${query}#interactions`;
-    }
-  } else {
-    backUrl = `/companies/${companyId}/interaction/view/${interactionId}?query=${query}`;
-  }
-
-  return backUrl;
-
-}
-
-function validateForm(req) {
-
-  req.checkBody({
-    'type': {
-      notEmpty: {
-        errorMessage: 'You must provide the type for this interaction'
+      // If the url has a contact id query param, we added a
+      // interaction from the contact screen, likewise for company id
+      if (req.query.contact_id) {
+        res.redirect(`/contact/${req.query.contact_id}/view#interactions`);
+        return;
+      } else if (req.query.company_id) {
+        res.redirect(`/company/DIT/${req.query.company_id}#interactions`);
+        return;
       }
-    },
-    'subject': {
-      notEmpty: {
-        errorMessage: 'Please provide a brief subject for this interaction'
-      }
-    },
-    'notes': {
-      notEmpty: {
-        errorMessage: 'You must provide notes, describing the interaction'
-      }
-    },
-    'date': {
-      notEmpty: {
-        errorMessage: 'You must provide a date the interaction took place.'
-      },
-      validUkDateString: {
-        errorMessage: 'You must provide a valid date'
-      }
-    },
-    'contactId': {
-      notEmpty: {
-        errorMessage: 'Please provide the name of the company contact for this interaction'
-      }
-    },
-    'advisor': {
-      notEmpty: {
-        errorMessage: 'Provide the UKTI advisor involved in this interaction'
-      }
-    },
-    'serviceOffer': {
-      notEmpty: {
-        errorMessage: 'Please provide service offer for the interaction'
-      }
-    },
-    'serviceProvider': {
-      notEmpty: {
-        errorMessage: 'Please provide the service provider for the interaction'
-      }
-    }
-  });
 
-  return transformErrors(req.validationErrors());
-}
-
-function applyFormFieldsToInteraction(interaction, formData) {
-  return Object.assign(interaction, formData);
-}
-
-function getCompanyContactOptions(company) {
-  let result = {};
-
-  let contacts = company.contacts;
-  for (let contact of contacts) {
-    result[contact.id] = `${contact.firstname} ${contact.lastname}`;
-  }
-
-  return result;
+      // otherwise we editing the interaction so go back to that screen.
+      res.redirect(`/interaction/${savedInteraction.id}/view`);
+    })
+    .catch((error) => {
+      req.errors = error.response.body;
+      view(req, res);
+    });
 }
 
 function sanitizeForm(req) {
   // join date parts
   try {
 
-    if (req.body.date_day && req.body.date_day.length === 1) {
-      req.body.date_day = `0${req.body.date_day}`;
+    if (req.body.date_of_interaction_day && req.body.date_of_interaction_day.length === 1) {
+      req.body.date_of_interation_day = `0${req.body.date_of_interaction_day}`;
     }
 
-    if (req.body.date_month && req.body.date_month.length === 1) {
-      req.body.date_month = `0${req.body.date_month}`;
+    if (req.body.date_of_interaction_month && req.body.date_of_interaction_month.length === 1) {
+      req.body.date_of_interaction_month = `0${req.body.date_of_interaction_month}`;
     }
 
-    req.body.date = `${req.body.date_day}/${req.body.date_month}/${req.body.date_year}`;
-    delete req.body.date_day;
-    delete req.body.date_month;
-    delete req.body.date_year;
+    req.body.date_of_interaction =
+      `${req.body.date_of_interaction_year}-${req.body.date_of_interaction_month}-${req.body.date_of_interaction_day}`;
+
+    delete req.body.date_of_interaction_day;
+    delete req.body.date_of_interaction_month;
+    delete req.body.date_of_interaction_year;
   } catch (err) {
-    console.warn('Error handling date');
+    // console.warn('Error handling date');
   }
 }
 
+function getCompanyContactOptions(contacts) {
+  let result = {};
+
+  for (let contact of contacts) {
+    result[contact.id] = `${contact.first_name} ${contact.last_name}`;
+  }
+
+  return result;
+}
+
+router.get('/add?', add);
+router.get('/:interaction_id/edit', edit);
+router.get('/:interaction_id/view', view);
+router.post(['/add', '/:interaction_id/edit'], post);
+
 module.exports = {
-  get,
+  view,
   edit,
-  post
+  post,
+  router
 };

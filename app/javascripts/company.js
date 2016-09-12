@@ -1,20 +1,22 @@
+/* globals interactions: true, company: true, contacts: true */
+
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ContactTable from './components/contacttable.component';
-import InteractionTable from './components/interactiontable.component';
+import CompanyInteractionTable from './components/companyinteractiontable.component';
 
 
-if (company.contacts && company.contacts.length > 0) {
+if (contacts && contacts.length > 0) {
   ReactDOM.render(
-    <ContactTable contacts={company.contacts} company={company} query={query}/>,
+    <ContactTable contacts={contacts} company={company}/>,
     document.querySelector('#contact-table-wrapper')
   );
 }
 
 if (interactions && interactions.length > 0) {
   ReactDOM.render(
-    <InteractionTable interactions={interactions} company={company} query={query}/>,
+    <CompanyInteractionTable interactions={interactions} company={company}/>,
     document.querySelector('#interaction-table-wrapper')
   );
 }

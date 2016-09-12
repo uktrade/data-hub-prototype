@@ -1,39 +1,40 @@
 {% import "macros/forms.html" as forms %}
-
 <form method="post">
+
+  <input type="hidden" name="id" value="{{ company.id }}"/>
 
   {% if company.source == 'Department of International Trade' %}
 
-    {{ forms.yesNo('ukbased',
+    {{ forms.yesNo('uk_based',
     label="Is the business based in the UK?",
-    radioValue=formData.ukbased,
-    error=errors.ukbased)
+    radioValue=formData.uk_based,
+    error=errors.uk_based)
     }}
 
-    {{ forms.dropdown('typeOfBusiness',
+    {{ forms.dropdown('type_of_business',
     label="Type of business",
     emptyLabel="Select a value",
-    value=formData.typeOfBusiness,
+    value=formData.type_of_business,
     options=TYPES_OF_BUSINESS,
-    error=errors.typeOfBusiness)
+    error=errors.type_of_business)
     }}
 
     {{ forms.textbox('title',
     label="Registered business name",
     hint="Provide the registered name of the company.",
-    value=formData.title,
-    error=errors.title)
+    value=formData.registered_name,
+    error=errors.registered_name)
     }}
   {% else %}
-    <input type="hidden" name="title" value="{{ company.title }}"/>
+    <input type="hidden" name="company_number" value="{{ company.ch.company_number }}"/>
   {% endif %}
 
 
-  {{ forms.textbox('tradingName',
+  {{ forms.textbox('trading_name',
     label="Trading name (optional)",
     hint="Provide the name the company trades as if this differs from it’s registered name.",
-    value=formData.tradingName,
-    error=errors.tradingName)
+    value=formData.trading_name,
+    error=errors.trading_name)
   }}
 
   {{ forms.addAnotherDropdown('sectors',
@@ -45,31 +46,32 @@
     error=errors.sectors)
   }}
   {{ forms.textbox('website', label="Website (optional)", value=formData.website, error=errors.website) }}
-  {{ forms.textarea('businessDescription', label="Business description (optional)", value=formData.businessDescription, error=errors.businessDescription) }}
+  {{ forms.textarea('business_description', label="Business description (optional)", value=formData.business_description, error=errors.business_description) }}
 
-  {{ forms.dropdown('employees',
+  {{ forms.dropdown('number_of_employees',
     label="Number of employees (optional)",
     emptyLabel="Select a value",
-    value=formData.employees,
+    value=formData.number_of_employees,
     options=EMPLOYEE_OPTIONS,
-    error=errors.employees)
+    error=errors.number_of_emplyees)
   }}
 
-  {{ forms.dropdown('turnover',
+  {{ forms.dropdown('annual_turnover',
     label="Annual turnover (optional)",
     emptyLabel="Select a value",
-    value=formData.region,
+    value=formData.annual_turnover,
     options=TURNOVER_OPTIONS,
-    error=errors.turnover)
+    error=errors.annual_turnover)
   }}
 
-  {% if formData.operatingAddress and formData.operatingAddress.country and formData.operatingAddress.country.length > 0 or errors.tradingAddress %}
+  {% if formData.trading_address and formData.trading_address.country and formData.trading_address.country.length > 0 or errors.trading_address %}
     {% set useCompaniesHouseAddress = 'No' %}
   {% else %}
     {% set useCompaniesHouseAddress = 'Yes' %}
   {% endif %}
+
   {% call forms.yesNoHidden('useCompaniesHouseAddress', label="Is the trading address the same as the registered office address?", radioValue=useCompaniesHouseAddress, revealFor="No") -%}
-  {{ forms.address('operatingAddress', label="Trading address", value=formData.operatingAddress, optionalNonUk='yes', optional='yes', error=errors.tradingAddress) }}
+    {{ forms.address('trading_address', label="Trading address", value=formData.trading_address, optionalNonUk='yes', optional='yes', error=errors.trading_address) }}
   {%- endcall %}
 
   {{ forms.dropdown('region',
@@ -80,43 +82,42 @@
     error=errors.region)
   }}
 
-
-  {% if formData.accountManager and formData.accountManager.length > 0 or errors.accountManager %}
+  {% if formData.account_manager and formData.account_manager.length > 0 or errors.account_manager %}
     {% set hasManager = 'Yes' %}
   {% else %}
     {% set hasManager = 'No' %}
   {% endif %}
   {% call forms.yesNoHidden('hasAccountManager', label="Is there an agreed DIT account manager for this company?", radioValue=hasManager, error=errors.accountManager) -%}
-    {{ forms.autocomplete('accountManager',
+    {{ forms.autocomplete('account_manager',
       label="Account manager",
-      value=formData.accountManager,
+      value=formData.account_manager,
       options=ADVISOR_OPTIONS,
-      error=errors.accountManager
+      error=errors.account_manager
     ) }}
   {%- endcall %}
 
 
-  {% if formData.exportingMarkets and formData.exportingMarkets.length > 0 or errors.exportingMarkets %}
+  {% if formData.currently_exporting_to and formData.currently_exporting_to.length > 0 or errors.currently_exporting_to %}
     {% set hasExportingMarkets = 'Yes' %}
   {% else %}
     {% set hasExportingMarkets = 'No' %}
   {% endif %}
-  {% call forms.yesNoHidden('hasExportingMarkets', label="Is this company curently exporting to a market?", radioValue=hasExportingMarkets, error=errors.exportingMarkets) -%}
-    {{ forms.addAnotherAutocomplete('exportingMarkets',
+  {% call forms.yesNoHidden('hasExportingMarkets', label="Is this company curently exporting to a market?", radioValue=hasExportingMarkets, error=errors.currently_exporting_to) -%}
+    {{ forms.addAnotherAutocomplete('currently_exporting_to',
       label="Export market",
       addLabel="country",
-      values=formData.exportingMarkets,
+      values=formData.currently_exporting_to,
       options=countrys,
-      error=errors.exportingMarkets
+      error=errors.currently_exporting_to
     ) }}
   {%- endcall %}
 
-  {{ forms.addAnotherAutocomplete('countryOfInterest',
+  {{ forms.addAnotherAutocomplete('countries_of_interest',
     label="Future countries of interest (optional)",
     addLabel="country",
-    values=formData.countryOfInterest,
+    values=formData.countries_of_interest,
     options=countrys,
-    error=errors.countryOfInterest
+    error=errors.countries_of_interest
   ) }}
 
   {{ forms.addAnotherAutocomplete('connections',

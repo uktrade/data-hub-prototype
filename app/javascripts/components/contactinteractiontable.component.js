@@ -8,22 +8,22 @@ var monthNames = [
 ];
 
 function formatDate(date) {
-  const parts = date.split('/');
-  const dateTime = new Date(parseInt(parts[2], 10),
+  const parts = date.split('-');
+  const dateTime = new Date(parseInt(parts[0], 10),
     parseInt(parts[1], 10) - 1,
-    parseInt(parts[0], 10));
+    parseInt(parts[2], 10));
   const day = dateTime.getDate();
   const monthIndex = dateTime.getMonth();
   const year = dateTime.getFullYear();
-  return `${day} ${monthNames[monthIndex]} ${year - 2000}`;
+  return `${day} ${monthNames[monthIndex]} ${year}`;
 }
 
-class InteractionTable extends Component {
+class ContactInteractionTable extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      sortKey: 'creationdate',
+      sortKey: 'date_of_interaction',
       sortAsc: false
     };
   }
@@ -34,8 +34,8 @@ class InteractionTable extends Component {
     let bValue;
 
     if (this.state.sortKey == 'contact') {
-      aValue = `${a.contact.lastname} ${a.contact.firstname}`.toLocaleLowerCase();
-      bValue = `${b.contact.lastname} ${b.contact.firstname}`.toLocaleLowerCase();
+      aValue = `${a.contact.last_name} ${a.contact.first_name}`.toLocaleLowerCase();
+      bValue = `${b.contact.last_name} ${b.contact.first_name}`.toLocaleLowerCase();
     } else if (this.state.sortKey == 'advisor') {
       aValue = `${a.advisor.split(' ')[1]} ${a.advisor.split(' ')[0]}`.toLocaleLowerCase();
       bValue = `${b.advisor.split(' ')[1]} ${b.advisor.split(' ')[0]}`.toLocaleLowerCase();
@@ -72,14 +72,13 @@ class InteractionTable extends Component {
 
   renderInteraction = (interaction) => {
 
-    const link = `/companies/${this.props.company.id}/interaction/view/${interaction.id}?query=${this.props.query}`;
+    const link = `/interaction/${interaction.id}/view`;
 
     return (
       <tr key={interaction.id}>
-        <td className="date">{ formatDate(interaction.date) }</td>
-        <td className="type">{ interaction.type }</td>
-        <td className="advisor">{ interaction.advisor }</td>
-        <td className="contact">{ interaction.contact.firstname } { interaction.contact.lastname }</td>
+        <td className="date">{ formatDate(interaction.date_of_interaction) }</td>
+        <td className="type">{ interaction.interaction_type }</td>
+        <td className="advisor"><a href="#">{ interaction.advisor }</a></td>
         <td className="subject"><a href={link}>{interaction.subject }</a></td>
       </tr>
     );
@@ -119,10 +118,6 @@ class InteractionTable extends Component {
             onClick={() => {this.changeSort('advisor');}}
           >Advisor</th>
           <th
-            className={this.columnClass('contact')}
-            onClick={() => {this.changeSort('contact');}}
-          >Company contact</th>
-          <th
             className={this.columnClass('subject')}
             onClick={() => { this.changeSort('subject');}}
           >Subject</th>
@@ -139,10 +134,9 @@ class InteractionTable extends Component {
 
 }
 
-InteractionTable.propTypes = {
+ContactInteractionTable.propTypes = {
   company: React.PropTypes.object.isRequired,
-  interactions: React.PropTypes.array,
-  query: React.PropTypes.string.isRequired
+  interactions: React.PropTypes.array
 };
 
-export default InteractionTable;
+export default ContactInteractionTable;

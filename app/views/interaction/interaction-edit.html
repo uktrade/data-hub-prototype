@@ -3,8 +3,8 @@
 
 {% block main %}
 
-  {% if interactionId %}
-    <a class="back-link" href="{{ backUrl }}">Back to interaction</a>
+  {% if interaction.id %}
+    <a class="back-link" href="/interaction/{{ interaction.id }}/view">Back to interaction</a>
     {{ forms.errorPanel(errors) }}
     <h1 class="heading-xlarge record-title">Edit interaction details</h1>
   {% else %}
@@ -13,28 +13,30 @@
     <h1 class="heading-xlarge record-title">Add interaction</h1>
   {% endif %}
 
-  <h2 class="heading-small">Company</h2>
-  <p>
-    <a href="/companies/{{ company.id }}?query={{ query }}">{{ company.title }}</a>
-  </p>
+  <div class="form-group">
+    <div class="form-label">Company</div>
+    <strong>{{ interaction.company.registered_name }}</strong>
+  </div>
 
   <form method="post">
-    {{ forms.dropdown('type',
+    <input type="hidden" name="id" value="{{ interaction.id }}"/>
+    <input type="hidden" name="company" value="{{ interaction.company.id }}"/>
+    {{ forms.dropdown('interaction_type',
       label="InteractionType",
       emptyLabel="Select an interaction type",
-      value=interaction.type,
+      value=interaction.interaction_type,
       options=INTERACTION_TYPES,
-      error=errors.type
+      error=errors.interaction_type
     ) }}
 
     {{ forms.textbox('subject', label="Subject", value=interaction.subject, error=errors.subject) }}
-    {{ forms.date(name='date', label='Date of interaction', value=interaction.date, error=errors.date) }}
+    {{ forms.date(name='date_of_interaction', label='Date of interaction', value=interaction.date_of_interaction, error=errors.date) }}
 
-    {{ forms.autocomplete('contactId',
+    {{ forms.autocomplete('contact',
       label="Company contact",
-      value=contact.id,
+      value=interaction.contact.id,
       options=contactOptions,
-      error=error.errors.contactId
+      error=error.errors.contact
     ) }}
 
     {{ forms.autocomplete('advisor',
@@ -45,12 +47,9 @@
     ) }}
 
     {{ forms.textarea('notes', label="Interaction notes", value=interaction.notes, error=errors.notes) }}
-    {{ forms.textbox('serviceOffer', label="Service offer", value=interaction.serviceOffer, error=errors.serviceOffer) }}
-    {{ forms.textbox('serviceProvider', label="Service provider", value=interaction.serviceProvider, error=errors.serviceProvider) }}
 
-    {{ forms.save(backUrl=backUrl) }}
+    {{ forms.save() }}
 
   </form>
-
 
 {% endblock %}

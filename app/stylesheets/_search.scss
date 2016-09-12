@@ -7,3 +7,11 @@
   }
 
 }
+
+.meta--address {
+  text-transform: capitalize;
+}
+
+.meta--address .meta--address__postcode {
+  text-transform: uppercase;
+}
