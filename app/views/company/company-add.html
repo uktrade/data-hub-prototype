@@ -2,7 +2,8 @@
 {% import "macros/forms.html" as forms %}
 
 {% block main %}
-  <a class="back-link" href='/search?query={{query}}'>Back to search</a>
+
+  <a class="back-link" href='/'>Back to home</a>
 
   {{ forms.errorPanel(errors) }}
 
@@ -10,40 +11,51 @@
     Add new company
   </h1>
 
-  <p class="lede text">
-    You can add any type of business except UK based private and public limited companies.
-    These companies are already in Data Hub as it uses Companies House data. Search for
-    these companies on Data Hub to edit their details.
-  </p>
-
   <form method="post">
 
-    {{ forms.yesNo('ukbased',
-      label="Is the business based in the UK?",
-      radioValue=formData.ukbased,
-      error=errors.ukbased)
-    }}
+    <div class="form-group{% if error %} error{% endif %}" id="{{ name }}-wrapper">
+      <label class="form-label" for="{{ id }}">
+        Registered business name
+        <span class="form-hint">Provide the registered name of the company</span>
+        {% if error %}<span class="error-message">{{ error }}</span>{% endif %}
+      </label>
 
-    {{ forms.dropdown('typeOfBusiness',
+      <input
+        id="registered_name"
+        class="form-control autocomplete company-autocomplete"
+        name="registered_name"
+        value="{{ formData.registered_name }}"
+        autocomplete="registered_name"
+        data-options-url="/suggest?term="
+      />
+
+      <div class="indented-info hidden">
+        <h3 class="heading-small indented-info__heading">Did you mean this company?</h3>
+        <a class="indented-info__link" href="#"></a>
+        <p class="indented-info__description"></p>
+      </div>
+
+    </div>
+
+
+    {% call forms.yesNoHidden('uk_based',
+      label="Is the business based in the UK?",
+      radioValue=formData.uk_based,
+      error=errors.uk_based) -%}
+        <p>
+          You can add any type of company except UK based private and public limited
+          companies. These companies are already on data hub as it uses companies
+          house data. Please search for these companies first on data hub to add or
+          edit their details.
+        </p>
+    {%- endcall %}
+
+    {{ forms.dropdown('business_type',
     label="Type of business",
     emptyLabel="Select a value",
-    value=formData.typeOfBusiness,
+    value=formData.business_type,
     options=TYPES_OF_BUSINESS,
-    error=errors.typeOfBusiness)
-    }}
-
-    {{ forms.textbox('title',
-    label="Registered business name",
-    hint="Provide the registered name of the company.",
-    value=formData.title,
-    error=errors.title)
-    }}
-
-    {{ forms.textbox('tradingName',
-    label="Trading name (optional)",
-    hint="Provide the name the company trades as if this differs from it’s registered name.",
-    value=formData.tradingName,
-    error=errors.tradingName)
+    error=errors.business_type)
     }}
 
     {{ forms.addAnotherDropdown('sectors',
@@ -54,27 +66,14 @@
     options=SECTOR_OPTIONS,
     error=errors.sectors)
     }}
-    {{ forms.textbox('website', label="Website (optional)", value=formData.website, error=errors.website) }}
-    {{ forms.textarea('businessDescription', label="Business description (optional)", value=formData.businessDescription, error=errors.businessDescription) }}
 
-    {{ forms.dropdown('employees',
-    label="Number of employees (optional)",
-    emptyLabel="Select a value",
-    value=formData.employees,
-    options=EMPLOYEE_OPTIONS,
-    error=errors.employees)
+    {{ forms.address('registered_address',
+      label="Registered office address",
+      value=formData.registered_address,
+      optionalNonUk='yes',
+      optional='no',
+      error=errors.registered_address)
     }}
-
-    {{ forms.dropdown('turnover',
-    label="Annual turnover (optional)",
-    emptyLabel="Select a value",
-    value=formData.region,
-    options=TURNOVER_OPTIONS,
-    error=errors.turnover)
-    }}
-
-    {{ forms.address('operatingAddress', label="Trading address", value=formData.operatingAddress, optionalNonUk='yes', optional='yes', error=errors.tradingAddress) }}
-
 
     {{ forms.dropdown('region',
     label="Region",
@@ -84,43 +83,92 @@
     error=errors.region)
     }}
 
+    <hr/>
 
-    {% if formData.accountManager and formData.accountManager.length > 0 or errors.accountManager %}
+    {{ forms.textbox('trading_name',
+    label="Trading name (optional)",
+    hint="Provide the name the company trades as if this differs from it’s registered name.",
+    value=formData.trading_name,
+    error=errors.trading_name)
+    }}
+
+
+    {{ forms.textbox('website', label="Website (optional)", value=formData.website, error=errors.website) }}
+    {{ forms.textarea('business_description',
+      label="Business description (optional)",
+      value=formData.business_description,
+      error=errors.business_description)
+    }}
+
+    {{ forms.dropdown('number_of_employees',
+    label="Number of employees (optional)",
+    emptyLabel="Select a value",
+    value=formData.number_of_emplyees,
+    options=EMPLOYEE_OPTIONS,
+    error=errors.number_of_employees)
+    }}
+
+    {{ forms.dropdown('annual_turnover',
+    label="Annual turnover (optional)",
+    emptyLabel="Select a value",
+    value=formData.annual_turnover,
+    options=TURNOVER_OPTIONS,
+    error=errors.annual_turnover)
+    }}
+
+    {% if formData.trading_address and formData.trading_address.country and formData.trading_address.country.length > 0 or errors.trading_address %}
+      {% set useRegisteredAddress = 'No' %}
+    {% else %}
+      {% set useRegisteredAddress = 'Yes' %}
+    {% endif %}
+
+    {% call forms.yesNoHidden('useRegisteredAddress', label="Is the trading address the same as the registered office address? (optional)", radioValue=useRegisteredAddress, revealFor="No") -%}
+    {{ forms.address('trading_address',
+      label="Trading address",
+      value=formData.trading_address,
+      optionalNonUk='yes',
+      optional='yes',
+      error=errors.trading_address)
+    }}
+    {%- endcall %}
+
+
+    {% if formData.account_manager and formData.account_manager.length > 0 or errors.account_manager %}
       {% set hasManager = 'Yes' %}
     {% else %}
       {% set hasManager = 'No' %}
     {% endif %}
     {% call forms.yesNoHidden('hasAccountManager', label="Is there an agreed DIT account manager for this company?", radioValue=hasManager, error=errors.accountManager) -%}
-    {{ forms.autocomplete('accountManager',
-    label="Account manager",
-    value=formData.accountManager,
-    options=ADVISOR_OPTIONS,
-    error=errors.accountManager
-    ) }}
+      {{ forms.autocomplete('accountManager',
+        label="Account manager",
+        value=formData.account_manager,
+        options=ADVISOR_OPTIONS,
+        error=errors.account_manager
+      ) }}
     {%- endcall %}
 
 
-    {% if formData.exportingMarkets and formData.exportingMarkets.length > 0 or errors.exportingMarkets %}
+    {% if formData.currently_exporting_to and formData.currently_exporting_to.length > 0 or errors.currently_exporting_to %}
       {% set hasExportingMarkets = 'Yes' %}
     {% else %}
       {% set hasExportingMarkets = 'No' %}
     {% endif %}
-    {% call forms.yesNoHidden('hasExportingMarkets', label="Is this company curently exporting to a market?", radioValue=hasExportingMarkets, error=errors.exportingMarkets) -%}
-    {{ forms.addAnotherAutocomplete('exportingMarkets',
-    label="Export market",
-    addLabel="country",
-    values=formData.exportingMarkets,
-    options=countrys,
-    error=errors.exportingMarkets
-    ) }}
+    {% call forms.yesNoHidden('hasExportingMarkets', label="Is this company curently exporting to a market?", radioValue=hasExportingMarkets, error=errors.currently_exporting_to) -%}
+      {{ forms.addAnotherAutocomplete('exportingMarkets',
+        label="Export market",
+        addLabel="country",
+        values=formData.currently_exporting_to,
+        options=countrys,
+        error=errors.currently_exporting_to
+      ) }}
     {%- endcall %}
 
-    {{ forms.addAnotherAutocomplete('countryOfInterest',
+    {{ forms.addAnotherAutocomplete('countries_of_interest',
     label="Future countries of interest (optional)",
     addLabel="country",
-    values=formData.countryOfInterest,
+    values=formData.countries_of_interest,
     options=countrys,
-    error=errors.countryOfInterest
+    error=errors.countries_of_interest
     ) }}
 
     {{ forms.addAnotherAutocomplete('connections',
@@ -134,45 +182,5 @@
     {{ forms.save(backUrl="#") }}
 
   </form>
-
-  <script>
-    (function() {
-      var isUKBasedRadios = document.querySelectorAll('[name="ukbased"]');
-      var regionFormGroup = document.getElementById('region-wrapper');
-      var ltdElement = document.querySelector('[value="Private limited company"]');
-      var plcElement = document.querySelector('[value="Public limited company"]');
-
-      function getSelectedRadio() {
-        for (var iPos = 0; iPos < isUKBasedRadios.length; iPos += 1) {
-          if (isUKBasedRadios[iPos].checked === true) {
-            return isUKBasedRadios[iPos].value;
-          }
-        }
-      }
-
-      function handleCountryChangeUK() {
-
-        var value = getSelectedRadio().toLowerCase();
-
-        if (value === 'yes') {
-          ltdElement.disabled = true;
-          plcElement.disabled = true;
-          regionFormGroup.className = 'form-group';
-        } else {
-          ltdElement.disabled = false;
-          plcElement.disabled = false;
-          regionFormGroup.className = 'form-group hidden';
-
-        }
-      }
-
-      for (var iPos = 0; iPos < isUKBasedRadios.length; iPos += 1) {
-        isUKBasedRadios[iPos].addEventListener('click', handleCountryChangeUK);
-      }
-
-      handleCountryChangeUK();
-
-    })();
-  </script>
-
+  <script src="{{ asset_path }}javascripts/addcompany.bundle.js"></script>
 {% endblock %}

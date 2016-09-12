@@ -42,21 +42,31 @@ function sanitizeForm(req) {
   req.sanitize('currently_exporting_to').joinArray();
   req.sanitize('countries_of_interest').joinArray();
   req.sanitize('connections').joinArray();
+  req.sanitize('uk_based').yesNoToBoolean();
 }
 
 function add(req, res) {
-  let formData;
+  controllerUtils.convertToFormAddress(req.body, 'trading_address');
+  controllerUtils.convertToFormAddress(req.body, 'registered_address');
 
-  if (req.body && Object.keys(req.body).length > 0) {
-    formData = req.body;
-  } else {
-    formData = {
-      ukbased: 'Yes'
-    };
+  if (req.body.sectors && req.body.sectors.length > 0) {
+    req.body.sectors = req.body.sectors.split(',');
+  }
+
+  if (req.body.currently_exporting_to && req.body.currently_exporting_to.length > 0) {
+    req.body.currently_exporting_to = req.body.currently_exporting_to.split(',');
+  }
+
+  if (req.body.countries_of_interest && req.body.countries_of_interest.length > 0) {
+    req.body.countries_of_interest = req.body.countries_of_interest.split(',');
+  }
+
+  if (req.body.connections && req.body.connections.length > 0) {
+    req.body.connections = req.body.connections.split(',');
   }
 
   res.render('company/company-add', {
-    formData,
+    formData: req.body,
     SECTOR_OPTIONS,
     REGION_OPTIONS,
     ADVISOR_OPTIONS,
@@ -78,6 +88,10 @@ function renderCompany(req, res, company, formData) {
     company.sectors = company.sectors.split(',');
   }
 
+  if (formData.currently_exporting_to && formData.currently_exporting_to.length > 0) {
+    formData.currently_exporting_to = formData.currently_exporting_to.split(',');
+  }
+
   if (company.currently_exporting_to && company.currently_exporting_to.length > 0) {
     company.currently_exporting_to = company.currently_exporting_to.split(',');
   }
@@ -86,8 +100,16 @@ function renderCompany(req, res, company, formData) {
     company.countries_of_interest = company.countries_of_interest.split(',');
   }
 
+  if (formData.countries_of_interest && formData.countries_of_interest.length > 0) {
+    formData.countries_of_interest = formData.countries_of_interest.split(',');
+  }
+
   if (company.connections && company.connections.length > 0) {
     company.connections = company.connections.split(',');
+  }
+
+  if (formData.connections && formData.connections.length > 0) {
+    formData.connections = formData.connections.split(',');
   }
 
   let title;
@@ -137,6 +159,8 @@ function view(req, res) {
       }
 
       controllerUtils.convertToFormAddress(formData, 'trading_address');
+      controllerUtils.convertToFormAddress(formData, 'registered_address');
+
 
       renderCompany(req, res, company, formData);
     })
@@ -150,6 +174,7 @@ function post(req, res) {
 
   sanitizeForm(req);
   controllerUtils.convertFromFormAddress(req.body, 'trading_address');
+  controllerUtils.convertFromFormAddress(req.body, 'registered_address');
 
   companyRepository.saveCompany(req.body)
     .then((data) => {
@@ -157,13 +182,18 @@ function post(req, res) {
     })
     .catch((error) => {
       req.errors = error.response.body;
-      view(req, res);
+      if (req.body.id) {
+        view(req, res);
+      } else {
+        add(req, res);
+      }
     });
 
 }
 
+router.get('/add', add);
 router.get('/:source/:sourceId?', view);
 router.post(['/', '/add', '/:source/:sourceId?'], post);
-router.get('/add', add);
+
 
 module.exports = { view, post, router };

@@ -3,7 +3,13 @@
 
   <input type="hidden" name="id" value="{{ company.id }}"/>
 
-  {% if company.source == 'Department of International Trade' %}
+  {% if not company.company_number or company.comany_number.length == 0%}
+    {{ forms.textbox('title',
+    label="Registered business name",
+    hint="Provide the registered name of the company.",
+    value=formData.registered_name,
+    error=errors.registered_name)
+    }}
 
     {{ forms.yesNo('uk_based',
     label="Is the business based in the UK?",
@@ -19,12 +25,15 @@
     error=errors.type_of_business)
     }}
 
-    {{ forms.textbox('title',
-    label="Registered business name",
-    hint="Provide the registered name of the company.",
-    value=formData.registered_name,
-    error=errors.registered_name)
+    {{ forms.address('registered_address',
+    label="Registered office address",
+    value=formData.registered_address,
+    optionalNonUk='yes',
+    optional='no',
+    error=errors.registered_address)
     }}
+
+    <hr/>
   {% else %}
     <input type="hidden" name="company_number" value="{{ company.ch.company_number }}"/>
   {% endif %}

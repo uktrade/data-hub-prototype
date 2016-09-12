@@ -7,7 +7,8 @@ module.exports = {
 
   entry: {
     company: `${paths.sourceJS}/company.js`,
-    contact: `${paths.sourceJS}/contact.js`
+    contact: `${paths.sourceJS}/contact.js`,
+    addcompany: `${paths.sourceJS}/addcompany.js`
   },
   output: {
     path: paths.outputJS,

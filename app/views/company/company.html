@@ -110,6 +110,5 @@
     var contacts = {{ company.contacts | stringify | safe }};
     var interactions = {{ company.interactions |stringify | safe }};
   </script>
-  <script src="{{ asset_path }}javascripts/common.js"></script>
   <script src="{{ asset_path }}javascripts/company.bundle.js"></script>
 {% endblock %}

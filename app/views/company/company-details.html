@@ -1,6 +1,7 @@
 {% if company.company_number %}
   {% include "./company-details-ch.html" %}
-  <hr/>
+{% else %}
+  {% include "./company-details-uktihead.html" %}
 {% endif %}
 <div class="js-hidden-edit{% if errors %} js-hidden-edit-open{% endif %}">
   <div class="js-view-data">
