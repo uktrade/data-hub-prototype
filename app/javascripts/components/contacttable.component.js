@@ -8,11 +8,16 @@ var monthNames = [
 ];
 
 function formatDate(date) {
-  const dateTime = new Date(date);
+
+  const parts = date.substr(0, 10).split('-');
+  const dateTime = new Date(parseInt(parts[0], 10),
+    parseInt(parts[1], 10) - 1,
+    parseInt(parts[2], 10));
+
   const day = dateTime.getDate();
   const monthIndex = dateTime.getMonth();
   const year = dateTime.getFullYear();
-  return `${day} ${monthNames[monthIndex]} ${year - 2000}`;
+  return `${day} ${monthNames[monthIndex]} ${year}`;
 }
 
 class ContactTable extends Component {
@@ -31,8 +36,8 @@ class ContactTable extends Component {
     let bValue;
 
     if (this.state.sortKey == 'name') {
-      aValue = `${a.lastname} ${a.firstname}`.toLocaleLowerCase();
-      bValue = `${b.lastname} ${b.firstname}`.toLocaleLowerCase();
+      aValue = `${a.last_name} ${a.first_name}`.toLocaleLowerCase();
+      bValue = `${b.last_name} ${b.first_name}`.toLocaleLowerCase();
     } else {
       aValue = a[this.state.sortKey];
       bValue = b[this.state.sortKey];
@@ -66,15 +71,15 @@ class ContactTable extends Component {
 
   renderContact = (contact) => {
 
-    const link = `/companies/${this.props.company.id}/contact/view/${contact.id}?query=${this.props.query}`;
+    const link = `/contact/${contact.id}/view`;
 
     return (
       <tr key={contact.id}>
-        <td className="creationdate">{ formatDate(contact.creationdate) }</td>
-        <td className="name"><a href={link}>{ contact.firstname } { contact.lastname }</a></td>
-        <td className="title">{ contact.occupation }</td>
-        <td className="phone">{ contact.telephonenumber }</td>
-        <td className="email"><a href={'mailto:' + contact.emailaddress }>{ contact.emailaddress }</a></td>
+        <td className="creationdate">{ formatDate(contact.created_date) }</td>
+        <td className="name"><a href={link}>{ contact.first_name } { contact.last_name }</a></td>
+        <td className="title">{ contact.role }</td>
+        <td className="phone">{ contact.phone }</td>
+        <td className="email"><a href={'mailto:' + contact.email }>{ contact.email }</a></td>
       </tr>
     );
   };
@@ -135,8 +140,7 @@ class ContactTable extends Component {
 
 ContactTable.propTypes = {
   company: React.PropTypes.object.isRequired,
-  contacts: React.PropTypes.array,
-  query: React.PropTypes.string.isRequired
+  contacts: React.PropTypes.array
 };
 
 export default ContactTable;

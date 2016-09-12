@@ -64,3 +64,14 @@
 .lede {
   margin-bottom: 60px;
 }
+
+
+.facet-value-label {
+  text-transform: capitalize;
+}
+
+strong {
+  @include bold-19;
+}
+
+

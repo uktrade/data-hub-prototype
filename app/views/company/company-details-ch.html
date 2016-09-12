@@ -7,26 +7,35 @@
   </tr>
   <tr class="table-detail--readonly__section">
     <th>Registered office address</th>
-    <td>{{ company.registered_office_address.address_line_1 }},
-      {{ company.registered_office_address.address_line_2 }},
-      {{ company.registered_office_address.locality }},
-      {{ company.registered_office_address.postal_code }}
+    <td class="meta--address">{{ company.ch.registered_address_address_1 | lower }},
+      {{ company.ch.registered_address_address_2 | lower }},
+      {{ company.ch.registered_address_town | lower }},
+      <span class="meta--address__postcode">{{ company.ch.registered_address_postcode }}</span>
     </td>
   </tr>
   <tr>
     <th>Company type</th>
-    <td>{{ company.companyType }}</td>
+    <td>{{ company.ch.company_category }}</td>
   </tr>
   <tr class="table-detail--readonly__section">
     <th>Company status</th>
-    <td>{{ company.company_status }}</td>
+    <td>{{ company.ch.company_status }}</td>
   </tr>
   <tr class="table-detail--readonly__section">
     <th>Nature of business (SIC)</th>
     <td>
-      {% for sic_code in company.sic_codes %}
-        {{ sic_code.code }} - {{ sic_code.description }}
-      {% endfor %}
+      {% if company.ch.sic_code_1 %}
+        {{ company.ch.sic_code_1 }}
+      {% endif %}
+      {% if company.ch.sic_code_2 %}
+        <br/>{{ company.ch.sic_code_2 }}
+      {% endif %}
+      {% if company.ch.sic_code_3 %}
+        <br/>{{ company.ch.sic_code_3 }}
+      {% endif %}
+      {% if company.ch.sic_code_4 %}
+        <br/>{{ company.ch.sic_code_4 }}
+      {% endif %}
     </td>
   </tr>
   </tbody>

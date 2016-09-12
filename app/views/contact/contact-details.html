@@ -2,7 +2,7 @@
   <tbody>
     <tr>
       <th width="30%">Company</th>
-      <td><a href="/companies/{{ contact.company.id }}?query={{ query }}">{{ contact.company.title }}</a></td>
+      <td><a href="/company/DIT/{{ contact.company.id }}">{{ contact.company.registered_name }}</a></td>
     </tr>
     <tr>
     <tr>
@@ -11,13 +11,13 @@
     </tr>
     <tr>
       <th>Role</th>
-      <td>{{ contact.occupation }}</td>
+      <td>{{ contact.role }}</td>
     </tr>
-    {% if contact.primaryContactTeam %}
+    {% if contact.primary_contact_team %}
       <tr>
         <th>Teams</th>
         <td>
-          {% for primaryTeam in contact.primaryContactTeam %}
+          {% for primaryTeam in contact.primary_contact_team %}
             <div>{{ primaryTeam }}</div>
           {% endfor %}
         </td>
@@ -25,27 +25,27 @@
     {% endif %}
     <tr>
       <th>Phone number</th>
-      <td>{{ contact.telephonenumber }}</td>
+      <td>{{ contact.phone }}</td>
     </tr>
     <tr>
       <th>Email</th>
-      <td>{{ contact.emailaddress }}</td>
+      <td>{{ contact.email }}</td>
     </tr>
-    {% if contact.address %}
+    {% if contact.address_1 %}
       <tr>
         <th>Address</th>
         <td>
-          {{ contact.address.address1 }}, {% if contact.address.address2 %}{{ contact.address.address2 }},{% endif %} {{ contact.address.city }}, {{ contact.address.postcode }}
+          {{ contact.address_1 }}, {% if contact.address_2 %}{{ contact.address_2 }},{% endif %} {{ contact.address_town }}, {{ contact.address_postcode }}
         </td>
       </tr>
     {% endif %}
     <tr>
       <th>Alternative phone</th>
-      <td>{{ contact.alternativeTelephonenumber }}</td>
+      <td>{{ contact.alt_phone }}</td>
     </tr>
     <tr>
       <th>Alternative email</th>
-      <td>{{ contact.alternativeEmailaddress }}</td>
+      <td>{{ contact.alt_email }}</td>
     </tr>
     <tr>
       <th>Notes</th>
@@ -54,5 +54,4 @@
   </tbody>
 </table>
 
-<a href="/companies/{{ contact.company.id }}/contact/edit/{{ contact.id }}?query={{ query }}"
-   class="button button-secondary">Edit contact details</a>
+<a href="/contact/{{ contact.id }}/edit" class="button button-secondary">Edit contact details</a>

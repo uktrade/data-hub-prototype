@@ -1,11 +1,13 @@
+/* globals interactions: true, company: true */
+
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import InteractionTable from './components/interactiontable.component';
+import ContactInteractionTable from './components/contactinteractiontable.component';
 
 if (interactions && interactions.length > 0) {
   ReactDOM.render(
-    <InteractionTable interactions={interactions} company={company} query={query}/>,
+    <ContactInteractionTable interactions={interactions} company={company}/>,
     document.querySelector('#interaction-table-wrapper')
   );
 }

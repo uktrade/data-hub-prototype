@@ -4,7 +4,8 @@
   "env":{
     "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-nodejs.git",
     "NODE_MODULES_CACHE": "false",
-    "COMPANY_KEY": {
+    "NPM_CONFIG_PRODUCTION": "false",
+    "API_ROOT": {
       "required": true
     },
     "POSTCODE_KEY": {

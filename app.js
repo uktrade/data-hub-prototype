@@ -5,49 +5,44 @@ const expressValidator = require('express-validator');
 const app = express();
 const bodyParser = require('body-parser');
 const config = require('./config');
-const companyViewController = require('./app/controller/companycontroller');
-const contactViewController = require('./app/controller/contactcontroller');
-const interactionViewcController = require('./app/controller/interactioncontroller');
+const companyController = require('./app/controller/companycontroller');
+const contactController = require('./app/controller/contactcontroller');
+const interactionController = require('./app/controller/interactioncontroller');
+const searchController = require('./app/controller/searchcontroller');
 const apiController = require('./app/controller/apicontroller');
-const nunjucks = require('express-nunjucks');
+const expressNunjucks = require('express-nunjucks');
 const filters = require('./node_modules/govstrap/nunjucks/filters');
 const compression = require('compression');
-const seed = require('./app/seed');
 const customValidators = require('./app/lib/validators');
 const customSanitizers = require('./app/lib/sanitizers');
+const isDev = app.get('env') === 'development';
+const nunjuckFilters = require('./app/lib/nunjuckfilters');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator({ customValidators, customSanitizers }));
 
 app.use(compression());
-
-let nunjucksConfig = {
-  autoescape: true
-};
-
-if (config.env !== 'production') {
-  nunjucksConfig.noCache = true;
-}
-
-app.set('view engine', 'html');
 app.set('views', [
   `${__dirname}/app/views`,
   `${__dirname}/node_modules/govuk_template_jinja/views`,
   `${__dirname}/node_modules/govstrap/nunjucks`
 ]);
 
-nunjucks.setup(nunjucksConfig, app);
+filters.stringify = JSON.stringify;
+filters.highlightTerm = nunjuckFilters.highlightTerm;
+filters.formatDate = nunjuckFilters.formatDate;
 
-// Add extra filters to nunjucks
-nunjucks.ready((nj) => {
-  Object.keys(filters).forEach((filterName) => {
-    nj.addFilter(filterName, filters[filterName]);
-  });
-  nj.addFilter('stringify', JSON.stringify);
+expressNunjucks(app, {
+  watch: isDev,
+  noCache: isDev,
+  filters: filters
 });
 
-// Insert usefull variables into response for all controllers
+
+// Insert useful variables into response for all controllers
 app.use(require(`${__dirname}/app/middleware/locals`));
+
+// Static files
 app.use('/images', express.static(`${__dirname}/node_modules/govuk_frontend_toolkit/images`));
 app.use('/images', express.static(`${__dirname}/node_modules/govstrap/images`));
 app.use('/javascripts', express.static(`${__dirname}/node_modules/govstrap/public/javascripts`));
@@ -56,49 +51,14 @@ app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`));
 
-app.get('/api/search?', apiController.search);
-app.get('/api/suggest?', apiController.suggest);
-
-app.get('/companies/add', companyViewController.add);
-app.post('/companies/add', companyViewController.addPost);
-
-app.get('/companies/:id?', companyViewController.get);
-app.post('/companies/:id?', companyViewController.post);
-
-app.get('/companies/:companyId/contact/view/:contactId?', contactViewController.get);
-app.get([
-  '/companies/:companyId/contact/edit/:contactId?',
-  '/companies/:companyId/contact/add?'],
-  contactViewController.edit);
-app.post([
-  '/companies/:companyId/contact/edit/:contactId?',
-  '/companies/:companyId/contact/add?'],
-  contactViewController.post);
-
-app.get('/companies/:companyId/interaction/view/:interactionId?', interactionViewcController.get);
-
-app.get([
-  '/companies/:companyId/interaction/edit/:interactionId?',
-  '/companies/:companyId/contact/:contactId/interaction/add?',
-  '/companies/:companyId/interaction/add?'],
-  interactionViewcController.edit);
-
-app.post([
-  '/companies/:companyId/interaction/edit/:interactionId?',
-  '/companies/:companyId/contact/:contactId/interaction/add?',
-  '/companies/:companyId/interaction/add?'],
-  interactionViewcController.post);
+app.use('/company', companyController.router);
+app.use('/contact', contactController.router);
+app.use('/interaction', interactionController.router);
+app.use('/search', searchController.router);
+app.use('/postcodelookup/:postcode', apiController.postcodelookup);
 
 app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.get('/search?', function(req, res) {
-  res.render('search');
-});
-
-app.get('/postcodelookup/:postcode', apiController.postcodelookup);
-
 app.listen(config.port);
-
-seed.seedUktiCustomers();

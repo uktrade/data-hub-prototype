@@ -1,12 +1,16 @@
-'use strict';
+/* eslint new-cap: 0 */
 
-let companyRepository = require('../lib/companyrepository');
-const transformErrors = require('../lib/controllerutils').transformErrors;
+'use strict';
+const express = require('express');
+const router = express.Router();
+
+const companyRepository = require('../repository/companyrepository');
+const controllerUtils = require('../lib/controllerutils');
+
 const SECTOR_OPTIONS = require('../../data/sectors.json');
 const REGION_OPTIONS = require('../../data/regions.json');
 const ADVISOR_OPTIONS = require('../../data/advisors.json');
 const countryKeysValues = require('../../data/countrys.json');
-const searchService = require('../lib/searchservice');
 
 const EMPLOYEE_OPTIONS = [
   '1 to 9',
@@ -34,101 +38,13 @@ for (let country in countryKeysValues) {
 }
 
 function sanitizeForm(req) {
-  req.sanitize('sectors').trimArray();
-  req.sanitize('exportingMarkets').trimArray();
-  req.sanitize('countryOfInterest').trimArray();
-  req.sanitize('connections').trimArray();
-}
-
-function validateForm(req) {
-  req.check('title', 'You must provide the registered company name').notEmpty();
-  req.check('sectors', 'You must provide at least one sector').hasOneOrMoreValues();
-  if (req.body.hasOwnProperty('ukbased') && req.body.ukbased.toLowerCase() === 'yes') {
-    req.check('region', 'You must provide the region for this company').notEmpty();
-  }
-
-  if (req.body.useCompaniesHouseAddress === 'No') {
-    req.check('operatingAddress.country', 'Provide the company operating address').notEmpty();
-
-    if (req.body['operatingAddress.country'] && req.body['operatingAddress.country'].toLocaleLowerCase() === 'united kingdom') {
-      req.check('operatingAddress.address1', 'Provide the company operating address').notEmpty();
-      req.check('operatingAddress.city', 'Provide the company operating address').notEmpty();
-    }
-  }
-
-  if (req.body.hasAccountManager === 'Yes') {
-    req.check('accountManager', 'Enter the name of the UKTI Account manager for this company').notEmpty();
-  }
-
-  if (req.body.isCurrentlyExporting === 'Yes') {
-    req.check('exportingMarkets', 'Provide at least one value for current exporting markets.').hasOneOrMoreValues();
-  }
-
-  return transformErrors(req.validationErrors());
-
-}
-
-function convertAddress(formData) {
-  let address = {
-    address1: formData['operatingAddress.address1'],
-    address2: formData['operatingAddress.address2'],
-    city: formData['operatingAddress.city'],
-    county: formData['operatingAddress.county'],
-    postcode: formData['operatingAddress.postcode'],
-    country: formData['operatingAddress.country']
-  };
-
-  delete formData['operatingAddress.address1'];
-  delete formData['operatingAddress.address2'];
-  delete formData['operatingAddress.city'];
-  delete formData['operatingAddress.county'];
-  delete formData['operatingAddress.postcode'];
-  delete formData['operatingAddress.country'];
-
-  formData.operatingAddress = address;
-}
-
-function expandInteractions(company) {
-
-  if (!company.interactions) {
-    return null;
-  }
-
-  return company.interactions.map((interaction) => {
-    let contact = company.contacts.find((companyContact) => companyContact.id === interaction.contactId);
-    return Object.assign({}, interaction, { contact });
-  });
-
-}
-
-function transformAddressErrors(convertedErrors) {
-  if (convertedErrors && convertedErrors.hasOwnProperty('operatingAddress.country') ||
-    convertedErrors && convertedErrors.hasOwnProperty('operatingAddress.address1') ||
-    convertedErrors && convertedErrors.hasOwnProperty('operatingAddress.city')) {
-
-    convertedErrors.tradingAddress = {
-      message: 'Incomplete address'
-    };
-
-    if (convertedErrors['operatingAddress.country']) {
-      convertedErrors.tradingAddress.country = convertedErrors['operatingAddress.country'];
-      delete convertedErrors['operatingAddress.country'];
-    }
-
-    if (convertedErrors['operatingAddress.address1']) {
-      convertedErrors.tradingAddress.address1 = convertedErrors['operatingAddress.address1'];
-      delete convertedErrors['operatingAddress.address1'];
-    }
-
-    if (convertedErrors['operatingAddress.city']) {
-      convertedErrors.tradingAddress.city = convertedErrors['operatingAddress.city'];
-      delete convertedErrors['operatingAddress.city'];
-    }
-  }
+  req.sanitize('sectors').joinArray();
+  req.sanitize('currently_exporting_to').joinArray();
+  req.sanitize('countries_of_interest').joinArray();
+  req.sanitize('connections').joinArray();
 }
 
 function add(req, res) {
-  let query = req.query.query;
   let formData;
 
   if (req.body && Object.keys(req.body).length > 0) {
@@ -139,12 +55,7 @@ function add(req, res) {
     };
   }
 
-  const errors = req.validationErrors();
-  let convertedErrors = transformErrors(errors);
-  transformAddressErrors(convertedErrors);
-
   res.render('company/company-add', {
-    query,
     formData,
     SECTOR_OPTIONS,
     REGION_OPTIONS,
@@ -153,69 +64,81 @@ function add(req, res) {
     TURNOVER_OPTIONS,
     TYPES_OF_BUSINESS,
     countrys,
-    errors: convertedErrors
+    errors: req.errors
   });
 }
 
-function addPost(req, res) {
+function renderCompany(req, res, company, formData) {
 
-  let query = req.query.query;
+  if (formData.sectors && formData.sectors.length > 0) {
+    formData.sectors = formData.sectors.split(',');
+  }
 
-  sanitizeForm(req);
-  let errors = validateForm(req);
-  convertAddress(req.body);
+  if (company.sectors && company.sectors.length > 0) {
+    company.sectors = company.sectors.split(',');
+  }
 
-  if (errors) {
-    add(req, res);
+  if (company.currently_exporting_to && company.currently_exporting_to.length > 0) {
+    company.currently_exporting_to = company.currently_exporting_to.split(',');
+  }
+
+  if (company.countries_of_interest && company.countries_of_interest.length > 0) {
+    company.countries_of_interest = company.countries_of_interest.split(',');
+  }
+
+  if (company.connections && company.connections.length > 0) {
+    company.connections = company.connections.split(',');
+  }
+
+  let title;
+  if (company.ch && company.ch.company_name) {
+    title = company.ch.company_name;
+  } else if (company.registered_name) {
+    title = company.registered_name;
+  } else {
+    title = company.trading_name;
+  }
+
+
+  res.render('company/company', {
+    company,
+    title,
+    SECTOR_OPTIONS,
+    REGION_OPTIONS,
+    ADVISOR_OPTIONS,
+    EMPLOYEE_OPTIONS,
+    TURNOVER_OPTIONS,
+    TYPES_OF_BUSINESS,
+    countrys,
+    errors: req.errors,
+    formData
+  });
+}
+
+function view(req, res) {
+  let id = req.params.sourceId;
+  let source = req.params.source;
+
+  if (!id) {
+    res.redirect('/');
     return;
   }
 
-  let company = req.body;
-  company.uktidata = true;
-  company.source = 'Department of International Trade';
-  companyRepository.addCompany(company);
-  searchService.indexCHRecord(company);
-
-  res.redirect(`/companies/${company.id}?query=${query}`);
-}
-
-function get(req, res) {
-  let companyId = req.params.id;
-  let query = req.query.query;
-
-  if (!companyId) {
-    res.redirect('/');
-  }
-
-  companyRepository.getCompany(companyId)
+  companyRepository.getCompany(id, source)
     .then((company) => {
-      let expandedInteractions = expandInteractions(company);
       let formData;
 
-      if (req.body && Object.keys(req.body).length > 0) {
-        formData = req.body;
-      } else {
+      if (!req.body || Object.keys(req.body).length === 0) {
         formData = Object.assign({}, company);
+        delete formData.contact;
+        delete formData.interaction;
+      } else {
+        formData = req.body;
       }
 
-      const errors = req.validationErrors();
-      let convertedErrors = transformErrors(errors);
-      transformAddressErrors(convertedErrors);
+      controllerUtils.convertToFormAddress(formData, 'trading_address');
 
-      res.render('company/company', {
-        query,
-        company,
-        expandedInteractions,
-        formData,
-        SECTOR_OPTIONS,
-        REGION_OPTIONS,
-        ADVISOR_OPTIONS,
-        EMPLOYEE_OPTIONS,
-        TURNOVER_OPTIONS,
-        TYPES_OF_BUSINESS,
-        countrys,
-        errors: convertedErrors
-      });
+      renderCompany(req, res, company, formData);
     })
     .catch((error) => {
       res.render('error', {error});
@@ -223,29 +146,24 @@ function get(req, res) {
 }
 
 function post(req, res) {
-  let companyNum = req.params.id;
-  let query = req.query.query;
+  let term = req.query.term;
 
   sanitizeForm(req);
-  let errors = validateForm(req);
-  convertAddress(req.body);
+  controllerUtils.convertFromFormAddress(req.body, 'trading_address');
 
-  if (errors) {
-    get(req, res);
-    return;
-  }
-
-  companyRepository.getCompany(companyNum)
-    .then((currentCompany) => {
-      let updatedCompany = Object.assign({}, currentCompany, req.body);
-      updatedCompany.uktidata = true;
-      updatedCompany.source = 'Combined';
-      companyRepository.updateCompany(updatedCompany);
-      searchService.removeCHRecord(updatedCompany);
-      searchService.indexCHRecord(updatedCompany);
-      res.redirect(`/companies/${companyNum}?query=${query}`);
+  companyRepository.saveCompany(req.body)
+    .then((data) => {
+      res.redirect(`/company/COMBINED/${data.id}?term=${term}`);
+    })
+    .catch((error) => {
+      req.errors = error.response.body;
+      view(req, res);
     });
 
 }
 
-module.exports = { get, post, add, addPost };
+router.get('/:source/:sourceId?', view);
+router.post(['/', '/add', '/:source/:sourceId?'], post);
+router.get('/add', add);
+
+module.exports = { view, post, router };

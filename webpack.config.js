@@ -3,10 +3,9 @@ const paths = require('./gulp/paths');
 const prod = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  devtool: prod ? 'hidden-source-map' : 'cheap-module-source-map',
+  devtool: prod ? 'hidden-source-map' : 'source-map',
 
   entry: {
-    search: `${paths.sourceJS}/search.js`,
     company: `${paths.sourceJS}/company.js`,
     contact: `${paths.sourceJS}/contact.js`
   },

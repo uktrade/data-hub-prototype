@@ -7,6 +7,14 @@ function trimArray(value) {
   return null;
 }
 
+function joinArray(value) {
+  let trimmed = trimArray(value);
+  if (trimmed && trimmed.length > 0) {
+    return trimmed.join();
+  }
+  return null;
+}
+
 module.exports = {
-  trimArray
+  trimArray, joinArray
 };

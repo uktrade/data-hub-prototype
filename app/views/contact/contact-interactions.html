@@ -1,4 +1,4 @@
-{% if interactions.length > 0 %}
+{% if contact.interactions.length > 0 %}
   <div class="grid-row">
     <div class="column-one-third">
       <div class="data">
@@ -14,7 +14,7 @@
     </div>
     <div class="column-one-third">
       <p class="actions">
-        <a class="button button-secondary" href="/companies/{{ company.id }}/contact/{{ contact.id }}/interaction/add?query={{ query }}">Add new interaction</a>
+        <a class="button button-secondary" href="/interaction/add?contact_id={{ contact.id }}">Add new interaction</a>
       </p>
     </div>
   </div>
@@ -22,7 +22,7 @@
 
 {% else %}
   <p class="actions">
-    <a class="button button-secondary" href="/companies/{{ company.id }}/contact/{{ contact.id }}/interaction/add?query={{ query }}">Add new interaction</a>
+    <a class="button button-secondary" href="/interaction/add?contact_id={{ contact.id }}">Add new interaction</a>
   </p>
   <h2 class="heading-medium">This contact has no interactions</h2>
 {% endif %}

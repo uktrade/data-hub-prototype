@@ -1,15 +1,14 @@
 {% extends "../layouts/ukti-search-header.html" %}
 
 {% block main %}
-  {% if referer.indexOf('search') != -1 %}
-    <a class="back-link" href="/search?query={{ query }}">Back to search</a>
+  {% if referer and referer.indexOf('search') != -1 %}
+    <a class="back-link" href="/search?term={{ term }}">Back to search</a>
   {% else %}
-    <a class="back-link" href="/companies/{{ contact.company.id }}?query={{query}}#contacts">Back to company</a>
+    <a class="back-link" href="/company/DIT/{{ contact.company.id }}#contacts">Back to company</a>
   {% endif %}
-
   <h1 class="heading-xlarge record-title">
-    {{ contact.firstname }} {{ contact.lastname }}
-    {% if contact.primaryContact %}
+    {{ contact.first_name }} {{ contact.last_name }}
+    {% if contact.primary_contact_team and contact.primary_contact_team.length > 0 %}
       <span class="status-badge status-badge--primary-contact">Primary</span>
     {% endif %}
   </h1>
@@ -40,9 +39,8 @@
   </div>
 
   <script>
-    var company = {{ company|stringify|safe }};
-    var query = {{ query|stringify|safe }};
-    var interactions = {{ interactions|stringify|safe }}
+    var company = {{ contact.company|stringify|safe }};
+    var interactions = {{ contact.interactions|stringify|safe }};
   </script>
   <script src="{{ asset_path }}javascripts/common.js"></script>
   <script src="{{ asset_path }}javascripts/contact.bundle.js"></script>

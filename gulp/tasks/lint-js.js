@@ -8,7 +8,7 @@ gulp.task('' +
   'lint-js', () => {
   const eslint = require('gulp-eslint');
 
-  return gulp.src(['./**/*.js', '!node_modules/**', '!build/**', '!data/**'])
+  return gulp.src(['./**/*.js', '!node_modules/**', '!build/**', '!data/**', '!reports/**'])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());

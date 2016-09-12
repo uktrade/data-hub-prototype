@@ -2,14 +2,17 @@
 {% import "macros/forms.html" as forms %}
 
 {% block main %}
-  <a class="back-link" href='/search?query={{query}}'>Back to search</a>
 
+  {% if referer and referer.indexOf('search') != -1 %}
+    <a class="back-link" href="{{ referer }}">Back to search</a>
+  {% else %}
+    <a class="back-link" href="/">Back to homepage</a>
+  {% endif %}
   <h1 class="heading-xlarge record-title">
-    {{ company.title }}
-    {% if company.source == 'Department of International Trade' %}
+    {{ title }}
+    {% if company.id %}
       <span class="status-badge status-badge--dit">DIT</span>
-    {% endif %}
-    {% if company.source == 'Companies House' %}
+    {% else %}
       <span class="status-badge status-badge--ch">CH</span>
     {% endif %}
   </h1>
@@ -17,7 +20,7 @@
   {{ forms.errorPanel(errors) }}
 
   <div class="tabs tabs--inline js-tabs">
-    {% if not company.uktidata %}
+    {% if not company.id %}
       <div id="tab-error-contacts" class="tabs-errors">
         <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
           <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
@@ -28,7 +31,8 @@
           </p>
           <ul class="error-summary-list">
             <li>
-            <a href="/companies/{{ company.id }}?query={{ query }}">Add company details</a>
+              <!-- Add way to link to the edit form -->
+              <a href="#">Add company details</a>
             </li>
           </ul>
         </div>
@@ -44,14 +48,14 @@
           </p>
           <ul class="error-summary-list">
             <li>
-              <a href="/companies/{{ company.id }}/contact/add?query={{ query }}">Add new contact</a>
+              <a href="/contact/add?company_id={{ company.id }}">Add new contact</a>
             </li>
           </ul>
         </div>
       </div>
     {% endif %}
 
-    {% if company.uktidata == true and not company.contacts %}
+    {% if company.id and company.contacts.length == 0 %}
       <div id="tab-error-interactions" class="tabs-errors">
         <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
           <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
@@ -63,7 +67,7 @@
           </p>
           <ul class="error-summary-list">
             <li>
-              <a href="/companies/{{ company.id }}/contact/add?query={{ query }}">Add new contact</a>
+              <a href="/contact/add?company_id={{ company.id }}">Add new contact</a>
             </li>
           </ul>
         </div>
@@ -102,9 +106,9 @@
   </div>
 
   <script>
-    var company = {{ company|stringify|safe }};
-    var query = {{ query|stringify|safe }};
-    var interactions = {{ expandedInteractions|stringify|safe }}
+    var company = {{ company | stringify | safe }};
+    var contacts = {{ company.contacts | stringify | safe }};
+    var interactions = {{ company.interactions |stringify | safe }};
   </script>
   <script src="{{ asset_path }}javascripts/common.js"></script>
   <script src="{{ asset_path }}javascripts/company.bundle.js"></script>

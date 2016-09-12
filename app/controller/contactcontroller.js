@@ -1,164 +1,124 @@
-'use strict';
+/* eslint new-cap: 0 */
 
-const companyRepository = require('../lib/companyrepository');
-const transformErrors = require('../lib/controllerutils').transformErrors;
+'use strict';
+const express = require('express');
+const router = express.Router();
+
+let contactRepository = require('../repository/contactrepository');
+let companyRepository = require('../repository/companyrepository');
+
 const TEAM_OPTIONS = require('../../data/teams.json');
 
-function expandInteractions(interactions, contact) {
-  return interactions.map((interaction) => {
-    return Object.assign({}, interaction, { contact });
-  });
-}
+function view(req, res) {
 
+  const contact_id = req.params.contact_id;
 
-function get(req, res) {
-
-  let contactId = req.params.contactId;
-  let companyId = req.params.companyId;
-
-  let query = req.query.query || '';
-
-  if (!contactId || !companyId) {
+  if (!contact_id) {
     res.redirect('/');
   }
 
-  let company = companyRepository.getCompanySummary(companyId);
-  let contact = companyRepository.getCompanyContact(companyId, contactId);
-  let interactions = companyRepository.getInteractionsForContact(companyId, contactId);
-  let expandedInteractions = expandInteractions(interactions, contact);
+  contactRepository.getContact(contact_id)
+    .then((contact) => {
 
-  if (contact) {
-    res.render('contact/contact', {query, contact, company, interactions: expandedInteractions});
-  } else {
-    res.render('error', {error: 'Cannot find contact'});
-  }
+      if (contact.primary_contact_team && contact.primary_contact_team.length > 0) {
+        contact.primary_contact_team = contact.primary_contact_team.split(',');
+      }
 
+      res.render('contact/contact', { term: req.query.term, contact });
+    })
+    .catch((error) => {
+      res.render('error', {error});
+    });
 }
 
 function edit(req, res) {
-  let contactId = req.params.contactId;
-  let companyId = req.params.companyId;
-
-  let query = req.query.query || '';
-
-  if (!companyId) {
-    res.redirect('/');
-  }
-
-  let company = companyRepository.getCompanySummary(companyId);
-
-  let contact;
 
   if (req.body && Object.keys(req.body).length > 0) {
-    contact = req.body;
-  } else if (contactId) {
-    contact = companyRepository.getCompanyContact(companyId, contactId);
-
-  } else {
-    contact = {};
-  }
-
-  const errors = req.validationErrors();
-
-  res.render('contact/contact-edit', {
-    query,
-    contact,
-    company,
-    TEAM_OPTIONS,
-    errors: transformErrors(errors)
-  });
-
-}
-
-function post(req, res) {
-  let contactId = req.params.contactId;
-  let companyId = req.params.companyId;
-
-  let query = req.query.query || '';
-
-  if (!companyId) {
-    res.redirect('/');
-  }
-
-  sanitizeForm(req);
-  let errors = validateForm(req);
-
-  convertAddress(req.body);
-
-  if (errors) {
-    edit(req, res);
+    companyRepository.getDitCompany(req.body.company)
+      .then((company) => {
+        convertToFormAddress(req.body);
+        res.render('contact/contact-edit', {
+          company: company,
+          contact: req.body,
+          TEAM_OPTIONS
+        });
+      });
     return;
   }
 
+  const contact_id = req.params.contact_id;
 
-  let contact = contactId ? companyRepository.getCompanyContact(companyId, contactId) : {};
-  let updatedContact = applyFormFieldsToContact(contact, req.body);
-  updatedContact = companyRepository.setCompanyContact(companyId, updatedContact);
-  res.redirect(`/companies/${companyId}/contact/view/${updatedContact.id}?query=${query}`);
+  if (!contact_id) {
+    res.redirect('/');
+    return;
+  }
+
+  contactRepository.getContact(contact_id)
+    .then((contact) => {
+
+      convertToFormAddress(contact);
+      if (contact.primary_contact_team && contact.primary_contact_team.length > 0) {
+        contact.primary_contact_team = contact.primary_contact_team.split(',');
+      }
+
+      res.render('contact/contact-edit', { contact, TEAM_OPTIONS
+      });
+    })
+    .catch((error) => {
+      res.render('error', {error});
+    });
+}
+
+function add(req, res) {
+  let companyId = req.query.company_id;
+  if (!companyId) {
+    res.redirect('/');
+  }
+
+  companyRepository.getCompany(companyId)
+    .then((company) => {
+      res.render('contact/contact-edit', {
+        contact: {
+          company: company
+        },
+        formData: {},
+        TEAM_OPTIONS
+      });
+    });
+}
+
+function post(req, res) {
+  sanitizeForm(req);
+  convertFromFormAddress(req.body);
+
+  contactRepository.saveContact(req.body)
+    .then((savedContact) => {
+      if (req.params.contact_id) {
+        res.redirect(`/contact/${req.params.contact_id}/view`);
+      } else {
+        res.redirect(`/company/DIT/${savedContact.company}#contacts`);
+      }
+    })
+    .catch((error) => {
+      req.errors = error.response.body;
+      view(req, res);
+    });
 
 }
 
 function sanitizeForm(req) {
-  req.sanitize('primaryContactTeam').trimArray();
+  req.sanitize('primaryContactTeam').joinArray();
 }
 
-function validateForm(req) {
-
-  req.checkBody({
-    'firstname': {
-      notEmpty: {
-        errorMessage: 'You must enter a first name for this contact.'
-      }
-    },
-    'lastname': {
-      notEmpty: {
-        errorMessage: 'You must enter a last name for this contact.'
-      }
-    },
-    'occupation': {
-      notEmpty: {
-        errorMessage: 'Please provide a role for this contact'
-      }
-    },
-    'telephonenumber': {
-      notEmpty: {
-        errorMessage: 'You must enter a telephone number for this contact.'
-      }
-    },
-    'emailaddress': {
-      notEmpty: {
-        errorMessage: 'Please provide an email address for the contact'
-      },
-      isEmail: {
-        errorMessage: 'Invalid Email'
-      }
-    }
-  });
-
-  if (req.body.primaryContact.toLocaleLowerCase() === 'yes') {
-    req.check('primaryContactTeam', 'You must select a team for primary contact').notEmpty();
-  }
-
-  if (req.body.useCompanyAddress.toLocaleLowerCase() === 'no') {
-    req.check('address.country', 'You must enter a the country for the contact address').notEmpty();
-  }
-
-  return transformErrors(req.validationErrors());
-
-}
-
-function convertAddress(formData) {
+function convertFromFormAddress(formData) {
 
   if (formData.useCompanyAddress.toLocaleLowerCase() === 'no') {
-    let address = {
-      address1: formData['address.address1'],
-      address2: formData['address.address2'],
-      city: formData['address.city'],
-      county: formData['address.county'],
-      postcode: formData['address.postcode'],
-      country: formData['address.country']
-    };
-    formData.address = address;
+    formData.address_1 = formData['address.address1'];
+    formData.address_2 = formData['address.address2'];
+    formData.address_town = formData['address.city'];
+    formData.address_county = formData['address.county'];
+    formData.address_postcode = formData['address.postcode'];
+    formData.address_country = formData['address.country'];
   }
 
   delete formData['address.address1'];
@@ -170,20 +130,28 @@ function convertAddress(formData) {
 
 }
 
-function applyFormFieldsToContact(contact, formData){
-  formData.primaryContact = formData.primaryContact === 'Yes';
-  let updatedContact = Object.assign(contact, formData);
+function convertToFormAddress(formData) {
+  formData.address = {
+    address1: formData.address_1,
+    address2: formData.address_2,
+    city: formData.address_town,
+    county: formData.address_county,
+    postcode: formData.address_postcode,
+    country: formData.address_country
+  };
 
-  if (!formData.address) {
-    delete updatedContact.address;
-  }
-
-  return updatedContact;
+  delete formData.address_1;
+  delete formData.address_2;
+  delete formData.address_town;
+  delete formData.address_county;
+  delete formData.address_postcode;
+  delete formData.address_country;
 }
 
+router.get('/add?', add);
+router.get('/:contact_id/edit', edit);
+router.get('/:contact_id/view', view);
+router.post(['/add', '/:contact_id/edit'], post);
 
-module.exports = {
-  get,
-  edit,
-  post
-};
+
+module.exports = { view, post, edit, router };

@@ -1,11 +1,7 @@
 {% extends "../layouts/ukti-search-header.html" %}
 
 {% block main %}
-  {% if referer.indexOf('contact') != -1 %}
-    <a class="back-link" href="/companies/{{ company.id }}/contact/view/{{ interaction.contactId }}?query={{ query }}#interactions">Back to contact</a>
-  {% else %}
-    <a class="back-link" href="/companies/{{ company.id }}?query={{query}}#interactions">Back to company</a>
-  {% endif %}
+
 
   <h1 class="heading-xlarge record-title">
     Interaction details
@@ -16,13 +12,13 @@
     <tr>
       <th width="30%">Company</th>
       <td>
-        <a href="/companies/{{ company.id }}?query={{query}}">
-        {{ company.title }}
+        <a href="/company/DIT/{{ interaction.company.id }}#interactions">
+        {{ interaction.company.registered_name }}</a>
       </td>
     </tr>
     <tr>
       <th width="30%">Interaction type</th>
-      <td>{{ interaction.type }}</td>
+      <td>{{ interaction.interaction_type }}</td>
     </tr>
     <tr>
     <tr>
@@ -31,11 +27,11 @@
     </tr>
     <tr>
       <th>Date of interaction</th>
-      <td>{{ interaction.date | formatDate('DD MMM YYYY') }}</td>
+      <td>{{ interaction.date_of_interaction | formatDate() }}</td>
     </tr>
     <tr>
       <th>Company contact</th>
-      <td><a href="/companies/{{ company.id }}/contact/view/{{ interaction.contactId }}?query={{ query }}">{{ contact.firstname }} {{ contact.lastname }}</td>
+      <td><a href="/contact/{{ interaction.contact.id }}">{{ interaction.contact.first_name }} {{ interaction.contact.last_name }}</td>
     </tr>
     <tr>
       <th>DIT advisor</th>
@@ -46,36 +42,25 @@
       <td>{{ interaction.notes }}</td>
     </tr>
     <tr>
-      <th>Service offer</th>
-      <td>{{ interaction.serviceOffer }}</td>
-    </tr>
-    <tr>
-      <th>Service provider</th>
-      <td><a href="#">{{ interaction.serviceProvider }}</a></td>
-    </tr>
-
-
-    <tr>
       <th>Created on</th>
-      <td>{{ interaction.createdOn | formatDate('DD MMM YYYY') }}</td>
+      <td>{{ interaction.created_date | formatDate() }}</td>
     </tr>
     <tr>
       <th>Created by</th>
-      <td><a href="#">{{ interaction.createdBy }}</a></td>
+      <td><a href="#"></a></td>
     </tr>
     <tr>
       <th>Updated on</th>
-      <td>{{ interaction.updatedOn | formatDate('DD MMM YYYY') }}</td>
+      <td>{{ interaction.modified_date | formatDate() }}</td>
     </tr>
     <tr>
       <th>Updated by</th>
-      <td><a href="#">{{ interaction.updatedBy }}</a></td>
+      <td><a href="#"></a></td>
     </tr>
 
 
     </tbody>
   </table>
 
-  <a href="/companies/{{ company.id }}/interaction/edit/{{ interaction.id }}?query={{ query }}"
-     class="button button-secondary">Edit interaction details</a>
+  <a href="/interaction/{{ interaction.id }}/edit" class="button button-secondary">Edit interaction details</a>
 {% endblock %}

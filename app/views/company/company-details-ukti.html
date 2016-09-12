@@ -4,21 +4,21 @@
   {% if company.ukbased %}
     <tr>
       <th>UK Based</th>
-      <td>{{ company.ukbased }}</td>
+      <td>{{ company.uk_based }}</td>
     </tr>
   {% endif %}
 
-  {% if company.typeOfBusiness %}
+  {% if company.type_of_business %}
     <tr>
       <th>Type of business</th>
-      <td>{{ company.typeOfBusiness }}</td>
+      <td>{{ company.type_of_business }}</td>
     </tr>
   {% endif %}
 
 
   <tr>
     <th>Trading name</th>
-    <td>{{ company.tradingName }}</td>
+    <td>{{ company.trading_name }}</td>
   </tr>
   <tr>
     <th>Sectors</th>
@@ -37,24 +37,25 @@
   </tr>
   <tr>
     <th>Business description</th>
-    <td>{{ company.businessDescription }}</td>
+    <td>{{ company.business_description }}</td>
   </tr>
   <tr>
     <th>Number of employees</th>
-    <td>{{ company.employees }}</td>
+    <td>{{ company.number_of_employees }}</td>
   </tr>
   <tr>
     <th>Annual turnover</th>
-    <td>{{ company.turnover }}</td>
+    <td>{{ company.annual_turnover }}</td>
   </tr>
   <tr>
     <th>Trading address</th>
     <td>
-      {% if company.operatingAddress.address1.length > 0 %}{{ company.operatingAddress.address1 }},{% endif %}
-      {% if company.operatingAddress.address2.length > 0 %}{{ company.operatingAddress.address2 }},{% endif %}
-      {% if company.operatingAddress.city.length > 0 %}{{ company.operatingAddress.city }},{% endif %}
-      {% if company.operatingAddress.postcode.length > 0 %}{{ company.operatingAddress.postcode }}{% endif %}
-      {% if company.operatingAddress.country.length > 0 %}{{ company.operatingAddress.country }}{% endif %}
+      {% if company.trading_address_1.length > 0 %}{{ company.trading_address_1 }},{% endif %}
+      {% if company.trading_address_2.length > 0 %}{{ company.trading_address_2 }},{% endif %}
+      {% if company.trading_address_town.length > 0 %}{{ company.trading_address_town }},{% endif %}
+      {% if company.trading_address_county.length > 0 %}{{ company.trading_address_county }}{% endif %}
+      {% if company.trading_address_postcode.length > 0 %}{{ company.trading_address_postcode }}{% endif %}
+      {% if company.trading_address_country.length > 0 %}{{ company.trading_address_country }}{% endif %}
     </td>
   </tr>
   <tr>
@@ -63,14 +64,14 @@
   </tr>
   <tr>
     <th>Account manager</th>
-    <td>{{ company.accountManager }}</td>
+    <td>{{ company.account_manager }}</td>
   </tr>
   <tr>
     <th>Is the company currently <br/>exporting to a market?</th>
     <td>
-      {% if company.exportingMarkets and company.exportingMarkets.length > 0 %}
+      {% if company.currently_exporting_to and company.currently_exporting_to.length > 0 %}
         Yes.
-        {% for exportingMarket in company.exportingMarkets %}
+        {% for exportingMarket in company.currently_exporting_to %}
           {{ exportingMarket }}
         {% endfor %}
       {% elif company.uktidata %}
@@ -81,8 +82,8 @@
   <tr>
     <th>Future countries of interest</th>
     <td>
-      {% if company.countryOfInterest %}
-        {% for countryOfInterest in company.countryOfInterest %}
+      {% if company.countries_of_interest %}
+        {% for countryOfInterest in company.countries_of_interest %}
           <div>{{ countryOfInterest }}</div>
         {% endfor %}
       {% endif %}
