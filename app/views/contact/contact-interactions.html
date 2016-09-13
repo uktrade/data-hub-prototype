@@ -14,7 +14,11 @@
     </div>
     <div class="column-one-third">
       <p class="actions">
-        <a class="button button-secondary" href="/interaction/add?contact_id={{ contact.id }}">Add new interaction</a>
+        {% if not contact.archive_date %}
+          <a class="button button-secondary" href="/interaction/add?contact_id={{ contact.id }}">Add new interaction</a>
+        {% else %}
+          <a class="button button-disabled">Add new interaction</a>
+        {% endif %}
       </p>
     </div>
   </div>
@@ -22,7 +26,11 @@
 
 {% else %}
   <p class="actions">
-    <a class="button button-secondary" href="/interaction/add?contact_id={{ contact.id }}">Add new interaction</a>
+    {% if not contact.archive_date %}
+      <a class="button button-secondary" href="/interaction/add?contact_id={{ contact.id }}">Add new interaction</a>
+    {% else %}
+      <a class="button button-disabled">Add new interaction</a>
+    {% endif %}
   </p>
   <h2 class="heading-medium">This contact has no interactions</h2>
 {% endif %}

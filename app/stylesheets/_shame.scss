@@ -9,7 +9,19 @@
   color: $black;
 
   &:focus, &:hover {
-    background-color: $red;
+    background-color: $grey-2;
+    color: $black;
+
+  }
+}
+
+.button-disabled {
+  background-color: $grey-3;
+  color: $grey-1;
+
+  &:focus, &:hover {
+    background-color: $grey-3;
+    color: $grey-1;
   }
 }
 
@@ -47,6 +59,16 @@
 
 .button-bar.button-bar--top {
   text-align: right;
+}
+
+.button-bar {
+  .button {
+    margin-left: 30px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
 }
 
 .heading-xlarge {

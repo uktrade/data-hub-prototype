@@ -54,8 +54,12 @@
   </tbody>
 </table>
 
-<a href="/contact/{{ contact.id }}/edit" class="button button-secondary">Edit contact details</a>
-{% if not contact.archive_date %}
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="#" id="archive-reveal-button" class="button button-secondary">Archive contact</a>
-{% endif %}
+<div class="button-bar">
+  {% if not contact.archive_date %}
+    <a href="/contact/{{ contact.id }}/edit" class="button button-secondary">Edit contact details</a>
+    <a href="#" id="archive-reveal-button" class="button button-secondary">Archive contact</a>
+  {% else %}
+    <a class="button button-disabled">Edit contact details</a>
+    <a href="/contact/{{ contact.id }}/unarchive" class="button button-secondary">Unarchive now</a>
+  {% endif %}
+</div>

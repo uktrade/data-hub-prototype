@@ -33,7 +33,10 @@ if (contacts && contacts.length > 0) {
   }
 
 } else {
-  addClass(document.getElementById('archived-section'), 'hidden');
+  const section = document.getElementById('archived-section');
+  if (section) {
+    addClass(section, 'hidden');
+  }
 }
 
 if (interactions && interactions.length > 0) {
