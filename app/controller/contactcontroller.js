@@ -8,7 +8,12 @@ let contactRepository = require('../repository/contactrepository');
 let companyRepository = require('../repository/companyrepository');
 
 const TEAM_OPTIONS = require('../../data/teams.json');
-
+const REASONS_FOR_ARCHIVE = [
+  'Contact has left the company',
+  'Contact does not want to be contacted',
+  'Contact changed role/responsibility',
+  'Other'
+];
 function view(req, res) {
 
   const contact_id = req.params.contact_id;
@@ -24,7 +29,7 @@ function view(req, res) {
         contact.primary_contact_team = contact.primary_contact_team.split(',');
       }
 
-      res.render('contact/contact', { term: req.query.term, contact });
+      res.render('contact/contact', { term: req.query.term, contact, REASONS_FOR_ARCHIVE });
     })
     .catch((error) => {
       res.render('error', {error});
@@ -106,6 +111,21 @@ function post(req, res) {
 
 }
 
+function archive(req, res) {
+  contactRepository.archiveContact(req.params.contact_id, req.body.archive_reason)
+    .then(() => {
+      res.redirect(`/contact/${req.params.contact_id}/view`);
+    });
+}
+
+function unarchive(req, res) {
+  contactRepository.unarchiveContact(req.params.contact_id)
+    .then(() => {
+      res.redirect(`/contact/${req.params.contact_id}/view`);
+    });
+}
+
+
 function sanitizeForm(req) {
   req.sanitize('primaryContactTeam').joinArray();
 }
@@ -152,6 +172,8 @@ router.get('/add?', add);
 router.get('/:contact_id/edit', edit);
 router.get('/:contact_id/view', view);
 router.post(['/add', '/:contact_id/edit'], post);
+router.post('/:contact_id/archive', archive);
+router.get('/:contact_id/unarchive', unarchive);
 
 
 module.exports = { view, post, edit, router };

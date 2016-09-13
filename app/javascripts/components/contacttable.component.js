@@ -73,15 +73,23 @@ class ContactTable extends Component {
 
     const link = `/contact/${contact.id}/view`;
 
-    return (
-      <tr key={contact.id}>
-        <td className="creationdate">{ formatDate(contact.created_date) }</td>
-        <td className="name"><a href={link}>{ contact.first_name } { contact.last_name }</a></td>
-        <td className="title">{ contact.role }</td>
-        <td className="phone">{ contact.phone }</td>
-        <td className="email"><a href={'mailto:' + contact.email }>{ contact.email }</a></td>
-      </tr>
-    );
+    if (this.props.archived === true && contact.archive_date !== null ||
+    this.props.archived === false && contact.archive_date === null) {
+
+      let date = contact.archive_date === null ? formatDate(contact.created_date) : formatDate(contact.archive_date);
+
+      return (
+        <tr key={contact.id}>
+          <td className="creationdate">{ date }</td>
+          <td className="name"><a href={link}>{ contact.first_name } { contact.last_name }</a></td>
+          <td className="title">{ contact.role }</td>
+          <td className="phone">{ contact.phone }</td>
+          <td className="email"><a href={'mailto:' + contact.email }>{ contact.email }</a></td>
+        </tr>
+      );
+    }
+
+    return null;
   };
 
   columnClass(key) {
@@ -140,7 +148,8 @@ class ContactTable extends Component {
 
 ContactTable.propTypes = {
   company: React.PropTypes.object.isRequired,
-  contacts: React.PropTypes.array
+  contacts: React.PropTypes.array,
+  archived: React.PropTypes.bool
 };
 
 export default ContactTable;

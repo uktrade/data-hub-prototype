@@ -55,3 +55,7 @@
 </table>
 
 <a href="/contact/{{ contact.id }}/edit" class="button button-secondary">Edit contact details</a>
+{% if not contact.archive_date %}
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="#" id="archive-reveal-button" class="button button-secondary">Archive contact</a>
+{% endif %}

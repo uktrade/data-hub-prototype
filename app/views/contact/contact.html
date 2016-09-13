@@ -1,4 +1,5 @@
 {% extends "../layouts/ukti-search-header.html" %}
+{% import "macros/forms.html" as forms %}
 
 {% block main %}
   {% if referer and referer.indexOf('search') != -1 %}
@@ -8,10 +9,39 @@
   {% endif %}
   <h1 class="heading-xlarge record-title">
     {{ contact.first_name }} {{ contact.last_name }}
-    {% if contact.primary_contact_team and contact.primary_contact_team.length > 0 %}
+    {% if contact.archive_date %}
+      <span class="status-badge status-badge--archived">Archived</span>
+    {% elseif contact.primary_contact_team and contact.primary_contact_team.length > 0 %}
       <span class="status-badge status-badge--primary-contact">Primary</span>
     {% endif %}
+
   </h1>
+
+  {% if not contact.archive_date %}
+    <form id="archive-details" class="hidden" action="/contact/{{ contact.id }}/archive" method="post">
+      {{ forms.dropdown('archive_reason',
+      label="Reason for archiving contact",
+      emptyLabel="Select a value",
+      value=formData.business_type,
+      options=REASONS_FOR_ARCHIVE,
+      error=errors.business_type)
+      }}
+
+      <div class="button-bar">
+        <button class="button button-warning" type="submit">Archive now</button>
+        <a id="cancel-archive-button" class="button-link button-cancel js-button-cancel" href="#">Cancel</a>
+      </div>
+
+      <hr/>
+    </form>
+  {% else %}
+    <p class="indented-info">
+      This contact has been archived on {{ contact.archive_date | formatDate }} by {{ contact.archived_by }}.<br/>
+      Reason: {{ contact.archive_reason }}
+    </p>
+    <a href="/contact/{{ contact.id }}/unarchive" class="button button-secondary">Unarchive now</a>
+    <hr/>
+  {% endif %}
   <div class="tabs tabs--inline js-tabs">
     <nav class="tabs-nav">
       <ul class="tabs-list">

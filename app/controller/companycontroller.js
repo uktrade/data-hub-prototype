@@ -182,7 +182,7 @@ function post(req, res) {
     })
     .catch((error) => {
       req.errors = error.response.body;
-      if (req.body.id) {
+      if (req.params.sourceId) {
         view(req, res);
       } else {
         add(req, res);

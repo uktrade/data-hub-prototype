@@ -2,13 +2,13 @@
   <div class="grid-row">
     <div class="column-one-third">
       <div class="data">
-        <h2 class="bold-xlarge data__title">3</h2>
+        <h2 class="bold-xlarge data__title">0</h2>
         <p class="bold-xsmall data__description">months since last new contact entry</p>
       </div>
     </div>
     <div class="column-one-third">
       <div class="data">
-        <h2 class="bold-xlarge data__title">2</h2>
+        <h2 id="added-count" class="bold-xlarge data__title">0</h2>
         <p class="bold-xsmall data__description">contacts added in the last 12 months</p>
       </div>
     </div>
@@ -20,35 +20,10 @@
   </div>
   <div id="contact-table-wrapper"></div>
   <br/><br/>
-  <table class="data-table contact-table">
-    <thead>
-      <tr class="spacer-row">
-        <th colspan="5">Archived contacts</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="creationdate">01 Jun 15</td>
-        <td class="name">John Smith</td>
-        <td class="title">CEO</td>
-        <td class="phone">44 7815 013 555</td>
-        <td class="email"><a href="mailto:fsmith@company.org">jsmith@company.org</a></td>
-      </tr>
-      <tr>
-        <td class="creationdate">02 Jun 12</td>
-        <td class="name">Wilma James</td>
-        <td class="title">MD</td>
-        <td class="phone">44 7815 013 553</td>
-        <td class="email"><a href="mailto:fsmith@company.org">wj@company.org</a></td>
-      </tr>
-      <tr>
-        <td class="creationdate">01 Jan 01</td>
-        <td class="name">Lee Spoke</td>
-        <td class="title">Sales manager</td>
-        <td class="phone">44 7815 013 555</td>
-        <td class="email"><a href="mailto:fsmith@company.org">ls@company.org</a></td>
-      </tr>
-    </tbody>
-  </table>
+  <div id="archived-section">
+    <h3 class="heading-small">Archived contacts</h3>
+    <div id="archived-contact-table-wrapper"></div>
+  </div>
+
 {% endif %}
 

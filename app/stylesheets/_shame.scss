@@ -1,9 +1,15 @@
 // Fix secondary button styling when using as link
 .button-secondary {
-  &:link,
-  &:visited {
     background-color: $grey-2;
     color: $black;
+}
+
+.button-warning {
+  background-color: $grey-2;
+  color: $black;
+
+  &:focus, &:hover {
+    background-color: $red;
   }
 }
 
@@ -78,7 +84,7 @@ hr {
   width: 100%;
 }
 
-.form-group .indented-info {
+.indented-info {
   @extend %contain-floats;
   clear: both;
   padding: 5px 0 10px 10px;
