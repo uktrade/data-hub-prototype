@@ -55,7 +55,9 @@ app.use('/company', companyController.router);
 app.use('/contact', contactController.router);
 app.use('/interaction', interactionController.router);
 app.use('/search', searchController.router);
-app.use('/postcodelookup/:postcode', apiController.postcodelookup);
+app.get('/postcodelookup/:postcode', apiController.postcodelookup);
+app.get('/suggest?', apiController.companySuggest);
+app.get('/api/company/:source/:sourceId/?', apiController.companyDetail);
 
 app.get('/', function(req, res) {
   res.render('index');

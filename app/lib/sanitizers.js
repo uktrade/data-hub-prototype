@@ -15,6 +15,14 @@ function joinArray(value) {
   return null;
 }
 
+
+function yesNoToBoolean(value) {
+  if (!value) {
+    return null;
+  }
+  return value.toLocaleLowerCase() === 'yes';
+}
+
 module.exports = {
-  trimArray, joinArray
+  trimArray, joinArray, yesNoToBoolean
 };

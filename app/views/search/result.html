@@ -1,5 +1,4 @@
 {% macro companyresult(result, term) %}
-  {{ result | log | safe }}
   <li class="results-list__result">
     <h3 class="result-title">
       <a href="/company/{{ result.result_source }}/{{ result.source_id }}?term={{ term }}">{{result.title | highlightTerm(term) | safe}}</a>

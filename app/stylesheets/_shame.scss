@@ -74,4 +74,19 @@ strong {
   @include bold-19;
 }
 
+hr {
+  width: 100%;
+}
+
+.form-group .indented-info {
+  @extend %contain-floats;
+  clear: both;
+  padding: 5px 0 10px 10px;
+  border-left: 5px solid $border-colour;
+  margin-top: 10px;
+}
+
+.table-detail.table-detail--compact {
+  margin-bottom: 0;
+}
 
