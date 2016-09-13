@@ -1,9 +1,27 @@
 // Fix secondary button styling when using as link
 .button-secondary {
-  &:link,
-  &:visited {
     background-color: $grey-2;
     color: $black;
+}
+
+.button-warning {
+  background-color: $grey-2;
+  color: $black;
+
+  &:focus, &:hover {
+    background-color: $grey-2;
+    color: $black;
+
+  }
+}
+
+.button-disabled {
+  background-color: $grey-3;
+  color: $grey-1;
+
+  &:focus, &:hover {
+    background-color: $grey-3;
+    color: $grey-1;
   }
 }
 
@@ -41,6 +59,21 @@
 
 .button-bar.button-bar--top {
   text-align: right;
+  float: right;
+}
+
+.button-bar {
+  .button {
+    margin-top: 10px;
+    @include media(tablet) {
+      margin-top: 0;
+      margin-left: 30px;
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
 }
 
 .heading-xlarge {
@@ -51,9 +84,9 @@
 .filter-title {
   margin-top: 0;
   margin-bottom: 15px;
-  line-height: 1.25;
+  line-height: 2.3;
   display: inline-block;
-  padding-top: 10px;
+  padding-top: 0;
   padding-bottom: 5px;
 }
 
@@ -78,7 +111,7 @@ hr {
   width: 100%;
 }
 
-.form-group .indented-info {
+.indented-info {
   @extend %contain-floats;
   clear: both;
   padding: 5px 0 10px 10px;
@@ -90,3 +123,7 @@ hr {
   margin-bottom: 0;
 }
 
+.result-summary {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}

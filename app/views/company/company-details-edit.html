@@ -36,6 +36,8 @@
     <hr/>
   {% else %}
     <input type="hidden" name="company_number" value="{{ company.ch.company_number }}"/>
+    <input type="hidden" name="registered_name" value="{{ company.ch.company_name }}"/>
+    <input type="hidden" name="type_of_business" value="{{ company.ch.company_category }}"/>
   {% endif %}
 
 
