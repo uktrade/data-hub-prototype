@@ -16,7 +16,7 @@ if (contacts && contacts.length > 0) {
   );
 
   ReactDOM.render(
-    <ContactTable contacts={contacts} company={company} archived={true} />,
+    <ContactTable contacts={contacts} company={company} archived />,
     document.querySelector('#archived-contact-table-wrapper')
   );
 
