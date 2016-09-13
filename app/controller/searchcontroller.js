@@ -88,6 +88,15 @@ function getPagination(req, result) {
   return pagination;
 }
 
+function getPopulatedFacetCount(facets) {
+  let total = 0;
+  for (let key in facets) {
+    total += facets[key].length - 1;
+  }
+  return total;
+}
+
+
 function get(req, res) {
   searchService.search(req.query)
     .then((result) => {
@@ -106,8 +115,13 @@ function get(req, res) {
       }
 
       let pagination = getPagination(req, result);
+      const facetCount = getPopulatedFacetCount(result.facets);
 
-      res.render('search/search', {result, FACETTITLES, pagination });
+      if (facetCount > 0) {
+        res.render('search/facet-search', {result, FACETTITLES, pagination });
+      } else {
+        res.render('search/non-facet-search', {result, FACETTITLES, pagination });
+      }
     })
     .catch((error) => {
       res.render('error', {error});
