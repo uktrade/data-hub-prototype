@@ -10,11 +10,6 @@
   {% endif %}
   <h1 class="heading-xlarge record-title">
     {{ title }}
-    {% if company.id %}
-      <span class="status-badge status-badge--dit">DIT</span>
-    {% else %}
-      <span class="status-badge status-badge--ch">CH</span>
-    {% endif %}
   </h1>
 
   {{ forms.errorPanel(errors) }}
