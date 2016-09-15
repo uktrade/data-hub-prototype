@@ -16,18 +16,12 @@ function postcodelookup(req, res) {
 }
 
 function companySuggest(req, res) {
-  searchService.search({
-    term: req.query.term,
-    filter: 'result_type:COMPANY'
-  })
+  searchService.suggestCompany(req.query.term)
     .then((result) => {
-      res.json(result.hits.map((hit) => {
-        return {
-          title: hit._source.title,
-          result_source: hit._source.result_source,
-          source_id: hit._source.source_id
-        };
-      }));
+      res.json(result.suggestions);
+    })
+    .catch(() => {
+
     });
 }
 

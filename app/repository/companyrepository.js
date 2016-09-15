@@ -22,7 +22,7 @@ function getCompany(id, source) {
 
   return new Promise((fulfill, reject) => {
     // Get DIT Company
-    if (source === 'CH') {
+    if (source === 'ch') {
       getCHCompany(id)
         .then((ch) => {
           fulfill({

@@ -7,7 +7,7 @@ const router = express.Router();
 const searchService = require('../lib/searchservice');
 const controllerUtils = require('../lib/controllerutils');
 const FACETTITLES = {
-  result_type: 'Type'
+  _type: 'Type'
 };
 const NEXTLABEL = 'Next';
 const PREVIOUSLABEL = 'Previous';
@@ -115,13 +115,13 @@ function get(req, res) {
       }
 
       let pagination = getPagination(req, result);
-      const facetCount = getPopulatedFacetCount(result.facets);
+      //const facetCount = getPopulatedFacetCount(result.facets);
 
-      if (facetCount > 0) {
-        res.render('search/facet-search', {result, FACETTITLES, pagination });
-      } else {
+      //if (facetCount > 0) {
+      //  res.render('search/facet-search', {result, FACETTITLES, pagination });
+      //} else {
         res.render('search/non-facet-search', {result, FACETTITLES, pagination });
-      }
+      //}
     })
     .catch((error) => {
       res.render('error', {error});
