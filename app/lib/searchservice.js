@@ -12,4 +12,14 @@ function search(query) {
   return rp(options);
 }
 
-module.exports = { search };
+function suggestCompany(term) {
+  let options = {
+    url: `${config.apiRoot}/suggest`,
+    qs: {term},
+    json: true
+  };
+
+  return rp(options);
+}
+
+module.exports = { search, suggestCompany };

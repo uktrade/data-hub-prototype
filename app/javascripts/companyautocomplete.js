@@ -14,7 +14,6 @@ class CompanyAutocomplete {
     this.$menu = $('<ul class="autosuggest__suggestions"></ul>');
     this.item = '<li class="autosuggest__suggestion"><a href="#"></a></li>';
     this.maxItems = 8;
-    this.minLength = 1;
     this.listen();
     this.optionsUrl = this.sourceField.data('options-url');
     this.sourceField.parent().css({
@@ -50,15 +49,15 @@ class CompanyAutocomplete {
     this.sourceField.val(val).change();
     this.displayField.val(display).change();
 
-    const source = selectedOption.attr('data-result_source');
+    const company_type = selectedOption.attr('data-result_type');
     const id = selectedOption.attr('data-source_id');
 
-    this.getSuggestionDetail(source, id);
+    this.getSuggestionDetail(company_type, id);
 
     return this.hide();
   }
 
-  getSuggestionDetail(source, id) {
+  getSuggestionDetail(company_type, id) {
     this.indentedSuggestion.addClass('hidden');
     const xmlhttp = new XMLHttpRequest();
     const showSuggestionDetail = this.showSuggestionDetail;
@@ -66,59 +65,86 @@ class CompanyAutocomplete {
     xmlhttp.onreadystatechange = function() {
       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         const myDetail = JSON.parse(xmlhttp.responseText);
-        showSuggestionDetail(myDetail, source, id);
+        showSuggestionDetail(myDetail, company_type, id);
       }
     };
 
-    xmlhttp.open('GET', `/api/company/${source}/${id}/`, true);
+    xmlhttp.open('GET', `/api/company/${company_type}/${id}/`, true);
     xmlhttp.send();
+  }
+
+  getDisplayAddress(company) {
+
+    let address = [];
+
+    // pick the correct address to display
+    if (company.trading_address_1 && company.trading_address_1.length > 0) {
+      address = [
+        company.trading_address_1,
+        company.trading_address_2,
+        company.trading_address_town,
+        company.trading_address_county,
+        company.trading_address_postcode,
+        company.trading_address_country
+      ];
+
+    } else if (!company.ch || Object.keys(company.ch).length > 0) {
+      address = [
+        company.ch.registered_address_address_1,
+        company.ch.registered_address_address_2,
+        company.ch.registered_address_town,
+        company.ch.registered_address_county,
+        company.ch.registered_address_postcode,
+        company.ch.registered_address_country
+      ];
+
+    } else {
+      address = [
+        company.registered_address_1,
+        company.registered_address_2,
+        company.registered_address_town,
+        company.registered_address_county,
+        company.registered_address_postcode,
+        company.registered_address_country
+      ];
+    }
+
+    return address.filter((val) => {
+      return (val && val.length > 0);
+    }).join(', ');
   }
 
   showSuggestionDetail = (company, source, id) => {
 
-    let address = '';
+    let description = '';
     let title = '';
+    let address = this.getDisplayAddress(company);
 
-    if (source === 'DIT') {
+    if (source === 'company') {
       title = company.registered_name;
-
-      if (company.registered_address_1 && company.registered_address_1.length > 0) {
-        address = company.registered_address_1 + ',';
-      }
-      if (company.registered_address_address_2 && company.registered_address_2.length > 0) {
-        address += company.registered_address_2 + ',';
-      }
-      if (company.registered_address_town && company.registered_address_town.length > 0) {
-        address += company.registered_address_town + ',';
-      }
-      if (company.registered_address_postcode && company.registered_address_postcode.length > 0) {
-        address += company.registered_address_postcode;
-      }
     } else {
       title = company.ch.company_name;
-      address = company.ch.sic_code_1 + '<br/>';
+    }
 
+    if (company.trading_name && company.trading_name.length > 0) {
+      description += `${company.trading_name}<br/>`;
+    }
 
-      if (company.ch.registered_address_address_1 && company.ch.registered_address_address_1.length > 0) {
-        address += company.ch.registered_address_address_1 + ',';
-      }
-      if (company.ch.registered_address_address_2 && company.ch.registered_address_address_2.length > 0) {
-        address += company.ch.registered_address_address_2 + ',';
-      }
-      if (company.ch.registered_address_town && company.ch.registered_address_town.length > 0) {
-        address += company.ch.registered_address_town + ',';
-      }
+    if (company.company_number && company.company_number.length > 0) {
+      description += `Company number: ${company.company_number}<br/>`;
+    }
 
-      if (company.ch.registered_address_postcode && company.ch.registered_address_postcode.length > 0) {
-        address += company.ch.registered_address_postcode;
-      }
+    description += `${address}<br/>`;
+
+    if (company.ch.sic_code_1 !== 'None Supplied') {
+      description += `${company.ch.sic_code_1}<br/>`;
     }
 
     this.suggestionLink
       .attr('href', `/company/${source}/${id}`)
       .text(title);
 
-    this.suggestion.html(address);
+    this.suggestion.html(description);
     this.indentedSuggestion.removeClass('hidden');
   };
 
@@ -165,7 +191,7 @@ class CompanyAutocomplete {
 
   handleAjaxResult = (result) => {
     if (result.length > 0) {
-      result = result.sort((a, b) => { return a.title.toLowerCase().localeCompare(b.title.toLowerCase()); });
+      result = result.sort((a, b) => { return a.name.toLowerCase().localeCompare(b.name.toLowerCase()); });
       this.render(result).show();
     } else {
       this.hide();
@@ -186,9 +212,9 @@ class CompanyAutocomplete {
 
     let suggestionElements = items.slice(0, this.maxItems).map((item) => {
       let suggestionElement = $(itemMarkup)
-        .attr('data-result_source', item.result_source)
-        .attr('data-source_id', item.source_id);
-      suggestionElement.find('a').html(highlighter(item.title));
+        .attr('data-result_type', item._type)
+        .attr('data-source_id', item.id);
+      suggestionElement.find('a').html(highlighter(item.name));
       return suggestionElement[0];
     });
 

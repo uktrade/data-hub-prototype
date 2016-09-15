@@ -1,33 +1,56 @@
 {% macro companyresult(result, term) %}
-  <li class="results-list__result">
+  <li class="results-list__result result-list__company">
     <h3 class="result-title">
-      <a href="/company/{{ result.result_source }}/{{ result.source_id }}?term={{ term }}">{{result.title | highlightTerm(term) | safe}}</a>
+      <a href="/company/company/{{ result.id }}?term={{ term }}">{{result.registered_name | highlightTerm(term) | safe }}</a>
     </h3>
-    {% if result.alt_title %}
-      <div class="meta meta--trading">Trading name: {{ result.alt_title }}</div>
+    {% if result.trading_name %}
+      <div class="meta meta--trading">Trading name: {{ result.trading_name | highlightTerm(term) | safe }}</div>
     {% endif %}
     {% if result.company_number and result.company_number.length > 0 %}
       <div class="meta meta--ch">{{ result.company_number }} - Incorporated on {{ result.incorporation_date | formatDate }}</div>
     {% endif %}
     <div class="meta meta--address">
-      {% if result.address_1 %}
-        {{result.address_1 | lower | highlightTerm(term) | safe}},
+      {% if result.registered_address_1 %}
+        {{result.registered_address_1 | lower | highlightTerm(term) | safe}},
       {% endif %}
-      {% if result.address_2 %}
-        {{result.address_2 | lower | highlightTerm(term) | safe}},
+      {% if result.registered_address_address_2 %}
+        {{result.registered_address_address_2 | lower | highlightTerm(term) | safe}},
       {% endif %}
-      {% if result.address_town %}
-        {{result.address_town | lower | highlightTerm(term) | safe}},
+      {% if result.registered_address_town %}
+        {{result.registered_address_town | lower | highlightTerm(term) | safe}},
       {% endif %}
-      {% if result.address_postcode %}
-        <span class="meta--address__postcode">{{result.address_postcode | highlightTerm(term) | safe}}</span>
+      {% if result.registered_address_postcode %}
+        <span class="meta--address__postcode">{{result.registered_address_postcode | highlightTerm(term) | safe}}</span>
+      {% endif %}
+    </div>
+  </li>
+{% endmacro %}
+
+{% macro chresult(result, term) %}
+  <li class="results-list__result result-list__ch">
+    <h3 class="result-title">
+      <a href="/company/ch/{{ result.company_number }}?term={{ term }}">{{result.company_name | highlightTerm(term) | safe}}</a>
+    </h3>
+    <div class="meta meta--ch">{{ result.company_number }} - Incorporated on {{ result.incorporation_date | formatDate }}</div>
+    <div class="meta meta--address">
+      {% if result.registered_address_address_1 %}
+        {{result.registered_address_address_1 | lower | highlightTerm(term) | safe}},
+      {% endif %}
+      {% if result.registered_address_address_2 %}
+        {{result.registered_address_address_2 | lower | highlightTerm(term) | safe}},
+      {% endif %}
+      {% if result.registered_address_town %}
+        {{result.registered_address_town | lower | highlightTerm(term) | safe}},
+      {% endif %}
+      {% if result.registered_address_postcode %}
+        <span class="meta--address__postcode">{{result.registered_address_postcode | highlightTerm(term) | safe}}</span>
       {% endif %}
     </div>
   </li>
 {% endmacro %}
 
 {% macro contactresult(result, term) %}
-  <li class="results-list__result">
+  <li class="results-list__result result-list__contact">
     <h3 class="result-title">
       <a href="/contact/{{ result.source_id }}/view?term={{ term }}">
         {{ result.title | highlightTerm(term) | safe }}

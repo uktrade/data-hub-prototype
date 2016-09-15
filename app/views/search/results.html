@@ -8,11 +8,14 @@
 </div>
 <ol class="results-list">
   {% for hit in result.hits %}
-    {% if hit._source.result_type == 'CONTACT' %}
+    {% if hit._type == 'contact' %}
       {{ resultTypes.contactresult(hit._source, result.term) }}
+    {% elseif hit._type == 'ch' %}
+      {{ resultTypes.chresult(hit._source, result.term) }}
     {% else %}
       {{ resultTypes.companyresult(hit._source, result.term) }}
     {% endif %}
+
   {% endfor %}
 </ol>
 
