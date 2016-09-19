@@ -8,6 +8,7 @@
 </div>
 <ol class="results-list">
   {% for hit in result.hits %}
+    {{ hit | log | safe }}
     {% if hit._type == 'contact' %}
       {{ resultTypes.contactresult(hit._source, result.term) }}
     {% elseif hit._type == 'ch' %}
