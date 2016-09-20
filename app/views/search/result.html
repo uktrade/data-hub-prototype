@@ -1,7 +1,7 @@
 {% macro companyresult(result, term) %}
   <li class="results-list__result result-list__company">
     <h3 class="result-title">
-      <a href="/company/company/{{ result.id }}?term={{ term }}">{{result.registered_name | highlightTerm(term) | safe }}</a>
+      <a href="/company/dit/{{ result.id }}?term={{ term }}">{{result.registered_name | highlightTerm(term) | safe }}</a>
     </h3>
     {% if result.trading_name %}
       <div class="meta meta--trading">Trading name: {{ result.trading_name | highlightTerm(term) | safe }}</div>

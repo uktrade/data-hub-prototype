@@ -170,15 +170,13 @@ function view(req, res) {
 }
 
 function post(req, res) {
-  let term = req.query.term;
-
   sanitizeForm(req);
   controllerUtils.convertFromFormAddress(req.body, 'trading_address');
   controllerUtils.convertFromFormAddress(req.body, 'registered_address');
 
   companyRepository.saveCompany(req.body)
     .then((data) => {
-      res.redirect(`/company/COMBINED/${data.id}?term=${term}`);
+      res.redirect(`/company/COMBINED/${data.id}`);
     })
     .catch((error) => {
       req.errors = error.response.body;
@@ -188,7 +186,6 @@ function post(req, res) {
         add(req, res);
       }
     });
-
 }
 
 router.get('/add', add);

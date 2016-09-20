@@ -278,12 +278,6 @@ class CompanyAutocomplete {
     if (!this.shown) return;
 
     switch (event.keyCode) {
-      case 9: // tab
-      case 13: // enter
-      case 27: // escape
-        event.preventDefault();
-        break;
-
       case 38: // up arrow
         event.preventDefault();
         this.prev();
@@ -315,12 +309,8 @@ class CompanyAutocomplete {
       case 16: // shift
       case 17: // ctrl
       case 18: // alt
-        break;
-
       case 9: // tab
       case 13: // enter
-        if (!this.shown) return;
-        this.select();
         break;
 
       case 27: // escape

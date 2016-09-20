@@ -13,11 +13,11 @@
 
   <form method="post">
 
-    <div class="form-group{% if error %} error{% endif %}" id="{{ name }}-wrapper">
-      <label class="form-label" for="{{ id }}">
+    <div class="form-group{% if errors.registered_name %} error{% endif %}" id="registered_name-wrapper">
+      <label class="form-label" for="registered_name">
         Registered business name
         <span class="form-hint">Provide the registered name of the company</span>
-        {% if error %}<span class="error-message">{{ error }}</span>{% endif %}
+        {% if error.registered_name %}<span class="error-message">{{ error }}</span>{% endif %}
       </label>
 
       <input
