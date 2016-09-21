@@ -23,7 +23,7 @@
     "express": "^4.14.0",
     "express-nunjucks": "^2.0.1",
     "express-validator": "^2.20.8",
-    "govstrap": "^0.15.4",
+    "govstrap": "^0.16.0",
     "govuk_template_jinja": "^0.18.1",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
