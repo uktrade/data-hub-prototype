@@ -69,6 +69,5 @@ for (const radio of isUKBasedRadios) {
   radio.addEventListener('click', handleCountryChangeUK);
 }
 
-handleCountryChangeUK();
 
 new CompanyAutocomplete(document.getElementById('registered_name'));
