@@ -1,7 +1,10 @@
 {% macro companyresult(result, term) %}
-  <li class="results-list__result result-list__company">
+  <li class="results-list__result result-list__company" data_registered_name="{{ result.registered_name }}">
     <h3 class="result-title">
       <a href="/company/dit/{{ result.id }}?term={{ term }}">{{result.registered_name | highlightTerm(term) | safe }}</a>
+      {% if result.archived %}
+        <span class="status-badge status-badge--archived">Archived</span>
+      {% endif %}
     </h3>
     {% if result.trading_name %}
       <div class="meta meta--trading">Trading name: {{ result.trading_name | highlightTerm(term) | safe }}</div>
@@ -27,7 +30,7 @@
 {% endmacro %}
 
 {% macro chresult(result, term) %}
-  <li class="results-list__result result-list__ch">
+  <li class="results-list__result result-list__ch" data_registered_name="{{ result.company_name }}">
     <h3 class="result-title">
       <a href="/company/ch/{{ result.company_number }}?term={{ term }}">{{result.company_name | highlightTerm(term) | safe}}</a>
     </h3>

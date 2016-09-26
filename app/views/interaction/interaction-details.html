@@ -61,6 +61,9 @@
 
     </tbody>
   </table>
-
-  <a href="/interaction/{{ interaction.id }}/edit" class="button button-secondary">Edit interaction details</a>
+  {% if not interaction.company.archive_date and not interaction.contact.archive_date %}
+    <a href="/interaction/{{ interaction.id }}/edit" class="button button-secondary">Edit interaction details</a>
+  {% else %}
+    <a class="button button-disabled">Edit interaction details</a>
+  {% endif %}
 {% endblock %}
