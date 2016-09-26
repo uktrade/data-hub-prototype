@@ -35,8 +35,7 @@ function showArchiveError() {
   addClass(archiveReasonGroup, 'error');
 }
 
-
-function submitForm(event) {
+function submitArchiveForm(event) {
   let reason = archiveReasonElement.options[archiveReasonElement.selectedIndex].value;
   if (!reason) {
     event.preventDefault();
@@ -44,9 +43,8 @@ function submitForm(event) {
   }
 }
 
-
 if (archiveButton) {
   archiveButton.addEventListener('click', revealArchive);
   cancelButton.addEventListener('click', hideArchive);
-  archiveForm.addEventListener('submit', submitForm);
+  archiveForm.addEventListener('submit', submitArchiveForm);
 }

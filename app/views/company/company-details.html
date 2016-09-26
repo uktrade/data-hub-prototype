@@ -6,7 +6,21 @@
 <div class="js-hidden-edit{% if errors %} js-hidden-edit-open{% endif %}">
   <div class="js-view-data">
     {% include "./company-details-ukti.html" %}
-    <a href="#" class="button button-secondary js-button-edit">Edit company details</a>
+
+    <div class="button-bar">
+      {% if not company.id %}
+        <a href="#" class="button button-secondary js-button-edit">Edit company details</a>
+      {% else  %}
+        {% if not company.archive_date %}
+          <a href="#" class="button button-secondary js-button-edit">Edit company details</a>
+          <a href="#" id="archive-reveal-button" class="button button-secondary">Archive company</a>
+        {% else %}
+          <a class="button button-disabled">Edit company details</a>
+          <a href="/company/{{ company.id }}/unarchive" class="button button-secondary">Unarchive now</a>
+        {% endif %}
+      {% endif %}
+    </div>
+
   </div>
   <div class="js-view-edit">
     {% include "./company-details-edit.html" %}

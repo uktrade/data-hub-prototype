@@ -14,7 +14,11 @@
     </div>
     <div class="column-one-third">
       <p class="actions">
-        <a class="button button-secondary" href="/interaction/add?company_id={{ company.id }}">Add new interaction</a>
+        {% if not company.archive_date %}
+          <a class="button button-secondary" href="/interaction/add?company_id={{ company.id }}">Add new interaction</a>
+        {% else %}
+          <a class="button button-disabled">Add new interaction</a>
+        {% endif %}
       </p>
     </div>
   </div>
@@ -23,6 +27,10 @@
 
 {% elif company.id and company.contacts.length > 0 %}
   <p class="actions">
-    <a class="button button-secondary" href="/interaction/add?company_id={{ company.id }}">Add new interaction</a>
+    {% if not company.archive_date %}
+      <a class="button button-secondary" href="/interaction/add?company_id={{ company.id }}">Add new interaction</a>
+    {% else %}
+      <a class="button button-disabled">Add new interaction</a>
+    {% endif %}
   </p>
 {% endif %}

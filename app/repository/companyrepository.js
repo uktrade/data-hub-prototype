@@ -1,6 +1,7 @@
 'use strict';
 const rp = require('request-promise');
 const config = require('../../config');
+const moment = require('moment');
 
 function getDitCompany(id) {
   return rp({
@@ -69,4 +70,36 @@ function saveCompany(company) {
   return rp(options);
 }
 
-module.exports = {getCompany, saveCompany, getDitCompany, getCHCompany};
+function archiveCompany(companyId, reason) {
+
+  let options = {
+    json: true,
+    body: {
+      'archive_date': moment().format('YYYY-MM-DD'),
+      'archive_reason': reason,
+      'archived_by': 'Lee Smith',
+    },
+    url: `${config.apiRoot}/company/${companyId}/`,
+    method: 'PATCH'
+  };
+
+  return rp(options);
+
+}
+
+function unarchiveCompany(companyId) {
+  let options = {
+    json: true,
+    body: {
+      'archive_date': null,
+      'archive_reason': null,
+      'archived_by': null,
+    },
+    url: `${config.apiRoot}/company/${companyId}/`,
+    method: 'PATCH'
+  };
+
+  return rp(options);
+}
+
+module.exports = {getCompany, saveCompany, getDitCompany, getCHCompany, archiveCompany, unarchiveCompany};

@@ -31,6 +31,11 @@ const TYPES_OF_BUSINESS = [
   'Public limited company',
   'Sole trader'
 ];
+const REASONS_FOR_ARCHIVE = [
+  'Company is dissolved',
+  'Other'
+];
+
 
 let countrys = [];
 for (let country in countryKeysValues) {
@@ -131,6 +136,7 @@ function renderCompany(req, res, company, formData) {
     EMPLOYEE_OPTIONS,
     TURNOVER_OPTIONS,
     TYPES_OF_BUSINESS,
+    REASONS_FOR_ARCHIVE,
     countrys,
     errors: req.errors,
     formData
@@ -188,8 +194,25 @@ function post(req, res) {
     });
 }
 
+function archive(req, res) {
+  companyRepository.archiveCompany(req.params.company_id, req.body.archive_reason)
+    .then(() => {
+      res.redirect(`/company/COMBINED/${req.params.company_id}`);
+    });
+}
+
+function unarchive(req, res) {
+  companyRepository.unarchiveCompany(req.params.company_id)
+    .then(() => {
+      res.redirect(`/company/COMBINED/${req.params.company_id}`);
+    });
+}
+
+
 router.get('/add', add);
+router.get('/:company_id/unarchive', unarchive);
 router.get('/:source/:sourceId?', view);
+router.post('/:company_id/archive', archive);
 router.post(['/', '/add', '/:source/:sourceId?'], post);
 
 

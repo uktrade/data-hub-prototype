@@ -10,10 +10,35 @@
   {% endif %}
   <h1 class="heading-xlarge record-title">
     {{ title }}
+    {% if company.archive_date %}
+      <span class="status-badge status-badge--archived">Archived</span>
+    {% endif %}
   </h1>
 
   {{ forms.errorPanel(errors) }}
+  {% if company.id %}
+    {% if not company.archive_date %}
+      <form id="archive-details" class="hidden" action="/company/{{ company.id }}/archive" method="post">
+        {{ forms.dropdown('archive_reason',
+          label="Reason for archiving company",
+          emptyLabel="Select a value",
+          value=formData.business_type,
+          options=REASONS_FOR_ARCHIVE,
+          error=errors.business_type)
+        }}
 
+        <div class="button-bar">
+          <button class="button button-warning" type="submit">Archive now</button>
+          <a id="cancel-archive-button" class="button-link button-cancel js-button-cancel" href="#">Cancel</a>
+        </div>
+      </form>
+    {% else %}
+      <p class="indented-info">
+        This company has been archived on {{ company.archive_date | formatDate }} by <a href="#">{{ company.archived_by }}</a>.<br/>
+        Reason: {{ company.archive_reason }}
+      </p>
+    {% endif %}
+  {% endif %}
   <div class="tabs tabs--inline js-tabs">
     {% if not company.id %}
       <div id="tab-error-contacts" class="tabs-errors">
