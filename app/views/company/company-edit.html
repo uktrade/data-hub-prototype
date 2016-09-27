@@ -4,7 +4,7 @@
   <input type="hidden" name="id" value="{{ company.id }}"/>
 
   {% if not company.company_number or company.comany_number.length == 0%}
-    {{ forms.textbox('title',
+    {{ forms.textbox('registered_name',
     label="Registered business name",
     hint="Provide the registered name of the company.",
     value=formData.registered_name,
@@ -20,14 +20,14 @@
     {{ forms.dropdown('type_of_business',
     label="Type of business",
     emptyLabel="Select a value",
-    value=formData.type_of_business,
+    value=formData.business_type,
     options=TYPES_OF_BUSINESS,
-    error=errors.type_of_business)
+    error=errors.business_type)
     }}
 
     {{ forms.address('registered_address',
     label="Registered office address",
-    value=formData.registered_address,
+    addressValue=formData.registered_address,
     optionalNonUk='yes',
     optional='no',
     error=errors.registered_address)
@@ -80,7 +80,14 @@
   {% endif %}
 
   {% call forms.yesNoHidden('useCompaniesHouseAddress', label="Is the trading address the same as the registered office address?", radioValue=useCompaniesHouseAddress, revealFor="No") -%}
-    {{ forms.address('trading_address', label="Trading address", value=formData.trading_address, optionalNonUk='yes', optional='yes', error=errors.trading_address) }}
+    {{ forms.address(
+      'trading_address',
+      label="Trading address",
+      addressValue=formData.trading_address,
+      optionalNonUk='yes',
+      optional='yes',
+      error=errors.trading_address)
+    }}
   {%- endcall %}
 
   {{ forms.dropdown('region',
