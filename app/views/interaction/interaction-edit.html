@@ -10,7 +10,7 @@
   {% else %}
     <a class="back-link" href="{{ backUrl }}">Back</a>
     {{ forms.errorPanel(errors) }}
-    <h1 class="heading-xlarge record-title">Add interaction</h1>
+    <h1 class="heading-xlarge record-title">Add new interaction</h1>
   {% endif %}
 
   <div class="form-group">
@@ -30,6 +30,9 @@
     ) }}
 
     {{ forms.textbox('subject', label="Subject", value=interaction.subject, error=errors.subject) }}
+
+    {{ forms.textarea('notes', label="Interaction notes", value=interaction.notes, error=errors.notes) }}
+
     {{ forms.date(name='date_of_interaction', label='Date of interaction', value=interaction.date_of_interaction, error=errors.date) }}
 
     {{ forms.autocomplete('contact',
@@ -40,13 +43,11 @@
     ) }}
 
     {{ forms.autocomplete('advisor',
-      label="UKTI advisor",
+      label="DIT advisor",
       value=interaction.advisor,
       options=ADVISORS,
       error=errors.advisor
     ) }}
-
-    {{ forms.textarea('notes', label="Interaction notes", value=interaction.notes, error=errors.notes) }}
 
     {{ forms.save() }}
 

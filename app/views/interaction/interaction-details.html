@@ -26,6 +26,10 @@
       <td>{{ interaction.subject }}</td>
     </tr>
     <tr>
+      <th>Interaction notes</th>
+      <td>{{ interaction.notes }}</td>
+    </tr>
+    <tr>
       <th>Date of interaction</th>
       <td>{{ interaction.date_of_interaction | formatDate() }}</td>
     </tr>
@@ -37,10 +41,7 @@
       <th>DIT advisor</th>
       <td>{{ interaction.advisor }}</td>
     </tr>
-    <tr>
-      <th>Interaction notes</th>
-      <td>{{ interaction.notes }}</td>
-    </tr>
+
     <tr>
       <th>Created on</th>
       <td>{{ interaction.created_date | formatDate() }}</td>
