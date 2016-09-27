@@ -49,6 +49,19 @@
       error=errors.advisor
     ) }}
 
+    {{ forms.textbox('service_offer',
+      label="Service offer (optional)",
+      value=interaction.service_offer,
+      error=errors.service_offer)
+    }}
+
+    {{ forms.textbox('service_provider',
+      label="Service provider (optional)",
+      value=interaction.service_provider,
+      error=errors.service_provider)
+    }}
+
+
     {{ forms.save() }}
 
   </form>
