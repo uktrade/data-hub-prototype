@@ -69,7 +69,7 @@
 
     {{ forms.address('registered_address',
       label="Registered office address",
-      value=formData.registered_address,
+      addressValue=formData.registered_address,
       optionalNonUk='yes',
       optional='no',
       error=errors.registered_address)
@@ -125,7 +125,7 @@
     {% call forms.yesNoHidden('useRegisteredAddress', label="Is the trading address the same as the registered office address? (optional)", radioValue=useRegisteredAddress, revealFor="No") -%}
     {{ forms.address('trading_address',
       label="Trading address",
-      value=formData.trading_address,
+      addressValue=formData.trading_address,
       optionalNonUk='yes',
       optional='yes',
       error=errors.trading_address)
