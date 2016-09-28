@@ -75,7 +75,7 @@
       </div>
     {% endif %}
 
-    {% if company.id and company.contacts.length == 0 %}
+    {% if company.id and company.contacts.length == 0 and not company.archive_date %}
       <div id="tab-error-interactions" class="tabs-errors">
         <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
           <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
