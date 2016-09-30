@@ -3,6 +3,7 @@
 
 {% block main %}
 
+
   {% if referer and referer.indexOf('search') != -1 %}
     <a class="back-link" href="{{ referer }}">Back to search</a>
   {% else %}
@@ -10,7 +11,7 @@
   {% endif %}
   <h1 class="heading-xlarge record-title">
     {{ title }}
-    {% if company.archive_date %}
+    {% if company.archived %}
       <span class="status-badge status-badge--archived">Archived</span>
     {% endif %}
   </h1>
@@ -19,12 +20,12 @@
   {% if company.id %}
     {% if not company.archive_date %}
       <form id="archive-details" class="hidden" action="/company/{{ company.id }}/archive" method="post">
-        {{ forms.dropdown('archive_reason',
+        {{ forms.dropdown('archived_reason',
           label="Reason for archiving company",
           emptyLabel="Select a value",
-          value=formData.business_type,
+          value=formData.archived_reason,
           options=REASONS_FOR_ARCHIVE,
-          error=errors.business_type)
+          error=errors.archived_reason)
         }}
 
         <div class="button-bar">
@@ -34,8 +35,8 @@
       </form>
     {% else %}
       <p class="indented-info">
-        This company has been archived on {{ company.archive_date | formatDate }} by <a href="#">{{ company.archived_by }}</a>.<br/>
-        Reason: {{ company.archive_reason }}
+        This company has been archived on {{ company.archived_on | formatDate }} by <a href="#">{{ company.archived_by }}</a>.<br/>
+        Reason: {{ company.archived_reason }}
       </p>
     {% endif %}
   {% endif %}

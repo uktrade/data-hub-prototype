@@ -1,52 +1,33 @@
-{% macro companyresult(result, term) %}
-  <li class="results-list__result result-list__company" data_registered_name="{{ result.registered_name }}">
+
+{% macro companyresult(result, term, type) %}
+
+  {% if type == 'company_companieshousecompany' %}
+    {% set id = result.company_number %}
+  {% else %}
+    {% set id = result.id %}
+  {% endif %}
+
+  <li class="results-list__result result-list__ch" data_name="{{ result.name }}">
     <h3 class="result-title">
-      <a href="/company/dit/{{ result.id }}?term={{ term }}">{{result.registered_name | highlightTerm(term) | safe }}</a>
-      {% if result.archived %}
-        <span class="status-badge status-badge--archived">Archived</span>
-      {% endif %}
+      <a href="/company/{{ type }}/{{ id }}?term={{ term }}">{{result.name | highlightTerm(term) | safe}}</a>
     </h3>
-    {% if result.trading_name %}
-      <div class="meta meta--trading">Trading name: {{ result.trading_name | highlightTerm(term) | safe }}</div>
-    {% endif %}
-    {% if result.company_number and result.company_number.length > 0 %}
+
+    {% if result.company_number %}
       <div class="meta meta--ch">{{ result.company_number }} - Incorporated on {{ result.incorporation_date | formatDate }}</div>
     {% endif %}
-    <div class="meta meta--address">
-      {% if result.registered_address_1 %}
-        {{result.registered_address_1 | lower | highlightTerm(term) | safe}},
-      {% endif %}
-      {% if result.registered_address_address_2 %}
-        {{result.registered_address_address_2 | lower | highlightTerm(term) | safe}},
-      {% endif %}
-      {% if result.registered_address_town %}
-        {{result.registered_address_town | lower | highlightTerm(term) | safe}},
-      {% endif %}
-      {% if result.registered_address_postcode %}
-        <span class="meta--address__postcode">{{result.registered_address_postcode | highlightTerm(term) | safe}}</span>
-      {% endif %}
-    </div>
-  </li>
-{% endmacro %}
 
-{% macro chresult(result, term) %}
-  <li class="results-list__result result-list__ch" data_registered_name="{{ result.company_name }}">
-    <h3 class="result-title">
-      <a href="/company/ch/{{ result.company_number }}?term={{ term }}">{{result.company_name | highlightTerm(term) | safe}}</a>
-    </h3>
-    <div class="meta meta--ch">{{ result.company_number }} - Incorporated on {{ result.incorporation_date | formatDate }}</div>
     <div class="meta meta--address">
-      {% if result.registered_address_address_1 %}
-        {{result.registered_address_address_1 | lower | highlightTerm(term) | safe}},
+      {% if result.address_1 %}
+        {{result.address_1 | lower | highlightTerm(term) | safe}},
       {% endif %}
-      {% if result.registered_address_address_2 %}
-        {{result.registered_address_address_2 | lower | highlightTerm(term) | safe}},
+      {% if result.address_2 %}
+        {{result.address_2 | lower | highlightTerm(term) | safe}},
       {% endif %}
-      {% if result.registered_address_town %}
-        {{result.registered_address_town | lower | highlightTerm(term) | safe}},
+      {% if result.address_town %}
+        {{result.address_town | lower | highlightTerm(term) | safe}},
       {% endif %}
-      {% if result.registered_address_postcode %}
-        <span class="meta--address__postcode">{{result.registered_address_postcode | highlightTerm(term) | safe}}</span>
+      {% if result.address_postcode %}
+        <span class="meta--address__postcode">{{result.address_postcode | highlightTerm(term) | safe}}</span>
       {% endif %}
     </div>
   </li>
@@ -56,8 +37,9 @@
   <li class="results-list__result result-list__contact">
     <h3 class="result-title">
       <a href="/contact/{{ result.source_id }}/view?term={{ term }}">
-        {{ result.title | highlightTerm(term) | safe }}
+        {{ result.name | highlightTerm(term) | safe }}
       </a>
     </h3>
+    <div class="meta">{{ result.company }}</div>
   </li>
 {% endmacro %}

@@ -121,13 +121,9 @@ class CompanyAutocomplete {
     let address = this.getDisplayAddress(company);
 
     if (source === 'company') {
-      title = company.registered_name;
+      title = company.name;
     } else {
-      title = company.ch.company_name;
-    }
-
-    if (company.trading_name && company.trading_name.length > 0) {
-      description += `${company.trading_name}<br/>`;
+      title = company.ch.name;
     }
 
     if (company.company_number && company.company_number.length > 0) {
