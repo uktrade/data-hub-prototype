@@ -8,6 +8,7 @@
     "url": "https://github.com/uktrade/data-hub-web"
   },
   "dependencies": {
+    "babel-core": "^6.17.0",
     "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.4",
     "babel-plugin-react-transform": "^2.0.2",
