@@ -11,19 +11,14 @@ function getDitCompany(id) {
 }
 
 function getCHCompany(id) {
-  let chOptions = {
-    url: `${config.apiRoot}/ch/${id}/`,
-    json: true
-  };
-
-  return rp(chOptions);
+  return rp({ url: `${config.apiRoot}/ch-company/${id}/`, json: true });
 }
 
 function getCompany(id, source) {
 
   return new Promise((fulfill, reject) => {
     // Get DIT Company
-    if (source === 'ch') {
+    if (source === 'company_companieshousecompany') {
       getCHCompany(id)
         .then((ch) => {
           fulfill({

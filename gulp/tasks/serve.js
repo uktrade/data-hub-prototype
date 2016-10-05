@@ -5,7 +5,7 @@ gulp.task('serve', (cb) => {
   var started = false;
 
 	return nodemon({
-    exec: 'node --inspect --debug-brk',
+    exec: 'node --debug',
 		script: 'app.js',
     ignore: './javascripts',
 	}).on('start', function() {

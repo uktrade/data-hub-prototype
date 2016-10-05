@@ -3,47 +3,11 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-
+let metadata = require('../lib/metadata');
 const companyRepository = require('../repository/companyrepository');
 const controllerUtils = require('../lib/controllerutils');
 
-const SECTOR_OPTIONS = require('../../data/sectors.json');
-const REGION_OPTIONS = require('../../data/regions.json');
-const ADVISOR_OPTIONS = require('../../data/advisors.json');
-const countryKeysValues = require('../../data/countrys.json');
-
-const EMPLOYEE_OPTIONS = [
-  '1 to 9',
-  '10 to 49',
-  '50 to 249',
-  '250 to 499',
-  '500+'
-];
-const TURNOVER_OPTIONS = [
-  '£0 to £1.34M',
-  '£1.34M to £6.7M',
-  '£6.7M to £33.5M',
-  '£33.5M +'
-];
-const TYPES_OF_BUSINESS = [
-  'Business partnership',
-  'Private limited company',
-  'Public limited company',
-  'Sole trader'
-];
-const REASONS_FOR_ARCHIVE = [
-  'Company is dissolved',
-  'Other'
-];
-
-
-let countrys = [];
-for (let country in countryKeysValues) {
-  countrys.push(countryKeysValues[country]);
-}
-
 function sanitizeForm(req) {
-  req.sanitize('sectors').joinArray();
   req.sanitize('currently_exporting_to').joinArray();
   req.sanitize('countries_of_interest').joinArray();
   req.sanitize('connections').joinArray();
@@ -51,12 +15,7 @@ function sanitizeForm(req) {
 }
 
 function add(req, res) {
-  controllerUtils.convertToFormAddress(req.body, 'trading_address');
-  controllerUtils.convertToFormAddress(req.body, 'registered_address');
-
-  if (req.body.sectors && req.body.sectors.length > 0) {
-    req.body.sectors = req.body.sectors.split(',');
-  }
+  controllerUtils.convertToFormAddress(req.body, 'address');
 
   if (req.body.currently_exporting_to && req.body.currently_exporting_to.length > 0) {
     req.body.currently_exporting_to = req.body.currently_exporting_to.split(',');
@@ -72,26 +31,18 @@ function add(req, res) {
 
   res.render('company/company-add', {
     formData: req.body,
-    SECTOR_OPTIONS,
-    REGION_OPTIONS,
-    ADVISOR_OPTIONS,
-    EMPLOYEE_OPTIONS,
-    TURNOVER_OPTIONS,
-    TYPES_OF_BUSINESS,
-    countrys,
+    SECTOR_OPTIONS: metadata.SECTOR_OPTIONS,
+    REGION_OPTIONS: metadata.REGION_OPTIONS,
+    ADVISOR_OPTIONS: metadata.ADVISOR_OPTIONS,
+    EMPLOYEE_OPTIONS: metadata.EMPLOYEE_OPTIONS,
+    TURNOVER_OPTIONS: metadata.TURNOVER_OPTIONS,
+    TYPES_OF_BUSINESS: metadata.TYPES_OF_BUSINESS,
+    COUNTRYS: metadata.COUNTRYS,
     errors: req.errors
   });
 }
 
 function renderCompany(req, res, company, formData) {
-
-  if (formData.sectors && formData.sectors.length > 0) {
-    formData.sectors = formData.sectors.split(',');
-  }
-
-  if (company.sectors && company.sectors.length > 0) {
-    company.sectors = company.sectors.split(',');
-  }
 
   if (formData.currently_exporting_to && formData.currently_exporting_to.length > 0) {
     formData.currently_exporting_to = formData.currently_exporting_to.split(',');
@@ -118,26 +69,23 @@ function renderCompany(req, res, company, formData) {
   }
 
   let title;
-  if (company.ch && company.ch.company_name) {
-    title = company.ch.company_name;
-  } else if (company.registered_name) {
-    title = company.registered_name;
+  if (!company.name && company.ch.name) {
+    title = company.ch.name;
   } else {
-    title = company.trading_name;
+    title = company.name;
   }
-
 
   res.render('company/company', {
     company,
     title,
-    SECTOR_OPTIONS,
-    REGION_OPTIONS,
-    ADVISOR_OPTIONS,
-    EMPLOYEE_OPTIONS,
-    TURNOVER_OPTIONS,
-    TYPES_OF_BUSINESS,
-    REASONS_FOR_ARCHIVE,
-    countrys,
+    SECTOR_OPTIONS: metadata.SECTOR_OPTIONS,
+    REGION_OPTIONS: metadata.REGION_OPTIONS,
+    ADVISOR_OPTIONS: metadata.ADVISOR_OPTIONS,
+    EMPLOYEE_OPTIONS: metadata.EMPLOYEE_OPTIONS,
+    TURNOVER_OPTIONS: metadata.TURNOVER_OPTIONS,
+    TYPES_OF_BUSINESS: metadata.TYPES_OF_BUSINESS,
+    REASONS_FOR_ARCHIVE: metadata.REASONS_FOR_ARCHIVE,
+    countrys: metadata.COUNTRYS,
     errors: req.errors,
     formData
   });
@@ -164,9 +112,7 @@ function view(req, res) {
         formData = req.body;
       }
 
-      controllerUtils.convertToFormAddress(formData, 'trading_address');
-      controllerUtils.convertToFormAddress(formData, 'registered_address');
-
+      controllerUtils.convertToFormAddress(formData, 'address');
 
       renderCompany(req, res, company, formData);
     })
@@ -177,8 +123,7 @@ function view(req, res) {
 
 function post(req, res) {
   sanitizeForm(req);
-  controllerUtils.convertFromFormAddress(req.body, 'trading_address');
-  controllerUtils.convertFromFormAddress(req.body, 'registered_address');
+  controllerUtils.convertFromFormAddress(req.body, 'address');
 
   companyRepository.saveCompany(req.body)
     .then((data) => {

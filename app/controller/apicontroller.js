@@ -18,10 +18,10 @@ function postcodelookup(req, res) {
 function companySuggest(req, res) {
   searchService.suggestCompany(req.query.term)
     .then((result) => {
-      res.json(result.suggestions);
+      res.json(result);
     })
     .catch(() => {
-
+      res.json([]);
     });
 }
 

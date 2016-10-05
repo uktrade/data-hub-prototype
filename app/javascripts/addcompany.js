@@ -1,13 +1,22 @@
 import { addClass, removeClass } from './utils/classtuff';
 import CompanyAutocomplete from './companyautocomplete';
 
-
 const isUKBasedRadios = document.querySelectorAll('[name="uk_based"]');
-const regionFormGroup = document.getElementById('region-wrapper');
-const ltdElement = document.querySelector('[value="Private limited company"]');
-const plcElement = document.querySelector('[value="Public limited company"]');
-const countryElement = document.getElementById('registered_address-country');
-const countryWrapper = document.getElementById('registered_address.country-wrapper');
+const regionFormGroup = document.getElementById('uk_region-wrapper');
+const countryElement = document.getElementById('address-country');
+const countryWrapper = document.getElementById('address.country-wrapper');
+const options = document.querySelectorAll('#business_type option');
+
+let ltdElement;
+let plcElement;
+
+for (let option of options) {
+  if (option.innerText === 'Private limited company') {
+    ltdElement = option;
+  } else if (option.innerText === 'Public limited company') {
+    plcElement = option;
+  }
+}
 
 function getSelectedRadio() {
   for (const radio of isUKBasedRadios) {
@@ -70,4 +79,4 @@ for (const radio of isUKBasedRadios) {
 }
 
 
-new CompanyAutocomplete(document.getElementById('registered_name'));
+new CompanyAutocomplete(document.getElementById('name'));

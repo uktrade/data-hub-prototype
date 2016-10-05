@@ -1,4 +1,4 @@
-{% if company.company_number %}
+{% if company.ch and company.ch.company_number %}
   <table class="table-detail table-detail--readonly">
     <tbody>
     <tr class="table-detail--readonly__section">
@@ -8,10 +8,10 @@
     </tr>
     <tr class="table-detail--readonly__section">
       <th>Registered office address</th>
-      <td class="meta--address">{{ company.ch.registered_address_address_1 | lower }},
-        {{ company.ch.registered_address_address_2 | lower }},
-        {{ company.ch.registered_address_town | lower }},
-        <span class="meta--address__postcode">{{ company.ch.registered_address_postcode }}</span>
+      <td class="meta--address">{{ company.ch.address_1 | lower }},
+        {{ company.ch.address_2 | lower }},
+        {{ company.ch.address_town | lower }},
+        <span class="meta--address__postcode">{{ company.ch.address_postcode }}</span>
       </td>
     </tr>
     <tr>
@@ -46,44 +46,30 @@
   <div class="js-view-data">
     <table class="table-detail">
       <tbody>
-      {% if not company.company_number %}
+      {% if not company.ch and not company.ch.company_number %}
         <tr>
-          <th>Registered office address</th>
-          <td class="meta--address">
-            {% if company.registered_address_1 %}{{ company.registered_address_1 | lower }},{% endif %}
-            {% if company.registered_address_2 %}{{ company.registered_address_2 | lower }},{% endif %}
-            {% if company.registered_address_town %}{{ company.registered_address_town | lower }},{% endif %}
-            {% if company.registered_address_county %}{{ company.registered_address_county | lower }},{% endif %}
-            {% if company.registered_address_postcode %}
-              <span class="meta--address__postcode">{{ company.registered_address_postcode }}</span>
-            {% endif %}
+          {% if not company.company_number or company.company_number.length == 0%}
+            <th>Company address</th>
+          {% else %}
+            <th>Trading address</th>
+          {% endif %}
+          <td>
+            {% if company.address_1.length > 0 %}{{ company.address_1 }},{% endif %}
+            {% if company.address_2.length > 0 %}{{ company.address_2 }},{% endif %}
+            {% if company.address_town.length > 0 %}{{ company.address_town }},{% endif %}
+            {% if company.address_county.length > 0 %}{{ company.address_county }}{% endif %}
+            {% if company.address_postcode.length > 0 %}{{ company.address_postcode }}{% endif %}
+            {% if companyaddress_country.length > 0 %}{{ company.address_country }}{% endif %}
           </td>
         </tr>
         <tr>
           <th>Company type</th>
-          <td>{{ company.business_type }}</td>
-        </tr>
-
-        <tr>
-          <th>UK Based</th>
-          <td>
-            {% if company.uk_based %}
-              Yes
-            {% else %}
-              No
-            {% endif %}
-          </td>
+          <td>{{ company.business_type.name }}</td>
         </tr>
       {% endif %}
       <tr>
-        <th>Trading name</th>
-        <td>{{ company.trading_name }}</td>
-      </tr>
-      <tr>
-        <th>Sectors</th>
-        <td>{% for sector in company.sectors %}
-            <div>{{ sector }}</div>
-          {% endfor %}
+        <th>Sector</th>
+        <td>{{ company.sector.name }}
         </td>
       </tr>
       <tr>
@@ -96,30 +82,20 @@
       </tr>
       <tr>
         <th>Business description</th>
-        <td>{{ company.business_description }}</td>
+        <td>{{ company.description }}</td>
       </tr>
       <tr>
         <th>Number of employees</th>
-        <td>{{ company.number_of_employees }}</td>
+        <td>{{ company.employee_range.name }}</td>
       </tr>
       <tr>
         <th>Annual turnover</th>
-        <td>{{ company.annual_turnover }}</td>
+        <td>{{ company.turnover_range.name }}</td>
       </tr>
-      <tr>
-        <th>Trading address</th>
-        <td>
-          {% if company.trading_address_1.length > 0 %}{{ company.trading_address_1 }},{% endif %}
-          {% if company.trading_address_2.length > 0 %}{{ company.trading_address_2 }},{% endif %}
-          {% if company.trading_address_town.length > 0 %}{{ company.trading_address_town }},{% endif %}
-          {% if company.trading_address_county.length > 0 %}{{ company.trading_address_county }}{% endif %}
-          {% if company.trading_address_postcode.length > 0 %}{{ company.trading_address_postcode }}{% endif %}
-          {% if company.trading_address_country.length > 0 %}{{ company.trading_address_country }}{% endif %}
-        </td>
-      </tr>
+
       <tr>
         <th>Region</th>
-        <td>{{ company.region }}</td>
+        <td>{{ company.uk_region.name }}</td>
       </tr>
       <tr>
         <th>Account manager</th>

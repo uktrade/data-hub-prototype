@@ -3,17 +3,15 @@
 <div class="result-summary">
   <span class="result-summary--result-count">
     {{result.total}}</span> results found containing
-    <span class="result-summary--result-query">{{ result.term }}
+    <span class="result-summary--result-query">{{ params.term }}
   </span>
 </div>
 <ol class="results-list">
   {% for hit in result.hits %}
-    {% if hit._type == 'contact' %}
-      {{ resultTypes.contactresult(hit._source, result.term) }}
-    {% elseif hit._type == 'ch' %}
-      {{ resultTypes.chresult(hit._source, result.term) }}
-    {% else %}
-      {{ resultTypes.companyresult(hit._source, result.term) }}
+    {% if hit._type == 'company_contact' %}
+      {{ resultTypes.contactresult(hit._source, params.term, hit._type) }}
+    {% elseif hit._type == 'company_companieshousecompany' or hit._type == 'company_company' %}
+      {{ resultTypes.companyresult(hit._source, params.term, hit._type) }}
     {% endif %}
 
   {% endfor %}

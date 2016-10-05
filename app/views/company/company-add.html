@@ -13,19 +13,18 @@
 
   <form method="post">
 
-    <div class="form-group{% if errors.registered_name %} error{% endif %}" id="registered_name-wrapper">
-      <label class="form-label" for="registered_name">
-        Registered business name
-        <span class="form-hint">Provide the registered name of the company</span>
-        {% if error.registered_name %}<span class="error-message">{{ error }}</span>{% endif %}
+    <div class="form-group{% if errors.name %} error{% endif %}" id="name-wrapper">
+      <label class="form-label" for="name">
+        Company trading name
+        {% if error.name %}<span class="error-message">{{ error }}</span>{% endif %}
       </label>
 
       <input
-        id="registered_name"
+        id="name"
         class="form-control autocomplete company-autocomplete"
-        name="registered_name"
-        value="{{ formData.registered_name }}"
-        autocomplete="registered_name"
+        name="name"
+        value="{{ formData.name }}"
+        autocomplete="name"
         data-options-url="/suggest?term="
       />
 
@@ -51,87 +50,62 @@
     {%- endcall %}
 
     {{ forms.dropdown('business_type',
-    label="Type of business",
-    emptyLabel="Select a value",
-    value=formData.business_type,
-    options=TYPES_OF_BUSINESS,
-    error=errors.business_type)
+      label="Type of business",
+      emptyLabel="Select a value",
+      value=formData.business_type,
+      options=TYPES_OF_BUSINESS,
+      error=errors.business_type)
     }}
 
-    {{ forms.addAnotherDropdown('sectors',
-    label="Sector",
-    addLabel="sector",
-    emptyLabel="Select sector to add",
-    values=formData.sectors,
-    options=SECTOR_OPTIONS,
-    error=errors.sectors)
+    {{ forms.dropdown('sector',
+      label="Sector",
+      emptyLabel="Select sector to add",
+      value=formData.sector,
+      options=SECTOR_OPTIONS,
+      error=errors.sector)
     }}
 
-    {{ forms.address('registered_address',
-      label="Registered office address",
-      addressValue=formData.registered_address,
-      optionalNonUk='yes',
-      optional='no',
-      error=errors.registered_address)
+    {{ forms.address('address',
+      label="Company address",
+        addressValue=formData.address,
+        optionalNonUk='yes',
+        optional='no',
+        error=errors.address)
     }}
 
-    {{ forms.dropdown('region',
-    label="Region",
-    emptyLabel="Select a region",
-    value=formData.region,
-    options=REGION_OPTIONS,
-    error=errors.region)
+    {{ forms.dropdown('uk_region',
+      label="Region",
+      emptyLabel="Select a region",
+      value=formData.uk_region,
+      options=REGION_OPTIONS,
+      error=errors.uk_region)
     }}
 
     <hr/>
 
-    {{ forms.textbox('trading_name',
-    label="Trading name (optional)",
-    hint="Provide the name the company trades as if this differs from it’s registered name.",
-    value=formData.trading_name,
-    error=errors.trading_name)
-    }}
-
-
     {{ forms.textbox('website', label="Website (optional)", value=formData.website, error=errors.website) }}
-    {{ forms.textarea('business_description',
+
+    {{ forms.textarea('description',
       label="Business description (optional)",
-      value=formData.business_description,
-      error=errors.business_description)
+      value=formData.description,
+      error=errors.description)
     }}
 
-    {{ forms.dropdown('number_of_employees',
-    label="Number of employees (optional)",
-    emptyLabel="Select a value",
-    value=formData.number_of_emplyees,
-    options=EMPLOYEE_OPTIONS,
-    error=errors.number_of_employees)
+    {{ forms.dropdown('employee_range',
+      label="Number of employees (optional)",
+      emptyLabel="Select a value",
+      value=formData.employee_range,
+      options=EMPLOYEE_OPTIONS,
+      error=errors.employee_range)
     }}
 
-    {{ forms.dropdown('annual_turnover',
-    label="Annual turnover (optional)",
-    emptyLabel="Select a value",
-    value=formData.annual_turnover,
-    options=TURNOVER_OPTIONS,
-    error=errors.annual_turnover)
+    {{ forms.dropdown('turnover_range',
+      label="Annual turnover (optional)",
+      emptyLabel="Select a value",
+      value=formData.turnover_range,
+      options=TURNOVER_OPTIONS,
+      error=errors.turnover_range)
     }}
-
-    {% if formData.trading_address and formData.trading_address.country and formData.trading_address.country.length > 0 or errors.trading_address %}
-      {% set useRegisteredAddress = 'No' %}
-    {% else %}
-      {% set useRegisteredAddress = 'Yes' %}
-    {% endif %}
-
-    {% call forms.yesNoHidden('useRegisteredAddress', label="Is the trading address the same as the registered office address? (optional)", radioValue=useRegisteredAddress, revealFor="No") -%}
-    {{ forms.address('trading_address',
-      label="Trading address",
-      addressValue=formData.trading_address,
-      optionalNonUk='yes',
-      optional='yes',
-      error=errors.trading_address)
-    }}
-    {%- endcall %}
-
 
     {% if formData.account_manager and formData.account_manager.length > 0 or errors.account_manager %}
       {% set hasManager = 'Yes' %}
@@ -158,7 +132,7 @@
         label="Export market",
         addLabel="country",
         values=formData.currently_exporting_to,
-        options=countrys,
+        options=COUNTRYS,
         error=errors.currently_exporting_to
       ) }}
     {%- endcall %}
@@ -167,7 +141,7 @@
     label="Future countries of interest (optional)",
     addLabel="country",
     values=formData.countries_of_interest,
-    options=countrys,
+    options=COUNTRYS,
     error=errors.countries_of_interest
     ) }}
 
