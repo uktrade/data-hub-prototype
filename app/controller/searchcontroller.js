@@ -3,7 +3,7 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-
+let metadata = require('../lib/metadata');
 const searchService = require('../lib/searchservice');
 const controllerUtils = require('../lib/controllerutils');
 const FACETTITLES = {
@@ -104,8 +104,10 @@ function get(req, res) {
         }
       }
 
+      result.facets = getFakeFacets();
+
       let pagination = getPagination(req, result);
-      res.render('search/non-facet-search', {result, FACETTITLES, pagination, params: req.query });
+      res.render('search/facet-search', {result, FACETTITLES, pagination, params: req.query });
 
     })
     .catch((error) => {
@@ -113,6 +115,22 @@ function get(req, res) {
     });
 }
 
+
+
+function getFakeFacets() {
+  let facets = {
+    'Category': [{value:'Company'},{value:'Contact'}],
+    'Business type': []
+  };
+  const business_types = metadata.TYPES_OF_BUSINESS;
+
+  for (let btype of business_types) {
+    facets['Business type'].push({value: btype.name});
+  }
+
+
+  return facets;
+}
 router.get('/', get);
 
 
