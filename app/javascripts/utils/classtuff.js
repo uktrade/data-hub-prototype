@@ -24,3 +24,11 @@ export function hasClass(element, className) {
   }
   return !!element.className.match(new RegExp(regularExp1 + className + regularExp2));
 }
+
+export function toggleClass(element, className) {
+  if (hasClass(element, className)) {
+    removeClass(element, className);
+  } else {
+    addClass(element, className);
+  }
+}

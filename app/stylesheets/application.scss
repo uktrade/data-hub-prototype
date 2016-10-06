@@ -1,12 +1,15 @@
 $images-dir: '/images/';
 @import 'govstrap';
+@import 'font-awesome';
 
 // application specific
+@import 'buttons';
 @import 'dashboard';
 @import 'datahub_badges';
-@import 'search';
 @import 'event-list';
+@import 'facets';
 @import 'login-bar.scss';
 @import 'pagination';
+@import 'search';
 @import 'shame';
 @import 'tables';

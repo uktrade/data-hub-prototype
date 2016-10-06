@@ -6,6 +6,9 @@ const router = express.Router();
 let metadata = require('../lib/metadata');
 const searchService = require('../lib/searchservice');
 const controllerUtils = require('../lib/controllerutils');
+const sectors = require('../../data/sectors.json');
+
+
 const FACETTITLES = {
   _type: 'Type'
 };
@@ -119,8 +122,10 @@ function get(req, res) {
 
 function getFakeFacets() {
   let facets = {
-    'Category': [{value:'Company'},{value:'Contact'}],
-    'Business type': []
+    'Category': [{value: 'Company' }, {value: 'Contact' }],
+    'Business type': [],
+    'Status': [{value: 'Active'}, {value: 'Archived'}],
+    'Sector': []
   };
   const business_types = metadata.TYPES_OF_BUSINESS;
 
@@ -128,6 +133,9 @@ function getFakeFacets() {
     facets['Business type'].push({value: btype.name});
   }
 
+  for (let sector of sectors) {
+    facets.Sector.push({value: sector});
+  }
 
   return facets;
 }
