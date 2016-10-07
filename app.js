@@ -47,6 +47,7 @@ app.use('/images', express.static(`${__dirname}/node_modules/govuk_frontend_tool
 app.use('/images', express.static(`${__dirname}/node_modules/govstrap/images`));
 app.use('/javascripts', express.static(`${__dirname}/node_modules/govstrap/public/javascripts`));
 app.use('/fonts', express.static(`${__dirname}/node_modules/govuk_template_mustache/assets/stylesheets`));
+app.use('/fonts', express.static(`${__dirname}/node_modules/font-awesome/fonts`));
 app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`));

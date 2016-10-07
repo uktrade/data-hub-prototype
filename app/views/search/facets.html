@@ -5,9 +5,14 @@
     {% for facet, options in result.facets %}
       {% if options.length > 1 %}
         <div class="govuk-option-select js-collapsible">
-          <button class="js-container-head" type="button" aria-expanded="false">
-            <div class="option-select-label">{{ FACETTITLES[facet] }}</div>
-          </button>
+          <div class="option-select-label">
+            {{ facet }}
+            <span class="controls">
+              <span class="clear-filter-button clear-filter-js">clear</span>
+              <i class="collapse-filter collapse-filter-js fa fa-chevron-up"></i>
+            </span>
+          </div>
+
           <div class="options-container">
             <div class="js-auto-height-inner">
               {% for option in options %}
@@ -38,42 +43,4 @@
     {% endfor %}
   </div>
 &nbsp;</div>
-<script>
-  (function() {
-    var wrapper = document.getElementById('facets');
-
-    // Facets aren't supported unless you have JS enabled.
-    // First check that there are some facets available, if none made it then dont do anything
-    // otherwise reveal the filter section
-    if (wrapper.getElementsByClassName('facet-option').length == 0) {
-      return;
-    }
-
-    function handler(event) {
-      event = event || window.event;
-      var target = event.target || event.srcElement;
-
-      if (!target.className.match(/facet-option/)) {
-        return;
-      }
-
-      // if the user made a radio button in filter checked (apply the filter)
-      if (target.checked) {
-        // add the filter to the current url, goto that url.
-        window.location.href = window.location.href + '&filter=' + target.name + ':' + encodeURIComponent(target.value);
-      } else {
-        window.location.href = window.location.href.replace('&filter=' + target.name + ':' + encodeURIComponent(target.value), '');
-      }
-
-    }
-
-    if (wrapper.addEventListener) {
-      wrapper.addEventListener('click', handler, false);
-    } else {
-      wrapper.attachEvent('onclick', handler);//for IE
-    }
-
-    wrapper.className = wrapper.className.replace('hidden', '');
-  })();
-
-</script>
+<script src="{{ asset_path }}javascripts/facets.bundle.js"></script>
