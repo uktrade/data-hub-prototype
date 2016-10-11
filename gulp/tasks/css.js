@@ -8,7 +8,6 @@ const paths = require('../paths');
 const SASS_PATHS = [
   `${paths.node_modules}/govuk-elements-sass/public/sass`,
   `${paths.node_modules}/govuk_frontend_toolkit/stylesheets`,
-  `${paths.node_modules}/govstrap/sass`,
   `${paths.node_modules}/font-awesome/scss`
 ];
 

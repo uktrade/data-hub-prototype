@@ -96,7 +96,6 @@ function get(req, res) {
     .then((result) => {
       // combine filters and facets to show which are
       // selected
-
       for (let filterKey in result.filters) {
         let filterValue = result.filters[filterKey];
         let facet = result.facets[filterKey];

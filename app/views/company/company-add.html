@@ -15,7 +15,7 @@
 
     <div class="form-group{% if errors.name %} error{% endif %}" id="name-wrapper">
       <label class="form-label" for="name">
-        Company trading name
+        Registered name
         {% if error.name %}<span class="error-message">{{ error }}</span>{% endif %}
       </label>
 
@@ -65,12 +65,13 @@
       error=errors.sector)
     }}
 
-    {{ forms.address('address',
-      label="Company address",
-        addressValue=formData.address,
-        optionalNonUk='yes',
-        optional='no',
-        error=errors.address)
+    {{ forms.address(
+      'registered',
+      label="Registered address",
+      addressValue=formData,
+      optionalNonUk='yes',
+      optional='no',
+      error=errors.registered_address)
     }}
 
     {{ forms.dropdown('uk_region',
@@ -82,6 +83,16 @@
     }}
 
     <hr/>
+
+    {{ forms.textbox('alias', label="Trading name (optional)", value=formData.alias, error=errors.alias) }}
+
+    {{ forms.address('trading_address',
+      label="Trading address",
+      addressValue=formData.trading_address,
+      optionalNonUk='yes',
+      optional='yes',
+      error=errors.trading_address)
+    }}
 
     {{ forms.textbox('website', label="Website (optional)", value=formData.website, error=errors.website) }}
 
@@ -156,5 +167,8 @@
     {{ forms.save(backUrl="#") }}
 
   </form>
+  <script>
+    var countrys = {{ COUNTRYS | stringify | safe }};
+  </script>
   <script src="{{ asset_path }}javascripts/addcompany.bundle.js"></script>
 {% endblock %}

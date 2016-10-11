@@ -5,7 +5,7 @@
 
   {% if not company.company_number or company.company_number.length == 0%}
     {{ forms.textbox('name',
-      label="Company name",
+      label="Registered name",
       value=formData.name,
       error=errors.name)
     }}
@@ -19,12 +19,7 @@
     }}
 
   {% else %}
-    {{ forms.textbox('name',
-    label="Trading name (optional)",
-    hint="Provide the name the company trades as if this differs from it’s registered name.",
-      value=formData.name,
-      error=errors.name)
-    }}
+    <input type="hidden" name="name" value="{{ company.ch.name }}"/>
     <input type="hidden" name="company_number" value="{{ company.ch.company_number }}"/>
   {% endif %}
 
@@ -36,32 +31,15 @@
     error=errors.sector)
   }}
 
-  {% if not company.company_number or company.comany_number.length == 0 %}
+  {% if not company.company_number or company.company_number.length == 0 %}
     {{ forms.address(
-      'address',
+      'registered',
       label="Company address",
-      addressValue=formData.address,
+      addressValue=formData,
       optionalNonUk='yes',
-      optional='yes',
-      error=errors.address)
+      optional='no',
+      error=errors.registered_address)
     }}
-  {% else %}
-    {% if formData.address and formData.address.country and formData.address.country.length > 0 or errors.address %}
-      {% set useCompaniesHouseAddress = 'No' %}
-    {% else %}
-      {% set useCompaniesHouseAddress = 'Yes' %}
-    {% endif %}
-
-    {% call forms.yesNoHidden('useCompaniesHouseAddress', label="Is the trading address the same as the registered office address?", radioValue=useCompaniesHouseAddress, revealFor="No") -%}
-    {{ forms.address(
-      'address',
-      label="Trading address",
-      addressValue=formData.address,
-      optionalNonUk='yes',
-      optional='yes',
-      error=errors.address)
-    }}
-    {%- endcall %}
   {% endif %}
 
   {{ forms.dropdown('uk_region',
@@ -73,6 +51,20 @@
   }}
 
   <hr/>
+  {{ forms.textbox('alias',
+    label="Trading name (optional)",
+    value=formData.alias,
+    error=errors.alias)
+  }}
+
+  {{ forms.address('trading',
+    label="Trading address",
+    addressValue=formData,
+    optionalNonUk='yes',
+    optional='yes',
+    error=errors.trading_address)
+  }}
+
 
   {{ forms.textbox('website', label="Website (optional)", value=formData.website, error=errors.website) }}
   {{ forms.textarea('description', label="Business description (optional)", value=formData.description, error=errors.description) }}
@@ -142,3 +134,6 @@
   {{ forms.save(backUrl="#") }}
 
 </form>
+<script>
+  var countrys = {{ COUNTRYS | stringify | safe }};
+</script>
