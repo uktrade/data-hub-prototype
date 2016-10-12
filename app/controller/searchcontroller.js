@@ -107,6 +107,7 @@ function get(req, res) {
       }
 
       result.facets = getFakeFacets();
+      result.term = req.query.term;
 
       let pagination = getPagination(req, result);
       res.render('search/facet-search', {result, FACETTITLES, pagination, params: req.query });

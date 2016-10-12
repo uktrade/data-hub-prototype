@@ -1,6 +1,7 @@
 'use strict';
 const rp = require('request-promise');
 const config = require('../../config');
+const results = require('../../data/fakeresults.json');
 
 function search(query) {
 
@@ -23,7 +24,17 @@ function search(query) {
     method: 'POST'
   };
 
-  return rp(options);
+
+  return rp(options)
+    .then((searchResults) => {
+      if (!searchResults || !searchResults.total || searchResults.total === 0) {
+        return results;
+      }
+      return searchResults;
+    })
+    .catch((error) => {
+      return results;
+    });
 }
 
 function suggestCompany(term) {

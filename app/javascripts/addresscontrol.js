@@ -182,7 +182,7 @@ export default class AddressControl {
         return `<option 
           data-address1="${address.address1}"
           data-address2="${address.address2}"
-          data-town="${address.town}"
+          data-town="${address.city}"
           data-county="${address.county}"
           data-postcode="${address.postcode}"
           value="${address.address1}-${address.address2}">${address.address1}, ${address.address2}</option>`;
@@ -197,13 +197,13 @@ export default class AddressControl {
 
     this.addressDropdown.html(options);
     this.updateVisibility();
-  };
+  }
 
   postcodeSelect() {
-    let selected = this.addressDropdown.find("option:selected");
+    let selected = this.addressDropdown.find('option:selected');
     this.address1Input.val(selected.data('address1'));
     this.address2Input.val(selected.data('address2'));
-    this.addressTownInput.val(selected.data('city'));
+    this.addressTownInput.val(selected.data('town'));
     this.addressCountyInput.val(selected.data('county'));
     this.addressPostcodeInput.val(selected.data('postcode'));
   }

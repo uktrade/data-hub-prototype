@@ -1,6 +1,5 @@
 
 {% macro companyresult(result, term, type) %}
-{{ result | log | safe }}
   {% if type == 'company_companieshousecompany' %}
     {% set id = result.company_number %}
   {% else %}
@@ -41,5 +40,19 @@
       </a>
     </h3>
     <div class="meta">{{ result.company }}</div>
+    <div class="meta meta--address">
+      {% if result.address_1 %}
+        {{result.address_1 | lower | highlightTerm(term) | safe}},
+      {% endif %}
+      {% if result.address_2 %}
+        {{result.address_2 | lower | highlightTerm(term) | safe}},
+      {% endif %}
+      {% if result.address_town %}
+        {{result.address_town | lower | highlightTerm(term) | safe}},
+      {% endif %}
+      {% if result.address_postcode %}
+        <span class="meta--address__postcode">{{result.address_postcode | highlightTerm(term) | safe}}</span>
+      {% endif %}
+    </div>
   </li>
 {% endmacro %}
