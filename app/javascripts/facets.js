@@ -45,15 +45,44 @@ class Facets {
 
   renderFilterList() {
     removeClass(this.element, 'hidden');
+    const contacts =  document.querySelectorAll('.result-list__contact');
+    const companies = document.querySelectorAll('.result-list__ch');
+
 
     this.hideNoneCategoryFacets();
 
     if (this.companyCheckbox.checked || this.contactCheckbox.checked) {
       this.showStatusFacets();
+
+      for (const contact of contacts) {
+        addClass(contact, 'hidden');
+      }
+      for (const company of companies) {
+        addClass(company, 'hidden');
+      }
+
+      if (this.companyCheckbox.checked) {
+        for (const company of companies) {
+          removeClass(company, 'hidden');
+        }
+      }
+
+      if (this.contactCheckbox.checked) {
+        for (const contact of contacts) {
+          removeClass(contact, 'hidden');
+        }
+      }
     }
 
     if (!this.companyCheckbox.checked && !this.contactCheckbox.checked) {
       this.clearStatusOptions();
+
+      for (const contact of contacts) {
+        removeClass(contact, 'hidden');
+      }
+      for (const company of companies) {
+        removeClass(company, 'hidden');
+      }
     }
 
     if (this.companyCheckbox.checked) {
@@ -100,7 +129,7 @@ class Facets {
     }
 
     if (subTitle.length > 0) {
-      summary += `which are <strong>${subTitle.substring(0, subTitle.length - 2)}</strong>.`;
+      summary += ` which are <strong>${subTitle.substring(0, subTitle.length - 2)}</strong>.`;
     }
 
     this.resultSummaryElement.innerHTML = summary;

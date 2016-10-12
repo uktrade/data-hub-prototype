@@ -46,92 +46,102 @@
   <div class="js-view-data">
     <table class="table-detail">
       <tbody>
-      {% if not company.ch and not company.ch.company_number %}
         <tr>
-          {% if not company.company_number or company.company_number.length == 0%}
-            <th>Company address</th>
-          {% else %}
-            <th>Trading address</th>
-          {% endif %}
+          <th>Registered address</th>
           <td>
-            {% if company.address_1.length > 0 %}{{ company.address_1 }},{% endif %}
-            {% if company.address_2.length > 0 %}{{ company.address_2 }},{% endif %}
-            {% if company.address_town.length > 0 %}{{ company.address_town }},{% endif %}
-            {% if company.address_county.length > 0 %}{{ company.address_county }}{% endif %}
-            {% if company.address_postcode.length > 0 %}{{ company.address_postcode }}{% endif %}
-            {% if companyaddress_country.length > 0 %}{{ company.address_country }}{% endif %}
+            {% if company.registered_address_1.length > 0 %}{{ company.registered_address_1 }},{% endif %}
+            {% if company.registered_address_2.length > 0 %}{{ company.registered_address_2 }},{% endif %}
+            {% if company.registered_address_town.length > 0 %}{{ company.registered_address_town }},{% endif %}
+            {% if company.registered_address_county.length > 0 %}{{ company.registered_address_county }},{% endif %}
+            {% if company.registered_address_postcode.length > 0 %}{{ company.registered_address_postcode }},{% endif %}
+            {% if company.registered_address_country_name.length > 0 %}{{ company.registered_address_country_name }}{% endif %}
           </td>
         </tr>
         <tr>
           <th>Company type</th>
           <td>{{ company.business_type.name }}</td>
         </tr>
-      {% endif %}
-      <tr>
-        <th>Sector</th>
-        <td>{{ company.sector.name }}
-        </td>
-      </tr>
-      <tr>
-        <th>Website</th>
-        <td>
-          {% if company.website %}
-            <a href="{{ company.website }}">{{ company.website }}</a>
-          {% endif %}
-        </td>
-      </tr>
-      <tr>
-        <th>Business description</th>
-        <td>{{ company.description }}</td>
-      </tr>
-      <tr>
-        <th>Number of employees</th>
-        <td>{{ company.employee_range.name }}</td>
-      </tr>
-      <tr>
-        <th>Annual turnover</th>
-        <td>{{ company.turnover_range.name }}</td>
-      </tr>
+        <tr>
+          <th>Sector</th>
+          <td>{{ company.sector.name }}
+          </td>
+        </tr>
+        <tr>
+          <th>Trading name</th>
+          <td>{{ company.alias }}
+          </td>
+        </tr>
+        <tr>
+          <th>Trading address</th>
+          <td>
+            {% if company.trading_address_1.length > 0 %}{{ company.trading_address_1 }},{% endif %}
+            {% if company.trading_address_2.length > 0 %}{{ company.trading_address_2 }},{% endif %}
+            {% if company.trading_address_town.length > 0 %}{{ company.trading_address_town }},{% endif %}
+            {% if company.trading_addresss_county.length > 0 %}{{ company.trading_address_county }},{% endif %}
+            {% if company.trading_address_postcode.length > 0 %}{{ company.trading_address_postcode }},{% endif %}
+            {% if company.trading_address_country_name.length > 0 %}{{ company.trading_address_country_name }}{% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th>Website</th>
+          <td>
+            {% if company.website %}
+              <a href="{{ company.website }}">{{ company.website }}</a>
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th>Business description</th>
+          <td>{{ company.description }}</td>
+        </tr>
+        <tr>
+          <th>Number of employees</th>
+          <td>{{ company.employee_range.name }}</td>
+        </tr>
+        <tr>
+          <th>Annual turnover</th>
+          <td>{{ company.turnover_range.name }}</td>
+        </tr>
 
-      <tr>
-        <th>Region</th>
-        <td>{{ company.uk_region.name }}</td>
-      </tr>
-      <tr>
-        <th>Account manager</th>
-        <td>{{ company.account_manager }}</td>
-      </tr>
-      <tr>
-        <th>Is the company currently <br/>exporting to a market?</th>
-        <td>
-          {% if company.currently_exporting_to and company.currently_exporting_to.length > 0 %}
-            Yes.
-            {% for exportingMarket in company.currently_exporting_to %}
-              {{ exportingMarket }}
+        <tr>
+          <th>Region</th>
+          <td>{{ company.uk_region.name }}</td>
+        </tr>
+        <tr>
+          <th>Account manager</th>
+          <td>{{ company.account_manager }}</td>
+        </tr>
+        <tr>
+          <th>Is the company currently <br/>exporting to a market?</th>
+          <td>
+            {% if company.currently_exporting_to and company.currently_exporting_to.length > 0 %}
+              Yes.
+              {% for exportingMarket in company.currently_exporting_to %}
+                {{ exportingMarket }}
+              {% endfor %}
+              {% elif company.uktidata %}
+              No
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th>Future countries of interest</th>
+          <td>
+            {% if company.countries_of_interest %}
+              {% for countryOfInterest in company.countries_of_interest %}
+                <div>{{ countryOfInterest }}</div>
+              {% endfor %}
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th>Company connections</th>
+          <td>
+            {% for connection in company.connections %}
+              <div>{{ connection }}</div>
             {% endfor %}
-            {% elif company.uktidata %}
-            No
-          {% endif %}
-        </td>
-      </tr>
-      <tr>
-        <th>Future countries of interest</th>
-        <td>
-          {% if company.countries_of_interest %}
-            {% for countryOfInterest in company.countries_of_interest %}
-              <div>{{ countryOfInterest }}</div>
-            {% endfor %}
-          {% endif %}
-        </td>
-      </tr>
-      <tr>
-        <th>Company connections</th>
-        <td>
-          {% for connection in company.connections %}
-            <div>{{ connection }}</div>
-          {% endfor %}
-        </td>
-      </tr>
+          </td>
+        </tr>
       </tbody>
     </table>
     <div class="button-bar">

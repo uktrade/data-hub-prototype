@@ -11,12 +11,11 @@ const interactionController = require('./app/controller/interactioncontroller');
 const searchController = require('./app/controller/searchcontroller');
 const apiController = require('./app/controller/apicontroller');
 const expressNunjucks = require('express-nunjucks');
-const filters = require('./node_modules/govstrap/nunjucks/filters');
 const compression = require('compression');
 const customValidators = require('./app/lib/validators');
 const customSanitizers = require('./app/lib/sanitizers');
 const isDev = app.get('env') === 'development';
-const nunjuckFilters = require('./app/lib/nunjuckfilters');
+const filters = require('./app/lib/nunjuckfilters');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator({ customValidators, customSanitizers }));
@@ -24,13 +23,11 @@ app.use(expressValidator({ customValidators, customSanitizers }));
 app.use(compression());
 app.set('views', [
   `${__dirname}/app/views`,
-  `${__dirname}/node_modules/govuk_template_jinja/views`,
-  `${__dirname}/node_modules/govstrap/nunjucks`
+  `${__dirname}/node_modules/govuk_template_jinja/views`
 ]);
 
 filters.stringify = JSON.stringify;
-filters.highlightTerm = nunjuckFilters.highlightTerm;
-filters.formatDate = nunjuckFilters.formatDate;
+
 
 expressNunjucks(app, {
   watch: isDev,
@@ -44,8 +41,6 @@ app.use(require(`${__dirname}/app/middleware/locals`));
 
 // Static files
 app.use('/images', express.static(`${__dirname}/node_modules/govuk_frontend_toolkit/images`));
-app.use('/images', express.static(`${__dirname}/node_modules/govstrap/images`));
-app.use('/javascripts', express.static(`${__dirname}/node_modules/govstrap/public/javascripts`));
 app.use('/fonts', express.static(`${__dirname}/node_modules/govuk_template_mustache/assets/stylesheets`));
 app.use('/fonts', express.static(`${__dirname}/node_modules/font-awesome/fonts`));
 app.use(express.static(`${__dirname}/app/public`));

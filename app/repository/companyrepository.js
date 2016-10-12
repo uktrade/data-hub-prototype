@@ -2,6 +2,17 @@
 const rp = require('request-promise');
 const config = require('../../config');
 const moment = require('moment');
+const metadata = require('../lib/metadata');
+
+
+function lookupCountry(id) {
+  for (let country of metadata.COUNTRYS) {
+    if (country.id == id) {
+      return country.name;
+    }
+  }
+  return null;
+}
 
 function getDitCompany(id) {
   return rp({
@@ -12,6 +23,37 @@ function getDitCompany(id) {
 
 function getCHCompany(id) {
   return rp({ url: `${config.apiRoot}/ch-company/${id}/`, json: true });
+}
+
+function flattenAddresses(company) {
+
+  if (company.registered_address) {
+    const registered_address = company.registered_address;
+    if (registered_address.address_1) company.registered_address_1 = registered_address.address_1;
+    if (registered_address.address_2) company.registered_address_2 = registered_address.address_2;
+    if (registered_address.address_town) company.registered_address_town = registered_address.address_town;
+    if (registered_address.address_county) company.registered_address_county = registered_address.address_county;
+    if (registered_address.address_postcode) company.registered_address_postcode = registered_address.address_postcode;
+    if (registered_address.address_country) {
+      company.registered_address_country = registered_address.address_country;
+      company.registered_address_country_name = lookupCountry(registered_address.address_country);
+    }
+    delete company.registered_address;
+  }
+
+  if (company.trading_address) {
+    const trading_address = company.trading_address;
+    if (trading_address.address_1) company.trading_address_1 = trading_address.address_1;
+    if (trading_address.address_2) company.trading_address_2 = trading_address.address_2;
+    if (trading_address.address_town) company.trading_address_town = trading_address.address_town;
+    if (trading_address.address_county) company.trading_address_county = trading_address.address_county;
+    if (trading_address.address_postcode) company.trading_address_postcode = trading_address.address_postcode;
+    if (trading_address.address_country) {
+      company.trading_address_country = trading_address.address_country;
+      company.trading_address_country_name = lookupCountry(trading_address.address_country);
+    }
+    delete company.trading_address;
+  }
 }
 
 function getCompany(id, source) {
@@ -37,6 +79,7 @@ function getCompany(id, source) {
 
     getDitCompany(id)
       .then((company) => {
+        flattenAddresses(company);
         fulfill(company);
       })
       .catch((error) => {

@@ -3,9 +3,8 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-let metadata = require('../lib/metadata');
+const metadata = require('../lib/metadata');
 const companyRepository = require('../repository/companyrepository');
-const controllerUtils = require('../lib/controllerutils');
 
 function sanitizeForm(req) {
   req.sanitize('currently_exporting_to').joinArray();
@@ -15,7 +14,6 @@ function sanitizeForm(req) {
 }
 
 function add(req, res) {
-  controllerUtils.convertToFormAddress(req.body, 'address');
 
   if (req.body.currently_exporting_to && req.body.currently_exporting_to.length > 0) {
     req.body.currently_exporting_to = req.body.currently_exporting_to.split(',');
@@ -68,6 +66,7 @@ function renderCompany(req, res, company, formData) {
     formData.connections = formData.connections.split(',');
   }
 
+
   let title;
   if (!company.name && company.ch.name) {
     title = company.ch.name;
@@ -85,7 +84,7 @@ function renderCompany(req, res, company, formData) {
     TURNOVER_OPTIONS: metadata.TURNOVER_OPTIONS,
     TYPES_OF_BUSINESS: metadata.TYPES_OF_BUSINESS,
     REASONS_FOR_ARCHIVE: metadata.REASONS_FOR_ARCHIVE,
-    countrys: metadata.COUNTRYS,
+    COUNTRYS: metadata.COUNTRYS,
     errors: req.errors,
     formData
   });
@@ -112,8 +111,6 @@ function view(req, res) {
         formData = req.body;
       }
 
-      controllerUtils.convertToFormAddress(formData, 'address');
-
       renderCompany(req, res, company, formData);
     })
     .catch((error) => {
@@ -123,7 +120,6 @@ function view(req, res) {
 
 function post(req, res) {
   sanitizeForm(req);
-  controllerUtils.convertFromFormAddress(req.body, 'address');
 
   companyRepository.saveCompany(req.body)
     .then((data) => {

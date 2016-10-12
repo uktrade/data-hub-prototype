@@ -96,7 +96,6 @@ function get(req, res) {
     .then((result) => {
       // combine filters and facets to show which are
       // selected
-
       for (let filterKey in result.filters) {
         let filterValue = result.filters[filterKey];
         let facet = result.facets[filterKey];
@@ -108,6 +107,7 @@ function get(req, res) {
       }
 
       result.facets = getFakeFacets();
+      result.term = req.query.term;
 
       let pagination = getPagination(req, result);
       res.render('search/facet-search', {result, FACETTITLES, pagination, params: req.query });

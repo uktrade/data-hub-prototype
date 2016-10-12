@@ -1,5 +1,4 @@
 {% extends "layouts/govuk_template.html" %}
-{% import "macros/utils.html" as utils %}
 
 {% set global_header_text="Datahub" %}
 {% set homepage_url = "/" %}
@@ -31,5 +30,5 @@
 {% endblock %}
 
 {% block body_end %}
-  {{ utils.govstrap_scripts() }}
+  <script src="{{ asset_path }}javascripts/datahub.bundle.js"></script>
 {% endblock %}

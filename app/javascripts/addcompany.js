@@ -3,8 +3,8 @@ import CompanyAutocomplete from './companyautocomplete';
 
 const isUKBasedRadios = document.querySelectorAll('[name="uk_based"]');
 const regionFormGroup = document.getElementById('uk_region-wrapper');
-const countryElement = document.getElementById('address-country');
-const countryWrapper = document.getElementById('address.country-wrapper');
+const countryElement = document.getElementById('registered_address_country');
+const countryWrapper = document.getElementById('registered_address_country-wrapper');
 const options = document.querySelectorAll('#business_type option');
 
 let ltdElement;
@@ -44,9 +44,9 @@ function setUKCompany() {
   ltdElement.hidden = true;
   plcElement.disabled = true;
   plcElement.hidden = true;
-  setCountry('United Kingdom');
+  //setCountry('United Kingdom');
 
-  addClass(countryWrapper, 'hidden');
+  //addClass(countryWrapper, 'hidden');
   removeClass(regionFormGroup, 'hidden');
 }
 
@@ -56,12 +56,12 @@ function setNoneUKCompany() {
   plcElement.disabled = false;
   plcElement.hidden = false;
 
-  if (countryElement.value == 'United Kingdom') {
-    setCountry('');
-  }
+  //if (countryElement.value == 'United Kingdom') {
+  //  setCountry('');
+  //}
 
   addClass(regionFormGroup, 'hidden');
-  removeClass(countryWrapper, 'hidden');
+  //removeClass(countryWrapper, 'hidden');
 }
 
 function handleCountryChangeUK() {
