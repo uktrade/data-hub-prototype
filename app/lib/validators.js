@@ -1,3 +1,5 @@
+'use strict';
+
 var moment = require('moment');
 
 function validUkDateString(value) {

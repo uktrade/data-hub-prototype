@@ -1,3 +1,5 @@
+'use strict';
+
 function trimArray(value) {
   if (Array.isArray(value)) {
     return value.filter((item) => item.length > 0);

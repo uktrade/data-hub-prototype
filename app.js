@@ -59,4 +59,6 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.listen(config.port);
+app.listen(config.port, function(){
+	console.log('app listening on port %s', config.port);
+});

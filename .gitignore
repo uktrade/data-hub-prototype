@@ -22,6 +22,9 @@
 
 # Ignore node packages
 node_modules/
+
 test.sh
 apitest.js
 reports
+.env
+
