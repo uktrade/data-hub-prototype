@@ -24,6 +24,7 @@ const isDev = app.get('env') === 'development';
 
 app.use( cookieParser() );
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(expressValidator({ customValidators, customSanitizers }));
 
 app.use(compression());
@@ -58,8 +59,11 @@ app.use('/interaction', interactionController.router);
 app.use('/search', searchController.router);
 app.use('/leads', leadsController.router);
 app.get('/postcodelookup/:postcode', apiController.postcodelookup);
-app.get('/suggest', apiController.companySuggest);
+app.get('/api/suggest', apiController.companySuggest);
 app.get('/api/company/:source/:sourceId/?', apiController.companyDetail);
+app.get('/api/countrylookup', apiController.countryLookup);
+app.get('/api/accountmanagerlookup', apiController.accountManagerLookup);
+app.get('/api/meta/:metaName', apiController.getMetadata);
 
 app.get('/', function(req, res) {
   res.render('index');

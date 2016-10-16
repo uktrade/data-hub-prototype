@@ -10,9 +10,6 @@ rp({
     module.exports.SECTOR_OPTIONS = data;
   });
 
-
-
-
 module.exports.REASONS_FOR_ARCHIVE = [
   'Company is dissolved',
   'Other'
@@ -34,8 +31,6 @@ rp({
 .then((data) => {
     module.exports.REGION_OPTIONS = data;
 });
-
-module.exports.ADVISOR_OPTIONS = require('../../data/advisors.json');
 
 rp({
   url: `${config.apiRoot}/metadata/country`,

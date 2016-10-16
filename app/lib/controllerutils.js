@@ -31,7 +31,77 @@ function encodeQueryData(data) {
   return ret.join('&');
 }
 
+function convertAutosuggestCollection(form, targetFieldName) {
+
+  const lowerTargetFieldName = targetFieldName.toLocaleLowerCase();
+  const fieldNames = Object.keys(form);
+
+  form[targetFieldName] = [];
+
+  for (const fieldName of fieldNames) {
+    if (fieldName.toLocaleLowerCase().substr(0, targetFieldName.length) === lowerTargetFieldName) {
+      form[targetFieldName].push({
+        id: form[fieldName],
+        name: form[`${fieldName}-display`]
+      });
+      delete form[`${fieldName}-display`];
+      delete form[fieldName];
+    }
+  }
+}
+
+
+// Scans the properties of an object (form) and turns data.x = {id:123, name:'y'} into data.x=123
+// This is used so that when a form posts back an nested object (in the same format it was given the data
+// it is flattened in to the alternative format used by the server.
+
+function flattenIdFields(data) {
+  const fieldNames = Object.keys(data);
+  for (const fieldName of fieldNames) {
+    const fieldValue = data[fieldName];
+    if (fieldValue !== null) {
+      if (Array.isArray(fieldValue)) {
+        // Scan through the array of values, strip out any that are null, empty or have a null or empty id
+        data[fieldName] = fieldValue
+          .filter((item) =>
+            (item && item.hasOwnProperty('id') && item.id !== null && item.id.length > 0
+            || item !== null && item.length > 0))
+          .map((item) => item.id);
+      } else if (fieldValue.hasOwnProperty('id')) {
+        data[fieldName] = fieldValue.id;
+      }
+    }
+  }
+}
+
+
+function flattenAddress(data, addressName) {
+
+  if (data[`${addressName}_address`]) {
+    const address = data[`${addressName}_address`];
+    const addressKeys = Object.keys(address);
+    for (const key of addressKeys) {
+      data[`${addressName}_${key}`] = address[key];
+    }
+    delete data[`${addressName}_address`];
+  }
+}
+
+function nullEmptyFields(data) {
+  const fieldNames = Object.keys(data);
+  for (const fieldName of fieldNames) {
+    const fieldValue = data[fieldName];
+    if (fieldValue !== null && fieldValue.length === 0) {
+      data[fieldName] = null;
+    }
+  }
+}
+
 module.exports = {
   transformErrors,
-  encodeQueryData
+  encodeQueryData,
+  convertAutosuggestCollection,
+  flattenIdFields,
+  flattenAddress,
+  nullEmptyFields
 };

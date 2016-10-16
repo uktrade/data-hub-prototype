@@ -1,10 +1,5 @@
 
-{% macro companyresult(result, term, type) %}
-  {% if type == 'company_companieshousecompany' %}
-    {% set id = result.company_number %}
-  {% else %}
-    {% set id = result.id %}
-  {% endif %}
+{% macro companyresult(id, result, term, type) %}
 
   <li class="results-list__result result-list__ch" data_name="{{ result.name }}">
     <h3 class="result-title">
@@ -32,10 +27,10 @@
   </li>
 {% endmacro %}
 
-{% macro contactresult(result, term) %}
+{% macro contactresult(id, result, term) %}
   <li class="results-list__result result-list__contact">
     <h3 class="result-title">
-      <a href="/contact/{{ result.source_id }}/view?term={{ term }}">
+      <a href="/contact/{{ id }}/view?term={{ term }}">
         {{ result.name | highlightTerm(term) | safe }}
       </a>
     </h3>

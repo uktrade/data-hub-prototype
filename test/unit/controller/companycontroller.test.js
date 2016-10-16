@@ -14,8 +14,7 @@ let formData = {
   accountManager: 'Fred Smith',
   isCurrentlyExporting: 'Yes',
   exportingMarkets: 'Brazil',
-  countryOfInterest: [ 'Argentina', 'Greece', 'France' ],
-  connections: 'connection'
+  countryOfInterest: [ 'Argentina', 'Greece', 'France' ]
 };
 
 let existingCompany = {
@@ -154,7 +153,6 @@ let existingCompany = {
   accountManager: '',
   operatingAddress: { address1: '', address2: '', city: '', postcode: '' },
   exportingMarkets: [],
-  connections: [],
   uktidata: true
 };
 
@@ -294,7 +292,6 @@ let expectedUpdatedCompany = {
   accountManager: 'Fred Smith',
   operatingAddress: { address1: 'addr1', address2: 'addr2', city: 'city', postcode: 'postcode' },
   exportingMarkets: ['Brazil'],
-  connections: ['connection'],
   uktidata: true
 };
 

@@ -49,12 +49,12 @@
         <tr>
           <th>Registered address</th>
           <td>
-            {% if company.registered_address_1.length > 0 %}{{ company.registered_address_1 }},{% endif %}
-            {% if company.registered_address_2.length > 0 %}{{ company.registered_address_2 }},{% endif %}
-            {% if company.registered_address_town.length > 0 %}{{ company.registered_address_town }},{% endif %}
-            {% if company.registered_address_county.length > 0 %}{{ company.registered_address_county }},{% endif %}
-            {% if company.registered_address_postcode.length > 0 %}{{ company.registered_address_postcode }},{% endif %}
-            {% if company.registered_address_country_name.length > 0 %}{{ company.registered_address_country_name }}{% endif %}
+            {% if company.registered_address.address_1.length > 0 %}{{ company.registered_address.address_1 }},{% endif %}
+            {% if company.registered_address.address_2.length > 0 %}{{ company.registered_address.address_2 }},{% endif %}
+            {% if company.registered_address.address_town.length > 0 %}{{ company.registered_address.address_town }},{% endif %}
+            {% if company.registered_address.address_county.length > 0 %}{{ company.registered_address.address_county }},{% endif %}
+            {% if company.registered_address.address_postcode.length > 0 %}{{ company.registered_address.address_postcode }},{% endif %}
+            {% if company.registered_address.address_country_name.length > 0 %}{{ company.registered_address.address_country_name }}{% endif %}
           </td>
         </tr>
         <tr>
@@ -74,12 +74,12 @@
         <tr>
           <th>Trading address</th>
           <td>
-            {% if company.trading_address_1.length > 0 %}{{ company.trading_address_1 }},{% endif %}
-            {% if company.trading_address_2.length > 0 %}{{ company.trading_address_2 }},{% endif %}
-            {% if company.trading_address_town.length > 0 %}{{ company.trading_address_town }},{% endif %}
-            {% if company.trading_addresss_county.length > 0 %}{{ company.trading_address_county }},{% endif %}
-            {% if company.trading_address_postcode.length > 0 %}{{ company.trading_address_postcode }},{% endif %}
-            {% if company.trading_address_country_name.length > 0 %}{{ company.trading_address_country_name }}{% endif %}
+            {% if company.trading_address.address_1.length > 0 %}{{ company.trading_address.address_1 }},{% endif %}
+            {% if company.trading_address.address_2.length > 0 %}{{ company.trading_address.address_2 }},{% endif %}
+            {% if company.trading_address.address_town.length > 0 %}{{ company.trading_address.address_town }},{% endif %}
+            {% if company.trading_address.addresss_county.length > 0 %}{{ company.trading_address.address_county }},{% endif %}
+            {% if company.trading_address.address_postcode.length > 0 %}{{ company.trading_address.address_postcode }},{% endif %}
+            {% if company.trading_address.address_country_name.length > 0 %}{{ company.trading_address.address_country_name }}{% endif %}
           </td>
         </tr>
         <tr>
@@ -109,17 +109,17 @@
         </tr>
         <tr>
           <th>Account manager</th>
-          <td>{{ company.account_manager }}</td>
+          <td>{{ company.account_manager.name }}</td>
         </tr>
         <tr>
           <th>Is the company currently <br/>exporting to a market?</th>
           <td>
-            {% if company.currently_exporting_to and company.currently_exporting_to.length > 0 %}
+            {% if company.export_to_countries and company.export_to_countries.length > 0 %}
               Yes.
-              {% for exportingMarket in company.currently_exporting_to %}
-                {{ exportingMarket }}
+              {% for exportingMarket in company.export_to_countries %}
+                {{ exportingMarket.name }}
               {% endfor %}
-              {% elif company.uktidata %}
+            {% elif company.uktidata %}
               No
             {% endif %}
           </td>
@@ -127,19 +127,11 @@
         <tr>
           <th>Future countries of interest</th>
           <td>
-            {% if company.countries_of_interest %}
-              {% for countryOfInterest in company.countries_of_interest %}
-                <div>{{ countryOfInterest }}</div>
+            {% if company.future_interest_countries %}
+              {% for countryOfInterest in company.future_interest_countries %}
+                <div>{{ countryOfInterest.name }}</div>
               {% endfor %}
             {% endif %}
-          </td>
-        </tr>
-        <tr>
-          <th>Company connections</th>
-          <td>
-            {% for connection in company.connections %}
-              <div>{{ connection }}</div>
-            {% endfor %}
           </td>
         </tr>
       </tbody>

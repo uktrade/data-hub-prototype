@@ -17,6 +17,14 @@ function joinArray(value) {
   return null;
 }
 
+function toArray(value) {
+  if (!Array.isArray(value)) {
+    let array = [value];
+    value = array;
+  }
+  return value;
+}
+
 
 function yesNoToBoolean(value) {
   if (!value) {
@@ -26,5 +34,5 @@ function yesNoToBoolean(value) {
 }
 
 module.exports = {
-  trimArray, joinArray, yesNoToBoolean
+  trimArray, joinArray, yesNoToBoolean, toArray
 };

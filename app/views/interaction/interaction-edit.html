@@ -45,7 +45,7 @@
     {{ forms.autocomplete('advisor',
       label="DIT advisor",
       value=interaction.advisor,
-      options=ADVISORS,
+      options_url="/api/accountmanagerlookup?accountmanager=",
       error=errors.advisor
     ) }}
 
@@ -60,7 +60,6 @@
       value=interaction.service_provider,
       error=errors.service_provider)
     }}
-
 
     {{ forms.save() }}
 

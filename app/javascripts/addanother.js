@@ -21,6 +21,18 @@ class AddAnother {
     event.preventDefault();
     this.fieldCount += 1;
 
+    if (this.originalField.hasClass('js-autocomplete')) {
+      this.addAutocompleteField();
+    } else {
+      this.addPlainField();
+    }
+
+  };
+
+  addPlainField() {
+    event.preventDefault();
+    this.fieldCount += 1;
+
     // Create a new copy of the field
     const newFormGroup = this.firstGroup.clone();
     const newInput = newFormGroup.find(`[name='${this.fieldName}']`);
@@ -35,6 +47,29 @@ class AddAnother {
       .parent();
 
     newFormGroup.insertAfter(lastField);
+    newInput.focus();
+
+  }
+
+  addAutocompleteField() {
+    event.preventDefault();
+    this.fieldCount += 1;
+
+    // Create a new copy of the field
+    const newFormGroup = this.firstGroup.clone();
+    newFormGroup.find('input').last().remove();
+    const newInput = newFormGroup.find(`[name='${this.fieldName}']`);
+
+    // Give the field a new ID and the label point to it too
+    const newId = `${this.fieldName}-${this.fieldCount}`;
+    newInput.val('').attr('id', newId).show();
+    newFormGroup.find('label').attr('for', newId);
+
+    const lastField = this.element.find(`[name='${this.fieldName}']`)
+      .filter(':last')
+      .parent();
+
+    newFormGroup.insertAfter(lastField);
 
     newInput.focus();
 
@@ -42,7 +77,7 @@ class AddAnother {
       new Autocomplete(newInput);
     }
 
-  };
+  }
 }
 
 export default AddAnother;

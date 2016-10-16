@@ -24,16 +24,18 @@ class Autocomplete {
 
   setupDisplayField() {
     this.displayField = this.sourceField.clone();
-    this.displayField.attr('id', this.sourceField.attr('id') + '-x').attr('name', '');
+    this.displayField
+      .attr('id', this.sourceField.attr('id') + '-x')
+      .attr('name', this.sourceField.attr('id') + '-display');
     this.displayField.insertAfter(this.sourceField);
-    this.sourceField.hide();
-
+    this.sourceField.hide().val(this.sourceField.attr('data-id'));
+    this.sourceField.addClass('autosuggest-source-js');
     let value;
 
-    // Display the value if the list if an object.
+    // Display the value if the list is an object.
     if (this.options && !Array.isArray(this.options)) {
       value = this.options[this.sourceField.val()];
-    } else if (Array.isArray(this.options) && this.options[0].id) {
+    } else if (Array.isArray(this.options) && this.options.length > 0 && this.options[0].id) {
       const id = this.sourceField.val();
       const filtered = this.options.filter((item) => item.id === id);
       if (filtered.length > 0 && filtered[0].name) {
@@ -44,6 +46,7 @@ class Autocomplete {
     }
     this.displayField.val(value);
   }
+
 
   select() {
     let suggestion = this.$menu.find(`.${ACTIVECLASS}`);
@@ -136,7 +139,7 @@ class Autocomplete {
       }
     }
 
-    matches.sort((a,b) => {
+    matches.sort((a, b) => {
       return this.options[a].toLowerCase().localeCompare(this.options[b].toLowerCase());
     });
 
@@ -166,7 +169,6 @@ class Autocomplete {
 
   handleAjaxResult = (result) => {
     if (result.length > 0) {
-      result = result.sort((a, b) => { return a.toLowerCase().localeCompare(b.toLowerCase()); });
       this.render(result).show();
     } else {
       this.hide();
@@ -311,6 +313,7 @@ class Autocomplete {
   };
 
   keyup = (event) => {
+
     switch (event.keyCode) {
       case 40: // down arrow
       case 38: // up arrow
