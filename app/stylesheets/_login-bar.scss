@@ -1,10 +1,33 @@
 .login-bar {
+  
   @include core-19();
   line-height: 2.0;
   border-bottom: 1px solid $border-colour;
-  text-align: right;
+  overflow: hidden;
 
   @include media(tablet) {
     line-height: 1.8;
+  }
+
+  .login-links {
+    
+    margin: 0;
+    padding: 0;
+
+    a {
+      margin: 0 0.5em;
+    }
+
+  }
+
+  .login-links-left {
+    float: left;
+    margin-left: -0.5em;
+  }
+
+  .login-links-right {
+    margin-right: -0.5em;
+    float: right;
+    text-align: right;
   }
 }

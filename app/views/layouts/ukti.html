@@ -21,7 +21,16 @@
       </p>
     </div>
     <div class="login-bar">
-      Lee Smith: <a href="#">My account</a> | <a href="#">Sign out</a>
+      <div class="login-links login-links-left">
+        <a href="/">Home</a>
+        |
+        <a href="/leads">My Leads</a>
+      </div>
+      <div class="login-links login-links-right">
+        Lee Smith: <a href="#">My account</a>
+        |
+        <a href="#">Sign out</a>
+      </div>
     </div>
     <div class="container">
       {% block main %}{% endblock %}
