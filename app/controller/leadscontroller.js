@@ -1,16 +1,17 @@
-/* eslint new-cap: 0 */
 'use strict';
 
 const express = require('express');
-const router = express.Router();
+
+const createRouter = express.Router;
+const router = createRouter();
 
 function index( req, res ){
 
-	res.render( 'leads/index' );
+  res.render( 'leads/index' );
 }
 
 router.get( '/', index );
 
 module.exports = {
-	router
+  router
 };
