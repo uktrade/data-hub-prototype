@@ -171,4 +171,25 @@ filter.formatDate = function(d, f) {
   return formatted;
 };
 
+/**
+ * returns a standard gov.uk date from an epoch using momentjs
+ * moment documentation: http://momentjs.com/docs/
+ * @method function
+ * @param  {string} d date e.g 1462834800000
+ * @param  {string} f moment.js format string (to override the default if needed)
+ * @return {string} date string as per the current gov.uk standard 09/12/1981 -> 09 December 1981
+ */
+filter.date = function( date, format ) {
+
+  format = ( format || 'DD MMMM YYYY, h:mm:ss a' );
+
+  let formatted = moment( date ).format( format );
+
+  if (formatted === 'Invalid date') {
+    return '';
+  }
+
+  return formatted;
+};
+
 module.exports = filter;

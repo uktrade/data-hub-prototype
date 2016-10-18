@@ -1,16 +1,21 @@
 .login-bar {
-  
+
   @include core-19();
   line-height: 2.0;
   border-bottom: 1px solid $border-colour;
   overflow: hidden;
+  padding: 0.5em 0 0.25em 0;
 
   @include media(tablet) {
     line-height: 1.8;
   }
 
+  .user-name {
+    color: $grey-1;
+  }
+
   .login-links {
-    
+
     margin: 0;
     padding: 0;
 

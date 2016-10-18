@@ -1,5 +1,29 @@
 {% extends "layouts/ukti.html" %}
 
 {% block main %}
-	Leads
+
+  <h2 class="leads-heading bold-xlarge">My Leads</h2>
+
+  <a href="/leads/add" class="button button-secondary add-new-lead-button">Add new lead</a>
+
+	<table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for contact in contacts %}
+      <tr>
+        <td>{{ contact.date | date("DD.MM.YYYY") }}</td>
+        <td><a href="#">{{ contact.name }}</a></td>
+        <td>{{ contact.phone }}</td>
+        <td><a href="#">{{ contact.email }}</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
