@@ -22,13 +22,56 @@ function index( req, res ){
   } );
 }
 
+function saveLead( lead, req, res ){
+
+  let userId = req.cookies.userId;
+
+  if( !userId ){
+
+    userId = Math.floor( Date.now() * Math.random() );
+
+    res.cookie( 'userId', userId );
+  }
+
+  userLeads.save( userId );
+}
+
 function addLead( req, res ){
 
   res.render( 'leads/add' );
 }
 
+function createLead( req, res ){
+
+  var errors = [];
+
+  if( !req.body.first_name ){
+
+     errors.firstName = 'Please enter a first name';
+     errors.push( [ 'first_name', errors.firstName ] );
+  }
+
+  if( !req.body.last_name ){
+
+     errors.lastName = 'Please enter a last name';
+     errors.push( [ 'last_name', errors.lastName ] );
+  }
+
+  if( errors.length ){
+
+    res.render( 'leads/add', { errors, lead: req.body } );
+
+  } else {
+
+    // save lead info
+    //saveLead( req.body );
+    res.redirect( '/leads' );
+  }
+}
+
 router.get( '/', index );
 router.get( '/add', addLead );
+router.post( '/add', createLead );
 
 module.exports = {
   router
