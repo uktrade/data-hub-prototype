@@ -1,0 +1,26 @@
+{% extends "layouts/ukti.html" %}
+{% import "macros/forms.html" as forms %}
+
+{% block main %}
+
+  <a href="/leads" class="back-link">Back to my leads</a>
+
+  <h2 class="bold-xlarge leads-heading add-lead-heading">Add new lead</h2>
+
+  <form action="/leads/add">
+
+    {{ forms.textbox('firstName', label="First name", value=lead.firstName, error=errors.firstName) }}
+
+    {{ forms.textbox('lastName', label="Last name", value=lead.lastName, error=errors.lastName) }}
+
+    {{ forms.textbox('phone', label="Phone (optional)", value=lead.phone, error=errors.phone) }}
+
+    {{ forms.textbox('email', label="Email (optional)", value=lead.email, error=errors.email) }}
+
+    {{ forms.textarea('notes', label="Notes (optional)", value=lead.notes, error=errors.notes) }}
+
+    {{ forms.save(backUrl='/leads') }}
+
+  </form>
+
+{% endblock %}

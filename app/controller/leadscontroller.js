@@ -22,7 +22,13 @@ function index( req, res ){
   } );
 }
 
+function addLead( req, res ){
+
+  res.render( 'leads/add' );
+}
+
 router.get( '/', index );
+router.get( '/add', addLead );
 
 module.exports = {
   router
