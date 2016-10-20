@@ -2,7 +2,7 @@
 
 let leads = {};
 
-function generateUserId(){
+function generateLeadId(){
 
   return Math.floor( Date.now() * Math.random() );
 }
@@ -11,26 +11,42 @@ function getLeads( userId ){
 
   const userLeads = ( leads[ userId ] || [] );
 
-  console.log( 'Got %s lead(s) for user %s', userLeads.length, userId );
-
   return userLeads;
 }
 
 module.exports = {
 
-  get: getLeads,
+  getAll: getLeads,
+
+  getById: function( userId, leadId ){
+
+    if( typeof userId === 'undefined' ){ throw new Error( 'userId is required' ); }
+    if( typeof leadId === 'undefined' ){ throw new Error( 'leadId is required' ); }
+
+    const userLeads = getLeads( userId );
+    let i = 0;
+    let lead;
+
+    while( ( lead = userLeads[ i++ ] ) ){
+
+      if( lead._id == leadId ){
+        return lead;
+      }
+    }
+
+    return null;
+  },
 
   save: function( userId, lead ){
 
-    let userLeads = leads[ userId ] || [];
+    let userLeads = getLeads( userId );
 
-    lead._id = generateUserId();
+    lead._id = generateLeadId();
     lead.date = Date.now();
 
     userLeads.push( lead );
 
     leads[ userId ] = userLeads;
-    console.log( 'Added lead for %s', userId );
   },
 
   update: function( userId, leadId, newLead ){

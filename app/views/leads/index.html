@@ -21,7 +21,7 @@
       {% for lead in leads %}
       <tr>
         <td>{{ lead.date | date("DD.MM.YYYY") }}</td>
-        <td><a href="#">{{ lead.name }}</a></td>
+        <td><a href="/leads/view/{{ lead.id }}">{{ lead.name }}</a></td>
         <td>{{ lead.phone }}</td>
         <td><a href="#">{{ lead.email }}</a></td>
       </tr>

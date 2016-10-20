@@ -1,14 +1,11 @@
 .add-new-lead-button {
   float: right;
   margin-bottom: 1em;
+  margin-top: -0.75em;
 }
 
 .leads-heading {
-  margin: 0.75em 0 0 0;
-}
-
-.add-lead-heading {
-  margin-bottom: 0.75em;
+  margin: 0.75em 0 0.75em 0;
 }
 
 .no-leads {
@@ -19,4 +16,30 @@
   box-sizing: border-box;
   clear: both;
   margin-top: 4em;
+}
+
+.none {
+  color: $grey-2;
+}
+
+.view-lead-table {
+
+  border-top: 1px solid $grey-2;
+  margin-bottom: 3em;
+
+  td:first-of-type {
+    width: 25%;
+  }
+}
+
+.button-bar {
+
+  .button {
+    margin-right: 0.5em;
+  }
+
+  .text-link {
+    line-height: 2.2;
+    margin-left: 1em;
+  }
 }
