@@ -6,6 +6,8 @@
 
   <a href="/leads/add" class="button button-secondary add-new-lead-button">Add new lead</a>
 
+  {% if leads and leads.length %}
+
 	<table>
     <thead>
       <tr>
@@ -16,14 +18,21 @@
       </tr>
     </thead>
     <tbody>
-      {% for contact in contacts %}
+      {% for lead in leads %}
       <tr>
-        <td>{{ contact.date | date("DD.MM.YYYY") }}</td>
-        <td><a href="#">{{ contact.name }}</a></td>
-        <td>{{ contact.phone }}</td>
-        <td><a href="#">{{ contact.email }}</a></td>
+        <td>{{ lead.date | date("DD.MM.YYYY") }}</td>
+        <td><a href="#">{{ lead.name }}</a></td>
+        <td>{{ lead.phone }}</td>
+        <td><a href="#">{{ lead.email }}</a></td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
+
+  {% else %}
+
+    <p class="no-leads">You haven't added any leads yet.</p>
+
+  {% endif %}
+
 {% endblock %}

@@ -1,23 +1,28 @@
 'use strict';
 
+const config = require('./config');
+
 const express = require('express');
 const expressValidator = require('express-validator');
-const app = express();
+const cookieParser = require( 'cookie-parser' );
 const bodyParser = require('body-parser');
-const config = require('./config');
+const expressNunjucks = require('express-nunjucks');
+const compression = require('compression');
+
 const companyController = require('./app/controller/companycontroller');
 const contactController = require('./app/controller/contactcontroller');
 const interactionController = require('./app/controller/interactioncontroller');
 const searchController = require('./app/controller/searchcontroller');
 const apiController = require('./app/controller/apicontroller');
 const leadsController = require('./app/controller/leadscontroller');
-const expressNunjucks = require('express-nunjucks');
-const compression = require('compression');
 const customValidators = require('./app/lib/validators');
 const customSanitizers = require('./app/lib/sanitizers');
-const isDev = app.get('env') === 'development';
 const filters = require('./app/lib/nunjuckfilters');
 
+const app = express();
+const isDev = app.get('env') === 'development';
+
+app.use( cookieParser() );
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator({ customValidators, customSanitizers }));
 
@@ -28,7 +33,6 @@ app.set('views', [
 ]);
 
 filters.stringify = JSON.stringify;
-
 
 expressNunjucks(app, {
   watch: isDev,
