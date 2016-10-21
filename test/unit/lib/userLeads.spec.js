@@ -146,28 +146,58 @@ describe( 'userLeads', function(){
 
     describe( 'When the lead exists', function(){
 
-      it( 'Updates the lead', function(){
+      describe( 'When the leadId type matches', function(){
 
-        const userId = generateUserId();
-        const nameKey = 'name';
-        const nameValue = 'my-test-value';
+        it( 'Updates the lead', function(){
 
-        let oldLead = { name: 'old lead' };
-        let newLead = {};
+          const userId = generateUserId();
+          const nameKey = 'name';
+          const nameValue = 'my-test-value';
 
-        newLead[ nameKey ] = nameValue;
+          let oldLead = { name: 'old lead' };
+          let newLead = {};
 
-        leads.save( userId, oldLead );
-        let userLeads = leads.getAll( userId );
+          newLead[ nameKey ] = nameValue;
 
-        expect( userLeads.length ).toEqual( 1 );
+          leads.save( userId, oldLead );
+          let userLeads = leads.getAll( userId );
 
-        leads.update( userId, oldLead._id, newLead );
+          expect( userLeads.length ).toEqual( 1 );
 
-        userLeads = leads.getAll( userId );
+          leads.update( userId, oldLead._id, newLead );
 
-        expect( userLeads.length ).toEqual( 1 );
-        expect( userLeads[ 0 ][ nameKey ] ).toEqual( nameValue );
+          userLeads = leads.getAll( userId );
+
+          expect( userLeads.length ).toEqual( 1 );
+          expect( userLeads[ 0 ][ nameKey ] ).toEqual( nameValue );
+        } );
+      } );
+
+      describe( 'When the leadId type does not match', function(){
+
+        it( 'Updates the lead', function(){
+
+          const userId = generateUserId();
+          const nameKey = 'name';
+          const nameValue = 'my-test-value';
+
+          let oldLead = { name: 'old lead' };
+          let newLead = {};
+
+          newLead[ nameKey ] = nameValue;
+
+          leads.save( userId, oldLead );
+          let userLeads = leads.getAll( userId );
+
+          expect( userLeads.length ).toEqual( 1 );
+
+          leads.update( userId, ( oldLead._id + '' ), newLead );
+
+          userLeads = leads.getAll( userId );
+
+          expect( userLeads.length ).toEqual( 1 );
+          expect( userLeads[ 0 ][ nameKey ] ).toEqual( nameValue );
+        } );
       } );
     } );
   } );

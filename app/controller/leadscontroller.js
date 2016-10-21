@@ -45,6 +45,18 @@ function mapLeadForListView( lead ){
   };
 }
 
+function mapLeadForEdit( lead ){
+
+  return {
+    id: lead._id,
+    first_name: lead.firstName,
+    last_name: lead.lastName,
+    phone: lead.phone,
+    email: lead.email,
+    notes: lead.notes
+  };
+}
+
 function mapLeadsForListView( leads ){
 
   return leads.map( mapLeadForListView );
@@ -78,24 +90,34 @@ function index( req, res ){
 
 function addLead( req, res ){
 
-  res.render( 'leads/add' );
+  res.render( 'leads/add', {
+    action: '/leads/add',
+    backUrl: '/leads'
+  } );
 }
 
-function createLead( req, res ){
+function validateLead( params ){
 
   var errors = [];
 
-  if( !req.body.first_name ){
+  if( !params.first_name ){
 
      errors.firstName = 'Please enter a first name';
      errors.push( [ 'first_name', errors.firstName ] );
   }
 
-  if( !req.body.last_name ){
+  if( !params.last_name ){
 
      errors.lastName = 'Please enter a last name';
      errors.push( [ 'last_name', errors.lastName ] );
   }
+
+  return errors;
+}
+
+function createLead( req, res ){
+
+  let errors = validateLead( req.body );
 
   if( errors.length ){
 
@@ -111,6 +133,43 @@ function createLead( req, res ){
 
 function viewLead( req, res ){
 
+  res.render( 'leads/view', { lead: mapLeadForSingleView( req.lead ) } );
+}
+
+function editLead( req, res ){
+
+  res.render( 'leads/add', {
+    action: '/leads/update',
+    edit: true,
+    backUrl: `/leads/view/${ req.lead._id }`,
+    lead: mapLeadForEdit( req.lead )
+  } );
+}
+
+function updateLead( req, res ){
+
+  let errors = validateLead( req.body );
+
+  if( errors.length ){
+
+    res.render( 'leads/add', {
+      action: '/leads/update',
+      edit: true,
+      backUrl: `/leads/view/${req.body.id}`,
+      lead: req.body,
+      errors: errors
+    } );
+
+  } else {
+
+    userLeads.update( req.userId, req.body.id, getLeadDetails( req.body ) );
+    res.redirect( '/leads' );
+  }
+}
+
+
+function getLeads( req, res, next ){
+
   // console.log( 'userId: %s, leadId: %s', req.userId, req.params.leadId );
 
   const lead = userLeads.getById( req.userId, req.params.leadId );
@@ -119,7 +178,8 @@ function viewLead( req, res ){
 
   if( lead ){
 
-    res.render( 'leads/view', { lead: mapLeadForSingleView( lead ) } );
+    req.lead = lead;
+    next();
 
   } else {
 
@@ -136,8 +196,10 @@ router.get( '/', getUserId, index );
 router.get( '/add', addLead );
 router.post( '/add', getUserId, createLead );
 router.get( '/view', redirectToMyLeads );
-router.get( '/view/:leadId', getUserId, viewLead );
+router.get( '/view/:leadId', getUserId, getLeads, viewLead );
+router.get( '/edit', redirectToMyLeads );
+router.get( '/edit/:leadId', getUserId, getLeads, editLead );
+router.get( '/update', redirectToMyLeads );
+router.post( '/update', getUserId, updateLead );
 
-module.exports = {
-  router
-};
+module.exports = { router };

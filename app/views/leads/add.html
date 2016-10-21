@@ -7,9 +7,19 @@
 
   {{ forms.errorPanel( errors ) }}
 
-  <h2 class="bold-xlarge leads-heading">Add new lead</h2>
+  <h2 class="bold-xlarge leads-heading">
+    {% if edit %}
+      Edit lead
+    {% else %}
+      Add new lead
+    {% endif %}
+  </h2>
 
-  <form action="/leads/add" method="post">
+  <form action="{{ action }}" method="post">
+
+    {% if lead.id %}
+      <input type="hidden" name="id" value="{{ lead.id }}">
+    {% endif %}
 
     {{ forms.textbox('first_name', label="First name", value=lead.first_name, error=errors.firstName) }}
 
@@ -21,7 +31,7 @@
 
     {{ forms.textarea('notes', label="Notes (optional)", value=lead.notes, error=errors.notes) }}
 
-    {{ forms.save(backUrl='/leads') }}
+    {{ forms.save(backUrl=backUrl) }}
 
   </form>
 

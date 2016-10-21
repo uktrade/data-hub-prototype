@@ -58,7 +58,7 @@ module.exports = {
 
     while( ( lead = userLeads[ i ] ) ){
 
-      if( lead._id === leadId ){
+      if( lead._id == leadId ){
 
         newLead._id = leadId;
         userLeads[ i ] = newLead;
