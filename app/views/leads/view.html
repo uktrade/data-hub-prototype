@@ -1,0 +1,48 @@
+{% extends "layouts/ukti.html" %}
+
+{% macro leadProp( prop ) %}
+
+  {% if prop %}
+
+    {{ prop }}
+
+  {% else %}
+
+    <span class="none">(none)</span>
+
+  {% endif %}
+
+{% endmacro %}
+
+{% block main %}
+
+  <a href="/leads" class="back-link">Back to my leads</a>
+
+  <h2 class="bold-xlarge leads-heading">{{ lead.name }}</h2>
+
+  <table class="table-detail view-lead-table">
+    <tbody>
+      <tr>
+        <td>Phone number</td>
+        <td>{{ leadProp( lead.phone ) }}</td>
+      </tr>
+
+      <tr>
+        <td>Email</td>
+        <td>{{ leadProp( lead.email ) }}</td>
+      </tr>
+
+      <tr>
+        <td>Notes</td>
+        <td>{{ leadProp( lead.notes ) }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="button-bar">
+    <a href="/leads/edit/{{ lead.id }}" class="button button-secondary">Edit lead details</a>
+    <a href="#" class="button button-secondary">Turn to a contact</a>
+    <a href="#" class="text-link">Delete lead</a>
+  </div>
+
+{% endblock %}
