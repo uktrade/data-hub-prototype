@@ -24,10 +24,9 @@ module.exports = {
     if( typeof leadId === 'undefined' ){ throw new Error( 'leadId is required' ); }
 
     const userLeads = getLeads( userId );
-    let i = 0;
     let lead;
 
-    while( ( lead = userLeads[ i++ ] ) ){
+    for( lead of userLeads ){
 
       if( lead._id == leadId ){
         return lead;
