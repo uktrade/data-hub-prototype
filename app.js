@@ -8,6 +8,10 @@ const cookieParser = require( 'cookie-parser' );
 const bodyParser = require('body-parser');
 const expressNunjucks = require('express-nunjucks');
 const compression = require('compression');
+const logger = require('morgan');
+const session = require('express-session');
+const redis = require('redis');
+const redisCrypto = require('connect-redis-crypto');
 
 const companyController = require('./app/controller/companycontroller');
 const contactController = require('./app/controller/contactcontroller');
@@ -22,7 +26,45 @@ const filters = require('./app/lib/nunjuckfilters');
 const app = express();
 const isDev = app.get('env') === 'development';
 
+var RedisStore = redisCrypto(session);
+
+let client = redis.createClient(config.redis.port, config.redis.host);
+
+client.on('error', function clientErrorHandler(e) {
+  console.error('Error to connecting to redis');
+  console.error(e);
+  throw e;
+});
+
+client.on('connect', function() {
+  console.log('connected to redis');
+});
+
+client.on('ready', function() {
+  console.log('connection to redis is ready to use');
+});
+
+let redisStore = new RedisStore({
+  client: client,
+  // config ttl defined in milliseconds
+  ttl: config.session.ttl / 1000,
+  secret: config.session.secret
+});
+
+app.use( logger( ( isDev ? 'dev' : 'combined' ) ) );
 app.use( cookieParser() );
+app.use(session({
+  store: redisStore,
+  proxy: (config.env === 'development' || config.env === 'ci') ? false : true,
+  cookie: {
+    secure: (config.env === 'development' || config.env === 'ci') ? false : true,
+    maxAge: config.session.ttl
+  },
+  key: 'datahub.sid',
+  secret: config.session.secret,
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(expressValidator({ customValidators, customSanitizers }));
