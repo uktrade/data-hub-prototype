@@ -167,8 +167,24 @@ function updateLead( req, res ){
   }
 }
 
+function confirmDelete( req, res ){
 
-function getLeads( req, res, next ){
+  let lead = mapLeadForSingleView( req.lead );
+
+  res.render( 'leads/confirm-delete', {
+    action: '/leads/delete',
+    backUrl: `/leads/view/${ lead.id }`,
+    lead
+  } );
+}
+
+function removeLead( req, res ){
+
+  userLeads.remove( req.userId, req.body.leadId );
+  redirectToMyLeads( req, res );
+}
+
+function getLead( req, res, next ){
 
   // console.log( 'userId: %s, leadId: %s', req.userId, req.params.leadId );
 
@@ -196,10 +212,12 @@ router.get( '/', getUserId, index );
 router.get( '/add', addLead );
 router.post( '/add', getUserId, createLead );
 router.get( '/view', redirectToMyLeads );
-router.get( '/view/:leadId', getUserId, getLeads, viewLead );
+router.get( '/view/:leadId', getUserId, getLead, viewLead );
 router.get( '/edit', redirectToMyLeads );
-router.get( '/edit/:leadId', getUserId, getLeads, editLead );
+router.get( '/edit/:leadId', getUserId, getLead, editLead );
 router.get( '/update', redirectToMyLeads );
 router.post( '/update', getUserId, updateLead );
+router.get( '/delete/:leadId', getUserId, getLead, confirmDelete );
+router.post( '/delete', getUserId, removeLead );
 
 module.exports = { router };
