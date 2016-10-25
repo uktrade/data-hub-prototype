@@ -5,39 +5,10 @@ const express = require('express');
 const router = express.Router();
 const metadata = require('../lib/metadata');
 const companyRepository = require('../repository/companyrepository');
-
-function sanitizeForm(req) {
-  req.sanitize('currently_exporting_to').joinArray();
-  req.sanitize('countries_of_interest').joinArray();
-  req.sanitize('connections').joinArray();
-  req.sanitize('uk_based').yesNoToBoolean();
-}
+const controllerUtils = require('../lib/controllerutils');
 
 function add(req, res) {
-
-  if (req.body.currently_exporting_to && req.body.currently_exporting_to.length > 0) {
-    req.body.currently_exporting_to = req.body.currently_exporting_to.split(',');
-  }
-
-  if (req.body.countries_of_interest && req.body.countries_of_interest.length > 0) {
-    req.body.countries_of_interest = req.body.countries_of_interest.split(',');
-  }
-
-  if (req.body.connections && req.body.connections.length > 0) {
-    req.body.connections = req.body.connections.split(',');
-  }
-
-  res.render('company/company-add', {
-    formData: req.body,
-    SECTOR_OPTIONS: metadata.SECTOR_OPTIONS,
-    REGION_OPTIONS: metadata.REGION_OPTIONS,
-    ADVISOR_OPTIONS: metadata.ADVISOR_OPTIONS,
-    EMPLOYEE_OPTIONS: metadata.EMPLOYEE_OPTIONS,
-    TURNOVER_OPTIONS: metadata.TURNOVER_OPTIONS,
-    TYPES_OF_BUSINESS: metadata.TYPES_OF_BUSINESS,
-    COUNTRYS: metadata.COUNTRYS,
-    errors: req.errors
-  });
+  res.render('react', { app: 'companyadd_react'});
 }
 
 function renderCompany(req, res, company, formData) {
@@ -58,15 +29,6 @@ function renderCompany(req, res, company, formData) {
     formData.countries_of_interest = formData.countries_of_interest.split(',');
   }
 
-  if (company.connections && company.connections.length > 0) {
-    company.connections = company.connections.split(',');
-  }
-
-  if (formData.connections && formData.connections.length > 0) {
-    formData.connections = formData.connections.split(',');
-  }
-
-
   let title;
   if (!company.name && company.ch.name) {
     title = company.ch.name;
@@ -79,7 +41,6 @@ function renderCompany(req, res, company, formData) {
     title,
     SECTOR_OPTIONS: metadata.SECTOR_OPTIONS,
     REGION_OPTIONS: metadata.REGION_OPTIONS,
-    ADVISOR_OPTIONS: metadata.ADVISOR_OPTIONS,
     EMPLOYEE_OPTIONS: metadata.EMPLOYEE_OPTIONS,
     TURNOVER_OPTIONS: metadata.TURNOVER_OPTIONS,
     TYPES_OF_BUSINESS: metadata.TYPES_OF_BUSINESS,
@@ -119,20 +80,56 @@ function view(req, res) {
 }
 
 function post(req, res) {
-  sanitizeForm(req);
 
-  companyRepository.saveCompany(req.body)
+  // Flatten selected fields
+  let company = Object.assign({}, req.body.company);
+
+  controllerUtils.flattenIdFields(company);
+  controllerUtils.flattenAddress(company, 'registered');
+  controllerUtils.flattenAddress(company, 'trading');
+  controllerUtils.nullEmptyFields(company);
+
+  if (company.export_to_countries === null) company.export_to_countries = [];
+  if (company.future_interest_countries === null) company.future_interest_countries = [];
+
+  companyRepository.saveCompany(company)
     .then((data) => {
-      res.redirect(`/company/COMBINED/${data.id}`);
+      res.json(data);
     })
     .catch((error) => {
-      req.errors = error.response.body;
-      if (req.params.sourceId) {
-        view(req, res);
-      } else {
-        add(req, res);
-      }
+      let errors = error.error;
+      cleanErrors(errors);
+
+      res.status(400).json({errors: error.error});
     });
+}
+
+function cleanErrors(errors) {
+  if (errors.registered_address_1 || errors.registered_address_2 ||
+    errors.registered_address_town || errors.registered_address_county ||
+    errors.registered_address_postcode || errors.registered_address_country)
+  {
+    errors.registered_address = ['Invalid address'];
+    delete errors.registered_address_1;
+    delete errors.registered_address_2;
+    delete errors.registered_address_town;
+    delete errors.registered_address_county;
+    delete errors.registered_address_postcode;
+    delete errors.registered_address_country;
+  }
+
+  if (errors.trading_address_1 || errors.trading_address_2 ||
+    errors.trading_address_town || errors.trading_address_county ||
+    errors.trading_address_postcode || errors.trading_address_country)
+  {
+    errors.trading_address = ['Invalid address'];
+    delete errors.trading_address_1;
+    delete errors.trading_address_2;
+    delete errors.trading_address_town;
+    delete errors.trading_address_county;
+    delete errors.trading_address_postcode;
+    delete errors.trading_address_country;
+  }
 }
 
 function archive(req, res) {
@@ -149,9 +146,23 @@ function unarchive(req, res) {
     });
 }
 
+function getJson(req, res) {
+  let id = req.params.sourceId;
+
+  companyRepository.getDitCompany(id)
+    .then((company) => {
+      res.json(company);
+    })
+    .catch((error) => {
+      res.render('error', {error});
+    });
+}
+
 
 router.get('/add', add);
+router.get('/json/:company_id', getJson);
 router.get('/:company_id/unarchive', unarchive);
+router.get('/:sourceId/json?', getJson);
 router.get('/:source/:sourceId?', view);
 router.post('/:company_id/archive', archive);
 router.post(['/', '/add', '/:source/:sourceId?'], post);

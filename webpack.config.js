@@ -8,9 +8,9 @@ module.exports = {
   entry: {
     company: `${paths.sourceJS}/company.js`,
     contact: `${paths.sourceJS}/contact.js`,
-    addcompany: `${paths.sourceJS}/addcompany.js`,
     facets: `${paths.sourceJS}/facets.js`,
-    datahub: `${paths.sourceJS}/datahub.js`
+    datahub: `${paths.sourceJS}/datahub.js`,
+    companyadd_react: `${paths.sourceJS}/companyadd.js`,
   },
   output: {
     path: paths.outputJS,

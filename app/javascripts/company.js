@@ -3,6 +3,7 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {CompanyForm} from './sections/companyform';
 import ContactTable from './components/contacttable.component';
 import CompanyInteractionTable from './components/companyinteractiontable.component';
 import { addClass, removeClass } from './utils/classtuff';
@@ -13,6 +14,9 @@ const archiveButton = document.getElementById('archive-reveal-button');
 const cancelButton = document.getElementById('cancel-archive-button');
 const archiveReasonElement = document.getElementById('archive_reason');
 const archiveReasonGroup = document.getElementById('archive_reason-wrapper');
+import axios from 'axios';
+
+
 
 if (contacts && contacts.length > 0) {
   ReactDOM.render(
@@ -81,3 +85,54 @@ if (archiveButton) {
   cancelButton.addEventListener('click', hideArchive);
   archiveForm.addEventListener('submit', submitArchiveForm);
 }
+
+import $ from 'jquery';
+import Edit from './edit';
+import SearchBar from './searchbar';
+import Tabs from './tabs';
+
+$('.js-hidden-edit').each((index, element) => {
+  new Edit(element);
+});
+
+
+new SearchBar('js-searchbar');
+$('.searchbar').each((index, element) => {
+  new SearchBar(element);
+});
+new Tabs('.js-tabs');
+
+
+const editElement = document.getElementById('company-edit');
+
+
+function postProcessCompany(company) {
+  if (!company.export_to_countries || company.export_to_countries.length === 0) {
+    company.export_to_countries = [{id: null, name: ''}];
+  }
+  if (!company.future_interest_countries || company.future_interest_countries.length === 0) {
+    company.futur = [{id: null, name: ''}];
+  }
+
+  if (company.trading_address && !company.trading_address.address_country) {
+    company.trading_address = {
+      address_1: '',
+      address_2: '',
+      address_town: '',
+      address_county: '',
+      address_postcode: '',
+      address_country: null
+    };
+  }
+
+}
+
+const companyId = editElement.getAttribute('data-company-id');
+
+axios
+  .get(`/company/${companyId}/json`)
+  .then(result => {
+    let company = result.data;
+    postProcessCompany(company);
+    ReactDOM.render(<CompanyForm company={company}/>, editElement);
+  });

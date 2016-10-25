@@ -51,3 +51,13 @@ hr {
 .table-detail.table-detail--compact {
   margin-bottom: 0;
 }
+
+.add-another-button {
+  text-decoration: underline;
+  color: $link-colour;
+  cursor: pointer;
+}
+
+.fieldset--address {
+  margin-bottom: 40px;
+}

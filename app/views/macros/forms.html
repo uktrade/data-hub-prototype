@@ -240,7 +240,8 @@
         id="{{ id }}"
         class="form-control autocomplete js-autocomplete"
         name="{{ name }}"
-        value="{{ value }}"
+        value="{{ value.name }}"
+        data-id="{{ value.id }}"
         autocomplete="{{ name }}"
         data-options="{{ options | attributeArray | safe }}"
       />
@@ -249,7 +250,8 @@
         id="{{ id }}"
         class="form-control autocomplete js-autocomplete"
         name="{{ name }}"
-        value="{{ value }}"
+        value="{{ value.name }}"
+        data-id="{{ value.id }}"
         autocomplete="{{ name }}"
         data-options-url="{{ options_url }}"
       />

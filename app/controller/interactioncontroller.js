@@ -7,7 +7,6 @@ const contactRepository = require('../repository/contactrepository');
 const companyRepository = require('../repository/companyrepository');
 const interactionRepository = require('../repository/interactionrepository');
 const INTERACTION_TYPES = require('../../data/interactiontypes.json');
-const ADVISORS = require('../../data/advisors.json');
 
 
 function view(req, res) {
@@ -48,7 +47,6 @@ function edit(req, res) {
             contactOptions: getCompanyContactOptions(contacts),
             errors: req.errors,
             INTERACTION_TYPES,
-            ADVISORS
           });
         });
     });
@@ -76,8 +74,7 @@ function add(req, res) {
           },
           contactOptions: getCompanyContactOptions(contacts),
           errors: req.errors,
-          INTERACTION_TYPES,
-          ADVISORS
+          INTERACTION_TYPES
         });
       });
   } else if (companyId) {
@@ -92,8 +89,7 @@ function add(req, res) {
           },
           contactOptions: getCompanyContactOptions(company.contacts),
           errors: req.errors,
-          INTERACTION_TYPES,
-          ADVISORS
+          INTERACTION_TYPES
         });
       });
   }

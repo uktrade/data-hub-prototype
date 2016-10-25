@@ -45,7 +45,7 @@ class Facets {
 
   renderFilterList() {
     removeClass(this.element, 'hidden');
-    const contacts =  document.querySelectorAll('.result-list__contact');
+    const contacts = document.querySelectorAll('.result-list__contact');
     const companies = document.querySelectorAll('.result-list__ch');
 
 
