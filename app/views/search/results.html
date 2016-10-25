@@ -7,14 +7,12 @@
   </span>
 </div>
 <ol class="results-list">
-  {{ result.hits | log | safe }}
   {% for hit in result.hits %}
     {% if hit._type == 'company_contact' %}
       {{ resultTypes.contactresult(hit._id, hit._source, params.term, hit._type) }}
     {% elseif hit._type == 'company_companieshousecompany' or hit._type == 'company_company' %}
       {{ resultTypes.companyresult(hit._id, hit._source, params.term, hit._type) }}
     {% endif %}
-
   {% endfor %}
 </ol>
 

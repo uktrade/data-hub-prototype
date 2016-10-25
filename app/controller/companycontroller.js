@@ -100,7 +100,7 @@ function post(req, res) {
       let errors = error.error;
       cleanErrors(errors);
 
-      res.status(400).json({errors: error.error});
+      res.status(400).json({errors});
     });
 }
 
@@ -165,7 +165,7 @@ router.get('/:company_id/unarchive', unarchive);
 router.get('/:sourceId/json?', getJson);
 router.get('/:source/:sourceId?', view);
 router.post('/:company_id/archive', archive);
-router.post(['/', '/add', '/:source/:sourceId?'], post);
+router.post(['/'], post);
 
 
 module.exports = { view, post, router };

@@ -9,15 +9,15 @@
   {% endif %}
   <h1 class="heading-xlarge record-title">
     {{ contact.first_name }} {{ contact.last_name }}
-    {% if contact.archive_date %}
+    {% if contact.archived %}
       <span class="status-badge status-badge--archived">Archived</span>
-    {% elseif contact.primary_contact_team and contact.primary_contact_team.length > 0 %}
+    {% elseif contact.primary %}
       <span class="status-badge status-badge--primary-contact">Primary</span>
     {% endif %}
 
   </h1>
 
-  {% if not contact.archive_date %}
+  {% if not contact.archived %}
     <form id="archive-details" class="hidden" action="/contact/{{ contact.id }}/archive" method="post">
       {{ forms.dropdown('archive_reason',
       label="Reason for archiving contact",
@@ -36,7 +36,7 @@
     </form>
   {% else %}
     <p class="indented-info">
-      This contact has been archived on {{ contact.archive_date | formatDate }} by <a href="#">{{ contact.archived_by }}</a>.<br/>
+      This contact has been archived on {{ contact.archived_on | formatDate }} by <a href="#">{{ contact.archived_by }}</a>.<br/>
       Reason: {{ contact.archive_reason }}
     </p>
     <hr/>

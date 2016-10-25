@@ -18,7 +18,7 @@ function search(query) {
 
   let options = {
     url: `${config.apiRoot}/search`,
-    body,
+    form: body,
     json: true,
     method: 'POST'
   };
@@ -27,10 +27,17 @@ function search(query) {
   return rp(options);
 }
 
-function suggestCompany(term) {
+function suggestCompany(term, types) {
+
+  if (!types) {
+    types = ['company_company'];
+  }
+
+  term += '*';
+
   let options = {
     url: `${config.apiRoot}/search`,
-    body: {term},
+    form: {term, doc_type: types},
     json: true,
     method: 'POST'
   };
@@ -38,12 +45,10 @@ function suggestCompany(term) {
   return rp(options).
     then((result) => {
       return result.hits
-        .filter(item => item._type === 'company_companieshousecompany')
         .map(hit => {
           return {
-            company_number: hit._source.company_number,
             name: hit._source.name,
-            id: hit._source.company_number,
+            id: hit._id,
             _type: hit._type
           };
         });

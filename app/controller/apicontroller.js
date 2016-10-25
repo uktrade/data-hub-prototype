@@ -53,12 +53,12 @@ function countryLookup(req, res) {
 
 function accountManagerLookup(req, res) {
 
-  if (!req.query.accountmanager || req.query.accountmanager.length === 0) {
+  if (!req.query.term || req.query.term.length === 0) {
     res.json([]);
     return;
   }
 
-  const param = req.query.accountmanager.toLocaleLowerCase();
+  const param = req.query.term.toLocaleLowerCase();
 
   rp({
     url: `${config.apiRoot}/advisor/`,
@@ -97,6 +97,24 @@ function getMetadata(req, res) {
     case 'turnover_range':
       result = metadata.TURNOVER_OPTIONS;
       break;
+    case 'role':
+      rp({
+        url: `${config.apiRoot}/metadata/role/`,
+        json: true
+      })
+        .then((response) => {
+          res.json(response);
+        });
+      return;
+    case 'title':
+      rp({
+        url: `${config.apiRoot}/metadata/title/`,
+        json: true
+      })
+        .then((response) => {
+          res.json(response);
+        });
+      return;
     case 'advisors':
       rp({
         url: `${config.apiRoot}/advisor/`,

@@ -2,30 +2,30 @@
   <tbody>
     <tr>
       <th width="30%">Company</th>
-      <td><a href="/company/DIT/{{ contact.company.id }}">{{ contact.company.registered_name }}</a></td>
+      <td><a href="/company/DIT/{{ contact.company.id }}">{{ contact.company.name }}</a></td>
     </tr>
     <tr>
     <tr>
       <th>Title</th>
-      <td>{{ contact.title }}</td>
+      <td>{{ contact.title.name }}</td>
     </tr>
     <tr>
       <th>Role</th>
-      <td>{{ contact.role }}</td>
+      <td>{{ contact.role.name }}</td>
     </tr>
-    {% if contact.primary_contact_team %}
+    {% if contact.teams and contact.teams.length > 0 %}
       <tr>
         <th>Teams</th>
         <td>
-          {% for primaryTeam in contact.primary_contact_team %}
-            <div>{{ primaryTeam }}</div>
+          {% for team in contact.teams %}
+            <div>{{ team.name }}</div>
           {% endfor %}
         </td>
       </tr>
     {% endif %}
     <tr>
       <th>Phone number</th>
-      <td>{{ contact.phone }}</td>
+      <td>{{ contact.telephone_number }}</td>
     </tr>
     <tr>
       <th>Email</th>
@@ -41,11 +41,11 @@
     {% endif %}
     <tr>
       <th>Alternative phone</th>
-      <td>{{ contact.alt_phone }}</td>
+      <td>{{ contact.telephone_alternative }}</td>
     </tr>
     <tr>
       <th>Alternative email</th>
-      <td>{{ contact.alt_email }}</td>
+      <td>{{ contact.email_alternative }}</td>
     </tr>
     <tr>
       <th>Notes</th>
@@ -55,8 +55,8 @@
 </table>
 
 <div class="button-bar">
-  {% if not contact.company.archive_date %}
-    {% if not contact.archive_date %}
+  {% if not contact.company.archived_on %}
+    {% if not contact.archived_on %}
       <a href="/contact/{{ contact.id }}/edit" class="button button-secondary">Edit contact details</a>
       <a href="#" id="archive-reveal-button" class="button button-secondary">Archive contact</a>
     {% else %}
@@ -64,7 +64,7 @@
       <a href="/contact/{{ contact.id }}/unarchive" class="button button-secondary">Unarchive now</a>
     {% endif %}
   {% else %}
-    {% if not contact.archive_date %}
+    {% if not contact.archived_on %}
       <a class="button button-disabled">Edit contact details</a>
       <a id="archive-reveal-button" class="button button-disabled">Archive contact</a>
     {% else %}

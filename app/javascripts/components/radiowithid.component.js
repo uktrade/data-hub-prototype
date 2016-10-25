@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-class RadioWithId extends Component {
+export class RadioWithIdComponent extends Component {
 
   constructor(props) {
     super(props);
@@ -19,6 +19,12 @@ class RadioWithId extends Component {
       };
     }
 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps && nextProps.value) {
+      this.setState({value: nextProps.value});
+    }
   }
 
   getNameForId(id) {
@@ -85,7 +91,7 @@ class RadioWithId extends Component {
   }
 }
 
-RadioWithId.propTypes = {
+RadioWithIdComponent.propTypes = {
   value: React.PropTypes.string,
   url: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
@@ -93,5 +99,3 @@ RadioWithId.propTypes = {
   label: React.PropTypes.string.isRequired,
   errors: React.PropTypes.array
 };
-
-export default RadioWithId;

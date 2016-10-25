@@ -1,76 +1,8 @@
 {% extends "../layouts/ukti-search-header.html" %}
-{% import "macros/forms.html" as forms %}
 
 {% block main %}
-
-  {% if contact.id %}
-    {% set backUrl = "/contact/" + contact.id + "/view" %}
-    <a class="back-link" href="{{ backUrl }}">Back to contact</a>
-    {{ forms.errorPanel(errors) }}
-    <h1 class="heading-xlarge record-title">
-      Edit contact details
-    </h1>
-  {% else %}
-    {% set backUrl = "/company/DIT/" +  contact.company.id + "#contacts" %}
-    <a class="back-link" href="{{ backUrl }}">Back to company</a>
-    {{ forms.errorPanel(errors) }}
-    <h1 class="heading-xlarge record-title">
-      Add contact
-    </h1>
-  {% endif %}
-
-  <form method="post">
-    <input type="hidden" name="id" value="{{ contact.id }}"/>
-    <input type="hidden" name="company" value="{{ contact.company.id }}"/>
-    <div class="form-group">
-      <div class="form-label">Company</div>
-      <strong>{{ contact.company.registered_name }}</strong>
-    </div>
-    <div class="form-section form-section--compact">{{ forms.textbox('title', label="Title (optional)", value=contact.title, error=errors.title) }}
-      {{ forms.textbox('first_name', label="First name", value=contact.first_name, error=errors.first_name) }}
-      {{ forms.textbox('last_name', label="Last name", value=contact.last_name, error=errors.last_name) }}
-      {{ forms.textbox('role', label="Role", value=contact.role, error=errors.role) }}
-      {% if contact.primary_contact_team and contact.primary_contact_team.length > 0 or errors.primary_contact_team %}
-        {% set show_primary_contact = 'Yes' %}
-      {% else %}
-        {% set show_primary_contact = 'No' %}
-      {% endif %}
-      {% call forms.yesNoHidden('show_primary_contact', label="Is this person a primary contact?", radioValue=show_primary_contact, error=errors.primary_contact_team) -%}
-        {{ forms.addAnotherDropdown('primary_contact_team',
-          label="Team name",
-          addLabel="team",
-          hint="Provide the name of the team for which this contact is listed as a primary contact",
-          emptyLabel="Select a team",
-          values=contact.primary_contact_team,
-          options=TEAM_OPTIONS,
-          error=errors.primary_contact_team)
-        }}
-      {%- endcall %}
-      {{ forms.textbox('phone', label="Phone", value=contact.phone, error=errors.phone) }}
-      {{ forms.textbox('email', label="Email address", value=contact.email, error=errors.email) }}
-    </div>
-
-    {% if contact.address and contact.address.country and contact.address.country.length > 0 or errors.contact_address %}
-      {% set useCompanyAddress = 'No' %}
-    {% else %}
-      {% set useCompanyAddress = 'Yes' %}
-    {% endif %}
-    {% call forms.yesNoHidden('useCompanyAddress', label="Is the contact’s address the same as the company address?", radioValue=useCompanyAddress, revealFor="No") -%}
-      {{ forms.address('address',
-        label="Address",
-        addressValue=contact.address,
-        optionalNonUk='yes',
-        optional='yes',
-        error=errors.address)
-      }}
-    {%- endcall %}
-
-    <div class="form-section form-section--compact">
-      {{ forms.textbox('alt_phone', label="Alternative phone (optional)", value=contact.alt_phone, error=errors.alt_phone) }}
-      {{ forms.textbox('alt_email', label="Alternative email (optional)", value=contact.alt_email, error=errors.alt_email) }}
-      {{ forms.textarea('notes', label="Notes (optional)", value=contact.notes, error=errors.notes) }}
-    </div>
-    {{ forms.save(backUrl=backUrl) }}
-
-  </form>
+  <div id="contact-form"
+       data-contact-id="{{ contactId }}"
+       data-company-id="{{ companyId }}">Loading...</div>
+  <script src="/javascripts/contactedit.bundle.js"></script>
 {% endblock %}

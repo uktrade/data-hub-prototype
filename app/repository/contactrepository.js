@@ -45,7 +45,7 @@ function archiveContact(contactId, reason) {
   let options = {
     json: true,
     body: {
-      'archive_date': moment().format('YYYY-MM-DD'),
+      'archived_on': moment().format('YYYY-MM-DD'),
       'archive_reason': reason,
       'archived_by': 'Lee Smith',
     },
@@ -61,7 +61,7 @@ function unarchiveContact(contactId) {
   let options = {
     json: true,
     body: {
-      'archive_date': null,
+      'archived_on': null,
       'archive_reason': null,
       'archived_by': null,
     },

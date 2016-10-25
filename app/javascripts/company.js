@@ -29,7 +29,7 @@ if (contacts && contacts.length > 0) {
     document.querySelector('#archived-contact-table-wrapper')
   );
 
-  let validContacts = contacts.filter((contact) => !contact.archive_date);
+  let validContacts = contacts.filter((contact) => !contact.archived_on);
   let archivedContacts = contacts.length - validContacts.length;
 
   addedCountElement.innerHTML = validContacts.length;
