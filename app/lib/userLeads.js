@@ -48,6 +48,25 @@ module.exports = {
     leads[ userId ] = userLeads;
   },
 
+  remove: function( userId, leadId ){
+
+    let userLeads = getLeads( userId );
+    let lead;
+    let i = 0;
+
+    while( ( lead = userLeads[ i ] ) ){
+
+      if( lead._id == leadId ){
+
+        userLeads.splice( i, 1 );
+        return;
+      }
+
+      i++;
+      lead = null;
+    }
+  },
+
   update: function( userId, leadId, newLead ){
 
     const userLeads = getLeads( userId );
