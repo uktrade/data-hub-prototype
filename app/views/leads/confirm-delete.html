@@ -1,0 +1,26 @@
+{% extends "layouts/ukti.html" %}
+{% import "macros/forms.html" as forms %}
+
+{% block main %}
+
+  <a href="/leads" class="back-link">Back to my leads</a>
+
+  {{ forms.errorPanel( errors ) }}
+
+  <h2 class="bold-xlarge leads-heading">
+    {{ lead.name }}
+  </h2>
+
+  <form action="{{ action }}" method="post">
+
+    {% if lead.id %}
+      <input type="hidden" name="leadId" value="{{ lead.id }}">
+    {% endif %}
+
+    <p>Are you sure you want to delete this lead?</p>
+
+    {{ forms.save(backUrl=backUrl, buttonText="Delete") }}
+
+  </form>
+
+{% endblock %}

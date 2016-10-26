@@ -4,6 +4,17 @@
 
   <h2 class="leads-heading bold-xlarge">My Leads</h2>
 
+  {% if messages.success.length %}
+    <div class="flash-message success-message">
+      <p class="flash-message-content">
+        {% for message in messages.success %}
+          {{ message }}<br>
+        {% endfor %}
+      </p>
+    </div>
+  {% endif %}
+
+
   <a href="/leads/add" class="button button-secondary add-new-lead-button">Add new lead</a>
 
   {% if leads and leads.length %}

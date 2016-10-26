@@ -20,6 +20,12 @@ This prototype uses node and [mojular](https://github.com/mojular) to provide a 
   npm install
   ```
 
+You will need Redis running - if you don't have it installed locally you can run from a docker container:
+
+```bash
+docker run -d -p 6379:6379 redis
+```
+
 
 ## Running locally
 Run the server in either production mode or develop mode

@@ -21,7 +21,7 @@
       <input type="hidden" name="id" value="{{ lead.id }}">
     {% endif %}
 
-    {{ forms.textbox('first_name', label="First name", value=lead.first_name, error=errors.firstName) }}
+    {{ forms.textbox('first_name', label="First name", value=lead.first_name, error=errors.firstName, autofocus=true) }}
 
     {{ forms.textbox('last_name', label="Last name", value=lead.last_name, error=errors.lastName) }}
 

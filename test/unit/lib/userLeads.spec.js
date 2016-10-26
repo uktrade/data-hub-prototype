@@ -144,6 +144,47 @@ describe( 'userLeads', function(){
       } );
     } );
 
+    describe( 'Deleting a lead', function(){
+
+      describe( 'When the lead exists', function(){
+
+        it( 'Removes the lead', function(){
+
+          const userId = generateUserId();
+          const nameKey = 'name';
+          const nameValue = 'my-test-delete-value';
+
+          let newLead = {};
+
+          newLead[ nameKey ] = nameValue;
+
+          leads.save( userId, newLead );
+          let userLeads = leads.getAll( userId );
+
+          expect( userLeads.length ).toEqual( 1 );
+
+          leads.remove( userId, newLead._id );
+
+          expect( userLeads.length ).toEqual( 0 );
+        } );
+      } );
+
+      describe( 'When the lead does not exist', function(){
+
+        it( 'Does nothing', function(){
+
+          const userId = generateUserId();
+          let userLeads = leads.getAll( userId );
+
+          expect( userLeads.length ).toEqual( 0 );
+
+          leads.remove( userId, 1234 );
+
+          expect( userLeads.length ).toEqual( 0 );
+        } );
+      } );
+    } );
+
     describe( 'When the lead exists', function(){
 
       describe( 'When the leadId type matches', function(){

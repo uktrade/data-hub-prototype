@@ -1,4 +1,4 @@
-{% macro textbox(name, label, value='', hint, id, class, error, autocomplete=true) %}
+{% macro textbox(name, label, value='', hint, id, class, error, autocomplete=true, autofocus=false) %}
   {% if not id %}
     {% set id = name.replace('.','-') %}
   {% endif %}
@@ -12,7 +12,8 @@
            class="form-control"
            name="{{ name }}"
            {% if value %}value="{{ value }}"{% endif %}
-           {% if(autocomplete == false)%}autocomplete="off"{% endif %}/>
+           {% if(autocomplete == false)%}autocomplete="off"{% endif %}
+           {% if autofocus %} autofocus{% endif %}/>
   </div>
 {% endmacro %}
 
@@ -200,9 +201,9 @@
   </div>
 {% endmacro %}
 
-{% macro save(backUrl) %}
+{% macro save(backUrl, buttonText = 'Save') %}
   <div class="button-bar">
-    <button class="button button--save" type="submit">Save</button>
+    <button class="button button--save" type="submit">{{ buttonText }}</button>
     <a class="button-link button--cancel js-button-cancel" href="{{ backUrl }}">Cancel</a>
   </div>
 {% endmacro %}

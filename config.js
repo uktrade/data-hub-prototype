@@ -9,5 +9,15 @@ module.exports = {
   postcodeLookup: {
     apiKey: process.env.POSTCODE_KEY,
     baseUrl: 'https://api.getAddress.io/v2/uk/{postcode}?api-key={api-key}'
-  }
+  },
+  redis: {
+    url: process.env.REDIS_URL || process.env.REDISTOGO_URL,
+    port: process.env.REDIS_PORT || 6379,
+    host: process.env.REDIS_HOST || '127.0.0.1'
+  },
+  session: {
+    secret: process.env.SESSION_SECRET || 'howdoesyourgardengrow',
+    // 30 mins timeout
+    ttl: process.env.SESSION_TTL || (30 * 60 * 1000)
+  },
 };

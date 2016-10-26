@@ -9,13 +9,13 @@ const router = createRouter();
 
 function getUserId( req, res, next ){
 
-  let userId = req.cookies.userId;
+  let userId = req.session.userId;
 
   if( !userId ){
 
     userId = Math.floor( Date.now() * Math.random() );
 
-    res.cookie( 'userId', userId );
+    req.session.userId = userId;
   }
 
   req.userId = userId;
@@ -167,12 +167,33 @@ function updateLead( req, res ){
   }
 }
 
+function confirmDelete( req, res ){
 
-function getLeads( req, res, next ){
+  let lead = mapLeadForSingleView( req.lead );
+
+  res.render( 'leads/confirm-delete', {
+    action: '/leads/delete',
+    backUrl: `/leads/view/${ lead.id }`,
+    lead
+  } );
+}
+
+function removeLead( req, res ){
+
+  const lead = mapLeadForSingleView( req.lead );
+
+  req.flash( 'success-message', `The lead "${ lead.name }" was deleted successfully.` );
+  userLeads.remove( req.userId, req.body.leadId );
+  redirectToMyLeads( req, res );
+}
+
+function getLead( req, res, next ){
 
   // console.log( 'userId: %s, leadId: %s', req.userId, req.params.leadId );
 
-  const lead = userLeads.getById( req.userId, req.params.leadId );
+  const leadId = ( req.params.leadId || req.body.leadId )
+
+  const lead = userLeads.getById( req.userId, leadId );
 
   // console.log( userLeads.getAll( req.userId ), lead );
 
@@ -196,10 +217,13 @@ router.get( '/', getUserId, index );
 router.get( '/add', addLead );
 router.post( '/add', getUserId, createLead );
 router.get( '/view', redirectToMyLeads );
-router.get( '/view/:leadId', getUserId, getLeads, viewLead );
+router.get( '/view/:leadId', getUserId, getLead, viewLead );
 router.get( '/edit', redirectToMyLeads );
-router.get( '/edit/:leadId', getUserId, getLeads, editLead );
+router.get( '/edit/:leadId', getUserId, getLead, editLead );
 router.get( '/update', redirectToMyLeads );
 router.post( '/update', getUserId, updateLead );
+router.get( '/delete/:leadId', getUserId, getLead, confirmDelete );
+router.get( '/delete', redirectToMyLeads );
+router.post( '/delete', getUserId, getLead, removeLead );
 
 module.exports = { router };
