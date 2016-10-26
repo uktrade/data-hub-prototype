@@ -4,7 +4,6 @@ const config = require('./config');
 
 const express = require('express');
 const expressValidator = require('express-validator');
-const cookieParser = require( 'cookie-parser' );
 const bodyParser = require('body-parser');
 const expressNunjucks = require('express-nunjucks');
 const compression = require('compression');
@@ -12,6 +11,7 @@ const logger = require('morgan');
 const session = require('express-session');
 const redis = require('redis');
 const redisCrypto = require('connect-redis-crypto');
+const flash = require( 'connect-flash' );
 
 const companyController = require('./app/controller/companycontroller');
 const contactController = require('./app/controller/contactcontroller');
@@ -26,12 +26,12 @@ const filters = require('./app/lib/nunjuckfilters');
 const app = express();
 const isDev = app.get('env') === 'development';
 
-var RedisStore = redisCrypto(session);
+let RedisStore = redisCrypto(session);
 
 let client = redis.createClient(config.redis.port, config.redis.host);
 
 client.on('error', function clientErrorHandler(e) {
-  console.error('Error to connecting to redis');
+  console.error('Error connecting to redis');
   console.error(e);
   throw e;
 });
@@ -52,12 +52,11 @@ let redisStore = new RedisStore({
 });
 
 app.use( logger( ( isDev ? 'dev' : 'combined' ) ) );
-app.use( cookieParser() );
 app.use(session({
   store: redisStore,
-  proxy: (config.env === 'development' || config.env === 'ci') ? false : true,
+  proxy: (isDev ? false : true ),
   cookie: {
-    secure: (config.env === 'development' || config.env === 'ci') ? false : true,
+    secure: (isDev ? false : true ),
     maxAge: config.session.ttl
   },
   key: 'datahub.sid',
@@ -65,6 +64,8 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
+app.use(flash());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(expressValidator({ customValidators, customSanitizers }));
@@ -74,6 +75,7 @@ app.set('views', [
   `${__dirname}/app/views`,
   `${__dirname}/node_modules/govuk_template_jinja/views`
 ]);
+
 
 filters.stringify = JSON.stringify;
 
@@ -94,6 +96,15 @@ app.use('/fonts', express.static(`${__dirname}/node_modules/font-awesome/fonts`)
 app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`));
+
+app.use(function(req, res, next){
+    res.locals.messages = {
+      success: req.flash('success-message'),
+      error: req.flash('error-message')
+    };
+    console.dir( res.locals.messages );
+    next();
+});
 
 app.use('/company', companyController.router);
 app.use('/contact', contactController.router);

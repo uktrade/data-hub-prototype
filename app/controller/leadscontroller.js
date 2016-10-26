@@ -9,13 +9,13 @@ const router = createRouter();
 
 function getUserId( req, res, next ){
 
-  let userId = req.cookies.userId;
+  let userId = req.session.userId;
 
   if( !userId ){
 
     userId = Math.floor( Date.now() * Math.random() );
 
-    res.cookie( 'userId', userId );
+    req.session.userId = userId;
   }
 
   req.userId = userId;
@@ -133,6 +133,7 @@ function createLead( req, res ){
 
 function viewLead( req, res ){
 
+  console.dir( res.locals.messages );
   res.render( 'leads/view', { lead: mapLeadForSingleView( req.lead ) } );
 }
 
@@ -181,6 +182,8 @@ function confirmDelete( req, res ){
 function removeLead( req, res ){
 
   userLeads.remove( req.userId, req.body.leadId );
+  req.flash( 'success-message', 'Lead deleted' );
+  console.log( 'Success message set' );
   redirectToMyLeads( req, res );
 }
 

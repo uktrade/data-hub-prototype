@@ -4,6 +4,15 @@
 
   <h2 class="leads-heading bold-xlarge">My Leads</h2>
 
+  {% if messages.success.length %}
+    <p class="success-messages">
+      {% for message in messages.success %}
+        {{ message }}<br>
+      {% endfor %}
+    </p>
+  {% endif %}
+
+
   <a href="/leads/add" class="button button-secondary add-new-lead-button">Add new lead</a>
 
   {% if leads and leads.length %}
