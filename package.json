@@ -78,6 +78,7 @@
   "scripts": {
     "start": "node app.js",
     "build": "gulp build",
+    "build:prod": "NODE_ENV=production; gulp build",
     "develop": "gulp watch",
     "test": "JASMINE_CONFIG_PATH=test/jasmine.json jasmine",
     "postinstall": "gulp build"

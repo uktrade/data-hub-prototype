@@ -5,11 +5,13 @@
   <h2 class="leads-heading bold-xlarge">My Leads</h2>
 
   {% if messages.success.length %}
-    <p class="success-messages">
-      {% for message in messages.success %}
-        {{ message }}<br>
-      {% endfor %}
-    </p>
+    <div class="flash-message success-message">
+      <p class="flash-message-content">
+        {% for message in messages.success %}
+          {{ message }}<br>
+        {% endfor %}
+      </p>
+    </div>
   {% endif %}
 
 

@@ -133,7 +133,6 @@ function createLead( req, res ){
 
 function viewLead( req, res ){
 
-  console.dir( res.locals.messages );
   res.render( 'leads/view', { lead: mapLeadForSingleView( req.lead ) } );
 }
 
@@ -181,9 +180,10 @@ function confirmDelete( req, res ){
 
 function removeLead( req, res ){
 
+  const lead = mapLeadForSingleView( req.lead );
+
+  req.flash( 'success-message', `The lead "${ lead.name }" was deleted successfully.` );
   userLeads.remove( req.userId, req.body.leadId );
-  req.flash( 'success-message', 'Lead deleted' );
-  console.log( 'Success message set' );
   redirectToMyLeads( req, res );
 }
 
@@ -191,7 +191,9 @@ function getLead( req, res, next ){
 
   // console.log( 'userId: %s, leadId: %s', req.userId, req.params.leadId );
 
-  const lead = userLeads.getById( req.userId, req.params.leadId );
+  const leadId = ( req.params.leadId || req.body.leadId )
+
+  const lead = userLeads.getById( req.userId, leadId );
 
   // console.log( userLeads.getAll( req.userId ), lead );
 
@@ -221,6 +223,7 @@ router.get( '/edit/:leadId', getUserId, getLead, editLead );
 router.get( '/update', redirectToMyLeads );
 router.post( '/update', getUserId, updateLead );
 router.get( '/delete/:leadId', getUserId, getLead, confirmDelete );
-router.post( '/delete', getUserId, removeLead );
+router.get( '/delete', redirectToMyLeads );
+router.post( '/delete', getUserId, getLead, removeLead );
 
 module.exports = { router };

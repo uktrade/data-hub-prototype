@@ -7,7 +7,7 @@ import SearchBar from './searchbar';
 import SelectionButton from './selectionbutton';
 import Tabs from './tabs';
 import Autocomplete from './autocomplete';
-
+import FlashMessage from './flash-message.js';
 
 
 $('.js-hidden-edit').each((index, element) => {
@@ -33,3 +33,6 @@ $('.js-autocomplete').each((index, element) => {
   new Autocomplete(element);
 });
 
+$( '.flash-message' ).each( ( i, element ) => {
+  new FlashMessage( element );
+} );

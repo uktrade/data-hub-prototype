@@ -51,7 +51,6 @@ let redisStore = new RedisStore({
   secret: config.session.secret
 });
 
-app.use( logger( ( isDev ? 'dev' : 'combined' ) ) );
 app.use(session({
   store: redisStore,
   proxy: (isDev ? false : true ),
@@ -97,12 +96,13 @@ app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`));
 
+app.use( logger( ( isDev ? 'dev' : 'combined' ) ) );
+
 app.use(function(req, res, next){
     res.locals.messages = {
       success: req.flash('success-message'),
       error: req.flash('error-message')
     };
-    console.dir( res.locals.messages );
     next();
 });
 
