@@ -187,7 +187,12 @@ export class AddressComponent extends Component {
 
   getPostcodeLookupSection() {
 
+    if (this.state.address.address_country === null || this.state.address.address_country.length === 0) {
+      return null;
+    }
+
     const country = this.countryForId(this.state.address.address_country);
+
     if (country && country.name && country.name === 'United Kingdom') {
       const addressSuggestions = this.addressSuggestions();
 

@@ -14,6 +14,8 @@ export function errorListComponent(props) {
     );
   });
 
+  window.scrollTo(0,0);
+  
   return (
     <div className="error-summary" role="group" tabIndex="-1">
       <h1 className="heading-medium error-summary-heading" id="error-summary-heading">

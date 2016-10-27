@@ -18,7 +18,7 @@
 
   {{ forms.errorPanel(errors) }}
   {% if company.id %}
-    {% if not company.archive_date %}
+    {% if not company.archived_on %}
       <form id="archive-details" class="hidden" action="/company/{{ company.id }}/archive" method="post">
         {{ forms.dropdown('archived_reason',
           label="Reason for archiving company",
@@ -76,7 +76,7 @@
       </div>
     {% endif %}
 
-    {% if company.id and company.contacts.length == 0 and not company.archive_date %}
+    {% if company.id and company.contacts.length == 0 and not company.archived_on %}
       <div id="tab-error-interactions" class="tabs-errors">
         <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
           <h1 class="heading-medium error-summary-heading" id="error-summary-heading">

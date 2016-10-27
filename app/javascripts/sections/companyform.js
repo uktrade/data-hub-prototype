@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-
-import RadioWithId from '../components/radiowithid';
+import React from 'react';
+import {BaseForm} from './baseform';
+import {RadioWithIdComponent as RadioWithId} from '../components/radiowithid.component';
 import {AddressComponent as Address} from '../components/address.component';
 import {AutosuggestComponent as Autosuggest} from '../components/autosuggest.component';
 import {inputTextComponent as InputText} from '../components/inputtext.component';
@@ -62,15 +62,15 @@ const defaultCompany = {
   description: '',
   employee_range: {
     id: null,
-    name: null
+    name: ''
   },
   turnover_range: {
     id: null,
-    name: null
+    name: ''
   },
   account_manager: {
     id: null,
-    name: null
+    name: ''
   },
   export_to_countries: [
     {id: null, name: ''}
@@ -81,16 +81,16 @@ const defaultCompany = {
 };
 
 function setDefaults(company) {
-  const fieldNames = Object.keys(company);
+  const fieldNames = Object.keys(defaultCompany);
   for (const fieldName of fieldNames) {
-    if (company[fieldName] === null) {
+    if (!company[fieldName]) {
       company[fieldName] = defaultCompany[fieldName];
     }
   }
 }
 
 
-export class CompanyForm extends Component {
+export class CompanyForm extends BaseForm {
 
   constructor(props) {
     super(props);
@@ -104,60 +104,20 @@ export class CompanyForm extends Component {
     }
 
     this.state = {
-      advisors: [],
       countryOptions: [],
       show_account_manager: (company.account_manager.id !== null),
-      show_exporting_to: (company.export_to_countries.length > 0),
-      errors: null,
+      show_exporting_to: (company.export_to_countries[0].id !== null),
       saving: false,
-      company
+      formData: company
     };
   }
 
   componentDidMount() {
-    axios.get('/api/meta/advisors')
-      .then((result) => {
-        this.setState({advisors: result.data});
-      });
-
     axios.get('/api/meta/countries')
       .then(result => {
         this.setState({countryOptions: result.data});
       });
   }
-
-  updateField = (event) => {
-    const key = event.target.name;
-    let value;
-    if (event.target.value.toLocaleLowerCase() === 'yes') {
-      value = true;
-    } else if (event.target.value.toLocaleLowerCase() === 'no') {
-      value = false;
-    } else {
-      value = event.target.value;
-    }
-    let newCompanyState = this.state.company;
-    newCompanyState[key] = value;
-    this.setState({company: newCompanyState });
-  };
-
-  updateRadioWithId = ({name, value}) => {
-    this.changeCompanyState(name, value);
-  };
-
-  changeCompanyState(key, value) {
-    let newCompanyState = this.state.company;
-    newCompanyState[key] = value;
-    this.setState({company: newCompanyState });
-  }
-
-  updateAddress = ({name, value}) => {
-    this.changeCompanyState(name, value);
-  };
-
-  updateAccountManager = (accountManager) => {
-    this.changeCompanyState('account_manager', accountManager);
-  };
 
   updateExpandingSection = (event) => {
     const key = event.target.name;
@@ -174,33 +134,33 @@ export class CompanyForm extends Component {
   };
 
   updateExportingTo = (newValue, index) => {
-    let exportToCountries = this.state.company.export_to_countries;
+    let exportToCountries = this.state.formData.export_to_countries;
     exportToCountries[index] = newValue.value;
-    this.changeCompanyState('export_to_countries', exportToCountries);
+    this.changeFormData('export_to_countries', exportToCountries);
   };
 
   updateFutureExportTo = (newValue, index) => {
-    let futureCountries = this.state.company.future_interest_countries;
+    let futureCountries = this.state.formData.future_interest_countries;
     futureCountries[index] = newValue.value;
-    this.changeCompanyState('future_interest_countries', futureCountries);
+    this.changeFormData('future_interest_countries', futureCountries);
   };
 
   addCurrentExportCountry = (event) => {
     event.preventDefault();
-    let currentExportCountries = this.state.company.export_to_countries;
+    let currentExportCountries = this.state.formData.export_to_countries;
     currentExportCountries.push({ id: null, name: '' });
-    this.changeCompanyState('export_to_countries', currentExportCountries);
+    this.changeFormData('export_to_countries', currentExportCountries);
   };
 
   addFutureExportCountry = (event) => {
     event.preventDefault();
-    let futureExportCountries = this.state.company.future_interest_countries;
+    let futureExportCountries = this.state.formData.future_interest_countries;
     futureExportCountries.push({ id: null, name: '' });
-    this.changeCompanyState('future_interest_countries', futureExportCountries);
+    this.changeFormData('future_interest_countries', futureExportCountries);
   };
 
   getCurrentlyExportingTo() {
-    return this.state.company.export_to_countries.map((country, index) => {
+    return this.state.formData.export_to_countries.map((country, index) => {
       let label;
 
       if (index === 0) {
@@ -213,6 +173,7 @@ export class CompanyForm extends Component {
         <Autosuggest
           key={index}
           label={label}
+          name="export_to_countries"
           suggestions={this.state.countryOptions}
           onChange={(countryUpdate) => {
             this.updateExportingTo(countryUpdate, index);
@@ -224,7 +185,7 @@ export class CompanyForm extends Component {
   }
 
   getFutureCountriesOfInterest() {
-    return this.state.company.future_interest_countries.map((country, index) => {
+    return this.state.formData.future_interest_countries.map((country, index) => {
       let label;
 
       if (index === 0) {
@@ -237,6 +198,7 @@ export class CompanyForm extends Component {
         <Autosuggest
           key={index}
           label={label}
+          name="future_interest_countries"
           suggestions={this.state.countryOptions}
           onChange={(countryUpdate) => {
             this.updateFutureExportTo(countryUpdate, index);
@@ -247,23 +209,10 @@ export class CompanyForm extends Component {
     });
   }
 
-  getSaving() {
-    return (
-      <div className="saving">Saving...</div>
-    );
-  }
-
-  getErrors(name) {
-    if (this.state.errors && this.state.errors[name]) {
-      return this.state.errors[name];
-    }
-    return null;
-  }
-
   save = () => {
     // Just post the company and let the server do the rest. (Get it.. REST)
     this.setState({saving: true});
-    axios.post('/company/add', { company: this.state.company })
+    axios.post('/company/', { company: this.state.formData })
       .then((response) => {
         window.location.href = `/company/combined/${response.data.id}`;
       })
@@ -281,7 +230,7 @@ export class CompanyForm extends Component {
       return this.getSaving();
     }
 
-    const company = this.state.company;
+    const formData = this.state.formData;
 
     return (
       <div>
@@ -292,35 +241,35 @@ export class CompanyForm extends Component {
         <InputText
           label={LABELS.name}
           name="name"
-          value={company.name}
+          value={formData.name}
           onChange={this.updateField}
           errors={this.getErrors('name')}
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">Is the business based in the UK?</legend>
-          <label className={company.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-yes">
+          <label className={formData.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-yes">
             <input
               id="uk_based-yes"
               type="radio"
               name="uk_based"
               value="Yes"
-              checked={company.uk_based}
+              checked={formData.uk_based}
               onChange={this.updateField}
             />
             Yes
           </label>
-          <label className={!company.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-no">
+          <label className={!formData.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-no">
             <input
               id="uk_based-no"
               type="radio"
               name="uk_based"
               value="No"
-              checked={!company.uk_based}
+              checked={!formData.uk_based}
               onChange={this.updateField}
             />
             No
           </label>
-          { company.uk_based &&
+          { formData.uk_based &&
           <p className="js-radiohide-content">
             You can add any type of company except UK based private and public limited
             companies. These companies are already on data hub as it uses companies
@@ -330,43 +279,43 @@ export class CompanyForm extends Component {
           }
         </fieldset>
         <RadioWithId
-          value={company.business_type.id || null}
+          value={formData.business_type.id || null}
           url="/api/meta/typesofbusiness"
           name="business_type"
           label="Type of business"
           errors={this.getErrors('business_type')}
-          onChange={this.updateRadioWithId}
+          onChange={this.updateField}
         />
         <RadioWithId
-          value={company.sector.id}
+          value={formData.sector.id}
           url="/api/meta/sector"
           name="sector"
           label="Sector"
           errors={this.getErrors('sector')}
-          onChange={this.updateRadioWithId}
+          onChange={this.updateField}
         />
         <Address
           name='registered_address'
           label='Registered address'
-          onChange={this.updateAddress}
+          onChange={this.updateField}
           errors={this.getErrors('registered_address')}
-          value={company.registered_address}
+          value={formData.registered_address}
         />
-        { company.uk_based &&
+        { formData.uk_based &&
         <RadioWithId
-          value={company.uk_region.id}
+          value={formData.uk_region.id}
           url="/api/meta/region"
           name="uk_region"
           label="Region"
           errors={this.getErrors('uk_region')}
-          onChange={this.updateRadioWithId}
+          onChange={this.updateField}
         />
         }
         <hr/>
         <InputText
           label={LABELS.alias}
           name="alias"
-          value={company.alias}
+          value={formData.alias}
           errors={this.getErrors('alias')}
           onChange={this.updateField}
         />
@@ -374,15 +323,15 @@ export class CompanyForm extends Component {
           name='trading_address'
           label='Trading address'
           errors={this.getErrors('trading_address')}
-          onChange={this.updateAddress}
-          value={company.trading_address}
+          onChange={this.updateField}
+          value={formData.trading_address}
         />
 
         <InputText
           label={LABELS.website}
           name="website"
           errors={this.getErrors('website')}
-          value={company.website}
+          value={formData.website}
           onChange={this.updateField}
         />
         <div className="form-group ">
@@ -393,23 +342,23 @@ export class CompanyForm extends Component {
             name="description"
             rows="5"
             onChange={this.updateField}
-            value={company.description}/>
+            value={formData.description}/>
         </div>
         <RadioWithId
-          value={company.employee_range.id}
+          value={formData.employee_range.id}
           url="/api/meta/employee_range"
           name="employee_range"
           errors={this.getErrors('employee_range')}
           label="Number of employees (optional)"
-          onChange={this.updateRadioWithId}
+          onChange={this.updateField}
         />
         <RadioWithId
-          value={company.turnover_range.id}
+          value={formData.turnover_range.id}
           url="/api/meta/turnover_range"
           name="turnover_range"
           errors={this.getErrors('turnover_range')}
           label="Annual turnover (optional)"
-          onChange={this.updateRadioWithId}
+          onChange={this.updateField}
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">Is there an agreed DIT account manager for this company?</legend>
@@ -446,10 +395,11 @@ export class CompanyForm extends Component {
           <div className="js-radiohide-content">
             <Autosuggest
               label='Account manager'
-              suggestions={this.state.advisors}
-              onChange={this.updateAccountManager}
+              lookupUrl='/api/accountmanagerlookup'
+              onChange={this.updateField}
               errors={this.getErrors('account_manager')}
-              value={company.account_manager}
+              name="account_manager"
+              value={formData.account_manager}
             />
           </div>
           }

@@ -73,17 +73,17 @@ class ContactTable extends Component {
 
     const link = `/contact/${contact.id}/view`;
 
-    if (this.props.archived === true && contact.archive_date !== null ||
-    this.props.archived === false && contact.archive_date === null) {
+    if (this.props.archived === true && contact.archived_on !== null ||
+    this.props.archived === false) {
 
-      let date = contact.archive_date === null ? formatDate(contact.created_date) : formatDate(contact.archive_date);
+      //let date = formatDate(contact.created_date);
 
       return (
         <tr key={contact.id}>
-          <td className="creationdate">{ date }</td>
+          <td className="creationdate"></td>
           <td className="name"><a href={link}>{ contact.first_name } { contact.last_name }</a></td>
-          <td className="title">{ contact.role }</td>
-          <td className="phone">{ contact.phone }</td>
+          <td className="title">{ contact.role.name }</td>
+          <td className="phone">{ contact.telephone_number }</td>
           <td className="email"><a href={'mailto:' + contact.email }>{ contact.email }</a></td>
         </tr>
       );
@@ -124,7 +124,7 @@ class ContactTable extends Component {
           <th
             className={this.columnClass('occupation')}
             onClick={() => {this.changeSort('occupation');}}
-          >Title</th>
+          >Role</th>
           <th
             className={this.columnClass('telephonenumber')}
             onClick={() => {this.changeSort('telephonenumber');}}

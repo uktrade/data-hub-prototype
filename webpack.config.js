@@ -11,6 +11,7 @@ module.exports = {
     facets: `${paths.sourceJS}/facets.js`,
     datahub: `${paths.sourceJS}/datahub.js`,
     companyadd_react: `${paths.sourceJS}/companyadd.js`,
+    contactedit: `${paths.sourceJS}/contactedit.js`
   },
   output: {
     path: paths.outputJS,
