@@ -1,68 +1,9 @@
 {% extends "../layouts/ukti-search-header.html" %}
-{% import "macros/forms.html" as forms %}
 
 {% block main %}
-
-  {% if interaction.id %}
-    <a class="back-link" href="/interaction/{{ interaction.id }}/view">Back to interaction</a>
-    {{ forms.errorPanel(errors) }}
-    <h1 class="heading-xlarge record-title">Edit interaction details</h1>
-  {% else %}
-    <a class="back-link" href="{{ backUrl }}">Back</a>
-    {{ forms.errorPanel(errors) }}
-    <h1 class="heading-xlarge record-title">Add new interaction</h1>
-  {% endif %}
-
-  <div class="form-group">
-    <div class="form-label">Company</div>
-    <strong>{{ interaction.company.registered_name }}</strong>
-  </div>
-
-  <form method="post">
-    <input type="hidden" name="id" value="{{ interaction.id }}"/>
-    <input type="hidden" name="company" value="{{ interaction.company.id }}"/>
-    {{ forms.dropdown('interaction_type',
-      label="InteractionType",
-      emptyLabel="Select an interaction type",
-      value=interaction.interaction_type,
-      options=INTERACTION_TYPES,
-      error=errors.interaction_type
-    ) }}
-
-    {{ forms.textbox('subject', label="Subject", value=interaction.subject, error=errors.subject) }}
-
-    {{ forms.textarea('notes', label="Interaction notes", value=interaction.notes, error=errors.notes) }}
-
-    {{ forms.date(name='date_of_interaction', label='Date of interaction', value=interaction.date_of_interaction, error=errors.date) }}
-
-    {{ forms.autocomplete('contact',
-      label="Company contact",
-      value=interaction.contact.id,
-      options=contactOptions,
-      error=error.errors.contact
-    ) }}
-
-    {{ forms.autocomplete('advisor',
-      label="DIT advisor",
-      value=interaction.advisor,
-      options_url="/api/accountmanagerlookup?accountmanager=",
-      error=errors.advisor
-    ) }}
-
-    {{ forms.textbox('service_offer',
-      label="Service offer (optional)",
-      value=interaction.service_offer,
-      error=errors.service_offer)
-    }}
-
-    {{ forms.textbox('service_provider',
-      label="Service provider (optional)",
-      value=interaction.service_provider,
-      error=errors.service_provider)
-    }}
-
-    {{ forms.save() }}
-
-  </form>
-
+  <div id="interaction-form"
+       data-contact-id="{{ contactId }}"
+       data-company-id="{{ companyId }}"
+       data-interaction-id="{{ interactionId }}">Loading...</div>
+  <script src="/javascripts/interactionedit.bundle.js"></script>
 {% endblock %}

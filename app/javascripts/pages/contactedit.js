@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {ContactForm} from './sections/contactform';
+import {ContactForm} from '../forms/contactform';
 import axios from 'axios';
 
 const editElement = document.getElementById('contact-form');
