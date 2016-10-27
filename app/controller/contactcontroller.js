@@ -4,6 +4,7 @@
 const express = require('express');
 const router = express.Router();
 const controllerUtils = require('../lib/controllerutils');
+const userLeads = require( '../lib/userLeads' );
 
 let contactRepository = require('../repository/contactrepository');
 
@@ -46,12 +47,36 @@ function edit(req, res) {
 }
 
 function add(req, res) {
-  let companyId = req.query.company_id || null;
 
-  res.render('contact/contact-edit', {
-    companyId,
-    contactId: null
-  });
+  let companyId = req.query.company_id || null;
+  let leadId = req.query.lead;
+  let userId = req.session.userId;
+  let viewModel = {
+        companyId,
+        contactId: null
+      };
+
+  function render( data ){
+
+    if( data ){
+
+      Object.assign( viewModel, data );
+    }
+
+    res.render('contact/contact-edit', viewModel);
+  }
+
+  if( leadId && userId ){
+
+    userLeads.getById( userId, leadId ).then( ( lead ) => {
+
+      render( { lead } );
+    } );
+
+  } else {
+
+    render();
+  }
 }
 
 function cleanErrors(errors) {
@@ -71,6 +96,8 @@ function cleanErrors(errors) {
 
 function post(req, res) {
   // Flatten selected fields
+
+  let leadId = req.body.contact.leadId;
   let contact = Object.assign({}, req.body.contact);
 
   controllerUtils.flattenIdFields(contact);
@@ -80,6 +107,9 @@ function post(req, res) {
   contact.telephone_countrycode = '+44';
 
   contactRepository.saveContact(contact)
+    .then(() => {
+      return userLeads.remove( req.session.userId, leadId );
+    })
     .then((data) => {
       res.json(data);
     })

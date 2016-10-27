@@ -86,6 +86,18 @@ export class ContactForm extends BaseForm {
       state.formData.company = props.company;
     }
 
+    if( props.lead ){
+
+      let lead = JSON.parse( props.lead );
+
+      state.formData.first_name = lead.firstName;
+      state.formData.last_name = lead.lastName;
+      state.formData.notes = lead.notes;
+      state.formData.telephone_number = lead.phone;
+      state.formData.email = lead.email;
+      state.formData.leadId = lead._id;
+    }
+
     setDefaults(state.formData);
 
     this.state = state;
@@ -116,6 +128,10 @@ export class ContactForm extends BaseForm {
       <div>
         { this.state.errors &&
         <ErrorList labels={LABELS} errors={this.state.errors}/>
+        }
+
+        { formData.leadId &&
+          <input type='hidden' name='lead_id' value={ formData.leadId }/>
         }
 
         { this.state.showCompanyField ?
