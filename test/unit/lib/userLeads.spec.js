@@ -15,9 +15,14 @@ describe( 'userLeads', function(){
 
     describe( 'When the user is unknown', function(){
 
-      it( 'Returns an empty array', function(){
+      it( 'Returns an empty array', function( done ){
 
-        expect( leads.getAll( generateUserId() ) ).toEqual( [] );
+        leads.getAll( generateUserId() ).then( ( leadList ) => {
+
+          expect( leadList ).toEqual( [] );
+          done();
+        } );
+
       } );
     } );
 
@@ -25,28 +30,35 @@ describe( 'userLeads', function(){
 
       let lead = { name: 'test-user' };
 
-      it( 'Returns the saved leads', function(){
+      it( 'Returns the saved leads', function( done ){
 
         const userId = generateUserId();
 
-        leads.save( userId, lead );
+        leads.save( userId, lead ).then( () => {
 
-        const userLeads = leads.getAll( userId );
+          return leads.getAll( userId );
 
-        expect( userLeads.length ).toEqual( 1 );
-        expect( userLeads[ 0 ].name ).toEqual( lead.name );
+        } ).then( ( userLeads ) => {
+
+          expect( userLeads.length ).toEqual( 1 );
+          expect( userLeads[ 0 ].name ).toEqual( lead.name );
+          done();
+        } );
       } );
 
-      it( 'Generates an id and date for the lead', function(){
+      it( 'Generates an id and date for the lead', function( done ){
 
         const userId = generateUserId();
 
-        leads.save( userId, lead );
+        leads.save( userId, lead ).then( () => {
 
-        const userLeads = leads.getAll( userId );
+          leads.getAll( userId ).then( ( userLeads ) => {
 
-        expect( userLeads[ 0 ]._id ).toBeDefined();
-        expect( userLeads[ 0 ].date ).toBeDefined();
+            expect( userLeads[ 0 ]._id ).toBeDefined();
+            expect( userLeads[ 0 ].date ).toBeDefined();
+            done();
+          } );
+        } );
       } );
     } );
   } );
@@ -80,36 +92,43 @@ describe( 'userLeads', function(){
 
       describe( 'When the leadId type matches', function(){
 
-        it( 'Returns the lead', function(){
+        it( 'Returns the lead', function( done ){
 
           const userId = generateUserId();
           let testLead = { firstName: 'testlead', lastName: 'testLeadLast' };
-          leads.save( userId, testLead );
+          leads.save( userId, testLead ).then( () => {
 
-          expect( testLead._id ).toBeDefined();
+            expect( testLead._id ).toBeDefined();
 
-          let userLead = leads.getById( userId, testLead._id );
+            leads.getById( userId, testLead._id ).then( ( userLead ) => {
 
-          expect( userLead.firstName ).toEqual( testLead.firstName );
-          expect( userLead.lastName ).toEqual( testLead.lastName );
+              expect( userLead.firstName ).toEqual( testLead.firstName );
+              expect( userLead.lastName ).toEqual( testLead.lastName );
+              done();
+            } );
+          } );
         } );
       } );
 
       describe( 'When the leadId type does not match', function(){
 
-        it( 'Returns the lead', function(){
+        it( 'Returns the lead', function( done ){
 
           const userId = generateUserId();
           let testLead = { firstName: 'testlead', lastName: 'testLeadLast' };
-          leads.save( userId, testLead );
 
-          expect( testLead._id ).toBeDefined();
+          leads.save( userId, testLead ).then( () => {
 
-          let userLead = leads.getById( userId, ( testLead._id + '' ) );
+            expect( testLead._id ).toBeDefined();
 
-          expect( userLead ).not.toEqual( null );
-          expect( userLead.firstName ).toEqual( testLead.firstName );
-          expect( userLead.lastName ).toEqual( testLead.lastName );
+            leads.getById( userId, ( testLead._id + '' ) ).then( ( userLead ) => {
+
+              expect( userLead ).not.toEqual( null );
+              expect( userLead.firstName ).toEqual( testLead.firstName );
+              expect( userLead.lastName ).toEqual( testLead.lastName );
+              done();
+            } );
+          } );
         } );
       } );
 
@@ -117,12 +136,14 @@ describe( 'userLeads', function(){
 
     describe( 'When the lead does not exist', function(){
 
-      it( 'Returns null', function(){
+      it( 'Returns null', function( done ){
 
         const userId = generateUserId();
-        let userLead = leads.getById( userId, 345 );
+        let userLead = leads.getById( userId, 345 ).then( ( userLead ) => {
 
-        expect( userLead ).toEqual( null );
+          expect( userLead ).toEqual( null );
+          done();
+        } );
       } );
     } );
   } );
@@ -131,16 +152,15 @@ describe( 'userLeads', function(){
 
     describe( 'When the lead doesn\'t exist', function(){
 
-      it( 'Throws an error', function(){
+      it( 'Rejects with an error', function( done ){
 
         const userId = generateUserId();
 
-        function updateNonExistentLead(){
+        leads.update( userId, 'abcxyz', {} ).catch( ( e ) => {
 
-          leads.update( userId, 'abcxyz', {} );
-        }
-
-        expect( updateNonExistentLead ).toThrow( new Error( 'Lead does not exist' ) );
+          expect( e ).toEqual( new Error( 'Lead does not exist' ) );
+          done();
+          } );
       } );
     } );
 
@@ -148,7 +168,7 @@ describe( 'userLeads', function(){
 
       describe( 'When the lead exists', function(){
 
-        it( 'Removes the lead', function(){
+        it( 'Removes the lead', function( done ){
 
           const userId = generateUserId();
           const nameKey = 'name';
@@ -158,29 +178,39 @@ describe( 'userLeads', function(){
 
           newLead[ nameKey ] = nameValue;
 
-          leads.save( userId, newLead );
-          let userLeads = leads.getAll( userId );
+          leads.save( userId, newLead ).then( () => {
 
-          expect( userLeads.length ).toEqual( 1 );
+            return leads.getAll( userId );
 
-          leads.remove( userId, newLead._id );
+          } ).then( ( userLeads ) => {
 
-          expect( userLeads.length ).toEqual( 0 );
+            expect( userLeads.length ).toEqual( 1 );
+
+            leads.remove( userId, newLead._id ).then( () => {
+
+              expect( userLeads.length ).toEqual( 0 );
+              done();
+            } );
+          } );
         } );
       } );
 
       describe( 'When the lead does not exist', function(){
 
-        it( 'Does nothing', function(){
+        it( 'Does nothing', function( done ){
 
           const userId = generateUserId();
-          let userLeads = leads.getAll( userId );
 
-          expect( userLeads.length ).toEqual( 0 );
+          leads.getAll( userId ).then( ( userLeads ) => {
 
-          leads.remove( userId, 1234 );
+            expect( userLeads.length ).toEqual( 0 );
 
-          expect( userLeads.length ).toEqual( 0 );
+            leads.remove( userId, 1234 ).then( () => {
+
+              expect( userLeads.length ).toEqual( 0 );
+              done();
+            } );
+          } );
         } );
       } );
     } );
@@ -189,7 +219,7 @@ describe( 'userLeads', function(){
 
       describe( 'When the leadId type matches', function(){
 
-        it( 'Updates the lead', function(){
+        it( 'Updates the lead', function( done ){
 
           const userId = generateUserId();
           const nameKey = 'name';
@@ -200,17 +230,25 @@ describe( 'userLeads', function(){
 
           newLead[ nameKey ] = nameValue;
 
-          leads.save( userId, oldLead );
-          let userLeads = leads.getAll( userId );
+          leads.save( userId, oldLead ).then( () => {
 
-          expect( userLeads.length ).toEqual( 1 );
+            return leads.getAll( userId );
 
-          leads.update( userId, oldLead._id, newLead );
+          } ).then( ( userLeads ) => {
 
-          userLeads = leads.getAll( userId );
+            expect( userLeads.length ).toEqual( 1 );
 
-          expect( userLeads.length ).toEqual( 1 );
-          expect( userLeads[ 0 ][ nameKey ] ).toEqual( nameValue );
+            leads.update( userId, oldLead._id, newLead ).then( () => {
+
+              return leads.getAll( userId );
+
+            } ).then( ( userLeads ) => {
+
+              expect( userLeads.length ).toEqual( 1 );
+              expect( userLeads[ 0 ][ nameKey ] ).toEqual( nameValue );
+              done();
+            } );
+          } );
         } );
       } );
 
@@ -227,17 +265,24 @@ describe( 'userLeads', function(){
 
           newLead[ nameKey ] = nameValue;
 
-          leads.save( userId, oldLead );
-          let userLeads = leads.getAll( userId );
+          leads.save( userId, oldLead ).then( () => {
 
-          expect( userLeads.length ).toEqual( 1 );
+            return leads.getAll( userId );
 
-          leads.update( userId, ( oldLead._id + '' ), newLead );
+          } ).then( ( userLeads ) => {
 
-          userLeads = leads.getAll( userId );
+            expect( userLeads.length ).toEqual( 1 );
 
-          expect( userLeads.length ).toEqual( 1 );
-          expect( userLeads[ 0 ][ nameKey ] ).toEqual( nameValue );
+            leads.update( userId, ( oldLead._id + '' ), newLead ).then( () => {
+
+                return leads.getAll( userId );
+
+            } ).then( ( userLeads ) => {
+
+              expect( userLeads.length ).toEqual( 1 );
+              expect( userLeads[ 0 ][ nameKey ] ).toEqual( nameValue );
+            } );
+          } );
         } );
       } );
     } );

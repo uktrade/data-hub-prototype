@@ -9,9 +9,12 @@ function generateLeadId(){
 
 function getLeads( userId ){
 
-  const userLeads = ( leads[ userId ] || [] );
+  return new Promise( ( resolve, reject ) => {
 
-  return userLeads;
+    const userLeads = ( leads[ userId ] || [] );
+
+    resolve( userLeads );
+  } );
 }
 
 module.exports = {
@@ -23,70 +26,94 @@ module.exports = {
     if( typeof userId === 'undefined' ){ throw new Error( 'userId is required' ); }
     if( typeof leadId === 'undefined' ){ throw new Error( 'leadId is required' ); }
 
-    const userLeads = getLeads( userId );
-    let lead;
+    return new Promise( ( resolve, reject ) => {
 
-    for( lead of userLeads ){
+      getLeads( userId ).then( ( userLeads ) => {
 
-      if( lead._id == leadId ){
-        return lead;
-      }
-    }
+        let lead;
 
-    return null;
+        for( lead of userLeads ){
+
+          if( lead._id == leadId ){
+            resolve( lead );
+            return;
+          }
+        }
+
+        resolve( null );
+      } );
+    } );
   },
 
   save: function( userId, lead ){
 
-    let userLeads = getLeads( userId );
+    return new Promise( ( resolve, reject ) => {
 
-    lead._id = generateLeadId();
-    lead.date = Date.now();
+      getLeads( userId ).then( ( userLeads ) => {
 
-    userLeads.push( lead );
+        lead._id = generateLeadId();
+        lead.date = Date.now();
 
-    leads[ userId ] = userLeads;
+        userLeads.push( lead );
+
+        leads[ userId ] = userLeads;
+
+        resolve();
+      } );
+    } );
   },
 
   remove: function( userId, leadId ){
 
-    let userLeads = getLeads( userId );
-    let lead;
-    let i = 0;
+    return new Promise( ( resolve, reject ) => {
 
-    while( ( lead = userLeads[ i ] ) ){
+      getLeads( userId ).then( ( userLeads ) => {
 
-      if( lead._id == leadId ){
+        let lead;
+        let i = 0;
 
-        userLeads.splice( i, 1 );
-        return;
-      }
+        while( ( lead = userLeads[ i ] ) ){
 
-      i++;
-      lead = null;
-    }
+          if( lead._id == leadId ){
+
+            userLeads.splice( i, 1 );
+            break;
+          }
+
+          i++;
+          lead = null;
+        }
+
+        resolve();
+      } );
+    } );
   },
 
   update: function( userId, leadId, newLead ){
 
-    const userLeads = getLeads( userId );
+    return new Promise( ( resolve, reject ) => {
 
-    let lead;
-    let i = 0;
+      getLeads( userId ).then( ( userLeads ) => {
 
-    while( ( lead = userLeads[ i ] ) ){
+        let lead;
+        let i = 0;
 
-      if( lead._id == leadId ){
+        while( ( lead = userLeads[ i ] ) ){
 
-        newLead._id = leadId;
-        userLeads[ i ] = newLead;
-        return;
-      }
+          if( lead._id == leadId ){
 
-      i++;
-      lead = null;
-    }
+            newLead._id = leadId;
+            userLeads[ i ] = newLead;
+            resolve();
+            return;
+          }
 
-    throw new Error( 'Lead does not exist' );
+          i++;
+          lead = null;
+        }
+
+        reject( new Error( 'Lead does not exist' ) );
+      } );
+    } );
   }
 };
