@@ -84,8 +84,10 @@ function index( req, res ){
     { name: 'Fred Smith', date: 1234224000000 }
   ];
 */
-  let leads = userLeads.getAll( req.userId );
-  res.render( 'leads/index', { leads: mapLeadsForListView( leads ) } );
+  userLeads.getAll( req.userId ).then( ( leads ) => {
+
+    res.render( 'leads/index', { leads: mapLeadsForListView( leads ) } );
+  } );
 }
 
 function addLead( req, res ){
@@ -126,8 +128,10 @@ function createLead( req, res ){
   } else {
 
     // save lead info
-    userLeads.save( req.userId, getLeadDetails( req.body ) );
-    res.redirect( '/leads' );
+    userLeads.save( req.userId, getLeadDetails( req.body ) ).then( () => {
+
+      res.redirect( '/leads' );
+    } );
   }
 }
 
@@ -162,8 +166,10 @@ function updateLead( req, res ){
 
   } else {
 
-    userLeads.update( req.userId, req.body.id, getLeadDetails( req.body ) );
-    res.redirect( '/leads' );
+    userLeads.update( req.userId, req.body.id, getLeadDetails( req.body ) ).then( () => {
+
+      res.redirect( '/leads' );
+    } );
   }
 }
 
@@ -183,29 +189,32 @@ function removeLead( req, res ){
   const lead = mapLeadForSingleView( req.lead );
 
   req.flash( 'success-message', `The lead "${ lead.name }" was deleted successfully.` );
-  userLeads.remove( req.userId, req.body.leadId );
-  redirectToMyLeads( req, res );
+  userLeads.remove( req.userId, req.body.leadId ).then( () => {
+
+    redirectToMyLeads( req, res );
+  } );
 }
 
 function getLead( req, res, next ){
 
   // console.log( 'userId: %s, leadId: %s', req.userId, req.params.leadId );
 
-  const leadId = ( req.params.leadId || req.body.leadId )
+  const leadId = ( req.params.leadId || req.body.leadId );
 
-  const lead = userLeads.getById( req.userId, leadId );
+  userLeads.getById( req.userId, leadId ).then( ( lead ) => {
 
-  // console.log( userLeads.getAll( req.userId ), lead );
+    // console.log( userLeads.getAll( req.userId ), lead );
 
-  if( lead ){
+    if( lead ){
 
-    req.lead = lead;
-    next();
+      req.lead = lead;
+      next();
 
-  } else {
+    } else {
 
-    redirectToMyLeads( res, res );
-  }
+      redirectToMyLeads( res, res );
+    }
+  } );
 }
 
 function redirectToMyLeads( req, res ){

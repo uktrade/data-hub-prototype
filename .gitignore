@@ -27,4 +27,4 @@ test.sh
 apitest.js
 reports
 .env
-
+npm*.log
