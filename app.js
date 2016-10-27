@@ -12,6 +12,7 @@ const session = require('express-session');
 const redis = require('redis');
 const redisCrypto = require('connect-redis-crypto');
 const flash = require( 'connect-flash' );
+const url = require('url');
 
 const companyController = require('./app/controller/companycontroller');
 const contactController = require('./app/controller/contactcontroller');
@@ -28,7 +29,17 @@ const isDev = app.get('env') === 'development';
 
 let RedisStore = redisCrypto(session);
 
-let client = redis.createClient(config.redis.port, config.redis.host);
+let client;
+
+if (config.redis.url) {
+  var redisURL = url.parse(config.redis.url);
+  /* eslint-disable camelcase */
+  client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+  /* eslint-enable camelcase */
+  client.auth(redisURL.auth.split(':')[1]);
+} else {
+  client = redis.createClient(config.redis.port, config.redis.host);
+}
 
 client.on('error', function clientErrorHandler(e) {
   console.error('Error connecting to redis');
