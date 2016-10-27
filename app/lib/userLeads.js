@@ -9,7 +9,7 @@ function generateLeadId(){
 
 function getLeads( userId ){
 
-  return new Promise( ( resolve, reject ) => {
+  return new Promise( ( resolve ) => {
 
     const userLeads = ( leads[ userId ] || [] );
 
@@ -26,7 +26,7 @@ module.exports = {
     if( typeof userId === 'undefined' ){ throw new Error( 'userId is required' ); }
     if( typeof leadId === 'undefined' ){ throw new Error( 'leadId is required' ); }
 
-    return new Promise( ( resolve, reject ) => {
+    return new Promise( ( resolve ) => {
 
       getLeads( userId ).then( ( userLeads ) => {
 
@@ -47,7 +47,7 @@ module.exports = {
 
   save: function( userId, lead ){
 
-    return new Promise( ( resolve, reject ) => {
+    return new Promise( ( resolve ) => {
 
       getLeads( userId ).then( ( userLeads ) => {
 
@@ -65,7 +65,7 @@ module.exports = {
 
   remove: function( userId, leadId ){
 
-    return new Promise( ( resolve, reject ) => {
+    return new Promise( ( resolve ) => {
 
       getLeads( userId ).then( ( userLeads ) => {
 

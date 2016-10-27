@@ -81,7 +81,8 @@
     "build:prod": "NODE_ENV=production; gulp build",
     "develop": "gulp watch",
     "test": "JASMINE_CONFIG_PATH=test/jasmine.json jasmine",
-    "postinstall": "gulp build"
+    "postinstall": "gulp build",
+    "lint": "gulp lint-js"
   },
   "author": "Zac Tolley <zac@thetolleys.com>",
   "license": "MIT",

@@ -199,7 +199,7 @@ function getLead( req, res, next ){
 
   // console.log( 'userId: %s, leadId: %s', req.userId, req.params.leadId );
 
-  const leadId = ( req.params.leadId || req.body.leadId )
+  const leadId = ( req.params.leadId || req.body.leadId );
 
   userLeads.getById( req.userId, leadId ).then( ( lead ) => {
 
