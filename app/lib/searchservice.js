@@ -13,7 +13,7 @@ function search(query) {
     body.offset = 0;
     query.page = 1;
   } else {
-    body = (query.page * body.limit) - body.limit;
+    body.offset = (query.page * body.limit) - body.limit;
   }
 
   let options = {
