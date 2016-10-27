@@ -31,7 +31,7 @@
   <li class="results-list__result result-list__contact">
     <h3 class="result-title">
       <a href="/contact/{{ id }}/view?term={{ term }}">
-        {{ result.name | highlightTerm(term) | safe }}
+        {{ (result.first_name + ' ' + result.last_name) | highlightTerm(term) | safe }}
       </a>
     </h3>
     <div class="meta">{{ result.company }}</div>
