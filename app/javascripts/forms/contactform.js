@@ -54,16 +54,6 @@ const defaultContact = {
   notes: ''
 };
 
-function setDefaults(contact) {
-  const fieldNames = Object.keys(defaultContact);
-  for (const fieldName of fieldNames) {
-    if (!contact[fieldName]) {
-      contact[fieldName] = defaultContact[fieldName];
-    }
-  }
-}
-
-
 export class ContactForm extends BaseForm {
 
   constructor(props) {
@@ -86,7 +76,7 @@ export class ContactForm extends BaseForm {
       state.formData.company = props.company;
     }
 
-    if( props.lead ){
+    if (props.lead) {
 
       let lead = JSON.parse( props.lead );
 
@@ -98,7 +88,7 @@ export class ContactForm extends BaseForm {
       state.formData.leadId = lead._id;
     }
 
-    setDefaults(state.formData);
+    this.setDefaults(state.formData, defaultContact);
 
     this.state = state;
   }
