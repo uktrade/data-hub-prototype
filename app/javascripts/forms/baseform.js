@@ -43,4 +43,13 @@ export class BaseForm extends Component {
       <div className="saving">Saving...</div>
     );
   }
+
+  setDefaults(object, defaultObject) {
+    const fieldNames = Object.keys(defaultObject);
+    for (const fieldName of fieldNames) {
+      if (!object[fieldName]) {
+        object[fieldName] = defaultObject[fieldName];
+      }
+    }
+  }
 }

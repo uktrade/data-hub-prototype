@@ -1,28 +1,27 @@
 import React from 'react';
 import axios from 'axios';
 import {BaseForm} from './baseform';
-import {AddressComponent as Address} from '../components/address.component';
 import {AutosuggestComponent as Autosuggest} from '../components/autosuggest.component';
+import {RadioWithIdComponent as RadioWithId} from '../components/radiowithid.component';
+import {DateInputComponent as DateInput} from '../components/dateinput.component';
+
 import {inputTextComponent as InputText} from '../components/inputtext.component';
 import {errorListComponent as ErrorList} from '../components/errorlist.component';
 
 
 const LABELS = {
   'company': 'Company',
-  'title': 'Title (optional)',
-  'first_name': 'First name',
-  'last_name': 'Last name',
-  'role': 'Role',
-  'telephone_number': 'Phone',
-  'email': 'Email address',
-  'address': 'Address',
-  'telephone_alternative': 'Alternative phone (optional)',
-  'email_alternative': 'Alternative email (optional)',
-  'notes': 'Notes (optional)',
-  'primary': 'Is this person a primary contact?'
+  'contact': 'Company contact',
+  'dit_advisor': 'DIT advisor',
+  'interaction_type': 'Interaction type',
+  'subject': 'Subject',
+  'notes': 'Interaction notes',
+  'data_of_interaction': 'Date of interaction',
+  'service': 'Service offer (optional)',
+  'dit_team': 'Service provider (optional)'
 };
 
-const defaultContact = {
+const defaultInteraction = {
   company: {
     id: '',
     name: ''
@@ -31,52 +30,26 @@ const defaultContact = {
     id: '',
     name: ''
   },
+  dit_advisor: {
+    id: '',
+    name: ''
+  },
   interaction_type: {
     id: '',
     name: ''
   },
+  subject: '',
   notes: '',
-  
-
-
-
-
-  address_same_as_company: true,
-  title: {
+  date_of_interaction: '',
+  service: {
     id: '',
     name: ''
   },
-  first_name: '',
-  last_name: '',
-  role: {
+  dit_team: {
     id: '',
     name: ''
-  },
-  telephone_number: '',
-  email: '',
-  primary: false,
-  address: {
-    address_1: '',
-    address_2: '',
-    address_town: '',
-    address_county: '',
-    address_postcode: '',
-    address_country: ''
-  },
-  telephone_alternative: '',
-  email_alternative: '',
-  notes: ''
-};
-
-function setDefaults(contact) {
-  const fieldNames = Object.keys(defaultContact);
-  for (const fieldName of fieldNames) {
-    if (!contact[fieldName]) {
-      contact[fieldName] = defaultContact[fieldName];
-    }
   }
-}
-
+};
 
 export class InteractionForm extends BaseForm {
 
@@ -85,34 +58,40 @@ export class InteractionForm extends BaseForm {
 
     let state = {
       saving: false,
-      showCompanyField: true
+      showCompanyField: true,
+      showContactField: true
     };
 
-    if (props.contact) {
-      state.formData = Object.assign({}, props.contact);
+    if (props.interaction) {
+      state.formData = props.interaction;
       state.showCompanyField = false;
+      state.showContactField = false;
+    } else if (props.company) {
+      state.formData = {
+        company: props.company,
+      };
+      state.showCompanyField = false;
+    } else if (props.contact) {
+      state.formData = {
+        company: props.contact.company,
+        contact: props.contact
+      };
+      state.showCompanyField = false;
+      state.showContactField = false;
     } else {
       state.formData = {};
     }
 
-    if (props.company) {
-      state.showCompanyField = false;
-      state.formData.company = props.company;
-    }
-
-    setDefaults(state.formData);
+    this.setDefaults(state.formData, defaultInteraction);
 
     this.state = state;
   }
 
   save = () => {
-    if (this.state.showAddress === false) {
-      this.state.formData.address = defaultContact.address;
-    }
 
-    axios.post('/contact/', { contact: this.state.formData })
+    axios.post('/interaction/', { interaction: this.state.formData })
       .then((response) => {
-        window.location.href = `/contact/${response.data.id}/view`;
+        window.location.href = `/interaction/${response.data.id}/view`;
       })
       .catch((error) => {
         this.setState({
@@ -122,9 +101,22 @@ export class InteractionForm extends BaseForm {
       });
   };
 
+  lookupContacts = (term) => {
+    return axios.get(`/api/contactlookup?company=${this.state.formData.company.id}&contact=${term}`)
+      .then(response => {
+        return response.data.map(({id, first_name, last_name}) => {
+          return {
+            id,
+            name: `${first_name} ${last_name}`
+          };
+        });
+      });
+  };
+
   render() {
 
     const formData = this.state.formData;
+
 
     return (
       <div>
@@ -147,127 +139,26 @@ export class InteractionForm extends BaseForm {
             <strong>{ formData.company.name }</strong>
           </div>
         }
-        <Autosuggest
-          label={LABELS.title}
-          suggestionUrl='/api/meta/title'
+
+        <RadioWithId
+          value={formData.interaction_type.id || null}
+          url="/api/meta/typesofinteraction"
+          name="interaction_type"
+          label={LABELS.interaction_type}
+          errors={this.getErrors('interaction_type')}
           onChange={this.updateField}
-          errors={this.getErrors('title')}
-          name="title"
-          value={formData.title}
         />
+
         <InputText
-          label={LABELS.first_name}
-          name="first_name"
-          value={formData.first_name}
+          label={LABELS.subject}
+          name="subject"
+          value={formData.subject}
           onChange={this.updateField}
-          errors={this.getErrors('firstName')}
+          errors={this.getErrors('subject')}
         />
-        <InputText
-          label={LABELS.last_name}
-          name="last_name"
-          value={formData.last_name}
-          onChange={this.updateField}
-          errors={this.getErrors('last_name')}
-        />
-        <Autosuggest
-          label={LABELS.role}
-          suggestionUrl='/api/meta/role'
-          onChange={this.updateField}
-          errors={this.getErrors('role')}
-          name="role"
-          value={formData.role}
-        />
-        <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
-          <legend className="form-label">{LABELS.primary}</legend>
-          <label
-            className={formData.primary ? 'block-label selected' : 'block-label'}
-            htmlFor="primary-yes">
-            <input
-              id="primary-yes"
-              type="radio"
-              name="primary"
-              value="Yes"
-              checked={formData.primary}
-              onChange={this.updateField}
-            />
-            Yes
-          </label>
-          <label
-            className={!formData.primary ? 'block-label selected' : 'block-label'}
-            htmlFor="primary-no">
-            <input
-              id="primary-no"
-              type="radio"
-              name="primary"
-              value="No"
-              checked={!formData.primary}
-              onChange={this.updateField}
-            />
-            No
-          </label>
-        </fieldset>
-        <InputText
-          label={LABELS.telephone_number}
-          name="telephone_number"
-          value={formData.telephone_number}
-          onChange={this.updateField}
-          errors={this.getErrors('telephone_number')}
-        />
-        <InputText
-          label={LABELS.email}
-          name="email"
-          value={formData.email}
-          onChange={this.updateField}
-          errors={this.getErrors('email')}
-        />
-        <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
-          <legend className="form-label">Is the contact's address the same as the company address?</legend>
-          <label className={this.state.formData.address_same_as_company ? 'block-label selected' : 'block-label'}>
-            <input
-              type="radio"
-              value="Yes"
-              name="address_same_as_company"
-              checked={this.state.formData.address_same_as_company}
-              onChange={this.updateField}
-            />
-            Yes
-          </label>
-          <label className={this.state.formData.address_same_as_company ? 'block-label' : 'block-label selected'}>
-            <input
-              type="radio"
-              value="No"
-              name="address_same_as_company"
-              checked={!this.state.formData.address_same_as_company}
-              onChange={this.updateField}
-            />
-            No
-          </label>
-        </fieldset>
-        { !this.state.formData.address_same_as_company &&
-        <Address
-          name='address'
-          label={LABELS.address}
-          onChange={this.updateField}
-          errors={this.getErrors('address')}
-          value={formData.address}
-        />
-        }
-        <InputText
-          label={LABELS.telephone_alternative}
-          name="telephone_alternative"
-          value={formData.telephone_alternative}
-          onChange={this.updateField}
-          errors={this.getErrors('telephone_alternative')}
-        />
-        <InputText
-          label={LABELS.email_alternative}
-          name="email_alternative"
-          value={formData.email_alternative}
-          onChange={this.updateField}
-          errors={this.getErrors('email_alternative')}
-        />
+
         <div className="form-group ">
-          <label className="form-label" htmlFor="description">Notes (optional)</label>
+          <label className="form-label" htmlFor="description">{LABELS.notes}</label>
           <textarea
             id="notes"
             className="form-control"
@@ -276,6 +167,58 @@ export class InteractionForm extends BaseForm {
             onChange={this.updateField}
             value={formData.notes}/>
         </div>
+
+        { this.state.showContactField ?
+          <Autosuggest
+            label={LABELS.contact}
+            fetchSuggestions={this.lookupContacts}
+            onChange={this.updateField}
+            errors={this.getErrors('contact')}
+            name="contact"
+            value={formData.contact}
+          />
+          :
+          <div className="form-group">
+            <div className="form-label">{LABELS.contact}</div>
+            <strong>{ formData.contact.first_name } { formData.contact.last_name }</strong>
+          </div>
+        }
+
+        <DateInput
+          label="Date of interaction"
+          name="date_of_interaction"
+          value={formData.date_of_interaction}
+          onChange={this.updateField}
+          errors={this.getErrors('date_of_interaction')}
+        />
+
+        <Autosuggest
+          label={LABELS.dit_advisor}
+          lookupUrl='/api/accountmanagerlookup'
+          onChange={this.updateField}
+          errors={this.getErrors('dit_advisor')}
+          name="dit_advisor"
+          value={formData.dit_advisor}
+        />
+
+        <Autosuggest
+          label={LABELS.service}
+          suggestionUrl='/api/meta/service'
+          onChange={this.updateField}
+          errors={this.getErrors('service')}
+          name="service"
+          value={formData.service}
+        />
+
+        <Autosuggest
+          label={LABELS.dit_team}
+          lookupUrl='/api/teamlookup'
+          onChange={this.updateField}
+          errors={this.getErrors('dit_team')}
+          name="dit_team"
+          value={formData.dit_team}
+        />
+
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
           <a className="button-link button--cancel js-button-cancel" href="/">Cancel</a>

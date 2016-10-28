@@ -55,3 +55,11 @@ rp({
 .then((data) => {
   module.exports.TYPES_OF_BUSINESS = data;
 });
+
+rp({
+  url: `${config.apiRoot}/metadata/team`,
+  json: true
+})
+  .then((data) => {
+    module.exports.TEAMS = data;
+  });
