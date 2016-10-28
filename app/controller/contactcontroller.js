@@ -107,11 +107,19 @@ function post(req, res) {
   contact.telephone_countrycode = '+44';
 
   contactRepository.saveContact(contact)
-    .then(() => {
-      return userLeads.remove( req.session.userId, leadId );
-    })
     .then((data) => {
-      res.json(data);
+
+      if( leadId ){
+
+        userLeads.remove( req.session.userId, leadId ).then( () => {
+
+          res.json(data);
+        } );
+
+      } else {
+
+        res.json(data);
+      }
     })
     .catch((error) => {
 

@@ -9,7 +9,7 @@ import {errorListComponent as ErrorList} from '../components/errorlist.component
 
 const LABELS = {
   'company': 'Company',
-  'title': 'Title (optional)',
+  'title': 'Title',
   'first_name': 'First name',
   'last_name': 'Last name',
   'role': 'Role',
@@ -128,10 +128,6 @@ export class ContactForm extends BaseForm {
       <div>
         { this.state.errors &&
         <ErrorList labels={LABELS} errors={this.state.errors}/>
-        }
-
-        { formData.leadId &&
-          <input type='hidden' name='lead_id' value={ formData.leadId }/>
         }
 
         { this.state.showCompanyField ?
