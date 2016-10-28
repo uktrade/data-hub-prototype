@@ -2,11 +2,41 @@
 const rp = require('request-promise');
 const config = require('../../config');
 const moment = require('moment');
+const interactionRepository = require('../repository/interactionrepository');
+const contactRepository = require('../repository/contactrepository');
 
+// Get a company and then go back and get further detail for each company contact
+// and interaction, so the company detail page can give the detail required.
 function getDitCompany(id) {
+  let result;
+
   return rp({
     url: `${config.apiRoot}/company/${id}/`,
     json: true
+  })
+  .then((company) => {
+    result = company;
+
+    let promises = [];
+    for (const interaction of result.interactions) {
+      promises.push(interactionRepository.getInteraction(interaction.id));
+    }
+
+    return Promise.all(promises);
+  })
+  .then((interactions) => {
+    result.interactions = interactions;
+
+    let promises = [];
+    for (const contact of result.contacts) {
+      promises.push(contactRepository.getContact(contact.id));
+    }
+
+    return Promise.all(promises);
+  })
+  .then((contacts) => {
+    result.contacts = contacts;
+    return result;
   });
 }
 
