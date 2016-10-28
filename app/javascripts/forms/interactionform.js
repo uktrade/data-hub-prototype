@@ -113,10 +113,23 @@ export class InteractionForm extends BaseForm {
       });
   };
 
+  getBackUrl() {
+    if (this.props.interaction) {
+      return `/interaction/${this.props.interaction.id}/view`;
+    } else if (this.props.contact) {
+      return `/contact/${this.props.contact.id}/view`;
+    } else if (this.props.company) {
+      return `/company/${this.props.company.id}/view`;
+    }
+
+    return '/';
+  }
+
   render() {
 
     const formData = this.state.formData;
 
+    let backUrl = this.getBackUrl();
 
     return (
       <div>
@@ -221,7 +234,7 @@ export class InteractionForm extends BaseForm {
 
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
-          <a className="button-link button--cancel js-button-cancel" href="/">Cancel</a>
+          <a className="button-link button--cancel js-button-cancel" href={backUrl}>Cancel</a>
         </div>
       </div>
 
