@@ -23,8 +23,8 @@ module.exports = {
 
   getById: function( userId, leadId ){
 
-    if( typeof userId === 'undefined' ){ throw new Error( 'userId is required' ); }
-    if( typeof leadId === 'undefined' ){ throw new Error( 'leadId is required' ); }
+    if (typeof userId === 'undefined'){ throw new Error( 'userId is required' ); }
+    if (typeof leadId === 'undefined'){ throw new Error( 'leadId is required' ); }
 
     return new Promise( ( resolve ) => {
 
@@ -32,10 +32,10 @@ module.exports = {
 
         let lead;
 
-        for( lead of userLeads ){
+        for (lead of userLeads){
 
-          if( lead._id == leadId ){
-            resolve( lead );
+          if (lead._id == leadId){
+            resolve(lead);
             return;
           }
         }
@@ -72,9 +72,9 @@ module.exports = {
         let lead;
         let i = 0;
 
-        while( ( lead = userLeads[ i ] ) ){
+        while ((lead = userLeads[ i ])) {
 
-          if( lead._id == leadId ){
+          if (lead._id == leadId){
 
             userLeads.splice( i, 1 );
             break;
@@ -98,9 +98,9 @@ module.exports = {
         let lead;
         let i = 0;
 
-        while( ( lead = userLeads[ i ] ) ){
+        while ((lead = userLeads[ i ])) {
 
-          if( lead._id == leadId ){
+          if (lead._id == leadId) {
 
             newLead._id = leadId;
             userLeads[ i ] = newLead;

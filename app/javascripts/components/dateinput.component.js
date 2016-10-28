@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 function getDateParts(dateStr) {
   try {
     return dateStr.substr(0, 10).split('-');
-  } catch(e) {
+  } catch (e) {
     return ['', '', ''];
   }
 }
@@ -67,7 +67,7 @@ export class DateInputComponent extends Component {
                    className="form-control"
                    name={`${this.props.name}_day`}
                    value={this.state.day}
-                   onChange={(event) => {this.updateDatePart('day', event.target.value)}}
+                   onChange={(event) => {this.updateDatePart('day', event.target.value);}}
                    maxLength="2"
                    autoComplete="off"/>
           </div>
@@ -81,7 +81,7 @@ export class DateInputComponent extends Component {
                    className="form-control"
                    name={`${this.props.name}_month`}
                    value={this.state.month}
-                   onChange={(event) => {this.updateDatePart('month', event.target.value)}}
+                   onChange={(event) => {this.updateDatePart('month', event.target.value);}}
                    maxLength="2"
                    autoComplete="off"/>
           </div>
@@ -95,7 +95,7 @@ export class DateInputComponent extends Component {
                    className="form-control"
                    name={`${this.props.name}_year`}
                    value={this.state.year}
-                   onChange={(event) => {this.updateDatePart('year', event.target.value)}}
+                   onChange={(event) => {this.updateDatePart('year', event.target.value);}}
                    maxLength="4"
                    autoComplete="off"/>
           </div>

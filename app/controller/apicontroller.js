@@ -1,3 +1,4 @@
+/* eslint new-cap: 0 */
 'use strict';
 
 const express = require('express');
@@ -193,7 +194,7 @@ function teamLookup(req, res) {
   });
 
   if (results.length > 10) {
-    results = results.splice(0,10);
+    results = results.splice(0, 10);
   }
   res.json(results);
 
