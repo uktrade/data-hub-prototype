@@ -27,6 +27,20 @@ const defaultContact = {
     id: '',
     name: ''
   },
+  contact: {
+    id: '',
+    name: ''
+  },
+  interaction_type: {
+    id: '',
+    name: ''
+  },
+  notes: '',
+  
+
+
+
+
   address_same_as_company: true,
   title: {
     id: '',
