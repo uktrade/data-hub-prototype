@@ -1,24 +1,10 @@
 import React, { Component } from 'react';
 
-function getNewState(props) {
-
-  let newProps = Object.assign({}, props);
-
+function getDateParts(dateStr) {
   try {
-
-    if (!newProps || !newProps.value) {
-      return {
-        day: '',
-        month: '',
-        year: ''
-      };
-    }
-
-    const {year, month, day} = newProps.value.split('/');
-    return { year, month, day };
-
-  } catch (e) {
-    return null;
+    return dateStr.substr(0, 10).split('-');
+  } catch(e) {
+    return ['', '', ''];
   }
 }
 
@@ -26,7 +12,19 @@ export class DateInputComponent extends Component {
 
   constructor(props) {
     super(props);
-    this.state = getNewState(props);
+
+    if (!props || !props.value) {
+      this.state = {
+        day: '',
+        month: '',
+        year: ''
+      };
+      return;
+    }
+
+    const {year, month, day} = getDateParts(props.value);
+    this.state = {year, month, day};
+
   }
 
   updateDatePart = (part, value) => {
@@ -38,7 +36,7 @@ export class DateInputComponent extends Component {
 
     this.props.onChange({
       name: this.props.name,
-      value: `${state.year}/${state.month}/${state.day}`
+      value: `${state.year}-${state.month}-${state.day}T00:00:00Z`
     });
 
 
@@ -60,7 +58,7 @@ export class DateInputComponent extends Component {
         <fieldset>
           <legend className="form-label">{this.props.label}</legend>
           {error &&
-          <span className="error-message">{{error}}</span>
+          <span className="error-message">{error}</span>
           }
 
           <div className="form-group form-group-day">

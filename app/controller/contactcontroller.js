@@ -108,16 +108,13 @@ function post(req, res) {
 
   contactRepository.saveContact(contact)
     .then((data) => {
-
-      if( leadId ){
-
-        userLeads.remove( req.session.userId, leadId ).then( () => {
-
-          res.json(data);
-        } );
-
+      if (leadId){
+        userLeads
+          .remove( req.session.userId, leadId )
+          .then(() => {
+            res.json(data);
+          });
       } else {
-
         res.json(data);
       }
     })

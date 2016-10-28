@@ -158,7 +158,9 @@ filter.formatDate = function(d, f) {
 
   let formatted;
 
-  if (d && d.length > 0 && d.length < 11) {
+  if (f) {
+    formatted = moment(d, moment.ISO_8601).format(f);
+  } else if (d && d.length > 0 && d.length < 11) {
     formatted = moment(filter.newDate(d)).locale('en-gb').format(f ? f : 'LL');
   } else {
     formatted = moment(d, moment.ISO_8601).format('DD MMMM YYYY, h:mm:ss a');

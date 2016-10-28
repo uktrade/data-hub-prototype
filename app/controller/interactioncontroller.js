@@ -4,7 +4,7 @@
 const express = require('express');
 const router = express.Router();
 const interactionRepository = require('../repository/interactionrepository');
-
+const controllerUtils = require('../lib/controllerutils');
 
 function view(req, res) {
   let interaction_id = req.params.interaction_id;
@@ -50,27 +50,18 @@ function add(req, res) {
 
 function post(req, res) {
 
-  sanitizeForm(req);
+  let interaction = Object.assign({}, req.body.interaction);
 
-  interactionRepository.saveInteraction(req.body)
-    .then((savedInteraction) => {
+  controllerUtils.flattenIdFields(interaction);
+  controllerUtils.nullEmptyFields(interaction);
 
-      // If the url has a contact id query param, we added a
-      // interaction from the contact screen, likewise for company id
-      if (req.query.contact_id) {
-        res.redirect(`/contact/${req.query.contact_id}/view#interactions`);
-        return;
-      } else if (req.query.company_id) {
-        res.redirect(`/company/DIT/${req.query.company_id}#interactions`);
-        return;
-      }
-
-      // otherwise we editing the interaction so go back to that screen.
-      res.redirect(`/interaction/${savedInteraction.id}/view`);
+  interactionRepository.saveInteraction(interaction)
+    .then((data) => {
+      res.json(data);
     })
     .catch((error) => {
-      req.errors = error.response.body;
-      view(req, res);
+      let errors = error.error;
+      res.status(400).json({errors});
     });
 }
 
@@ -91,7 +82,7 @@ router.get('/add?', add);
 router.get('/:interaction_id/edit', edit);
 router.get('/:interaction_id/view', view);
 router.get('/:sourceId/json?', getJson);
-router.post(['/'], post);
+router.post('/', post);
 
 module.exports = {
   view,
