@@ -41,14 +41,7 @@ export class AutosuggestComponent extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps) {
-      return;
-    }
-
-    if (nextProps.value) {
-      this.setState({selected: nextProps.value});
-    }
-    if (nextProps.suggestions) {
+    if (nextProps && nextProps.suggestions) {
       this.setState({allSuggestions: nextProps.suggestions});
     }
   }
