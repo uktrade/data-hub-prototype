@@ -70,6 +70,11 @@ function getJson(req, res) {
 
   interactionRepository.getInteraction(id)
     .then((interaction) => {
+
+      if (interaction.dit_advisor && interaction.dit_advisor.id) {
+        interaction.dit_advisor.name = `${interaction.dit_advisor.first_name} ${interaction.dit_advisor.last_name}`;
+      }
+
       res.json(interaction);
     })
     .catch((error) => {

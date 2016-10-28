@@ -28,18 +28,13 @@ if (contactId && contactId.length > 0) {
   axios
     .get(`/contact/${contactId}/json`)
     .then(result => {
-
-      let contact = result.data;
-
-      render({ heading: 'Edit contact', contact });
+      render({ heading: 'Edit contact', contact: result.data });
     });
 } else if (companyId && companyId.length > 0) {
   axios
     .get(`/company/${companyId}/json`)
     .then(result => {
-      let company = result.data;
-
-      render({ company });
+      render({ company: result.data });
     });
 } else {
     render();

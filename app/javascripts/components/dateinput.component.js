@@ -22,9 +22,8 @@ export class DateInputComponent extends Component {
       return;
     }
 
-    const {year, month, day} = getDateParts(props.value);
-    this.state = {year, month, day};
-
+    const parts = getDateParts(props.value);
+    this.state = {year: parts[0], month: parts[1], day: parts[2]};
   }
 
   updateDatePart = (part, value) => {
