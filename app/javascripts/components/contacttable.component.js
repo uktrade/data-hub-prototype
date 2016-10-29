@@ -57,7 +57,6 @@ class ContactTable extends Component {
     this.props.archived === false) {
       return (
         <tr key={contact.id}>
-          <td className="creationdate">&nbsp;</td>
           <td className="name"><a href={link}>{ contact.first_name } { contact.last_name }</a></td>
           <td className="title">{ contact.role.name }</td>
           <td className="phone">{ contact.telephone_number }</td>
@@ -90,10 +89,6 @@ class ContactTable extends Component {
       <table className="data-table contact-table" id="contact-table">
         <thead>
         <tr>
-          <th
-            className={this.columnClass('creationdate')}
-            onClick={() => {this.changeSort('creationdate');}}
-          >Date</th>
           <th
             className={this.columnClass('name')}
             onClick={() => {this.changeSort('name');}}
