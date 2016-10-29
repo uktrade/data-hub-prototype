@@ -3,10 +3,10 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {CompanyForm} from './sections/companyform';
-import ContactTable from './components/contacttable.component';
-import CompanyInteractionTable from './components/companyinteractiontable.component';
-import { addClass, removeClass } from './utils/classtuff';
+import {CompanyForm} from '../forms/companyform';
+import ContactTable from '../components/contacttable.component';
+import CompanyInteractionTable from '../components/companyinteractiontable.component';
+import { addClass, removeClass } from '../utils/classtuff';
 
 const addedCountElement = document.getElementById('added-count');
 const archiveForm = document.getElementById('archive-details');
@@ -87,9 +87,9 @@ if (archiveButton) {
 }
 
 import $ from 'jquery';
-import Edit from './edit';
-import SearchBar from './searchbar';
-import Tabs from './tabs';
+import Edit from '../edit';
+import SearchBar from '../searchbar';
+import Tabs from '../tabs';
 
 $('.js-hidden-edit').each((index, element) => {
   new Edit(element);

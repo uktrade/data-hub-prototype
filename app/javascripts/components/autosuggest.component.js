@@ -41,14 +41,7 @@ export class AutosuggestComponent extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps) {
-      return;
-    }
-
-    if (nextProps.value) {
-      this.setState({selected: nextProps.value});
-    }
-    if (nextProps.suggestions) {
+    if (nextProps && nextProps.suggestions) {
       this.setState({allSuggestions: nextProps.suggestions});
     }
   }
@@ -82,7 +75,12 @@ export class AutosuggestComponent extends Component {
       return;
     }
 
-    if (this.props.lookupUrl) {
+    if (this.props.fetchSuggestions) {
+      this.props.fetchSuggestions(inputValue)
+        .then(suggestions => {
+          this.setState({ visibleSuggestions: suggestions });
+        });
+    } else if (this.props.lookupUrl) {
       this.fetchSuggestionsFromServer(inputValue);
     } else {
       this.fetchSuggestionsFromLocalOptions(inputValue);
@@ -162,6 +160,7 @@ export class AutosuggestComponent extends Component {
     label: React.PropTypes.string,
     suggestions: React.PropTypes.array,
     suggestionUrl: React.PropTypes.string,
+    fetchSuggestions: React.PropTypes.func,
     lookupUrl: React.PropTypes.string,
     value: React.PropTypes.shape({
       id: React.PropTypes.string,

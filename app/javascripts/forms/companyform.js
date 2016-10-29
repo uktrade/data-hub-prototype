@@ -80,16 +80,6 @@ const defaultCompany = {
   ]
 };
 
-function setDefaults(company) {
-  const fieldNames = Object.keys(defaultCompany);
-  for (const fieldName of fieldNames) {
-    if (!company[fieldName]) {
-      company[fieldName] = defaultCompany[fieldName];
-    }
-  }
-}
-
-
 export class CompanyForm extends BaseForm {
 
   constructor(props) {
@@ -98,7 +88,7 @@ export class CompanyForm extends BaseForm {
     let company;
     if (props.company) {
       company = Object.assign({}, props.company);
-      setDefaults(company);
+      this.setDefaults(company, defaultCompany);
     } else {
       company = Object.assign({}, defaultCompany);
     }

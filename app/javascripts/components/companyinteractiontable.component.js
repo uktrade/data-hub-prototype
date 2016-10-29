@@ -76,17 +76,15 @@ class CompanyInteractionTable extends Component {
 
     return (
       <tr key={interaction.id}>
-        <td className="date">{ formatDate(interaction.date_of_interaction) }</td>
-        <td className="type">{ interaction.interaction_type }</td>
-        <td className="advisor">
-          <a href="#">{ interaction.advisor }</a>
-        </td>
+        <td className="date">{formatDate(interaction.date_of_interaction)}</td>
+        <td className="type">{interaction.interaction_type.name}</td>
+        <td className="advisor">{interaction.dit_advisor.first_name} {interaction.dit_advisor.last_name}</td>
         <td className="contact">
           <a href={`/contact/${interaction.contact.id}/view`}>
-            { interaction.contact.first_name } { interaction.contact.last_name }
+            {interaction.contact.first_name} {interaction.contact.last_name}
             </a>
         </td>
-        <td className="subject"><a href={link}>{interaction.subject }</a></td>
+        <td className="subject"><a href={link}>{interaction.subject}</a></td>
       </tr>
     );
   };

@@ -1,4 +1,8 @@
+/* eslint new-cap: 0 */
 'use strict';
+
+const express = require('express');
+const router = express.Router();
 const postcodeService = require('../lib/postcodeservice');
 const searchService = require('../lib/searchservice');
 const companyRepository = require('../repository/companyrepository');
@@ -82,6 +86,15 @@ function getMetadata(req, res) {
     case 'typesofbusiness':
       result = metadata.TYPES_OF_BUSINESS;
       break;
+    case 'typesofinteraction':
+      rp({
+        url: `${config.apiRoot}/metadata/interaction-type/`,
+        json: true
+      })
+        .then((response) => {
+          res.json(response);
+        });
+      return;
     case 'sector':
       result = metadata.SECTOR_OPTIONS;
       break;
@@ -124,6 +137,15 @@ function getMetadata(req, res) {
           res.json(response.results);
         });
       return;
+    case 'service':
+      rp({
+        url: `${config.apiRoot}/metadata/service/`,
+        json: true
+      })
+        .then((response) => {
+          res.json(response);
+        });
+      return;
     default:
       result = [];
   }
@@ -132,7 +154,61 @@ function getMetadata(req, res) {
 
 }
 
+function contactLookup(req, res) {
 
+  if (!req.query.company || req.query.company.length === 0
+    || !req.query.contact || req.query.contact.length === 0)
+  {
+    res.json([]);
+    return;
+  }
+
+  const companyParam = req.query.company.toLocaleLowerCase();
+  const contactParam = req.query.contact.toLocaleLowerCase();
+  const contactParamLength = contactParam.length;
+
+  companyRepository.getDitCompany(companyParam)
+    .then(company => {
+      const results = company.contacts.filter((contact) => {
+        const name = `${contact.first_name.toLocaleLowerCase()} ${contact.last_name.toLocaleLowerCase()}`;
+        return name.substr(0, contactParamLength) === contactParam;
+      });
+      res.json(results);
+    });
+}
+
+function teamLookup(req, res) {
+
+  if (!req.query.term || req.query.term.length === 0)
+  {
+    res.json([]);
+    return;
+  }
+
+  const teamParam = req.query.term.toLocaleLowerCase();
+  const teamParamLength = teamParam.length;
+  const teams = metadata.TEAMS;
+
+  let results = teams.filter(team => {
+    return team.name.substr(0, teamParamLength).toLocaleLowerCase() === teamParam;
+  });
+
+  if (results.length > 10) {
+    results = results.splice(0, 10);
+  }
+  res.json(results);
+
+
+}
+
+router.get('/suggest', companySuggest);
+router.get('/company/:source/:sourceId/?', companyDetail);
+router.get('/countrylookup', countryLookup);
+router.get('/accountmanagerlookup', accountManagerLookup);
+router.get('/contactlookup', contactLookup);
+router.get('/teamlookup', teamLookup);
+router.get('/meta/:metaName', getMetadata);
+router.get('/postcodelookup/:postcode', postcodelookup);
 
 
 module.exports = {
@@ -141,5 +217,8 @@ module.exports = {
   companyDetail,
   countryLookup,
   accountManagerLookup,
-  getMetadata
+  contactLookup,
+  getMetadata,
+  teamLookup,
+  router
 };

@@ -122,12 +122,7 @@ app.use('/contact', contactController.router);
 app.use('/interaction', interactionController.router);
 app.use('/search', searchController.router);
 app.use('/leads', leadsController.router);
-app.get('/postcodelookup/:postcode', apiController.postcodelookup);
-app.get('/api/suggest', apiController.companySuggest);
-app.get('/api/company/:source/:sourceId/?', apiController.companyDetail);
-app.get('/api/countrylookup', apiController.countryLookup);
-app.get('/api/accountmanagerlookup', apiController.accountManagerLookup);
-app.get('/api/meta/:metaName', apiController.getMetadata);
+app.use('/api', apiController.router);
 
 app.get('/', function(req, res) {
   res.render('index');

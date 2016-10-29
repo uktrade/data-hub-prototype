@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {CompanyForm} from './sections/companyform';
+import {CompanyForm} from '../forms/companyform';
 
 ReactDOM.render(
   <div>

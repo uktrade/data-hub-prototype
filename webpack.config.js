@@ -6,12 +6,13 @@ module.exports = {
   devtool: prod ? 'hidden-source-map' : 'source-map',
 
   entry: {
-    company: `${paths.sourceJS}/company.js`,
-    contact: `${paths.sourceJS}/contact.js`,
+    company: `${paths.sourceJS}/pages/company.js`,
+    contact: `${paths.sourceJS}/pages/contact.js`,
     facets: `${paths.sourceJS}/facets.js`,
     datahub: `${paths.sourceJS}/datahub.js`,
-    companyadd_react: `${paths.sourceJS}/companyadd.js`,
-    contactedit: `${paths.sourceJS}/contactedit.js`
+    companyadd_react: `${paths.sourceJS}/pages/companyadd.js`,
+    contactedit: `${paths.sourceJS}/pages/contactedit.js`,
+    interactionedit: `${paths.sourceJS}/pages/interactionedit.js`,
   },
   output: {
     path: paths.outputJS,

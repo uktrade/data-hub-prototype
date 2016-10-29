@@ -1,25 +1,5 @@
 import React, { Component } from 'react';
 
-var monthNames = [
-  'Jan', 'Feb', 'Mar',
-  'Apr', 'May', 'Jun', 'Jul',
-  'Aug', 'Sept', 'Oct',
-  'Nov', 'Dec'
-];
-
-function formatDate(date) {
-
-  const parts = date.substr(0, 10).split('-');
-  const dateTime = new Date(parseInt(parts[0], 10),
-    parseInt(parts[1], 10) - 1,
-    parseInt(parts[2], 10));
-
-  const day = dateTime.getDate();
-  const monthIndex = dateTime.getMonth();
-  const year = dateTime.getFullYear();
-  return `${day} ${monthNames[monthIndex]} ${year}`;
-}
-
 class ContactTable extends Component {
 
   constructor(props) {
@@ -75,12 +55,9 @@ class ContactTable extends Component {
 
     if (this.props.archived === true && contact.archived_on !== null ||
     this.props.archived === false) {
-
-      //let date = formatDate(contact.created_date);
-
       return (
         <tr key={contact.id}>
-          <td className="creationdate"></td>
+          <td className="creationdate">&nbsp;</td>
           <td className="name"><a href={link}>{ contact.first_name } { contact.last_name }</a></td>
           <td className="title">{ contact.role.name }</td>
           <td className="phone">{ contact.telephone_number }</td>

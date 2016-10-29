@@ -56,7 +56,7 @@ export class AddressComponent extends Component {
       return;
     }
 
-    axios.get(`/postcodelookup/${postcode}`)
+    axios.get(`/api/postcodelookup/${postcode}`)
       .then((response) => {
 
         if (response.data.hasOwnProperty('error')) {

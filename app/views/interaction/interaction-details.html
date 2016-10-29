@@ -13,12 +13,12 @@
       <th width="30%">Company</th>
       <td>
         <a href="/company/DIT/{{ interaction.company.id }}#interactions">
-        {{ interaction.company.registered_name }}</a>
+        {{ interaction.company.name }}</a>
       </td>
     </tr>
     <tr>
       <th width="30%">Interaction type</th>
-      <td>{{ interaction.interaction_type }}</td>
+      <td>{{ interaction.interaction_type.name }}</td>
     </tr>
     <tr>
     <tr>
@@ -31,7 +31,7 @@
     </tr>
     <tr>
       <th>Date of interaction</th>
-      <td>{{ interaction.date_of_interaction | formatDate() }}</td>
+      <td>{{ interaction.date_of_interaction | formatDate('DD MMMM YYYY') }}</td>
     </tr>
     <tr>
       <th>Company contact</th>
@@ -39,34 +39,16 @@
     </tr>
     <tr>
       <th>DIT advisor</th>
-      <td>{{ interaction.advisor }}</td>
+      <td>{{ interaction.dit_advisor.first_name }} {{ interaction.dit_advisor.last_name }}</td>
     </tr>
     <tr>
       <th>Service offer</th>
-      <td>{{ interaction.service_offer }}</td>
+      <td>{{ interaction.service.name }}</td>
     </tr>
     <tr>
       <th>Service provider</th>
-      <td>{{ interaction.service_provider }}</td>
+      <td>{{ interaction.dit_team.name }}</td>
     </tr>
-    <tr>
-      <th>Created on</th>
-      <td>{{ interaction.created_date | formatDate() }}</td>
-    </tr>
-    <tr>
-      <th>Created by</th>
-      <td><a href="#"></a></td>
-    </tr>
-    <tr>
-      <th>Updated on</th>
-      <td>{{ interaction.modified_date | formatDate() }}</td>
-    </tr>
-    <tr>
-      <th>Updated by</th>
-      <td><a href="#"></a></td>
-    </tr>
-
-
     </tbody>
   </table>
   {% if not interaction.company.archived %}

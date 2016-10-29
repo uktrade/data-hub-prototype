@@ -11,7 +11,7 @@ function getUserId( req, res, next ){
 
   let userId = req.session.userId;
 
-  if( !userId ){
+  if (!userId) {
 
     userId = Math.floor( Date.now() * Math.random() );
 
@@ -90,7 +90,7 @@ function index( req, res ){
   } );
 }
 
-function addLead( req, res ){
+function addLead(req, res) {
 
   res.render( 'leads/add', {
     action: '/leads/add',
@@ -98,17 +98,17 @@ function addLead( req, res ){
   } );
 }
 
-function validateLead( params ){
+function validateLead(params){
 
   var errors = [];
 
-  if( !params.first_name ){
+  if (!params.first_name) {
 
      errors.firstName = 'Please enter a first name';
      errors.push( [ 'first_name', errors.firstName ] );
   }
 
-  if( !params.last_name ){
+  if (!params.last_name) {
 
      errors.lastName = 'Please enter a last name';
      errors.push( [ 'last_name', errors.lastName ] );
@@ -117,11 +117,11 @@ function validateLead( params ){
   return errors;
 }
 
-function createLead( req, res ){
+function createLead(req, res){
 
-  let errors = validateLead( req.body );
+  let errors = validateLead(req.body);
 
-  if( errors.length ){
+  if (errors.length) {
 
     res.render( 'leads/add', { errors, lead: req.body } );
 
@@ -154,7 +154,7 @@ function updateLead( req, res ){
 
   let errors = validateLead( req.body );
 
-  if( errors.length ){
+  if (errors.length) {
 
     res.render( 'leads/add', {
       action: '/leads/update',
@@ -205,7 +205,7 @@ function getLead( req, res, next ){
 
     // console.log( userLeads.getAll( req.userId ), lead );
 
-    if( lead ){
+    if (lead) {
 
       req.lead = lead;
       next();

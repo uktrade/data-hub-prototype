@@ -2,11 +2,28 @@
 const rp = require('request-promise');
 const config = require('../../config');
 const moment = require('moment');
+const interactionRepository = require('../repository/interactionrepository');
+
 
 function getContact(contactId) {
+  let result;
+
   return rp({
     url: `${config.apiRoot}/contact/${contactId}/`,
     json: true
+  })
+  .then((data) => {
+    result = data;
+    let promises = [];
+    for (const interaction of result.interactions) {
+      promises.push(interactionRepository.getInteraction(interaction.id));
+    }
+
+    return Promise.all(promises);
+  })
+  .then((interactions) => {
+    result.interactions = interactions;
+    return result;
   });
 }
 

@@ -1,9 +1,9 @@
 /* globals interactions: true, company: true */
-import { addClass, removeClass } from './utils/classtuff';
+import { addClass, removeClass } from '../utils/classtuff';
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ContactInteractionTable from './components/contactinteractiontable.component';
+import ContactInteractionTable from '../components/contactinteractiontable.component';
 
 const archiveForm = document.getElementById('archive-details');
 const archiveButton = document.getElementById('archive-reveal-button');

@@ -58,7 +58,7 @@ function add(req, res) {
 
   function render( data ){
 
-    if( data ){
+    if (data) {
 
       Object.assign( viewModel, data );
     }
@@ -66,7 +66,7 @@ function add(req, res) {
     res.render('contact/contact-edit', viewModel);
   }
 
-  if( leadId && userId ){
+  if (leadId && userId) {
 
     userLeads.getById( userId, leadId ).then( ( lead ) => {
 
@@ -108,16 +108,13 @@ function post(req, res) {
 
   contactRepository.saveContact(contact)
     .then((data) => {
-
-      if( leadId ){
-
-        userLeads.remove( req.session.userId, leadId ).then( () => {
-
-          res.json(data);
-        } );
-
+      if (leadId){
+        userLeads
+          .remove( req.session.userId, leadId )
+          .then(() => {
+            res.json(data);
+          });
       } else {
-
         res.json(data);
       }
     })

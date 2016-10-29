@@ -77,8 +77,8 @@ class ContactInteractionTable extends Component {
     return (
       <tr key={interaction.id}>
         <td className="date">{ formatDate(interaction.date_of_interaction) }</td>
-        <td className="type">{ interaction.interaction_type }</td>
-        <td className="advisor"><a href="#">{ interaction.advisor }</a></td>
+        <td className="type">{ interaction.interaction_type.name }</td>
+        <td className="advisor">{ interaction.dit_advisor.first_name } { interaction.dit_advisor.last_name }</td>
         <td className="subject"><a href={link}>{interaction.subject }</a></td>
       </tr>
     );
