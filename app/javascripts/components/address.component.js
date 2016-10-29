@@ -65,7 +65,6 @@ export class AddressComponent extends Component {
         }
 
         this.setState({addressSuggestions: response.data});
-        this.setAddressToSuggestion(response.data[0]);
       });
   };
 
