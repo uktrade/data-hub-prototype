@@ -110,9 +110,24 @@ export class ContactForm extends BaseForm {
       });
   };
 
+  getBackUrl() {
+
+    // if called with a company id, go back to company
+    if (this.props.company) {
+      return `/company/company_company/${this.props.company.id}#contacts`;
+    } else if (this.props.contact) {
+      return `/contact/${this.props.contact.id}/view`;
+    } else if (this.props.lead) {
+      return null;
+    }
+
+    return '/';
+  }
+
   render() {
 
     const formData = this.state.formData;
+    const backUrl = this.getBackUrl();
 
     return (
       <div>
@@ -266,7 +281,7 @@ export class ContactForm extends BaseForm {
         </div>
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
-          <a className="button-link button--cancel js-button-cancel" href="/">Cancel</a>
+          {backUrl && <a className="button-link button--cancel" href={backUrl}>Cancel</a>}
         </div>
       </div>
 
