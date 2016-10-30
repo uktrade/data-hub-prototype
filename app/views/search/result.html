@@ -34,7 +34,8 @@
         {{ (result.first_name + ' ' + result.last_name) | highlightTerm(term) | safe }}
       </a>
     </h3>
-    <div class="meta">{{ result.company }}</div>
+    {% if (result.company and result.company != 'Undefined') %}<div class="meta">{{ result.company }}</div>{% endif %}
+    {% if (result.role and result.role != 'Undefined') %}<div class="meta">{{ result.role }}</div>{% endif %}
     <div class="meta meta--address">
       {% if result.address_1 %}
         {{result.address_1 | lower | highlightTerm(term) | safe}},
