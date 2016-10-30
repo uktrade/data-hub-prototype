@@ -111,7 +111,7 @@ function postProcessCompany(company) {
     company.export_to_countries = [{id: null, name: ''}];
   }
   if (!company.future_interest_countries || company.future_interest_countries.length === 0) {
-    company.futur = [{id: null, name: ''}];
+    company.future_interest_countries = [{id: null, name: ''}];
   }
 
   if (company.trading_address && !company.trading_address.address_country) {
