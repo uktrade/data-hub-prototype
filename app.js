@@ -20,9 +20,12 @@ const interactionController = require('./app/controller/interactioncontroller');
 const searchController = require('./app/controller/searchcontroller');
 const apiController = require('./app/controller/apicontroller');
 const leadsController = require('./app/controller/leadscontroller');
+const loginController = require('./app/controller/logincontroller');
+
 const customValidators = require('./app/lib/validators');
 const customSanitizers = require('./app/lib/sanitizers');
 const filters = require('./app/lib/nunjuckfilters');
+const auth = require( './app/middleware/auth');
 
 const app = express();
 const isDev = app.get('env') === 'development';
@@ -117,6 +120,8 @@ app.use(function(req, res, next){
     next();
 });
 
+app.use(auth);
+app.use('/login', loginController.router);
 app.use('/company', companyController.router);
 app.use('/contact', contactController.router);
 app.use('/interaction', interactionController.router);
