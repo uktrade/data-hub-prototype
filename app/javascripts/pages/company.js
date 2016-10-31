@@ -130,7 +130,7 @@ function postProcessCompany(company) {
 const companyId = editElement.getAttribute('data-company-id');
 
 axios
-  .get(`/company/${companyId}/json`)
+  .get(`/company/company_company/${companyId}/json`)
   .then(result => {
     let company = result.data;
     postProcessCompany(company);

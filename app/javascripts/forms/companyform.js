@@ -5,6 +5,7 @@ import {AddressComponent as Address} from '../components/address.component';
 import {AutosuggestComponent as Autosuggest} from '../components/autosuggest.component';
 import {inputTextComponent as InputText} from '../components/inputtext.component';
 import {errorListComponent as ErrorList} from '../components/errorlist.component';
+import {DidYouMeanCompanyComponent as DidYouMeanCompany} from '../components/didyoumeancompany.component';
 
 import axios from 'axios';
 
@@ -228,10 +229,9 @@ export class CompanyForm extends BaseForm {
           <ErrorList labels={LABELS} errors={this.state.errors}/>
         }
 
-        <InputText
-          label={LABELS.name}
+        <DidYouMeanCompany
           name="name"
-          value={formData.name}
+          label={LABELS.name}
           onChange={this.updateField}
           errors={this.getErrors('name')}
         />

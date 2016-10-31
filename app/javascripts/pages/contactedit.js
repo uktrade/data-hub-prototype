@@ -57,7 +57,7 @@ if (contactId && contactId.length > 0) {
     });
 } else if (companyId && companyId.length > 0) {
   axios
-    .get(`/company/${companyId}/json`)
+    .get(`/company/company_compay/${companyId}/json`)
     .then(result => {
       render({ company: result.data });
     });
