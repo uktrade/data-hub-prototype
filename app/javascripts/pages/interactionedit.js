@@ -65,7 +65,7 @@ if (interactionId && interactionId.length > 0) {
     });
 } else if (companyId && companyId.length > 0) {
   axios
-    .get(`/company/compay_company/${companyId}/json`)
+    .get(`/company/company_company/${companyId}/json`)
     .then(result => {
       render({heading: 'Add interaction', company: result.data});
     });
