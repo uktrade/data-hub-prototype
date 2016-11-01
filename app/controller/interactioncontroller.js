@@ -4,6 +4,9 @@
 const express = require('express');
 const router = express.Router();
 const interactionRepository = require('../repository/interactionrepository');
+const contactRepository = require('../repository/contactrepository');
+const companyRepository = require('../repository/companyrepository');
+
 const controllerUtils = require('../lib/controllerutils');
 
 function view(req, res) {
@@ -29,11 +32,14 @@ function view(req, res) {
 function edit(req, res) {
   let interactionId = req.params.interaction_id || null;
 
-  res.render('interaction/interaction-edit', {
-    companyId: null,
-    contactId: null,
-    interactionId
-  });
+  interactionRepository.getInteraction(interactionId)
+    .then((interaction) => {
+      res.render('interaction/interaction-edit', {
+        company: null,
+        contact: null,
+        interaction
+      });
+    });
 }
 
 function add(req, res) {
@@ -41,11 +47,28 @@ function add(req, res) {
   const companyId = req.query.company_id;
   const contactId = req.query.contact_id;
 
-  res.render('interaction/interaction-edit', {
-    companyId,
-    contactId,
-    interactionId: null
-  });
+  if (contactId && contactId.length > 0) {
+    contactRepository.getContact(contactId)
+      .then((contact) => {
+        res.render('interaction/interaction-edit', {
+          company: contact.company,
+          contact,
+          interactionId: null
+        });
+      });
+  } else if (companyId && companyId.length > 0) {
+    companyRepository.getDitCompany(companyId)
+      .then((company) => {
+        res.render('interaction/interaction-edit', {
+          company,
+          contact: null,
+          interactionId: null
+        });
+      });
+  } else {
+    res.redirect('/');
+  }
+
 }
 
 function post(req, res) {

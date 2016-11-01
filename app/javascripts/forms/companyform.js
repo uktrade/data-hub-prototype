@@ -234,6 +234,7 @@ export class CompanyForm extends BaseForm {
           label={LABELS.name}
           onChange={this.updateField}
           errors={this.getErrors('name')}
+          value={formData.name}
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">Is the business based in the UK?</legend>

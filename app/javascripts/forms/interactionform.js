@@ -66,11 +66,6 @@ export class InteractionForm extends BaseForm {
       state.formData = props.interaction;
       state.showCompanyField = false;
       state.showContactField = false;
-    } else if (props.company) {
-      state.formData = {
-        company: props.company,
-      };
-      state.showCompanyField = false;
     } else if (props.contact) {
       state.formData = {
         company: props.contact.company,
@@ -78,6 +73,11 @@ export class InteractionForm extends BaseForm {
       };
       state.showCompanyField = false;
       state.showContactField = false;
+    } else if (props.company) {
+      state.formData = {
+        company: props.company,
+      };
+      state.showCompanyField = false;
     } else {
       state.formData = {};
     }
