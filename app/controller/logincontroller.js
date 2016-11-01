@@ -30,13 +30,13 @@ function authenticate(username, password) {
 
 function login( req, res ){
 
-  res.render( 'login' );
+  res.render( 'login', { action: '/login' } );
 }
 
 function loginToApi( req, res ){
 
   if (!req.body.username || !req.body.password) {
-    req.flash('error', 'Invalid user id or password');
+    req.flash('error-message', 'Invalid user id or password');
     res.redirect('/login');
     return;
   }
@@ -47,19 +47,29 @@ function loginToApi( req, res ){
       res.redirect('/');
     })
     .catch((error) => {
-      if (error.response.statusCode === 401) {
-        req.flash('error', 'Invalid user id or password');
-        res.redirect('/');
-        return;
-      }
 
-      req.error = error.error;
-      res.redirect('/error');
+      if (error.response.statusCode === 401) {
+
+        req.flash('error-message', 'Invalid user id or password');
+        res.redirect('/login');
+
+      } else {
+
+        req.error = error.error;
+        res.redirect('/error');
+      }
     });
 }
 
+function logout( req, res ){
+
+  req.session.token = null;
+  req.flash( 'success-message', 'Signed out' );
+  res.redirect( '/login' );
+}
 
 router.get('/', login);
 router.post( '/', loginToApi);
+router.get( '/signout', logout );
 
 module.exports = { router };

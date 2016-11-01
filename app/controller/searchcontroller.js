@@ -91,7 +91,7 @@ function getPagination(req, result) {
 }
 
 function get(req, res) {
-  searchService.search(req.query)
+  searchService.search(req.session.token, req.query)
     .then((result) => {
       // combine filters and facets to show which are
       // selected

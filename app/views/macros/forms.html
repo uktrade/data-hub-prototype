@@ -1,4 +1,4 @@
-{% macro textbox(name, label, value='', hint, id, class, error, autocomplete=true, autofocus=false) %}
+{% macro textbox(name, label, value='', hint, id, class, error, autocomplete=true, autofocus=false, type='text') %}
   {% if not id %}
     {% set id = name.replace('.','-') %}
   {% endif %}
@@ -11,6 +11,7 @@
     <input id="{{ id }}"
            class="form-control"
            name="{{ name }}"
+           type="{{ type }}"
            {% if value %}value="{{ value }}"{% endif %}
            {% if(autocomplete == false)%}autocomplete="off"{% endif %}
            {% if autofocus %} autofocus{% endif %}/>

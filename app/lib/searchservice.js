@@ -2,7 +2,7 @@
 const rp = require('request-promise');
 const config = require('../../config');
 
-function search(query) {
+function search(token, query) {
 
   let body = {
     term: query.term,
@@ -20,7 +20,10 @@ function search(query) {
     url: `${config.apiRoot}/search`,
     form: body,
     json: true,
-    method: 'POST'
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    }
   };
 
 

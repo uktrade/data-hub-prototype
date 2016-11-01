@@ -113,11 +113,20 @@ app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`))
 app.use( logger( ( isDev ? 'dev' : 'combined' ) ) );
 
 app.use(function(req, res, next){
-    res.locals.messages = {
-      success: req.flash('success-message'),
-      error: req.flash('error-message')
-    };
-    next();
+
+  const formErrors = req.flash( 'error' );
+
+  res.locals.messages = {
+    success: req.flash('success-message'),
+    error: req.flash('error-message')
+  };
+
+  if( formErrors && formErrors.length ){
+
+    res.locals.messages.formErrors = formErrors;
+  }
+
+  next();
 });
 
 app.use(auth);
