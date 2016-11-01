@@ -7,6 +7,7 @@ const controllerUtils = require('../lib/controllerutils');
 const userLeads = require( '../lib/userLeads' );
 
 let contactRepository = require('../repository/contactrepository');
+let companyRepository = require('../repository/companyrepository');
 
 const REASONS_FOR_ARCHIVE = [
   'Contact has left the company',
@@ -38,12 +39,28 @@ function view(req, res) {
 
 function edit(req, res) {
 
-  let contactId = req.params.contact_id || null;
+  const contact_id = req.params.contact_id;
 
-  res.render('contact/contact-edit', {
-    companyId: null,
-    contactId
-  });
+  if (!contact_id) {
+    res.redirect('/');
+  }
+
+  contactRepository.getContact(contact_id)
+    .then((contact) => {
+
+      if (!contact.interactions) {
+        contact.interactions = [];
+      }
+
+      res.render('contact/contact-edit', {
+        term: req.query.term,
+          company: null,
+        contact
+      });
+    })
+    .catch((error) => {
+      res.render('error', {error});
+    });
 }
 
 function add(req, res) {
@@ -52,14 +69,13 @@ function add(req, res) {
   let leadId = req.query.lead;
   let userId = req.session.userId;
   let viewModel = {
-        companyId,
-        contactId: null
-      };
+    company: null,
+    contact: null
+  };
 
   function render( data ){
 
     if (data) {
-
       Object.assign( viewModel, data );
     }
 
@@ -69,12 +85,15 @@ function add(req, res) {
   if (leadId && userId) {
 
     userLeads.getById( userId, leadId ).then( ( lead ) => {
-
       render( { lead } );
-    } );
+    });
 
+  } else if (companyId) {
+    companyRepository.getDitCompany(companyId)
+      .then((company) => {
+        render({company});
+      });
   } else {
-
     render();
   }
 }
@@ -142,22 +161,9 @@ function unarchive(req, res) {
     });
 }
 
-function getJson(req, res) {
-  let id = req.params.sourceId;
-
-  contactRepository.getContact(id)
-    .then((contact) => {
-      res.json(contact);
-    })
-    .catch((error) => {
-      res.render('error', {error});
-    });
-}
-
 
 router.get('/add?', add);
 router.get('/:contact_id/edit', edit);
-router.get('/:sourceId/json?', getJson);
 router.get('/:contact_id/view', view);
 router.post(['/'], post);
 router.post('/:contact_id/archive', archive);

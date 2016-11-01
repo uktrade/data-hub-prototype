@@ -1,66 +1,36 @@
+/* eslint-disable max-len */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {ContactForm} from '../forms/contactform';
-import axios from 'axios';
 
 const editElement = document.getElementById('contact-form');
-const contactId = editElement.getAttribute('data-contact-id');
-const companyId = editElement.getAttribute('data-company-id');
-
-function getBackLink(opts) {
-
-  // if called with a company id, go back to company
-  if (opts.company) {
-    return {
-      url: `/company/company_company/${opts.company.id}#contacts`,
-      title: 'company'
-    };
-  } else if (opts.contact) {
-    return {
-      url: `/contact/${opts.contact.id}/view`,
-      title: 'contact'
-    };
-  } else if (opts.lead) {
-    return null;
-  }
-
-  return {url: '/', title: 'home'};
-}
+const contact = editElement.getAttribute('data-contact').length > 0 ? JSON.parse(editElement.getAttribute('data-contact')) : null;
+const company = editElement.getAttribute('data-company').length > 0 ? JSON.parse(editElement.getAttribute('data-company')) : null;
+const lead = editElement.getAttribute('data-lead').length > 0 ? JSON.parse(editElement.getAttribute('data-lead')) : null;
+let backUrl, backTitle, title;
 
 
-function render( opts = {} ){
-
-  const heading = ( opts.heading || 'Add new contact' );
-  const lead = editElement.getAttribute( 'data-lead' );
-  const back = getBackLink(opts);
-
-
-  ReactDOM.render(
-    <div>
-      {back &&
-        <a className="back-link" href={back.url}>Back to {back.title}</a>
-      }
-      <h1 className="heading-xlarge">
-        { heading }
-      </h1>
-      <ContactForm contact={opts.contact} company={opts.company} lead={lead}/>
-    </div>,
-    editElement
-  );
-}
-
-if (contactId && contactId.length > 0) {
-  axios
-    .get(`/contact/${contactId}/json`)
-    .then(result => {
-      render({ heading: 'Edit contact', contact: result.data });
-    });
-} else if (companyId && companyId.length > 0) {
-  axios
-    .get(`/company/company_company/${companyId}/json`)
-    .then(result => {
-      render({ company: result.data });
-    });
+if (company) {
+  backUrl = `/company/company_company/${company.id}#contacts`;
+  backTitle = 'company';
+  title = 'Add new contact';
+} else if (contact) {
+  backUrl = `/contact/${contact.id}/view`;
+  backTitle = 'contact';
+  title = 'Edit contact';
 } else {
-    render();
+  backUrl = '/';
+  backTitle = 'home';
+  title = 'Add contact';
 }
+
+
+ReactDOM.render(
+  <div>
+    <a className="back-link" href={backUrl}>Back to {backTitle}</a>
+    <h1 className="heading-xlarge">{ title }</h1>
+    <ContactForm contact={contact} company={company} lead={lead}/>
+  </div>,
+  editElement
+);

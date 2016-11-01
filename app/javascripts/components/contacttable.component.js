@@ -119,8 +119,7 @@ class ContactTable extends Component {
 }
 
 ContactTable.propTypes = {
-  company: React.PropTypes.object.isRequired,
-  contacts: React.PropTypes.array,
+  contacts: React.PropTypes.array.isRequired,
   archived: React.PropTypes.bool
 };
 

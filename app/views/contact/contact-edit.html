@@ -2,8 +2,8 @@
 
 {% block main %}
   <div id="contact-form"
-       data-contact-id="{{ contactId }}"
-       data-company-id="{{ companyId }}"
+       data-contact='{{ contact | dump | safe }}'
+       data-company='{{ company | dump | safe }}'
        data-lead='{{ lead | dump | safe }}'>Loading...</div>
   <script src="/javascripts/contactedit.bundle.js"></script>
 {% endblock %}

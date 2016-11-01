@@ -144,8 +144,7 @@ class CompanyInteractionTable extends Component {
 }
 
 CompanyInteractionTable.propTypes = {
-  company: React.PropTypes.object.isRequired,
-  interactions: React.PropTypes.array
+  interactions: React.PropTypes.array.isRequired
 };
 
 export default CompanyInteractionTable;

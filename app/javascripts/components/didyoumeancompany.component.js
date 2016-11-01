@@ -5,7 +5,7 @@ import axios from 'axios';
 import {debounce} from 'lodash';
 
 const getSuggestionValue = suggestion => suggestion.name;
-const baseUrl='/api/suggest';
+const baseUrl = '/api/suggest';
 
 
 export class DidYouMeanCompanyComponent extends Component {
@@ -14,7 +14,7 @@ export class DidYouMeanCompanyComponent extends Component {
     super(props);
 
     this.state = {
-      selected: {id:'', name:''},
+      selected: { id: '', name: '' },
       visibleSuggestions: [],
       value: props.value || '',
       didYouMeanSuggestion: null
@@ -77,10 +77,7 @@ export class DidYouMeanCompanyComponent extends Component {
 
     if (!company) return null;
 
-    let name;
-    let type;
-    let id;
-    let addressStr;
+    let name, type, id, addressStr;
 
     if (!company.id && company.ch && company.ch.id) {
       addressStr = company.ch.registered_address_1;

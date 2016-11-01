@@ -78,7 +78,7 @@ export class ContactForm extends BaseForm {
 
     if (props.lead) {
 
-      let lead = JSON.parse( props.lead );
+      let lead = props.lead;
 
       state.formData.first_name = lead.firstName;
       state.formData.last_name = lead.lastName;

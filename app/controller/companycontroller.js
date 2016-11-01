@@ -7,6 +7,27 @@ const metadata = require('../lib/metadata');
 const companyRepository = require('../repository/companyrepository');
 const controllerUtils = require('../lib/controllerutils');
 
+// Add some extra default info into the company to make it easier to edit
+function postProcessCompany(company) {
+  if (!company.export_to_countries || company.export_to_countries.length === 0) {
+    company.export_to_countries = [{id: null, name: ''}];
+  }
+  if (!company.future_interest_countries || company.future_interest_countries.length === 0) {
+    company.future_interest_countries = [{id: null, name: ''}];
+  }
+
+  if (company.trading_address && !company.trading_address.address_country) {
+    company.trading_address = {
+      address_1: '',
+      address_2: '',
+      address_town: '',
+      address_county: '',
+      address_postcode: '',
+      address_country: null
+    };
+  }
+}
+
 function add(req, res) {
   res.render('react', { app: 'companyadd_react'});
 }
@@ -62,6 +83,7 @@ function view(req, res) {
 
   companyRepository.getCompany(id, source)
     .then((company) => {
+      postProcessCompany(company);
       let formData;
 
       if (!req.body || Object.keys(req.body).length === 0) {
@@ -163,7 +185,7 @@ function getJson(req, res) {
 router.get('/add', add);
 router.get('/json/:company_id', getJson);
 router.get('/:company_id/unarchive', unarchive);
-router.get(['/:sourceId/json?','/:source/:sourceId/json?'], getJson);
+router.get('/:source/:sourceId/json?', getJson);
 router.get('/:source/:sourceId?', view);
 router.post('/:company_id/archive', archive);
 router.post(['/'], post);

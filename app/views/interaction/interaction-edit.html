@@ -2,8 +2,8 @@
 
 {% block main %}
   <div id="interaction-form"
-       data-contact-id="{{ contactId }}"
-       data-company-id="{{ companyId }}"
-       data-interaction-id="{{ interactionId }}">Loading...</div>
+       data-contact='{{ contact | dump | safe }}'
+       data-company='{{ company | dump | safe }}'
+       data-interaction='{{ interaction | dump | safe }}'>Loading...</div>
   <script src="/javascripts/interactionedit.bundle.js"></script>
 {% endblock %}
