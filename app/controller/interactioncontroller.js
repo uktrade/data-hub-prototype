@@ -88,28 +88,10 @@ function post(req, res) {
     });
 }
 
-function getJson(req, res) {
-  let id = req.params.sourceId;
-
-  interactionRepository.getInteraction(id)
-    .then((interaction) => {
-
-      if (interaction.dit_advisor && interaction.dit_advisor.id) {
-        interaction.dit_advisor.name = `${interaction.dit_advisor.first_name} ${interaction.dit_advisor.last_name}`;
-      }
-
-      res.json(interaction);
-    })
-    .catch((error) => {
-      res.render('error', {error});
-    });
-}
-
 
 router.get('/add?', add);
 router.get('/:interaction_id/edit', edit);
 router.get('/:interaction_id/view', view);
-router.get('/:sourceId/json?', getJson);
 router.post('/', post);
 
 module.exports = {

@@ -185,7 +185,7 @@ function getJson(req, res) {
 router.get('/add', add);
 router.get('/json/:company_id', getJson);
 router.get('/:company_id/unarchive', unarchive);
-router.get(['/:sourceId/json?', '/:source/:sourceId/json?'], getJson);
+router.get('/:source/:sourceId/json?', getJson);
 router.get('/:source/:sourceId?', view);
 router.post('/:company_id/archive', archive);
 router.post(['/'], post);

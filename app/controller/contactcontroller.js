@@ -161,22 +161,9 @@ function unarchive(req, res) {
     });
 }
 
-function getJson(req, res) {
-  let id = req.params.sourceId;
-
-  contactRepository.getContact(id)
-    .then((contact) => {
-      res.json(contact);
-    })
-    .catch((error) => {
-      res.render('error', {error});
-    });
-}
-
 
 router.get('/add?', add);
 router.get('/:contact_id/edit', edit);
-router.get('/:sourceId/json?', getJson);
 router.get('/:contact_id/view', view);
 router.post(['/'], post);
 router.post('/:contact_id/archive', archive);
