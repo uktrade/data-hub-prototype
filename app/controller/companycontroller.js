@@ -51,8 +51,8 @@ function renderCompany(req, res, company, formData) {
   }
 
   let title;
-  if (!company.name && company.ch.name) {
-    title = company.ch.name;
+  if (!company.name && company.companies_house_data.name) {
+    title = company.companies_house_data.name;
   } else {
     title = company.name;
   }
@@ -114,7 +114,7 @@ function post(req, res) {
   if (company.export_to_countries === null) company.export_to_countries = [];
   if (company.future_interest_countries === null) company.future_interest_countries = [];
 
-  companyRepository.saveCompany(company)
+  companyRepository.saveCompany(req.session.token, company)
     .then((data) => {
       res.json(data);
     })
@@ -155,14 +155,14 @@ function cleanErrors(errors) {
 }
 
 function archive(req, res) {
-  companyRepository.archiveCompany(req.params.company_id, req.body.archive_reason)
+  companyRepository.archiveCompany(req.session.token, req.params.company_id, req.body.archive_reason)
     .then(() => {
       res.redirect(`/company/COMBINED/${req.params.company_id}`);
     });
 }
 
 function unarchive(req, res) {
-  companyRepository.unarchiveCompany(req.params.company_id)
+  companyRepository.unarchiveCompany(req.session.token, req.params.company_id)
     .then(() => {
       res.redirect(`/company/COMBINED/${req.params.company_id}`);
     });
@@ -172,7 +172,7 @@ function getJson(req, res) {
   const id = req.params.sourceId;
   const source = req.params.source;
 
-  companyRepository.getCompany(id, source)
+  companyRepository.getCompany(req.session.token, id, source)
     .then((company) => {
       res.json(company);
     })

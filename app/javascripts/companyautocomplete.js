@@ -88,14 +88,14 @@ class CompanyAutocomplete {
         company.trading_address_country
       ];
 
-    } else if (!company.ch || Object.keys(company.ch).length > 0) {
+    } else if (!company.companies_house_data || Object.keys(company.companies_house_data).length > 0) {
       address = [
-        company.ch.registered_address_address_1,
-        company.ch.registered_address_address_2,
-        company.ch.registered_address_town,
-        company.ch.registered_address_county,
-        company.ch.registered_address_postcode,
-        company.ch.registered_address_country
+        company.companies_house_data.registered_address_address_1,
+        company.companies_house_data.registered_address_address_2,
+        company.companies_house_data.registered_address_town,
+        company.companies_house_data.registered_address_county,
+        company.companies_house_data.registered_address_postcode,
+        company.companies_house_data.registered_address_country
       ];
 
     } else {
@@ -123,7 +123,7 @@ class CompanyAutocomplete {
     if (source === 'company') {
       title = company.name;
     } else {
-      title = company.ch.name;
+      title = company.companies_house_data.name;
     }
 
     if (company.company_number && company.company_number.length > 0) {
@@ -132,8 +132,8 @@ class CompanyAutocomplete {
 
     description += `${address}<br/>`;
 
-    if (company.ch.sic_code_1 !== 'None Supplied') {
-      description += `${company.ch.sic_code_1}<br/>`;
+    if (company.companies_house_data.sic_code_1 !== 'None Supplied') {
+      description += `${company.companies_house_data.sic_code_1}<br/>`;
     }
 
     this.suggestionLink
