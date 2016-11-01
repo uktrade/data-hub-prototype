@@ -1,5 +1,6 @@
 'use strict';
 const rp = require('request-promise');
+const authorisedRequest = require( './authorisedRequest' );
 const config = require('../../config');
 
 function search(token, query) {
@@ -21,13 +22,10 @@ function search(token, query) {
     form: body,
     json: true,
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    }
   };
 
 
-  return rp(options);
+  return authorisedRequest(token, options);
 }
 
 function suggestCompany(term, types) {
