@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {InteractionForm} from '../forms/interactionForm';
+import {InteractionForm} from '../forms/interactionform';
 import axios from 'axios';
 
 
@@ -65,7 +65,7 @@ if (interactionId && interactionId.length > 0) {
     });
 } else if (companyId && companyId.length > 0) {
   axios
-    .get(`/company/${companyId}/json`)
+    .get(`/company/company_company/${companyId}/json`)
     .then(result => {
       render({heading: 'Add interaction', company: result.data});
     });

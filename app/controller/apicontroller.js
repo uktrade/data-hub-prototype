@@ -23,7 +23,7 @@ function postcodelookup(req, res) {
 }
 
 function companySuggest(req, res) {
-  searchService.suggestCompany(req.query.term)
+  searchService.suggestCompany(req.query.term, req.query.type)
     .then((result) => {
       res.json(result);
     })

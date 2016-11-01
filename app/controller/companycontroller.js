@@ -147,9 +147,10 @@ function unarchive(req, res) {
 }
 
 function getJson(req, res) {
-  let id = req.params.sourceId;
+  const id = req.params.sourceId;
+  const source = req.params.source;
 
-  companyRepository.getDitCompany(id)
+  companyRepository.getCompany(id, source)
     .then((company) => {
       res.json(company);
     })
@@ -162,7 +163,7 @@ function getJson(req, res) {
 router.get('/add', add);
 router.get('/json/:company_id', getJson);
 router.get('/:company_id/unarchive', unarchive);
-router.get('/:sourceId/json?', getJson);
+router.get(['/:sourceId/json?','/:source/:sourceId/json?'], getJson);
 router.get('/:source/:sourceId?', view);
 router.post('/:company_id/archive', archive);
 router.post(['/'], post);

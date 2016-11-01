@@ -18,7 +18,7 @@ function search(query) {
 
   let options = {
     url: `${config.apiRoot}/search`,
-    form: body,
+    body,
     json: true,
     method: 'POST'
   };
@@ -37,7 +37,7 @@ function suggestCompany(term, types) {
 
   let options = {
     url: `${config.apiRoot}/search`,
-    form: {term, doc_type: types},
+    body: {term, doc_type: types},
     json: true,
     method: 'POST'
   };
