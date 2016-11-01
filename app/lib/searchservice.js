@@ -1,8 +1,9 @@
 'use strict';
 const rp = require('request-promise');
+const authorisedRequest = require( './authorisedRequest' );
 const config = require('../../config');
 
-function search(query) {
+function search(token, query) {
 
   let body = {
     term: query.term,
@@ -20,11 +21,11 @@ function search(query) {
     url: `${config.apiRoot}/search`,
     body,
     json: true,
-    method: 'POST'
+    method: 'POST',
   };
 
 
-  return rp(options);
+  return authorisedRequest(token, options);
 }
 
 function suggestCompany(term, types) {

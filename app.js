@@ -20,9 +20,12 @@ const interactionController = require('./app/controller/interactioncontroller');
 const searchController = require('./app/controller/searchcontroller');
 const apiController = require('./app/controller/apicontroller');
 const leadsController = require('./app/controller/leadscontroller');
+const loginController = require('./app/controller/logincontroller');
+
 const customValidators = require('./app/lib/validators');
 const customSanitizers = require('./app/lib/sanitizers');
 const filters = require('./app/lib/nunjuckfilters');
+const auth = require( './app/middleware/auth');
 
 const app = express();
 const isDev = app.get('env') === 'development';
@@ -110,13 +113,24 @@ app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`))
 app.use( logger( ( isDev ? 'dev' : 'combined' ) ) );
 
 app.use(function(req, res, next){
-    res.locals.messages = {
-      success: req.flash('success-message'),
-      error: req.flash('error-message')
-    };
-    next();
+
+  const formErrors = req.flash( 'error' );
+
+  res.locals.messages = {
+    success: req.flash('success-message'),
+    error: req.flash('error-message')
+  };
+
+  if( formErrors && formErrors.length ){
+
+    res.locals.messages.formErrors = formErrors;
+  }
+
+  next();
 });
 
+app.use(auth);
+app.use('/login', loginController.router);
 app.use('/company', companyController.router);
 app.use('/contact', contactController.router);
 app.use('/interaction', interactionController.router);

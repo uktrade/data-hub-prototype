@@ -91,7 +91,7 @@ function getPagination(req, result) {
 }
 
 function get(req, res) {
-  searchService.search(req.query)
+  searchService.search(req.session.token, req.query)
     .then((result) => {
       // combine filters and facets to show which are
       // selected
@@ -104,6 +104,7 @@ function get(req, res) {
           }
         }
       }
+
 
       result.facets = getFakeFacets();
       result.term = req.query.term;
@@ -120,16 +121,21 @@ function get(req, res) {
 
 
 function getFakeFacets() {
+
   let facets = {
     'Category': [{value: 'Company' }, {value: 'Contact' }],
     'Business type': [],
     'Status': [{value: 'Active'}, {value: 'Archived'}]
   };
+
   const business_types = metadata.TYPES_OF_BUSINESS;
 
-  for (let btype of business_types) {
-    facets['Business type'].push({value: btype.name});
+  if(business_types){
+    for (let btype of business_types) {
+      facets['Business type'].push({value: btype.name});
+    }
   }
+
   return facets;
 }
 

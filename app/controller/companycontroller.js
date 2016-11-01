@@ -81,7 +81,7 @@ function view(req, res) {
     return;
   }
 
-  companyRepository.getCompany(id, source)
+  companyRepository.getCompany( req.session.token, id, source)
     .then((company) => {
       postProcessCompany(company);
       let formData;

@@ -71,6 +71,7 @@
     "mocha": "^3.0.2",
     "mocha-junit-reporter": "^1.12.0",
     "mocha-multi": "^0.9.1",
+    "nodemon": "1.11.0",
     "protractor": "^4.0.4",
     "selenium-standalone-jar": "2.45.0",
     "sinon": "^1.17.5",
@@ -83,7 +84,8 @@
     "develop": "gulp watch",
     "test": "JASMINE_CONFIG_PATH=test/jasmine.json jasmine",
     "postinstall": "gulp build",
-    "lint": "gulp lint-js"
+    "lint": "gulp lint-js",
+    "watch": "nodemon app.js --ignore 'app/javascripts/**/*'"
   },
   "author": "Zac Tolley <zac@thetolleys.com>",
   "license": "MIT",

@@ -1,5 +1,6 @@
 'use strict';
 const rp = require('request-promise');
+const authorisedRequest = require( '../lib/authorisedRequest' );
 const config = require('../../config');
 const moment = require('moment');
 const interactionRepository = require('../repository/interactionrepository');
@@ -7,10 +8,10 @@ const contactRepository = require('../repository/contactrepository');
 
 // Get a company and then go back and get further detail for each company contact
 // and interaction, so the company detail page can give the detail required.
-function getDitCompany(id) {
+function getDitCompany(token, id) {
   let result;
 
-  return rp({
+  return authorisedRequest(token, {
     url: `${config.apiRoot}/company/${id}/`,
     json: true
   })
@@ -40,16 +41,16 @@ function getDitCompany(id) {
   });
 }
 
-function getCHCompany(id) {
-  return rp({ url: `${config.apiRoot}/ch-company/${id}/`, json: true });
+function getCHCompany(token, id) {
+  return authorisedRequest(token, { url: `${config.apiRoot}/ch-company/${id}/`, json: true });
 }
 
-function getCompany(id, source) {
+function getCompany(token, id, source) {
 
   return new Promise((fulfill, reject) => {
     // Get DIT Company
     if (source === 'company_companieshousecompany') {
-      getCHCompany(id)
+      getCHCompany(token, id)
         .then((ch) => {
           fulfill({
             company_number: id,
@@ -65,7 +66,7 @@ function getCompany(id, source) {
       return;
     }
 
-    getDitCompany(id)
+    getDitCompany(token, id)
       .then((company) => {
         fulfill(company);
       })

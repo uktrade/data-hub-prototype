@@ -1,0 +1,40 @@
+{% extends "layouts/ukti.html" %}
+{% import "macros/forms.html" as forms %}
+
+{% block main %}
+
+  <h2 class="leads-heading bold-xlarge">Login</h2>
+
+  {% if messages.error.length %}
+    <div class="flash-message error-message">
+      <p class="flash-message-content">
+        {% for message in messages.error %}
+          {{ message }}<br>
+        {% endfor %}
+      </p>
+    </div>
+  {% endif %}
+
+  {% if messages.success.length %}
+    <div class="flash-message success-message">
+      <p class="flash-message-content">
+        {% for message in messages.success %}
+          {{ message }}<br>
+        {% endfor %}
+      </p>
+    </div>
+  {% endif %}
+
+  {{ forms.errorPanel( messages.formErrors ) }}
+
+  <form action="{{ action }}" method="post">
+
+    {{ forms.textbox('username', label="User name", value=lead.username, error=errors.username, autofocus=true) }}
+
+    {{ forms.textbox('password', label="Password", value=lead.password, error=errors.password, type='password') }}
+
+    {{ forms.save(buttonText='Login') }}
+
+  </form>
+
+{% endblock %}

@@ -6,6 +6,11 @@ module.exports = {
   env: process.env.NODE_ENV,
   port: port,
   apiRoot: process.env.API_ROOT || 'http://localhost:8000',
+  api: {
+    authUrl: '/token/',
+    clientId: process.env.API_CLIENT_ID,
+    clientSecret: process.env.API_CLIENT_SECRET
+  },
   postcodeLookup: {
     apiKey: process.env.POSTCODE_KEY,
     baseUrl: 'https://api.getAddress.io/v2/uk/{postcode}?api-key={api-key}'
@@ -19,5 +24,5 @@ module.exports = {
     secret: process.env.SESSION_SECRET || 'howdoesyourgardengrow',
     // 30 mins timeout
     ttl: process.env.SESSION_TTL || (30 * 60 * 1000)
-  },
+  }
 };
