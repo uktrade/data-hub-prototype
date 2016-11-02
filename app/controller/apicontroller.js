@@ -24,7 +24,7 @@ function postcodelookup(req, res) {
 }
 
 function companySuggest(req, res) {
-  searchService.suggestCompany(req.query.term, req.query.type)
+  searchService.suggestCompany(req.session.token, req.query.term, req.query.type)
     .then((result) => {
       res.json(result);
     })
@@ -65,7 +65,7 @@ function accountManagerLookup(req, res) {
 
   const param = req.query.term.toLocaleLowerCase();
 
-  rp({
+  authorisedRequest(req.session.token, {
     url: `${config.apiRoot}/advisor/`,
     json: true
   })
