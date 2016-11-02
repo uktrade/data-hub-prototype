@@ -1,5 +1,5 @@
 'use strict';
-const rp = require('request-promise');
+
 const authorisedRequest = require( './authorisedRequest' );
 const config = require('../../config');
 
@@ -28,7 +28,7 @@ function search(token, query) {
   return authorisedRequest(token, options);
 }
 
-function suggestCompany(term, types) {
+function suggestCompany(token, term, types) {
 
   if (!types) {
     types = ['company_company'];
@@ -43,7 +43,7 @@ function suggestCompany(term, types) {
     method: 'POST'
   };
 
-  return rp(options).
+  return authorisedRequest(token, options).
     then((result) => {
       return result.hits
         .map(hit => {

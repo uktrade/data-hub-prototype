@@ -23,7 +23,7 @@ function view(req, res) {
     res.redirect('/');
   }
 
-  contactRepository.getContact(contact_id)
+  contactRepository.getContact(req.session.token, contact_id)
     .then((contact) => {
 
       if (!contact.interactions) {
@@ -45,7 +45,7 @@ function edit(req, res) {
     res.redirect('/');
   }
 
-  contactRepository.getContact(contact_id)
+  contactRepository.getContact(req.session.token, contact_id)
     .then((contact) => {
 
       if (!contact.interactions) {
@@ -89,7 +89,7 @@ function add(req, res) {
     });
 
   } else if (companyId) {
-    companyRepository.getDitCompany(companyId)
+    companyRepository.getDitCompany(req.session.token, companyId)
       .then((company) => {
         render({company});
       });
@@ -125,7 +125,7 @@ function post(req, res) {
 
   contact.telephone_countrycode = '+44';
 
-  contactRepository.saveContact(contact)
+  contactRepository.saveContact(req.session.token, contact)
     .then((data) => {
       if (leadId){
         userLeads
@@ -148,14 +148,14 @@ function post(req, res) {
 }
 
 function archive(req, res) {
-  contactRepository.archiveContact(req.params.contact_id, req.body.archive_reason)
+  contactRepository.archiveContact(req.session.token, req.params.contact_id, req.body.archive_reason)
     .then(() => {
       res.redirect(`/contact/${req.params.contact_id}/view`);
     });
 }
 
 function unarchive(req, res) {
-  contactRepository.unarchiveContact(req.params.contact_id)
+  contactRepository.unarchiveContact(req.session.token, req.params.contact_id)
     .then(() => {
       res.redirect(`/contact/${req.params.contact_id}/view`);
     });

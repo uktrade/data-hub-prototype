@@ -1,15 +1,15 @@
 'use strict';
-const rp = require('request-promise');
+const authorisedRequest = require('../lib/authorisedRequest');
 const config = require('../../config');
 
-function getInteraction(interactionId) {
-  return rp({
+function getInteraction(token, interactionId) {
+  return authorisedRequest(token, {
     url: `${config.apiRoot}/interaction/${interactionId}/`,
     json: true
   });
 }
 
-function saveInteraction(interaction) {
+function saveInteraction(token, interaction) {
   let options = {
     json: true,
     body: interaction
@@ -24,7 +24,7 @@ function saveInteraction(interaction) {
     options.method = 'POST';
   }
 
-  return rp(options);
+  return authorisedRequest(token, options);
 }
 
 

@@ -3,7 +3,6 @@
 const rp = require('request-promise');
 const config = require('../../config');
 
-
 function lookupAddress(postcode) {
   return new Promise((fulfill, reject) => {
 

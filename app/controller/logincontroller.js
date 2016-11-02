@@ -55,6 +55,8 @@ function loginToApi( req, res ){
 
       } else {
 
+        console.log( 'Error logging in' );
+        console.error( error );
         req.error = error.error;
         res.redirect('/error');
       }
