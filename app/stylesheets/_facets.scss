@@ -24,6 +24,8 @@
 .govuk-option-select .options-container {
   overflow-y: visible;
   max-height: 900px;
+  box-sizing: border-box;
+  width: 100%;
 }
 .govuk-option-select .option-select-label {
   margin-right: 10px;

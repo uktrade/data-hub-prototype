@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import { addClass, removeClass, toggleClass } from './utils/classtuff';
 import { getQueryParam } from './utils/urlstuff';
 
@@ -7,7 +8,7 @@ class Facets {
 
   constructor(targetElement, resultSummaryElement) {
     this.initElements(targetElement, resultSummaryElement);
-    this.addEventHanders();
+    this.addEventHandlers();
     this.renderFilterList();
   }
 
@@ -23,7 +24,7 @@ class Facets {
     this.collapseButtons = this.element.querySelectorAll('.collapse-filter-js');
   }
 
-  addEventHanders() {
+  addEventHandlers() {
     this.element.addEventListener('click', this.selectOptionHandler, false);
 
     for (const clearButton of this.clearButtons) {
