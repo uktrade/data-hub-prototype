@@ -73,6 +73,7 @@ app.use(session({
     secure: (isDev ? false : true ),
     maxAge: config.session.ttl
   },
+  rolling: true,
   key: 'datahub.sid',
   secret: config.session.secret,
   resave: true,
