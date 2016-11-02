@@ -50,22 +50,15 @@ class ContactTable extends Component {
   };
 
   renderContact = (contact) => {
-
     const link = `/contact/${contact.id}/view`;
-
-    if (this.props.archived === true && contact.archived_on !== null ||
-    this.props.archived === false) {
-      return (
-        <tr key={contact.id}>
-          <td className="name"><a href={link}>{ contact.first_name } { contact.last_name }</a></td>
-          <td className="title">{ contact.role.name }</td>
-          <td className="phone">{ contact.telephone_number }</td>
-          <td className="email"><a href={'mailto:' + contact.email }>{ contact.email }</a></td>
-        </tr>
-      );
-    }
-
-    return null;
+    return (
+      <tr key={contact.id}>
+        <td className="name"><a href={link}>{ contact.first_name } { contact.last_name }</a></td>
+        <td className="title">{ contact.role.name }</td>
+        <td className="phone">{ contact.telephone_number }</td>
+        <td className="email"><a href={'mailto:' + contact.email }>{ contact.email }</a></td>
+      </tr>
+    );
   };
 
   columnClass(key) {
@@ -119,8 +112,7 @@ class ContactTable extends Component {
 }
 
 ContactTable.propTypes = {
-  contacts: React.PropTypes.array.isRequired,
-  archived: React.PropTypes.bool
+  contacts: React.PropTypes.array.isRequired
 };
 
 export default ContactTable;

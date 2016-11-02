@@ -14,7 +14,7 @@
     </div>
     <div class="column-one-third">
       <p class="actions">
-        {% if not company.archived_on %}
+        {% if not company.archived %}
           <a class="button button-secondary" href="/contact/add?company_id={{ company.id }}">Add new contact</a>
         {% else %}
           <a class="button button-disabled">Add new contact</a>

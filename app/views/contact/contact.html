@@ -19,7 +19,7 @@
 
   {% if not contact.archived %}
     <form id="archive-details" class="hidden" action="/contact/{{ contact.id }}/archive" method="post">
-      {{ forms.dropdown('archive_reason',
+      {{ forms.dropdown('archived_reason',
       label="Reason for archiving contact",
       emptyLabel="Select a value",
       value=formData.business_type,
@@ -37,7 +37,7 @@
   {% else %}
     <p class="indented-info">
       This contact has been archived on {{ contact.archived_on | formatDate }} by <a href="#">{{ contact.archived_by }}</a>.<br/>
-      Reason: {{ contact.archive_reason }}
+      Reason: {{ contact.archived_reason }}
     </p>
     <hr/>
   {% endif %}

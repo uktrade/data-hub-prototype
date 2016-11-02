@@ -148,7 +148,7 @@ function post(req, res) {
 }
 
 function archive(req, res) {
-  contactRepository.archiveContact(req.session.token, req.params.contact_id, req.body.archive_reason)
+  contactRepository.archiveContact(req.session.token, req.params.contact_id, req.body.archived_reason)
     .then(() => {
       res.redirect(`/contact/${req.params.contact_id}/view`);
     });

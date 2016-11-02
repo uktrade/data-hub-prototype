@@ -155,7 +155,7 @@ function cleanErrors(errors) {
 }
 
 function archive(req, res) {
-  companyRepository.archiveCompany(req.session.token, req.params.company_id, req.body.archive_reason)
+  companyRepository.archiveCompany(req.session.token, req.params.company_id, req.body.archived_reason)
     .then(() => {
       res.redirect(`/company/COMBINED/${req.params.company_id}`);
     });

@@ -8,8 +8,8 @@ import ContactInteractionTable from '../components/contactinteractiontable.compo
 const archiveForm = document.getElementById('archive-details');
 const archiveButton = document.getElementById('archive-reveal-button');
 const cancelButton = document.getElementById('cancel-archive-button');
-const archiveReasonElement = document.getElementById('archive_reason');
-const archiveReasonGroup = document.getElementById('archive_reason-wrapper');
+const archiveReasonElement = document.getElementById('archived_reason');
+const archiveReasonGroup = document.getElementById('archived_reason-wrapper');
 
 
 if (interactions && interactions.length > 0) {

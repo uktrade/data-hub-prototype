@@ -1,7 +1,6 @@
 'use strict';
 const authorisedRequest = require( '../lib/authorisedRequest' );
 const config = require('../../config');
-const moment = require('moment');
 const interactionRepository = require('../repository/interactionrepository');
 const contactRepository = require('../repository/contactrepository');
 const metadata = require('../lib/metadata');
@@ -137,34 +136,21 @@ function saveCompany(token, company) {
 }
 
 function archiveCompany(token, companyId, reason) {
-
-  let options = {
+  const options = {
     json: true,
-    body: {
-      'archived_on': moment().format('YYYY-MM-DD'),
-      'archive_reason': reason,
-      'archived_by': 'Lee Smith',
-    },
-    url: `${config.apiRoot}/company/${companyId}/`,
-    method: 'PATCH'
+    body: {reason},
+    url: `${config.apiRoot}/company/${companyId}/archive/`,
+    method: 'POST'
   };
-
   return authorisedRequest(token, options);
-
 }
 
 function unarchiveCompany(token, companyId) {
   let options = {
     json: true,
-    body: {
-      'archived_on': null,
-      'archive_reason': null,
-      'archived_by': null,
-    },
-    url: `${config.apiRoot}/company/${companyId}/`,
-    method: 'PATCH'
+    url: `${config.apiRoot}/company/${companyId}/unarchive/`,
+    method: 'GET'
   };
-
   return authorisedRequest(token, options);
 }
 
