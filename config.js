@@ -22,7 +22,7 @@ module.exports = {
   },
   session: {
     secret: process.env.SESSION_SECRET || 'howdoesyourgardengrow',
-    // 30 mins timeout
-    ttl: process.env.SESSION_TTL || (30 * 60 * 1000)
+    // 2 hour timeout
+    ttl: process.env.SESSION_TTL || (2 * 60 * 60 * 1000)
   }
 };
