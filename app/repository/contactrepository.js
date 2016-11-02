@@ -4,6 +4,13 @@ const config = require('../../config');
 const moment = require('moment');
 const interactionRepository = require('../repository/interactionrepository');
 
+function getBriefContact(token, contactId) {
+  return authorisedRequest(token, {
+    url: `${config.apiRoot}/contact/${contactId}/`,
+    json: true
+  });
+}
+
 
 function getContact(token, contactId) {
   let result;
@@ -89,4 +96,4 @@ function unarchiveContact(token, contactId) {
   return authorisedRequest(token, options);
 }
 
-module.exports = { getContact, saveContact, getContactsForCompany, archiveContact, unarchiveContact };
+module.exports = { getContact, saveContact, getContactsForCompany, archiveContact, unarchiveContact, getBriefContact };

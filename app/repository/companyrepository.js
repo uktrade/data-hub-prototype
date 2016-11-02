@@ -31,7 +31,7 @@ function getDitCompany(token, id) {
 
     let promises = [];
     for (const contact of result.contacts) {
-      promises.push(contactRepository.getContact(token, contact.id));
+      promises.push(contactRepository.getBriefContact(token, contact.id));
     }
 
     return Promise.all(promises);
