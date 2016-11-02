@@ -26,6 +26,7 @@ const customValidators = require('./app/lib/validators');
 const customSanitizers = require('./app/lib/sanitizers');
 const filters = require('./app/lib/nunjuckfilters');
 const auth = require( './app/middleware/auth');
+let metadata = require( './app/lib/metadata' );
 
 const app = express();
 const isDev = app.get('env') === 'development';
@@ -142,6 +143,20 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.listen(config.port, function(){
-	console.log('app listening on port %s', config.port);
-});
+metadata.fetchAll( ( errors ) => {
+
+  if( errors ){
+
+    console.log( 'Unable to load all metadata, cannot start app' );
+
+    for( let err of errors ){
+      throw err;
+    }
+
+  } else {
+
+    app.listen(config.port, function(){
+      console.log('app listening on port %s', config.port);
+    });
+  }
+} );
