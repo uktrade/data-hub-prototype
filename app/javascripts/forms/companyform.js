@@ -103,7 +103,6 @@ export class CompanyForm extends BaseForm {
       isCDMS: (!company.company_number || company.company_number.length === 0)
     };
 
-    console.log(company);
   }
 
   componentDidMount() {
@@ -230,7 +229,7 @@ export class CompanyForm extends BaseForm {
       <div>
         { this.state.errors &&
           <ErrorList labels={LABELS} errors={this.state.errors}/>
-        }
+        } 
 
         { this.state.isCDMS &&
           <div>
