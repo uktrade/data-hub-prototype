@@ -21,7 +21,7 @@ function getDitCompany(token, id) {
 
     let promises = [];
     for (const interaction of result.interactions) {
-      promises.push(interactionRepository.getInteraction(interaction.id));
+      promises.push(interactionRepository.getInteraction(token, interaction.id));
     }
 
     return Promise.all(promises);
@@ -31,7 +31,7 @@ function getDitCompany(token, id) {
 
     let promises = [];
     for (const contact of result.contacts) {
-      promises.push(contactRepository.getContact(contact.id));
+      promises.push(contactRepository.getContact(token, contact.id));
     }
 
     return Promise.all(promises);
