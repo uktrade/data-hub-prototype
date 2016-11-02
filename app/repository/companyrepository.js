@@ -1,10 +1,11 @@
 'use strict';
-const rp = require('request-promise');
 const authorisedRequest = require( '../lib/authorisedRequest' );
 const config = require('../../config');
 const moment = require('moment');
 const interactionRepository = require('../repository/interactionrepository');
 const contactRepository = require('../repository/contactrepository');
+const metadata = require('../lib/metadata');
+
 
 // Get a company and then go back and get further detail for each company contact
 // and interaction, so the company detail page can give the detail required.
@@ -51,10 +52,10 @@ function getCompany(token, id, source) {
     // Get DIT Company
     if (source === 'company_companieshousecompany') {
       getCHCompany(token, id)
-        .then((ch) => {
+        .then((companies_house_data) => {
           fulfill({
             company_number: id,
-            ch,
+            companies_house_data,
             contacts: [],
             interactions: []
           });
@@ -76,25 +77,66 @@ function getCompany(token, id, source) {
   });
 }
 
-function saveCompany(company) {
-  let options = {
-    json: true,
-    body: company
-  };
+function setCHDefaults(token, company) {
+  return new Promise((resolve) => {
 
-  if (company.id && company.id.length > 0) {
-    // update
-    options.url = `${config.apiRoot}/company/${company.id}/`;
-    options.method = 'PUT';
-  } else {
-    options.url = `${config.apiRoot}/company/`;
-    options.method = 'POST';
-  }
+    if (company.company_number) {
+      getCHCompany(token, company.company_number)
+        .then((ch) => {
 
-  return rp(options);
+          if (!company.name) company.name = ch.name;
+          if (!company.registered_address_1) company.registered_address_1 = ch.registered_address_1;
+          if (!company.registered_address_2) company.registered_address_2 = ch.registered_address_2;
+          if (!company.registered_address_town) company.registered_address_town = ch.registered_address_town;
+          if (!company.registered_address_county) company.registered_address_county = ch.registered_address_county;
+          if (!company.registered_address_postcode) company.registered_address_postcode = ch.registered_address_postcode;
+          if (!company.registered_address_country) company.registered_address_country = ch.registered_address_country.id;
+
+          company.uk_based = true;
+
+          // Business type
+          const businessTypes = metadata.TYPES_OF_BUSINESS;
+          for (const businessType of businessTypes) {
+            if (businessType.name.toLowerCase() === ch.company_category.toLowerCase()) {
+              company.business_type = businessType.id;
+            }
+          }
+          resolve(company);
+
+        });
+    } else {
+      resolve(company);
+    }
+  });
+
 }
 
-function archiveCompany(companyId, reason) {
+function saveCompany(token, company) {
+  delete company.companies_house_data;
+  delete company.contacts;
+  delete company.interactions;
+
+  if (company.id && company.id.length > 0) {
+    return authorisedRequest(token, {
+      url: `${config.apiRoot}/company/${company.id}/`,
+      method: 'PUT',
+      json: true,
+      body: company
+    });
+  } else {
+    return setCHDefaults(token, company)
+      .then(parsedCompany => {
+        return authorisedRequest(token, {
+          url: `${config.apiRoot}/company/`,
+          method: 'POST',
+          json: true,
+          body: parsedCompany
+        });
+      });
+  }
+}
+
+function archiveCompany(token, companyId, reason) {
 
   let options = {
     json: true,
@@ -107,11 +149,11 @@ function archiveCompany(companyId, reason) {
     method: 'PATCH'
   };
 
-  return rp(options);
+  return authorisedRequest(token, options);
 
 }
 
-function unarchiveCompany(companyId) {
+function unarchiveCompany(token, companyId) {
   let options = {
     json: true,
     body: {
@@ -123,7 +165,7 @@ function unarchiveCompany(companyId) {
     method: 'PATCH'
   };
 
-  return rp(options);
+  return authorisedRequest(token, options);
 }
 
 module.exports = {getCompany, saveCompany, getDitCompany, getCHCompany, archiveCompany, unarchiveCompany};

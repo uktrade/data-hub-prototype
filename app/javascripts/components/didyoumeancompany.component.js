@@ -79,13 +79,13 @@ export class DidYouMeanCompanyComponent extends Component {
 
     let name, type, id, addressStr;
 
-    if (!company.id && company.ch && company.ch.id) {
-      addressStr = company.ch.registered_address_1;
-      if (company.ch.registered_address_2 && company.ch.registered_address_2.length > 0) addressStr += `, ${company.ch.registered_address_2}`;
-      if (company.ch.registered_address_town && company.ch.registered_address_town.length > 0) addressStr += `, ${company.ch.registered_address_town}`;
-      if (company.ch.registered_addres_county && company.ch.registered_address_county > 0) addressStr += `, ${company.ch.registered_address_county}`;
-      if (company.ch.registered_address_postcode && company.ch.registered_address_postcode > 0) addressStr += `, ${company.ch.registered_address_postcode}`;
-      name = company.ch.name;
+    if (!company.id && company.companies_house_data && company.companies_house_data.id) {
+      addressStr = company.companies_house_data.registered_address_1;
+      if (company.companies_house_data.registered_address_2 && company.companies_house_data.registered_address_2.length > 0) addressStr += `, ${company.companies_house_data.registered_address_2}`;
+      if (company.companies_house_data.registered_address_town && company.companies_house_data.registered_address_town.length > 0) addressStr += `, ${company.companies_house_data.registered_address_town}`;
+      if (company.companies_house_data.registered_addres_county && company.companies_house_data.registered_address_county > 0) addressStr += `, ${company.companies_house_data.registered_address_county}`;
+      if (company.companies_house_data.registered_address_postcode && company.companies_house_data.registered_address_postcode > 0) addressStr += `, ${company.companies_house_data.registered_address_postcode}`;
+      name = company.companies_house_data.name;
       id = company.company_number;
       type = 'company_companieshousecompany';
     } else {

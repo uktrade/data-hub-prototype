@@ -1,4 +1,4 @@
-{% if company.ch and company.ch.company_number %}
+{% if company.companies_house_data and company.companies_house_data.company_number %}
   <table class="table-detail table-detail--readonly">
     <tbody>
     <tr class="table-detail--readonly__section">
@@ -8,34 +8,35 @@
     </tr>
     <tr class="table-detail--readonly__section">
       <th>Registered office address</th>
-      <td class="meta--address">{{ company.ch.address_1 | lower }},
-        {{ company.ch.address_2 | lower }},
-        {{ company.ch.address_town | lower }},
-        <span class="meta--address__postcode">{{ company.ch.address_postcode }}</span>
+      <td class="meta--address">
+        {% if (company.companies_house_data.registered_address_1) %}{{ company.companies_house_data.registered_address_1 | lower }}, {% endif %}
+        {% if (company.companies_house_data.registered_address_2) %}{{ company.companies_house_data.registered_address_2 | lower }}, {% endif %}
+        {% if (company.companies_house_data.registered_address_town) %}{{ company.companies_house_data.registered_address_town | lower }}, {% endif %}
+        <span class="meta--address__postcode">{{ company.companies_house_data.registered_address_postcode }}</span>
       </td>
     </tr>
     <tr>
       <th>Company type</th>
-      <td>{{ company.ch.company_category }}</td>
+      <td>{{ company.companies_house_data.company_category }}</td>
     </tr>
     <tr class="table-detail--readonly__section">
       <th>Company status</th>
-      <td>{{ company.ch.company_status }}</td>
+      <td>{{ company.companies_house_data.company_status }}</td>
     </tr>
     <tr class="table-detail--readonly__section">
       <th>Nature of business (SIC)</th>
       <td>
-        {% if company.ch.sic_code_1 %}
-          {{ company.ch.sic_code_1 }}
+        {% if company.companies_house_data.sic_code_1 %}
+          {{ company.companies_house_data.sic_code_1 }}
         {% endif %}
-        {% if company.ch.sic_code_2 %}
-          <br/>{{ company.ch.sic_code_2 }}
+        {% if company.companies_house_data.sic_code_2 %}
+          <br/>{{ company.companies_house_data.sic_code_2 }}
         {% endif %}
-        {% if company.ch.sic_code_3 %}
-          <br/>{{ company.ch.sic_code_3 }}
+        {% if company.companies_house_data.sic_code_3 %}
+          <br/>{{ company.companies_house_data.sic_code_3 }}
         {% endif %}
-        {% if company.ch.sic_code_4 %}
-          <br/>{{ company.ch.sic_code_4 }}
+        {% if company.companies_house_data.sic_code_4 %}
+          <br/>{{ company.companies_house_data.sic_code_4 }}
         {% endif %}
       </td>
     </tr>
@@ -46,6 +47,7 @@
   <div class="js-view-data">
     <table class="table-detail">
       <tbody>
+      {% if (not company.company_number) %}
         <tr>
           <th>Registered address</th>
           <td>
@@ -61,6 +63,7 @@
           <th>Company type</th>
           <td>{{ company.business_type.name }}</td>
         </tr>
+      {% endif %}
         <tr>
           <th>Sector</th>
           <td>{{ company.sector.name }}
@@ -114,7 +117,7 @@
         <tr>
           <th>Is the company currently <br/>exporting to a market?</th>
           <td>
-            {% if company.export_to_countries and company.export_to_countries.length > 0 %}
+            {% if company.export_to_countries and company.export_to_countries.length > 0 and company.export_to_countries[0].id.length > 0 %}
               Yes.
               {% for exportingMarket in company.export_to_countries %}
                 {{ exportingMarket.name }}

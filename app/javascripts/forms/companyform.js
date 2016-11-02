@@ -16,7 +16,7 @@ const LABELS = {
   'sector': 'Sector',
   'registered_address': 'Registered address',
   'uk_region': 'Region',
-  'alias': 'Trading name (optiona)',
+  'alias': 'Trading name (optional)',
   'trading_address': 'Trading address (optional)',
   'website': 'Website (optional)',
   'description': 'Business description (optional)',
@@ -99,8 +99,10 @@ export class CompanyForm extends BaseForm {
       show_account_manager: (company.account_manager.id !== null),
       show_exporting_to: (company.export_to_countries[0].id !== null),
       saving: false,
-      formData: company
+      formData: company,
+      isCDMS: (!company.company_number || company.company_number.length === 0)
     };
+
   }
 
   componentDidMount() {
@@ -227,56 +229,61 @@ export class CompanyForm extends BaseForm {
       <div>
         { this.state.errors &&
           <ErrorList labels={LABELS} errors={this.state.errors}/>
+        } 
+
+        { this.state.isCDMS &&
+          <div>
+            <DidYouMeanCompany
+              name="name"
+              label={LABELS.name}
+              onChange={this.updateField}
+              errors={this.getErrors('name')}
+              value={formData.name}
+            />
+            <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
+              <legend className="form-label">Is the business based in the UK?</legend>
+              <label className={formData.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-yes">
+                <input
+                  id="uk_based-yes"
+                  type="radio"
+                  name="uk_based"
+                  value="Yes"
+                  checked={formData.uk_based}
+                  onChange={this.updateField}
+                />
+                Yes
+              </label>
+              <label className={!formData.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-no">
+                <input
+                id="uk_based-no"
+                type="radio"
+                name="uk_based"
+                value="No"
+                checked={!formData.uk_based}
+                onChange={this.updateField}
+                />
+                No
+              </label>
+              { formData.uk_based &&
+                <p className="js-radiohide-content">
+                You can add any type of company except UK based private and public limited
+                companies. These companies are already on data hub as it uses companies
+                house data. Please search for these companies first on data hub to add or
+                edit their details.
+                </p>
+              }
+            </fieldset>
+            <RadioWithId
+              value={formData.business_type.id || null}
+              url="/api/meta/typesofbusiness"
+              name="business_type"
+              label="Type of business"
+              errors={this.getErrors('business_type')}
+              onChange={this.updateField}
+            />
+          </div>
         }
 
-        <DidYouMeanCompany
-          name="name"
-          label={LABELS.name}
-          onChange={this.updateField}
-          errors={this.getErrors('name')}
-          value={formData.name}
-        />
-        <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
-          <legend className="form-label">Is the business based in the UK?</legend>
-          <label className={formData.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-yes">
-            <input
-              id="uk_based-yes"
-              type="radio"
-              name="uk_based"
-              value="Yes"
-              checked={formData.uk_based}
-              onChange={this.updateField}
-            />
-            Yes
-          </label>
-          <label className={!formData.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-no">
-            <input
-              id="uk_based-no"
-              type="radio"
-              name="uk_based"
-              value="No"
-              checked={!formData.uk_based}
-              onChange={this.updateField}
-            />
-            No
-          </label>
-          { formData.uk_based &&
-          <p className="js-radiohide-content">
-            You can add any type of company except UK based private and public limited
-            companies. These companies are already on data hub as it uses companies
-            house data. Please search for these companies first on data hub to add or
-            edit their details.
-          </p>
-          }
-        </fieldset>
-        <RadioWithId
-          value={formData.business_type.id || null}
-          url="/api/meta/typesofbusiness"
-          name="business_type"
-          label="Type of business"
-          errors={this.getErrors('business_type')}
-          onChange={this.updateField}
-        />
         <RadioWithId
           value={formData.sector.id}
           url="/api/meta/sector"
@@ -285,22 +292,24 @@ export class CompanyForm extends BaseForm {
           errors={this.getErrors('sector')}
           onChange={this.updateField}
         />
-        <Address
-          name='registered_address'
-          label='Registered address'
-          onChange={this.updateField}
-          errors={this.getErrors('registered_address')}
-          value={formData.registered_address}
-        />
-        { formData.uk_based &&
-        <RadioWithId
-          value={formData.uk_region.id}
-          url="/api/meta/region"
-          name="uk_region"
-          label="Region"
-          errors={this.getErrors('uk_region')}
-          onChange={this.updateField}
-        />
+        { this.state.isCDMS &&
+          <Address
+            name='registered_address'
+            label='Registered address'
+            onChange={this.updateField}
+            errors={this.getErrors('registered_address')}
+            value={formData.registered_address}
+          />
+        }
+        { (formData.uk_based || formData.company_number && formData.company_number.length > 0) &&
+          <RadioWithId
+            value={formData.uk_region.id}
+            url="/api/meta/region"
+            name="uk_region"
+            label="Region"
+            errors={this.getErrors('uk_region')}
+            onChange={this.updateField}
+          />
         }
         <hr/>
         <InputText
@@ -317,7 +326,6 @@ export class CompanyForm extends BaseForm {
           onChange={this.updateField}
           value={formData.trading_address}
         />
-
         <InputText
           label={LABELS.website}
           name="website"
