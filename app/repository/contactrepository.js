@@ -1,14 +1,14 @@
 'use strict';
-const rp = require('request-promise');
+const authorisedRequest = require('../lib/authorisedRequest');
 const config = require('../../config');
 const moment = require('moment');
 const interactionRepository = require('../repository/interactionrepository');
 
 
-function getContact(contactId) {
+function getContact(token, contactId) {
   let result;
 
-  return rp({
+  return authorisedRequest(token, {
     url: `${config.apiRoot}/contact/${contactId}/`,
     json: true
   })
@@ -27,9 +27,9 @@ function getContact(contactId) {
   });
 }
 
-function getContactsForCompany(companyId) {
+function getContactsForCompany(token, companyId) {
   return new Promise((fulfill) => {
-    rp({
+    authorisedRequest(token, {
       url: `${config.apiRoot}/contact/?company=${companyId}`,
       json: true
     })
@@ -39,7 +39,7 @@ function getContactsForCompany(companyId) {
   });
 }
 
-function saveContact(contact) {
+function saveContact(token, contact) {
   let options = {
     json: true,
     body: contact
@@ -54,10 +54,10 @@ function saveContact(contact) {
     options.method = 'POST';
   }
 
-  return rp(options);
+  return authorisedRequest(token, options);
 }
 
-function archiveContact(contactId, reason) {
+function archiveContact(token, contactId, reason) {
 
   let options = {
     json: true,
@@ -70,11 +70,11 @@ function archiveContact(contactId, reason) {
     method: 'PATCH'
   };
 
-  return rp(options);
+  return authorisedRequest(token, options);
 
 }
 
-function unarchiveContact(contactId) {
+function unarchiveContact(token, contactId) {
   let options = {
     json: true,
     body: {
@@ -86,7 +86,7 @@ function unarchiveContact(contactId) {
     method: 'PATCH'
   };
 
-  return rp(options);
+  return authorisedRequest(token, options);
 }
 
 module.exports = { getContact, saveContact, getContactsForCompany, archiveContact, unarchiveContact };

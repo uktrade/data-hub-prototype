@@ -48,7 +48,7 @@ function add(req, res) {
   const contactId = req.query.contact_id;
 
   if (contactId && contactId.length > 0) {
-    contactRepository.getContact(contactId)
+    contactRepository.getContact(req.session.token, contactId)
       .then((contact) => {
         res.render('interaction/interaction-edit', {
           company: contact.company,
@@ -57,7 +57,7 @@ function add(req, res) {
         });
       });
   } else if (companyId && companyId.length > 0) {
-    companyRepository.getDitCompany(companyId)
+    companyRepository.getDitCompany(req.session.token, companyId)
       .then((company) => {
         res.render('interaction/interaction-edit', {
           company,

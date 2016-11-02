@@ -9,6 +9,7 @@ const companyRepository = require('../repository/companyrepository');
 const metadata = require('../lib/metadata');
 const rp = require('request-promise');
 const config = require('../../config');
+const authorisedRequest = require( '../lib/authorisedRequest' );
 
 function postcodelookup(req, res) {
   let postcode = req.params.postcode;
@@ -129,7 +130,7 @@ function getMetadata(req, res) {
         });
       return;
     case 'advisors':
-      rp({
+      authorisedRequest(req.session.token, {
         url: `${config.apiRoot}/advisor/`,
         json: true
       })
@@ -167,7 +168,7 @@ function contactLookup(req, res) {
   const contactParam = req.query.contact.toLocaleLowerCase();
   const contactParamLength = contactParam.length;
 
-  companyRepository.getDitCompany(companyParam)
+  companyRepository.getDitCompany(req.session.token, companyParam)
     .then(company => {
       const results = company.contacts.filter((contact) => {
         const name = `${contact.first_name.toLocaleLowerCase()} ${contact.last_name.toLocaleLowerCase()}`;
