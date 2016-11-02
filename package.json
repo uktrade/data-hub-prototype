@@ -90,6 +90,6 @@
   "author": "Zac Tolley <zac@thetolleys.com>",
   "license": "MIT",
   "engines": {
-    "node": "6.5.0"
+    "node": "6.9.1"
   }
 }
