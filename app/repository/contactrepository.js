@@ -16,7 +16,7 @@ function getContact(token, contactId) {
     result = data;
     let promises = [];
     for (const interaction of result.interactions) {
-      promises.push(interactionRepository.getInteraction(interaction.id));
+      promises.push(interactionRepository.getInteraction(token, interaction.id));
     }
 
     return Promise.all(promises);
