@@ -102,15 +102,18 @@ export class InteractionForm extends BaseForm {
   };
 
   lookupContacts = (term) => {
-    return axios.get(`/api/contactlookup?company=${this.state.formData.company.id}&contact=${term}`)
-      .then(response => {
-        return response.data.map(({id, first_name, last_name}) => {
-          return {
-            id,
-            name: `${first_name} ${last_name}`
-          };
+    return new Promise((fullfill) => {
+      axios.get(`/api/contactlookup?company=${this.state.formData.company.id}&contact=${term}`)
+        .then(response => {
+          const result = response.data.map(({id, first_name, last_name}) => {
+            return {
+              id,
+              name: `${first_name} ${last_name}`
+            };
+          });
+          fullfill(result);
         });
-      });
+    });
   };
 
   getBackUrl() {
@@ -139,12 +142,12 @@ export class InteractionForm extends BaseForm {
 
         { this.state.showCompanyField ?
           <Autosuggest
+            name="company"
             label={LABELS.company}
+            value={formData.company}
             lookupUrl='/api/suggest'
             onChange={this.updateField}
             errors={this.getErrors('title')}
-            name="company"
-            value={formData.company}
           />
           :
           <div className="form-group">
@@ -183,12 +186,12 @@ export class InteractionForm extends BaseForm {
 
         { this.state.showContactField ?
           <Autosuggest
+            name="contact"
             label={LABELS.contact}
+            value={formData.contact}
             fetchSuggestions={this.lookupContacts}
             onChange={this.updateField}
             errors={this.getErrors('contact')}
-            name="contact"
-            value={formData.contact}
           />
           :
           <div className="form-group">
@@ -206,30 +209,30 @@ export class InteractionForm extends BaseForm {
         />
 
         <Autosuggest
+          name="dit_advisor"
           label={LABELS.dit_advisor}
+          value={formData.dit_advisor}
           lookupUrl='/api/accountmanagerlookup'
           onChange={this.updateField}
           errors={this.getErrors('dit_advisor')}
-          name="dit_advisor"
-          value={formData.dit_advisor}
         />
 
         <Autosuggest
+          name="service"
           label={LABELS.service}
-          suggestionUrl='/api/meta/service'
+          value={formData.service}
+          optionsUrl='/api/meta/service'
           onChange={this.updateField}
           errors={this.getErrors('service')}
-          name="service"
-          value={formData.service}
         />
 
         <Autosuggest
+          name="dit_team"
           label={LABELS.dit_team}
+          value={formData.dit_team}
           lookupUrl='/api/teamlookup'
           onChange={this.updateField}
           errors={this.getErrors('dit_team')}
-          name="dit_team"
-          value={formData.dit_team}
         />
 
         <div className="button-bar">

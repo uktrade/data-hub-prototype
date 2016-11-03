@@ -94,7 +94,7 @@ function get(req, res) {
   searchService.search(req.session.token, req.query)
     .then((result) => {
       // combine filters and facets to show which are
-      // selected
+      // value
       for (let filterKey in result.filters) {
         let filterValue = result.filters[filterKey];
         let facet = result.facets[filterKey];
@@ -130,7 +130,7 @@ function getFakeFacets() {
 
   const business_types = metadata.TYPES_OF_BUSINESS;
 
-  if(business_types){
+  if (business_types) {
     for (let btype of business_types) {
       facets['Business type'].push({value: btype.name});
     }

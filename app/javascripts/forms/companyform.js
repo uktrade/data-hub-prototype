@@ -165,13 +165,13 @@ export class CompanyForm extends BaseForm {
       return (
         <Autosuggest
           key={index}
-          label={label}
           name="export_to_countries"
-          suggestions={this.state.countryOptions}
+          label={label}
+          value={country}
+          options={this.state.countryOptions}
           onChange={(countryUpdate) => {
             this.updateExportingTo(countryUpdate, index);
           }}
-          value={country}
         />
       );
     });
@@ -190,13 +190,13 @@ export class CompanyForm extends BaseForm {
       return (
         <Autosuggest
           key={index}
-          label={label}
           name="future_interest_countries"
-          suggestions={this.state.countryOptions}
+          label={label}
+          value={country}
+          options={this.state.countryOptions}
           onChange={(countryUpdate) => {
             this.updateFutureExportTo(countryUpdate, index);
           }}
-          value={country}
         />
       );
     });
@@ -227,9 +227,10 @@ export class CompanyForm extends BaseForm {
 
     return (
       <div>
+
         { this.state.errors &&
           <ErrorList labels={LABELS} errors={this.state.errors}/>
-        } 
+        }
 
         { this.state.isCDMS &&
           <div>
@@ -393,12 +394,12 @@ export class CompanyForm extends BaseForm {
           { this.state.show_account_manager &&
           <div className="js-radiohide-content">
             <Autosuggest
+              name="account_manager"
               label='Account manager'
+              value={formData.account_manager}
               lookupUrl='/api/accountmanagerlookup'
               onChange={this.updateField}
               errors={this.getErrors('account_manager')}
-              name="account_manager"
-              value={formData.account_manager}
             />
           </div>
           }
@@ -444,12 +445,12 @@ export class CompanyForm extends BaseForm {
           </div>
           }
         </fieldset>
-        <div className="form-group">
-          {this.getFutureCountriesOfInterest()}
-          <a className="add-another-button" onClick={this.addFutureExportCountry}>
-            Add another country
-          </a>
-        </div>
+
+        {this.getFutureCountriesOfInterest()}
+        <a className="add-another-button" onClick={this.addFutureExportCountry}>
+          Add another country
+        </a>
+
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
           <a className="button-link button--cancel js-button-cancel" href="/">Cancel</a>

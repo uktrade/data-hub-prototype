@@ -1,73 +1,155 @@
 import React, { Component } from 'react';
-import Autosuggest from 'react-autosuggest';
 import Highlight from 'react-highlighter';
 import axios from 'axios';
-import {debounce} from 'lodash';
-
-const getSuggestionValue = suggestion => suggestion.name;
+import debounce from 'lodash/debounce';
 
 
 export class AutosuggestComponent extends Component {
+
+  // Component lifecycle
 
   constructor(props) {
     super(props);
 
     let state = {
-      selected: {id: '', name: ''},
-      visibleSuggestions: [],
-      allSuggestions: []
+      value: {id: '', name: ''},
+      highlightedIndex: null,
+      suggestions: [],
+      options: [],
+      invalidValue: false,
+      hasFocus: false,
+      changed: false
     };
 
-    if (props.suggestions) {
-      state.allSuggestions = props.suggestions;
+    if (props.options) {
+      state.options = props.options;
     }
 
     if (props.value) {
-      state.selected = props.value;
+      state.value = props.value;
     }
 
     this.state = state;
-    this.fetchSuggestionsFromServer = debounce(this.fetchSuggestionsFromServer, 300);
+    this.fetchSuggestions = debounce(this.fetchSuggestions, 300);
 
   }
 
   componentDidMount() {
-    if (this.props.suggestionUrl && this.props.suggestionUrl.length > 0) {
-      axios.get(this.props.suggestionUrl)
+
+    document.addEventListener('mousedown', this.onDocumentMouseDown);
+
+    if (this.props.optionsUrl && this.props.optionsUrl.length > 0) {
+      axios.get(this.props.optionsUrl)
         .then((result) => {
-          this.setState({allSuggestions: result.data});
+          this.setState({options: result.data});
         });
     }
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.onDocumentMouseDown);
+  }
+
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.suggestions) {
-      this.setState({allSuggestions: nextProps.suggestions});
+    if (nextProps && nextProps.options) {
+      this.setState({options: nextProps.options});
     }
   }
 
-  onChange = (event, { newValue }) => {
+
+  // event handlers
+
+  // Listen for clicks on the document.
+  // If the user clicks outside the autosuggest then clear it
+  // otherwise the user clicked on the field or a suggestion, so
+  // keep focus on the field.
+  onDocumentMouseDown = event => {
+    let node = event.detail && event.detail.target || event.target;
+
+    do {
+      if (node === this.container) {
+        return;
+      }
+      node = node.parentNode;
+    } while (node !== null && node !== document);
+
+    // Must have been outside the control, so clear the suggestions
+    this.leaveField();
+  };
+
+  // When the user types, change any currently selcted value
+  // and set the value to just be the text entered
+  // reset all the checks then go look for suggestions
+  onChange = (event) => {
+    const newValue = event.target.value;
+
     this.setState({
-      selected: {
+      value: {
+        id: null,
+        name: newValue
+      },
+      highlightedIndex: null,
+      invalidValue: false,
+      changed: true
+    });
+
+    this.props.onChange({
+      name: this.props.name,
+      value: {
         id: null,
         name: newValue
       }
     });
+
+    this.fetchSuggestions(newValue);
   };
 
-  onSuggestionSelected = (event, { suggestion }) => {
-    this.setState({
-      selected: suggestion
-    });
 
-    // Send back the suggestion and this field name
-    this.props.onChange({
-      name: this.props.name,
-      value: suggestion
-    });
+  // Need to use a combination of keydown and keyup to get
+  // keyboard navigation events.
+  keydown = (event) => {
+    // Tab
+    if (event.keyCode === 9) {
+      this.leaveField();
+    }
+  };
+  keyup = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    switch (event.keyCode) {
+      case 13: // enter
+        this.selectSuggestion();
+        break;
+
+      case 27: // escape
+        this.clearSuggestions();
+        break;
+
+      case 38: // up arrow
+        this.prev();
+        break;
+
+      case 40: // down arrow
+        this.next();
+        break;
+    }
   };
 
-  onSuggestionsFetchRequested = ({ value }) => {
+  // Set a var to say if we currently have focus.
+  // If the user types something in and moves off the field
+  // before the results come back then this helps decide
+  // to throw them away as we are no longer using the field.
+  focus = () => {
+    this.setState({hasFocus: true});
+  };
+
+
+
+  // Calculate suggestions
+
+  // Decides how to get suggestions, local, remotely or via a provided function
+  fetchSuggestions = (value) => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
     if (inputLength === 0) {
@@ -78,7 +160,9 @@ export class AutosuggestComponent extends Component {
     if (this.props.fetchSuggestions) {
       this.props.fetchSuggestions(inputValue)
         .then(suggestions => {
-          this.setState({ visibleSuggestions: suggestions });
+          if (this.state.hasFocus) {
+            this.setState({ suggestions });
+          }
         });
     } else if (this.props.lookupUrl) {
       this.fetchSuggestionsFromServer(inputValue);
@@ -88,84 +172,181 @@ export class AutosuggestComponent extends Component {
   };
 
   fetchSuggestionsFromLocalOptions = (value) => {
-    const visibleSuggestions = this.state.allSuggestions.filter(suggestion =>
+    const suggestions = this.state.options.filter(suggestion =>
       suggestion.name.toLowerCase().slice(0, value.length) === value
     );
 
-    this.setState({ visibleSuggestions });
+    this.setState({ suggestions });
   };
 
   fetchSuggestionsFromServer = (value) => {
     axios.get(`${this.props.lookupUrl}?term=${value}`)
       .then(response => {
-        this.setState({visibleSuggestions: response.data});
+        if (this.state.hasFocus) {
+          this.setState({suggestions: response.data});
+        }
       });
   };
 
-  onSuggestionsClearRequested = () => {
-    this.setState({ visibleSuggestions: [] });
+  clearSuggestions = () => {
+    this.setState({ suggestions: [], highlightedIndex: null });
   };
 
-  onBlur = () => {
-    // If the user moves off the field and didn't click something,
-    // then pick the first suggestion is there is one
-    if (!this.state.selected.id && this.state.visibleSuggestions.length > 0) {
-      this.setState({
-        selected: this.state.visibleSuggestions[0]
-      });
-      this.props.onChange(this.state.visibleSuggestions[0]);
+
+  // Navigate suggestions
+
+  leaveField() {
+    // If the current field value exactly matches the first suggestion
+    // then select that
+    if (this.state.suggestions.length > 0) {
+      const currentValue = this.state.value.name.toLocaleLowerCase();
+      const firstSuggestion = this.state.suggestions[0].name.toLocaleLowerCase();
+
+      if (currentValue === firstSuggestion) {
+        this.setState({value: this.state.suggestions[0]});
+        this.props.onChange({
+          name: this.props.name,
+          value: this.state.suggestions[0]
+        });
+        this.clearSuggestions();
+        return;
+      }
     }
-  };
 
-  renderSuggestion = (suggestion) => {
+    if (!this.props.allowOwnValue && !this.state.value.id && this.state.changed) {
+      this.setState({invalidValue: true});
+    }
+
+    this.clearSuggestions();
+  }
+
+  next() {
+    const length = this.state.suggestions.length;
+    if (this.state.highlightedIndex === null || this.state.highlightedIndex === length) {
+      this.setState({ highlightedIndex: 0 });
+    } else {
+      this.setState({ highlightedIndex: (this.state.highlightedIndex + 1) });
+    }
+  }
+
+  prev() {
+    const length = this.state.suggestions.length;
+    if (!this.state.highlightedIndex || this.state.highlightedIndex === 0) {
+      this.setState({ highlightedIndex: length });
+    } else {
+      this.setState({ highlightedIndex: this.state.highlightedIndex - 1 });
+    }
+  }
+
+  selectSuggestion(suggestion) {
+
+    let selectedSuggestion;
+
+    if (suggestion) {
+      selectedSuggestion = suggestion;
+    } else if (this.state.highlightedIndex !== null) {
+      selectedSuggestion = this.state.suggestions[this.state.highlightedIndex];
+    }
+
+    if (selectedSuggestion) {
+      this.setState({ value: selectedSuggestion, changed: true });
+      this.props.onChange({name: this.props.name, value: selectedSuggestion});
+    }
+
+    this.clearSuggestions();
+    this.textInput.focus();
+  }
+
+
+  // Render markup
+
+  renderSuggestion = (suggestion, key) => {
+
+    let className = 'autosuggest__suggestion';
+    if (key === this.state.highlightedIndex) {
+      className += ' autosuggest__suggestion--active';
+    }
+
     return (
-      <div className="autosuggest__suggestion">
-        <Highlight search={this.state.selected.name}>
-          {suggestion.name}
-        </Highlight>
-      </div>
+      <li key={key} className={className}>
+        <a onClick={() => { this.selectSuggestion(suggestion); }}>
+          <Highlight search={this.state.value.name}>{suggestion.name}</Highlight>
+        </a>
+      </li>
     );
   };
+
+  renderSuggestions(suggestions) {
+
+    if (!suggestions || suggestions.length === 0) return null;
+
+    const suggestionsMarkup = suggestions.map((suggestion, index) => {
+      return this.renderSuggestion(suggestion, index);
+    });
+
+    return (
+      <ul className="autosuggest__suggestions">
+        {suggestionsMarkup}
+      </ul>
+    );
+  }
 
   render() {
-    const { selected, visibleSuggestions } = this.state;
-    const inputProps = {
-      className: 'form-control',
-      value: selected.name,
-      onChange: this.onChange,
-      onBlur: this.onBlur
-    };
+    const { value } = this.state;
+    const suggestions = this.renderSuggestions(this.state.suggestions);
+    let className = 'form-group autosuggest__container';
+
+    let error;
+    if (this.props.errors && this.props.errors.length > 0) {
+      error = this.props.errors[0];
+      className += ' error';
+    } else if (this.state.invalidValue) {
+      className += ' error';
+      error = 'Invalid selection';
+    }
 
     return (
-      <div className="form-group">
+      <div className={className} onClick={this.test} ref={(div) => {this.container = div;}}>
         { this.props.label &&
-          <label className="form-label">{this.props.label}</label>
+          <label className="form-label">
+            {this.props.label}
+            {error &&
+              <span className="error-message">{error}</span>
+            }
+          </label>
         }
-        <Autosuggest
-          suggestions={visibleSuggestions}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          onSuggestionSelected={this.onSuggestionSelected}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={this.renderSuggestion}
-          focusFirstSuggestion
-          inputProps={inputProps}
+        <input
+          className="form-control"
+          name={this.props.name}
+          value={value.name}
+          onChange={this.onChange}
+          onKeyPress={this.keypress}
+          onKeyDown={this.keydown}
+          onKeyUp={this.keyup}
+          onFocus={this.focus}
+          autoComplete="off"
+          ref={(input) => {this.textInput = input;}}
         />
+        { suggestions }
       </div>
     );
   }
 
-  static propTypes = {
-    onChange: React.PropTypes.func.isRequired,
-    label: React.PropTypes.string,
-    suggestions: React.PropTypes.array,
-    suggestionUrl: React.PropTypes.string,
-    fetchSuggestions: React.PropTypes.func,
-    lookupUrl: React.PropTypes.string,
-    value: React.PropTypes.shape({
-      id: React.PropTypes.string,
-      name: React.PropTypes.string
-    }),
-    name: React.PropTypes.string
-  }
 }
+
+
+AutosuggestComponent.propTypes = {
+  onChange: React.PropTypes.func.isRequired,
+  label: React.PropTypes.string.isRequired,
+  options: React.PropTypes.array,
+  optionsUrl: React.PropTypes.string,
+  fetchSuggestions: React.PropTypes.func,
+  lookupUrl: React.PropTypes.string,
+  value: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.string
+  }),
+  name: React.PropTypes.string.isRequired,
+  allowOwnValue: React.PropTypes.bool,
+  errors: React.PropTypes.array
+};

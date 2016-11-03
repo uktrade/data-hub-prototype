@@ -56,3 +56,43 @@
     background: $light-blue-25;
   }
 }
+
+
+.autosuggest__container {
+  position: relative;
+
+  .autosuggest__suggestions {
+    box-sizing: border-box;
+    border: 1px solid $border-colour;
+    position: absolute;
+    z-index: 99;
+
+    @include media(tablet) {
+      width: 66%;
+    }
+  }
+
+  .autosuggest__suggestion {
+    @include core-19;
+    padding: 0 5px;
+    background: $white;
+
+
+    a {
+      text-decoration: none;
+      color: $black;
+      display: block;
+      cursor: pointer;
+    }
+
+    strong {
+      @include bold-19;
+    }
+
+    &.autosuggest__suggestion--active,
+    &:hover {
+      background: $light-blue-25;
+    }
+  }
+
+}

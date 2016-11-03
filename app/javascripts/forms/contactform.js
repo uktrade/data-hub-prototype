@@ -137,12 +137,12 @@ export class ContactForm extends BaseForm {
 
         { this.state.showCompanyField ?
           <Autosuggest
+            name="company"
             label={LABELS.company}
+            value={formData.company}
             lookupUrl='/api/suggest'
             onChange={this.updateField}
             errors={this.getErrors('title')}
-            name="company"
-            value={formData.company}
           />
           :
           <div className="form-group">
@@ -151,12 +151,12 @@ export class ContactForm extends BaseForm {
           </div>
         }
         <Autosuggest
+          name="title"
           label={LABELS.title}
-          suggestionUrl='/api/meta/title'
+          value={formData.title}
+          optionsUrl='/api/meta/title'
           onChange={this.updateField}
           errors={this.getErrors('title')}
-          name="title"
-          value={formData.title}
         />
         <InputText
           label={LABELS.first_name}
@@ -173,12 +173,12 @@ export class ContactForm extends BaseForm {
           errors={this.getErrors('last_name')}
         />
         <Autosuggest
+          name="role"
           label={LABELS.role}
-          suggestionUrl='/api/meta/role'
+          value={formData.role}
+          optionsUrl='/api/meta/role'
           onChange={this.updateField}
           errors={this.getErrors('role')}
-          name="role"
-          value={formData.role}
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">{LABELS.primary}</legend>

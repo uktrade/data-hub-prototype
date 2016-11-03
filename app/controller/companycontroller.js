@@ -103,7 +103,7 @@ function view(req, res) {
 
 function post(req, res) {
 
-  // Flatten selected fields
+  // Flatten value fields
   let company = Object.assign({}, req.body.company);
 
   controllerUtils.flattenIdFields(company);

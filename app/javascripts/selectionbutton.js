@@ -5,7 +5,7 @@ import $ from 'jquery';
 class SelectionButtons {
 
   constructor(element) {
-    this.selectedClass = 'selected';
+    this.selectedClass = 'value';
     this.focusedClass = 'focused';
     this.element = $(element);
     this.name = this.element.attr('name');

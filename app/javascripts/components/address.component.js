@@ -241,9 +241,9 @@ export class AddressComponent extends Component {
         <Autosuggest
           name={this.props.name + '_country'}
           label='Country'
-          suggestions={this.state.countryOptions}
-          onChange={this.countryChange}
           value={country}
+          options={this.state.countryOptions}
+          onChange={this.countryChange}
         />
 
         { this.getPostcodeLookupSection() }
