@@ -12,27 +12,27 @@ const addedCountElement = document.getElementById('added-count');
 const archiveForm = document.getElementById('archive-details');
 const archiveButton = document.getElementById('archive-reveal-button');
 const cancelButton = document.getElementById('cancel-archive-button');
-const archiveReasonElement = document.getElementById('archive_reason');
-const archiveReasonGroup = document.getElementById('archive_reason-wrapper');
+const archiveReasonElement = document.getElementById('archived_reason');
+const archiveReasonGroup = document.getElementById('archived_reason-wrapper');
 
 
 if (contacts && contacts.length > 0) {
+  const validContacts = contacts.filter((contact) => !contact.archived);
+  const archivedContacts = contacts.filter((contact) => contact.archived);
+
   ReactDOM.render(
-    <ContactTable contacts={contacts} archived={false} />,
+    <ContactTable contacts={validContacts}/>,
     document.querySelector('#contact-table-wrapper')
   );
 
   ReactDOM.render(
-    <ContactTable contacts={contacts} archived />,
+    <ContactTable contacts={archivedContacts} archived />,
     document.querySelector('#archived-contact-table-wrapper')
   );
 
-  let validContacts = contacts.filter((contact) => !contact.archived_on);
-  let archivedContacts = contacts.length - validContacts.length;
-
   addedCountElement.innerHTML = validContacts.length;
 
-  if (archivedContacts === 0) {
+  if (archivedContacts.length === 0) {
     addClass(document.getElementById('archived-section'), 'hidden');
   }
   if (validContacts.length === 0) {

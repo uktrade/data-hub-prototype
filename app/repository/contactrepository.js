@@ -1,7 +1,6 @@
 'use strict';
 const authorisedRequest = require('../lib/authorisedRequest');
 const config = require('../../config');
-const moment = require('moment');
 const interactionRepository = require('../repository/interactionrepository');
 
 function getBriefContact(token, contactId) {
@@ -65,32 +64,20 @@ function saveContact(token, contact) {
 }
 
 function archiveContact(token, contactId, reason) {
-
-  let options = {
+  const options = {
     json: true,
-    body: {
-      'archived_on': moment().format('YYYY-MM-DD'),
-      'archive_reason': reason,
-      'archived_by': 'Lee Smith',
-    },
-    url: `${config.apiRoot}/contact/${contactId}/`,
-    method: 'PATCH'
+    body: { reason },
+    url: `${config.apiRoot}/contact/${contactId}/archive/`,
+    method: 'POST'
   };
-
   return authorisedRequest(token, options);
-
 }
 
 function unarchiveContact(token, contactId) {
   let options = {
     json: true,
-    body: {
-      'archived_on': null,
-      'archive_reason': null,
-      'archived_by': null,
-    },
-    url: `${config.apiRoot}/contact/${contactId}/`,
-    method: 'PATCH'
+    url: `${config.apiRoot}/contact/${contactId}/unarchive/`,
+    method: 'GET'
   };
 
   return authorisedRequest(token, options);

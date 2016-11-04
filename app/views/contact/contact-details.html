@@ -55,8 +55,8 @@
 </table>
 
 <div class="button-bar">
-  {% if not contact.company.archived_on %}
-    {% if not contact.archived_on %}
+  {% if not contact.company.archived %}
+    {% if not contact.archived %}
       <a href="/contact/{{ contact.id }}/edit" class="button button-secondary">Edit contact details</a>
       <a href="#" id="archive-reveal-button" class="button button-secondary">Archive contact</a>
     {% else %}
@@ -64,12 +64,12 @@
       <a href="/contact/{{ contact.id }}/unarchive" class="button button-secondary">Unarchive now</a>
     {% endif %}
   {% else %}
-    {% if not contact.archived_on %}
+    {% if not contact.archived %}
       <a class="button button-disabled">Edit contact details</a>
-      <a id="archive-reveal-button" class="button button-disabled">Archive contact</a>
+      <a id="archive-reveal-button" class="button button-secondary">Archive contact</a>
     {% else %}
       <a class="button button-disabled">Edit contact details</a>
-      <a class="button button-disabled">Unarchive now</a>
+      <a class="button button-secondary">Unarchive now</a>
     {% endif %}
   {% endif %}
 </div>
