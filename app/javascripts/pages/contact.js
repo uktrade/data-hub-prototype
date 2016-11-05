@@ -1,6 +1,7 @@
 /* globals interactions: true, company: true */
-import { addClass, removeClass } from '../utils/classtuff';
+
 import 'babel-polyfill';
+import { addClass, removeClass } from '../utils/classtuff';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ContactInteractionTable from '../components/contactinteractiontable.component';
