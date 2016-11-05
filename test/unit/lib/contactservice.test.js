@@ -1,8 +1,8 @@
 'use strict';
 const moment = require('moment');
-const contactService = require('../../../app/lib/contactservice');
+const itemCollectionService = require('../../../app/lib/itemcollectionservice');
 
-describe('contact service', () => {
+describe('item collection service', () => {
 
   let contacts;
 
@@ -162,31 +162,31 @@ describe('contact service', () => {
     ];
   });
 
-  describe('Calculate contact headings', () => {
+  describe('Calculate item collection headings', () => {
     it('should say when 1 day since last added contact', () => {
       contacts[1].created_on = moment().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
-      const time = contactService.getTimeSinceLastAddedContact(contacts);
+      const time = itemCollectionService.getTimeSinceLastAddedItem(contacts);
 
       time.amount.should.eq('1');
       time.unit.should.eq('day');
     });
     it('should say when 2 days since last added contact', () => {
       contacts[1].created_on = moment().subtract(2, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
-      const time = contactService.getTimeSinceLastAddedContact(contacts);
+      const time = itemCollectionService.getTimeSinceLastAddedItem(contacts);
 
       time.amount.should.eq('2');
       time.unit.should.eq('days');
     });
     it('should say when 6 months since last added contact', () => {
       contacts[1].created_on = moment().subtract(6, 'months').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
-      const time = contactService.getTimeSinceLastAddedContact(contacts);
+      const time = itemCollectionService.getTimeSinceLastAddedItem(contacts);
 
       time.amount.should.eq('6');
       time.unit.should.eq('months');
     });
     it('should say when 2 years since last added contact', () => {
       contacts[1].created_on = moment().subtract(2, 'years').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
-      const time = contactService.getTimeSinceLastAddedContact(contacts);
+      const time = itemCollectionService.getTimeSinceLastAddedItem(contacts);
 
       time.amount.should.eq('2');
       time.unit.should.eq('years');
@@ -194,7 +194,7 @@ describe('contact service', () => {
     it('should handle a null date', () => {
       contacts[0].created_on = null;
       contacts[1].created_on = moment().subtract(2, 'years').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
-      const time = contactService.getTimeSinceLastAddedContact(contacts);
+      const time = itemCollectionService.getTimeSinceLastAddedItem(contacts);
 
       time.amount.should.eq('2');
       time.unit.should.eq('years');
@@ -202,7 +202,7 @@ describe('contact service', () => {
     it('should handle all null', () => {
       contacts[0].created_on = null;
       contacts[1].created_on = null;
-      const time = contactService.getTimeSinceLastAddedContact(contacts);
+      const time = itemCollectionService.getTimeSinceLastAddedItem(contacts);
 
       let isNull = !time;
       isNull.should.eq(true);
@@ -210,32 +210,32 @@ describe('contact service', () => {
     });
   });
 
-  describe('get contacts in time range', () => {
+  describe('get items in time range', () => {
     it('should return 1 single contact in the last year', () => {
-      const filtered = contactService.getContactsAddedSince(contacts);
+      const filtered = itemCollectionService.getItemsAddedSince(contacts);
       filtered.length.should.eq(1);
     });
     it('should return 2 contacts in the last year', () => {
       contacts[0].created_on = moment().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
       contacts[1].created_on = moment().subtract(2, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
-      const filtered = contactService.getContactsAddedSince(contacts);
+      const filtered = itemCollectionService.getItemsAddedSince(contacts);
       filtered.length.should.eq(2);
     });
     it('should return 1 contacts in the last week', () => {
       contacts[0].created_on = moment().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
       contacts[1].created_on = moment().subtract(2, 'months').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
-      const filtered = contactService.getContactsAddedSince(contacts, 'days', 7);
+      const filtered = itemCollectionService.getItemsAddedSince(contacts, 'days', 7);
       filtered.length.should.eq(1);
     });
     it('should handle a null', () => {
       contacts[0].created_on = null;
-      const filtered = contactService.getContactsAddedSince(contacts);
+      const filtered = itemCollectionService.getItemsAddedSince(contacts);
       filtered.length.should.eq(1);
     });
     it('should handle all null', () => {
       contacts[0].created_on = null;
       contacts[1].created_on = null;
-      const filtered = contactService.getContactsAddedSince(contacts);
+      const filtered = itemCollectionService.getItemsAddedSince(contacts);
       filtered.length.should.eq(0);
     });
   });
