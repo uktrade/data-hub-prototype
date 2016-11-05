@@ -234,13 +234,23 @@ export class CompanyForm extends BaseForm {
 
         { this.state.isCDMS &&
           <div>
-            <DidYouMeanCompany
-              name="name"
-              label={LABELS.name}
-              onChange={this.updateField}
-              errors={this.getErrors('name')}
-              value={formData.name}
-            />
+            { formData.id ?
+              <InputText
+                label={LABELS.name}
+                name="name"
+                value={formData.name}
+                errors={this.getErrors('name')}
+                onChange={this.updateField}
+              />
+              :
+              <DidYouMeanCompany
+                name="name"
+                label={LABELS.name}
+                onChange={this.updateField}
+                errors={this.getErrors('name')}
+                value={formData.name}
+              />
+            }
             <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
               <legend className="form-label">Is the business based in the UK?</legend>
               <label className={formData.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-yes">
