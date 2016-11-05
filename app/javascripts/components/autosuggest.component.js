@@ -30,7 +30,7 @@ export class AutosuggestComponent extends Component {
     }
 
     this.state = state;
-    this.fetchSuggestions = debounce(this.fetchSuggestions, 300);
+    this.fetchSuggestions = debounce(this.fetchSuggestions, 200);
 
   }
 
@@ -221,7 +221,7 @@ export class AutosuggestComponent extends Component {
   }
 
   next() {
-    const length = this.state.suggestions.length;
+    const length = this.state.suggestions.length - 1;
     if (this.state.highlightedIndex === null || this.state.highlightedIndex === length) {
       this.setState({ highlightedIndex: 0 });
     } else {
@@ -230,7 +230,7 @@ export class AutosuggestComponent extends Component {
   }
 
   prev() {
-    const length = this.state.suggestions.length;
+    const length = this.state.suggestions.length - 1;
     if (!this.state.highlightedIndex || this.state.highlightedIndex === 0) {
       this.setState({ highlightedIndex: length });
     } else {
