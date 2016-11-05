@@ -114,7 +114,7 @@ function cleanErrors(errors) {
 }
 
 function post(req, res) {
-  // Flatten value fields
+  // Flatten selected fields
 
   let leadId = req.body.contact.leadId;
   let contact = Object.assign({}, req.body.contact);
