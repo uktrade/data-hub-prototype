@@ -2,13 +2,13 @@
   <div class="grid-row">
     <div class="column-one-third">
       <div class="data">
-        <h2 class="bold-xlarge data__title">0</h2>
-        <p class="bold-xsmall data__description">months since last new contact entry</p>
+        <h2 class="bold-xlarge data__title">{{ timeSinceNewContact.amount }}</h2>
+        <p class="bold-xsmall data__description">{{ timeSinceNewContact.unit }} since last new contact entry</p>
       </div>
     </div>
     <div class="column-one-third">
       <div class="data">
-        <h2 id="added-count" class="bold-xlarge data__title">0</h2>
+        <h2 id="added-count" class="bold-xlarge data__title">{{ contactsInLastYear.length }}</h2>
         <p class="bold-xsmall data__description">contacts added in the last 12 months</p>
       </div>
     </div>

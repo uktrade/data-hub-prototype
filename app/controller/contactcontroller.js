@@ -8,6 +8,8 @@ const userLeads = require( '../lib/userLeads' );
 
 let contactRepository = require('../repository/contactrepository');
 let companyRepository = require('../repository/companyrepository');
+const itemCollectionService = require('../lib/itemcollectionservice');
+
 
 const REASONS_FOR_ARCHIVE = [
   'Contact has left the company',
@@ -30,7 +32,18 @@ function view(req, res) {
         contact.interactions = [];
       }
 
-      res.render('contact/contact', { term: req.query.term, contact, REASONS_FOR_ARCHIVE });
+      const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(contact.interactions);
+      const interactionsInLastYear = itemCollectionService.getItemsAddedSince(contact.interactions);
+
+
+      res.render(
+        'contact/contact', {
+          term: req.query.term,
+          contact,
+          REASONS_FOR_ARCHIVE,
+          timeSinceNewInteraction,
+          interactionsInLastYear
+        });
     })
     .catch((error) => {
       res.render('error', {error});
