@@ -3,14 +3,9 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-let metadata = require('../lib/metadata');
 const searchService = require('../lib/searchservice');
 const controllerUtils = require('../lib/controllerutils');
 
-
-const FACETTITLES = {
-  _type: 'Type'
-};
 const NEXTLABEL = 'Next';
 const PREVIOUSLABEL = 'Previous';
 
@@ -91,26 +86,20 @@ function getPagination(req, result) {
 }
 
 function get(req, res) {
-  searchService.search(req.session.token, req.query)
+
+  let filters = Object.assign({}, req.query);
+  delete filters.term;
+  delete filters.page;
+
+  searchService.search({
+    token: req.session.token,
+    term: req.query.term,
+    page: req.page,
+    filters
+  })
     .then((result) => {
-      // combine filters and facets to show which are
-      // selected
-      for (let filterKey in result.filters) {
-        let filterValue = result.filters[filterKey];
-        let facet = result.facets[filterKey];
-        for (let option of facet) {
-          if (option.value === filterValue) {
-            option.checked = true;
-          }
-        }
-      }
-
-
-      result.facets = getFakeFacets();
-      result.term = req.query.term;
-
       let pagination = getPagination(req, result);
-      res.render('search/facet-search', {result, FACETTITLES, pagination, params: req.query });
+      res.render('search/facet-search', {result, pagination, params: req.query });
 
     })
     .catch((error) => {
@@ -120,24 +109,7 @@ function get(req, res) {
 
 
 
-function getFakeFacets() {
 
-  let facets = {
-    'Category': [{value: 'Company' }, {value: 'Contact' }],
-    'Business type': [],
-    'Status': [{value: 'Active'}, {value: 'Archived'}]
-  };
-
-  const business_types = metadata.TYPES_OF_BUSINESS;
-
-  if(business_types){
-    for (let btype of business_types) {
-      facets['Business type'].push({value: btype.name});
-    }
-  }
-
-  return facets;
-}
 
 
 router.get('/', get);
