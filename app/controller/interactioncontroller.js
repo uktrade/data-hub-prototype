@@ -78,7 +78,7 @@ function post(req, res) {
   controllerUtils.flattenIdFields(interaction);
   controllerUtils.nullEmptyFields(interaction);
 
-  interactionRepository.saveInteraction(interaction)
+  interactionRepository.saveInteraction(req.session.token, interaction)
     .then((data) => {
       res.json(data);
     })
