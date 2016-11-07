@@ -2,6 +2,7 @@
 
 const request = require('request-promise');
 const config = require('../../config');
+const transformSectors = require( './transformers/metadata-sectors' );
 
 function getMetadata( path, key ){
 
@@ -14,6 +15,7 @@ function getMetadata( path, key ){
   .then((data) => {
 
     module.exports[ key ] = data;
+    return data;
 
   }).catch( ( err ) => {
 
@@ -22,8 +24,16 @@ function getMetadata( path, key ){
   } );
 }
 
+function createSubSectors( data ){
+
+  const splitSectors = transformSectors( data );
+
+  module.exports.PRIMARY_SECTORS = splitSectors.sectors;
+  module.exports.SUBSECTORS = splitSectors.subsectors;
+}
+
 const metadataItems = [
-  [ 'sector/', 'SECTOR_OPTIONS' ],
+  [ 'sector/', 'SECTOR_OPTIONS', createSubSectors ],
   [ 'turnover', 'TURNOVER_OPTIONS' ],
   [ 'uk-region', 'REGION_OPTIONS' ],
   [ 'country', 'COUNTRYS' ],
@@ -53,7 +63,16 @@ module.exports.fetchAll = function( cb ){
 
     totalRequests++;
 
-    getMetadata( item[ 0 ], item[ 1 ] ).then( checkResults ).catch( ( err ) => {
+    getMetadata( item[ 0 ], item[ 1 ] ).then( ( data ) => {
+
+      if( item[ 2 ] ){
+
+        item[ 2 ]( data );
+      }
+
+      checkResults();
+
+    } ).catch( ( err ) => {
 
       caughtErrors = caughtErrors || [];
       caughtErrors.push( err );
