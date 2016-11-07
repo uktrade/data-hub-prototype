@@ -1,9 +1,9 @@
 import 'babel-polyfill';
-import { getQueryParam } from './utils/urlstuff';
+import { getQueryParam } from '../utils/urlstuff';
 
 const term = getQueryParam('term');
 
-class Facets {
+export default class Facets {
 
   constructor(targetElement) {
     this.initElements(targetElement);
@@ -60,12 +60,3 @@ class Facets {
   }
 
 }
-
-document.addEventListener(
-  'DOMContentLoaded',
-  function() {
-    new Facets(document.getElementById('facets'), document.getElementById('result-summary'));
-  },
-  false
-);
-

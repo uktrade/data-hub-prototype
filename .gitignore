@@ -28,3 +28,4 @@ apitest.js
 reports
 .env
 npm*.log
+stats.json
