@@ -108,6 +108,8 @@ app.use(require(`${__dirname}/app/middleware/locals`));
 app.use('/images', express.static(`${__dirname}/node_modules/govuk_frontend_toolkit/images`));
 app.use('/fonts', express.static(`${__dirname}/node_modules/govuk_template_mustache/assets/stylesheets`));
 app.use('/fonts', express.static(`${__dirname}/node_modules/font-awesome/fonts`));
+app.use('/javascripts/react', express.static(`${__dirname}/node_modules/react/dist`));
+app.use('/javascripts/react-dom', express.static(`${__dirname}/node_modules/react-dom/dist`));
 app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/govuk_template_jinja/assets`));

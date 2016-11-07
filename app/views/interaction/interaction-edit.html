@@ -3,13 +3,15 @@
 {% block main %}
   <div id="interaction-form">Loading...</div>
   <script>
-  var dh = {
-    data: {
-      contact: {{ contact | dump | safe }},
-      company: {{ company | dump | safe }},
-      interaction: {{ interaction | dump | safe }}
-    }
-  };
+    var dh = {
+      data: {
+        contact: {{ contact | dump | safe }},
+        company: {{ company | dump | safe }},
+        interaction: {{ interaction | dump | safe }}
+      }
+    };
   </script>
+  <script src="/javascripts/react/react.min.js"></script>
+  <script src="/javascripts/react-dom/react-dom.min.js"></script>
   <script src="/javascripts/interactionedit.bundle.js"></script>
 {% endblock %}
