@@ -2,7 +2,13 @@
 const moment = require('moment');
 
 function sortItemDate(a, b) {
-  return Date.parse(b.created_on) - Date.parse(a.created_on);
+  const diff = Date.parse(b.created_on) - Date.parse(a.created_on);
+  if (diff > 0) {
+    return 1;
+  } else if (diff < 0) {
+    return -1;
+  }
+  return 0;
 }
 
 function getTimeSinceLastAddedItem(items) {
@@ -21,7 +27,7 @@ function getTimeSinceLastAddedItem(items) {
   return { amount, unit };
 }
 
-function getItemsAddedSince(items, unit='years', amount=1) {
+function getItemsAddedSince(items, unit = 'years', amount = 1) {
 
   // Figure out the date back using the unit and amount provided.
   const startFromDate = moment().subtract(amount, unit).toDate();
