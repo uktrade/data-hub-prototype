@@ -6,6 +6,8 @@ const router = express.Router();
 const metadata = require('../lib/metadata');
 const companyRepository = require('../repository/companyrepository');
 const controllerUtils = require('../lib/controllerutils');
+const itemCollectionService = require('../lib/itemcollectionservice');
+
 
 // Add some extra default info into the company to make it easier to edit
 function postProcessCompany(company) {
@@ -32,46 +34,6 @@ function add(req, res) {
   res.render('react', { app: 'companyadd_react'});
 }
 
-function renderCompany(req, res, company, formData) {
-
-  if (formData.currently_exporting_to && formData.currently_exporting_to.length > 0) {
-    formData.currently_exporting_to = formData.currently_exporting_to.split(',');
-  }
-
-  if (company.currently_exporting_to && company.currently_exporting_to.length > 0) {
-    company.currently_exporting_to = company.currently_exporting_to.split(',');
-  }
-
-  if (company.countries_of_interest && company.countries_of_interest.length > 0) {
-    company.countries_of_interest = company.countries_of_interest.split(',');
-  }
-
-  if (formData.countries_of_interest && formData.countries_of_interest.length > 0) {
-    formData.countries_of_interest = formData.countries_of_interest.split(',');
-  }
-
-  let title;
-  if (!company.name && company.companies_house_data.name) {
-    title = company.companies_house_data.name;
-  } else {
-    title = company.name;
-  }
-
-  res.render('company/company', {
-    company,
-    title,
-    SECTOR_OPTIONS: metadata.SECTOR_OPTIONS,
-    REGION_OPTIONS: metadata.REGION_OPTIONS,
-    EMPLOYEE_OPTIONS: metadata.EMPLOYEE_OPTIONS,
-    TURNOVER_OPTIONS: metadata.TURNOVER_OPTIONS,
-    TYPES_OF_BUSINESS: metadata.TYPES_OF_BUSINESS,
-    REASONS_FOR_ARCHIVE: metadata.REASONS_FOR_ARCHIVE,
-    COUNTRYS: metadata.COUNTRYS,
-    errors: req.errors,
-    formData
-  });
-}
-
 function view(req, res) {
   let id = req.params.sourceId;
   let source = req.params.source;
@@ -94,7 +56,35 @@ function view(req, res) {
         formData = req.body;
       }
 
-      renderCompany(req, res, company, formData);
+      const timeSinceNewContact = itemCollectionService.getTimeSinceLastAddedItem(company.contacts);
+      const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(company.interactions);
+      const contactsInLastYear = itemCollectionService.getItemsAddedSince(company.contacts);
+      const interactionsInLastYear = itemCollectionService.getItemsAddedSince(company.interactions);
+
+      let title;
+      if (!company.name && company.companies_house_data.name) {
+        title = company.companies_house_data.name;
+      } else {
+        title = company.name;
+      }
+
+      res.render('company/company', {
+        company,
+        title,
+        SECTOR_OPTIONS: metadata.SECTOR_OPTIONS,
+        REGION_OPTIONS: metadata.REGION_OPTIONS,
+        EMPLOYEE_OPTIONS: metadata.EMPLOYEE_OPTIONS,
+        TURNOVER_OPTIONS: metadata.TURNOVER_OPTIONS,
+        TYPES_OF_BUSINESS: metadata.TYPES_OF_BUSINESS,
+        REASONS_FOR_ARCHIVE: metadata.REASONS_FOR_ARCHIVE,
+        COUNTRYS: metadata.COUNTRYS,
+        errors: req.errors,
+        formData,
+        timeSinceNewContact,
+        timeSinceNewInteraction,
+        contactsInLastYear,
+        interactionsInLastYear
+      });
     })
     .catch((error) => {
       res.render('error', {error});

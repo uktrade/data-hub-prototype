@@ -2,13 +2,13 @@
   <div class="grid-row">
     <div class="column-one-third">
       <div class="data">
-        <h2 class="bold-xlarge data__title">3</h2>
-        <p class="bold-xsmall data__description">months since last interaction with DIT</p>
+        <h2 class="bold-xlarge data__title">{{ timeSinceNewInteraction.amount }}</h2>
+        <p class="bold-xsmall data__description">{{ timeSinceNewInteraction.unit }} since last interaction with DIT</p>
       </div>
     </div>
     <div class="column-one-third">
       <div class="data">
-        <h2 class="bold-xlarge data__title">8</h2>
+        <h2 class="bold-xlarge data__title">{{ interactionsInLastYear.length }}</h2>
         <p class="bold-xsmall data__description">interactions added in the last 12 months.</p>
       </div>
     </div>

@@ -8,7 +8,6 @@ import ContactTable from '../components/contacttable.component';
 import CompanyInteractionTable from '../components/companyinteractiontable.component';
 import { addClass, removeClass } from '../utils/classtuff';
 
-const addedCountElement = document.getElementById('added-count');
 const archiveForm = document.getElementById('archive-details');
 const archiveButton = document.getElementById('archive-reveal-button');
 const cancelButton = document.getElementById('cancel-archive-button');
@@ -29,8 +28,6 @@ if (contacts && contacts.length > 0) {
     <ContactTable contacts={archivedContacts} archived />,
     document.querySelector('#archived-contact-table-wrapper')
   );
-
-  addedCountElement.innerHTML = validContacts.length;
 
   if (archivedContacts.length === 0) {
     addClass(document.getElementById('archived-section'), 'hidden');
