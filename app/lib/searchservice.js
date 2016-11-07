@@ -2,19 +2,35 @@
 
 const authorisedRequest = require( './authorisedRequest' );
 const config = require('../../config');
+const includes = require('lodash/includes');
 
-function search(token, query) {
+const FACETS = {
+  'Category': [
+    {name: 'doc_type', value: 'company', label: 'Company' },
+    {name: 'doc_type', value: 'contact', label: 'Contact' }
+  ]
+};
 
-  let body = {
-    term: query.term,
-    limit: query.limit | 10
-  };
 
-  if (!query.page) {
-    body.offset = 0;
-    query.page = 1;
-  } else {
-    body.offset = (query.page * body.limit) - body.limit;
+function search({token, term, limit = 10, page = 1, filters}) {
+
+  let body = { term, limit };
+  body.offset = (page * body.limit) - body.limit;
+
+  if (filters) {
+    body = Object.assign(body, filters);
+  }
+
+
+  // Filters for company actually means filtering for 2 company types
+  // so we modify the criteria sent to the server.
+  if (body.doc_type && body.doc_type === 'company') {
+    body.doc_type = ['company_company', 'company_companieshousecompany'];
+  } else if (body.doc_type && Array.isArray(body.doc_type) && includes(body.doc_type, 'company')) {
+    let newDocTypeArray = body.doc_type.filter(item => item !== 'company');
+    newDocTypeArray.push('company_company');
+    newDocTypeArray.push('company_companieshousecompany');
+    body.doc_type = newDocTypeArray;
   }
 
   let options = {
@@ -25,7 +41,13 @@ function search(token, query) {
   };
 
 
-  return authorisedRequest(token, options);
+  return authorisedRequest(token, options)
+    .then(result => {
+      populateFacets(result, filters);
+      result.term = term;
+      result.page = page;
+      return result;
+    });
 }
 
 function suggestCompany(token, term, types) {
@@ -55,6 +77,31 @@ function suggestCompany(token, term, types) {
         });
 
     });
+}
+
+function hasFilterForFacet(filters, facet) {
+  const name = facet.name;
+  const value = facet.value;
+
+  return ((filters[name] && filters[name] === value) ||
+      (filters[name] && Array.isArray(filters[name]) && includes(filters[name], value)));
+
+}
+
+function populateFacets(result, filters) {
+
+  let facets = Object.assign({}, FACETS);
+
+  // Go through each facet, and then it's options.
+  // See if the facet option appears in the filters, if so then mark the option checked.
+  const facetTitles = Object.keys(facets);
+  for (const facetTitle of facetTitles) {
+    for (let facet of facets[facetTitle]) {
+      facet.checked = hasFilterForFacet(filters, facet);
+    }
+  }
+
+  result.facets = facets;
 }
 
 module.exports = { search, suggestCompany };

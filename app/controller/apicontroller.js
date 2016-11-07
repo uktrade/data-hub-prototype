@@ -33,13 +33,6 @@ function companySuggest(req, res) {
     });
 }
 
-function companyDetail(req, res) {
-  companyRepository.getCompany(req.params.sourceId, req.params.source)
-    .then((data) => {
-      res.json(data);
-    });
-}
-
 function countryLookup(req, res) {
 
   if (!req.query.country || req.query.country.length === 0) {
@@ -208,7 +201,6 @@ function teamLookup(req, res) {
 }
 
 router.get('/suggest', companySuggest);
-router.get('/company/:source/:sourceId/?', companyDetail);
 router.get('/countrylookup', countryLookup);
 router.get('/accountmanagerlookup', accountManagerLookup);
 router.get('/contactlookup', contactLookup);
@@ -220,7 +212,6 @@ router.get('/postcodelookup/:postcode', postcodelookup);
 module.exports = {
   postcodelookup,
   companySuggest,
-  companyDetail,
   countryLookup,
   accountManagerLookup,
   contactLookup,

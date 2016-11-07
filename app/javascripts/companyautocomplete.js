@@ -69,7 +69,7 @@ class CompanyAutocomplete {
       }
     };
 
-    xmlhttp.open('GET', `/api/company/${company_type}/${id}/`, true);
+    xmlhttp.open('GET', `/company/${company_type}/${id}/json`, true);
     xmlhttp.send();
   }
 

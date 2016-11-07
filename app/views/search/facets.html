@@ -20,7 +20,7 @@
                   {% if option.checked == true %}
                     <input
                       class="facet-option"
-                      name="{{ facet }}"
+                      name="{{ option.name }}"
                       type="checkbox"
                       checked="true"
                       value="{{ option.value }}"
@@ -28,12 +28,12 @@
                   {% else %}
                     <input
                       class="facet-option"
-                      name="{{ facet }}"
+                      name="{{ option.name }}"
                       type="checkbox"
                       value="{{ option.value }}"
                     />
                   {% endif %}
-                  {{ option.value.toLowerCase() }}
+                  {{ option.label }}
                 </label>
               {% endfor %}
             </div>
