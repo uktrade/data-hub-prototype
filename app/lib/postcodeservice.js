@@ -4,7 +4,7 @@ const rp = require('request-promise');
 const config = require('../../config');
 
 function lookupAddress(postcode) {
-  return new Promise((fulfill, reject) => {
+  return new Promise((resolve, reject) => {
 
     let formattedPostcode = tidyPostcode(postcode);
 
@@ -15,7 +15,7 @@ function lookupAddress(postcode) {
     rp({ url, json: true })
       .then((data) => {
         let parsed = parsePostcodeResult(data, postcode.toLocaleUpperCase());
-        fulfill(parsed);
+        resolve(parsed);
       })
       .catch((error) => {
         reject(error);

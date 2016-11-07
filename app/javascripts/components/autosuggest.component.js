@@ -30,8 +30,14 @@ export class AutosuggestComponent extends Component {
     }
 
     this.state = state;
-    this.fetchSuggestions = debounce(this.fetchSuggestions, 200);
 
+    if (this.props.fetchSuggestions) {
+      this.fetcher = this.fetchSuggestionsFromProps;
+    } else if (this.props.lookupUrl) {
+      this.fetcher = debounce(this.fetchSuggestionsFromServer, 200);
+    } else {
+      this.fetcher = this.fetchSuggestionsFromLocalOptions;
+    }
   }
 
   componentDidMount() {
@@ -157,18 +163,7 @@ export class AutosuggestComponent extends Component {
       return;
     }
 
-    if (this.props.fetchSuggestions) {
-      this.props.fetchSuggestions(inputValue)
-        .then(suggestions => {
-          if (this.state.hasFocus) {
-            this.setState({ suggestions });
-          }
-        });
-    } else if (this.props.lookupUrl) {
-      this.fetchSuggestionsFromServer(inputValue);
-    } else {
-      this.fetchSuggestionsFromLocalOptions(inputValue);
-    }
+    this.fetcher(inputValue);
   };
 
   fetchSuggestionsFromLocalOptions = (value) => {
@@ -180,10 +175,27 @@ export class AutosuggestComponent extends Component {
   };
 
   fetchSuggestionsFromServer = (value) => {
-    axios.get(`${this.props.lookupUrl}?term=${value}`)
+    let url;
+
+    if (typeof this.props.lookupUrl === 'function') {
+      url = this.props.lookupUrl(value);
+    } else {
+      url = `${this.props.lookupUrl}?term=${value}`;
+    }
+
+    axios.get(url)
       .then(response => {
         if (this.state.hasFocus) {
           this.setState({suggestions: response.data});
+        }
+      });
+  };
+
+  fetchSuggestionsFromProps = (value) => {
+    this.props.fetchSuggestions(value)
+      .then(suggestions => {
+        if (this.state.hasFocus) {
+          this.setState({ suggestions });
         }
       });
   };
@@ -341,7 +353,7 @@ AutosuggestComponent.propTypes = {
   options: React.PropTypes.array,
   optionsUrl: React.PropTypes.string,
   fetchSuggestions: React.PropTypes.func,
-  lookupUrl: React.PropTypes.string,
+  lookupUrl: React.PropTypes.any,
   value: React.PropTypes.shape({
     id: React.PropTypes.string,
     name: React.PropTypes.string

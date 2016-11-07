@@ -102,16 +102,10 @@ export class InteractionForm extends BaseForm {
   };
 
   lookupContacts = (term) => {
-    return new Promise((fullfill) => {
+    return new Promise((resolve) => {
       axios.get(`/api/contactlookup?company=${this.state.formData.company.id}&contact=${term}`)
         .then(response => {
-          const result = response.data.map(({id, first_name, last_name}) => {
-            return {
-              id,
-              name: `${first_name} ${last_name}`
-            };
-          });
-          fullfill(result);
+          resolve(response.data);
         });
     });
   };

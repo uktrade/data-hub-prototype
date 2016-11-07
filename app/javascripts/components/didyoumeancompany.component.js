@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {AutosuggestComponent as Autosuggest} from './autosuggest.component';
 import axios from 'axios';
-const baseUrl = '/api/suggest';
 
 
 export class DidYouMeanCompanyComponent extends Component {
@@ -32,16 +31,9 @@ export class DidYouMeanCompanyComponent extends Component {
     }
   };
 
-  fetchSuggestions = (value) => {
-    return new Promise((fullfill) => {
-      const inputValue = value.trim().toLowerCase();
-      axios
-        .get(`${baseUrl}?term=${inputValue}&type=company_company&type=company_companieshousecompany`)
-        .then((response) => {
-          fullfill(response.data);
-        });
-    });
-  };
+  lookupUrl(value) {
+    return `/api/suggest?term=${value}&type=company_company&type=company_companieshousecompany`;
+  }
 
   renderDidYouMean() {
     const company = this.state.didYouMeanSuggestion;
@@ -103,7 +95,7 @@ export class DidYouMeanCompanyComponent extends Component {
           name={this.props.name}
           label={this.props.label}
           value={this.state.selected}
-          fetchSuggestions={this.fetchSuggestions}
+          lookupUrl={this.lookupUrl}
           onChange={this.onChange}
           allowOwnValue
         />
