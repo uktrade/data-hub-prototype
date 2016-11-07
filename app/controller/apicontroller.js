@@ -170,10 +170,15 @@ function contactLookup(req, res) {
 
   companyRepository.getDitCompany(req.session.token, companyParam)
     .then(company => {
-      const results = company.contacts.filter((contact) => {
-        const name = `${contact.first_name.toLocaleLowerCase()} ${contact.last_name.toLocaleLowerCase()}`;
-        return name.substr(0, contactParamLength) === contactParam;
-      });
+      const results = company.contacts
+        .map(({id, first_name, last_name}) => {
+          return {
+            id,
+            name: `${first_name} ${last_name}`
+          };
+        })
+        .filter(({name}) => name.substr(0, contactParamLength).toLocaleLowerCase() === contactParam);
+
       res.json(results);
     });
 }

@@ -304,8 +304,8 @@ describe('save company update', () => {
 
   beforeEach(() => {
     getCompanySpy = sinon.stub(companyRepository, 'getCompany', function() {
-      return new Promise((fulfill) => {
-        fulfill(Object.assign({}, existingCompany));
+      return new Promise((resolve) => {
+        resolve(Object.assign({}, existingCompany));
       });
     });
   });

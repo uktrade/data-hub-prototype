@@ -1,5 +1,5 @@
 'use strict';
-
+import 'babel-polyfill';
 import $ from 'jquery';
 import RadioHide from './radiohide';
 import Edit from './edit';

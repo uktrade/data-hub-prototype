@@ -34,13 +34,13 @@ function getContact(token, contactId) {
 }
 
 function getContactsForCompany(token, companyId) {
-  return new Promise((fulfill) => {
+  return new Promise((resolve) => {
     authorisedRequest(token, {
       url: `${config.apiRoot}/contact/?company=${companyId}`,
       json: true
     })
       .then((data) => {
-        fulfill(data.results);
+        resolve(data.results);
       });
   });
 }

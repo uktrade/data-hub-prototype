@@ -47,12 +47,12 @@ function getCHCompany(token, id) {
 
 function getCompany(token, id, source) {
 
-  return new Promise((fulfill, reject) => {
+  return new Promise((resolve, reject) => {
     // Get DIT Company
     if (source === 'company_companieshousecompany') {
       getCHCompany(token, id)
         .then((companies_house_data) => {
-          fulfill({
+          resolve({
             company_number: id,
             companies_house_data,
             contacts: [],
@@ -68,7 +68,7 @@ function getCompany(token, id, source) {
 
     getDitCompany(token, id)
       .then((company) => {
-        fulfill(company);
+        resolve(company);
       })
       .catch((error) => {
         reject(error);

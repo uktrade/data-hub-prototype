@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import Autosuggest from 'react-autosuggest';
-import Highlight from 'react-highlighter';
+import {AutosuggestComponent as Autosuggest} from './autosuggest.component';
 import axios from 'axios';
-import {debounce} from 'lodash';
-
-const getSuggestionValue = suggestion => suggestion.name;
-const baseUrl = '/api/suggest';
 
 
 export class DidYouMeanCompanyComponent extends Component {
@@ -14,63 +9,31 @@ export class DidYouMeanCompanyComponent extends Component {
     super(props);
 
     this.state = {
-      selected: { id: '', name: '' },
       visibleSuggestions: [],
       value: props.value || '',
       didYouMeanSuggestion: null
     };
 
-    this.onSuggestionsFetchRequested = debounce(this.onSuggestionsFetchRequested, 300);
   }
 
-  onChange = (event, { newValue }) => {
-    this.setState({value: newValue, didYouMeanSuggestion: null});
-    this.props.onChange(event);
-  };
+  onChange = ({ name, value }) => {
+    this.setState({ value, didYouMeanSuggestion: null });
+    this.props.onChange({ name, value: value.name });
 
-  onSuggestionSelected = (event, { suggestion }) => {
-    this.setState({
-      selected: suggestion
-    });
-
-    // Get the company details for did you mean
-    axios.get(`/company/${suggestion._type}/${suggestion.id}/json`)
-      .then(response => {
-        this.setState({didYouMeanSuggestion: response.data});
-      });
-
-  };
-
-  onSuggestionsFetchRequested = ({ value }) => {
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
-
-    if (inputLength === 0) {
-      this.setState({ suggestions: [] });
-      return;
+    // if the item has an ID then look it up
+    if (value.id) {
+      // Get the company details for did you mean
+      const url = `/company/${value._type}/${value.id}/json`;
+      axios.get(url)
+        .then(response => {
+          this.setState({didYouMeanSuggestion: response.data});
+        });
     }
-
-    axios.get(`${baseUrl}?term=${inputValue}&type=company_company&type=company_companieshousecompany`)
-      .then(response => {
-        const filtered = response.data
-          .filter(suggestion => suggestion.name.substr(0, inputLength).toLocaleLowerCase() === inputValue);
-        this.setState({visibleSuggestions: filtered});
-      });
   };
 
-  onSuggestionsClearRequested = () => {
-    this.setState({ visibleSuggestions: [] });
-  };
-
-  renderSuggestion = (suggestion) => {
-    return (
-      <div className="autosuggest__suggestion">
-        <Highlight search={this.state.selected.name}>
-          {suggestion.name}
-        </Highlight>
-      </div>
-    );
-  };
+  lookupUrl(value) {
+    return `/api/suggest?term=${value}&type=company_company&type=company_companieshousecompany`;
+  }
 
   renderDidYouMean() {
     const company = this.state.didYouMeanSuggestion;
@@ -83,7 +46,7 @@ export class DidYouMeanCompanyComponent extends Component {
       addressStr = company.companies_house_data.registered_address_1;
       if (company.companies_house_data.registered_address_2 && company.companies_house_data.registered_address_2.length > 0) addressStr += `, ${company.companies_house_data.registered_address_2}`;
       if (company.companies_house_data.registered_address_town && company.companies_house_data.registered_address_town.length > 0) addressStr += `, ${company.companies_house_data.registered_address_town}`;
-      if (company.companies_house_data.registered_addres_county && company.companies_house_data.registered_address_county > 0) addressStr += `, ${company.companies_house_data.registered_address_county}`;
+      if (company.companies_house_data.registered_address_county && company.companies_house_data.registered_address_county > 0) addressStr += `, ${company.companies_house_data.registered_address_county}`;
       if (company.companies_house_data.registered_address_postcode && company.companies_house_data.registered_address_postcode > 0) addressStr += `, ${company.companies_house_data.registered_address_postcode}`;
       name = company.companies_house_data.name;
       id = company.company_number;
@@ -124,40 +87,28 @@ export class DidYouMeanCompanyComponent extends Component {
   }
 
   render() {
-    const { visibleSuggestions } = this.state;
-    const inputProps = {
-      className: 'form-control',
-      value: this.state.value,
-      onChange: this.onChange,
-      name: this.props.name
-    };
     const didYouMean = this.renderDidYouMean();
 
     return (
-      <div className="form-group">
-        { this.props.label &&
-        <label className="form-label">{this.props.label}</label>
-        }
+      <div>
         <Autosuggest
-          suggestions={visibleSuggestions}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          onSuggestionSelected={this.onSuggestionSelected}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={this.renderSuggestion}
-          inputProps={inputProps}
-          focusFirstSuggestion
+          name={this.props.name}
+          label={this.props.label}
+          value={this.state.selected}
+          lookupUrl={this.lookupUrl}
+          onChange={this.onChange}
+          allowOwnValue
         />
-
-        {didYouMean}
+        { didYouMean }
       </div>
     );
   }
 
-  static propTypes = {
-    onChange: React.PropTypes.func.isRequired,
-    label: React.PropTypes.string,
-    value: React.PropTypes.string,
-    name: React.PropTypes.string
-  }
 }
+
+DidYouMeanCompanyComponent.propTypes = {
+  onChange: React.PropTypes.func.isRequired,
+  label: React.PropTypes.string,
+  value: React.PropTypes.string,
+  name: React.PropTypes.string
+};

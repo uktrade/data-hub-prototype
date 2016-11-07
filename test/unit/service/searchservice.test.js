@@ -129,8 +129,8 @@ describe('Search service', () => {
 
   beforeEach(() => {
     findCompaniesSpy = sinon.stub(searchService.companiesHouseApi, 'findCompanies', function() {
-      return new Promise((fulfill) => {
-        fulfill(chResult);
+      return new Promise((resolve) => {
+        resolve(chResult);
       });
     });
   });
