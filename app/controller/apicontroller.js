@@ -104,6 +104,12 @@ function getMetadata(req, res) {
     case 'turnover_range':
       result = metadata.TURNOVER_OPTIONS;
       break;
+    case 'primary_sectors':
+      result = metadata.PRIMARY_SECTORS;
+      break;
+    case 'subsectors':
+      result = metadata.SUBSECTORS;
+      break;
     case 'role':
       rp({
         url: `${config.apiRoot}/metadata/role/`,
@@ -196,8 +202,13 @@ function teamLookup(req, res) {
     results = results.splice(0, 10);
   }
   res.json(results);
+}
 
+function getSubsectors( req, res ){
 
+  const sectorId = req.params.sectorId;
+
+  res.json( metadata.SUBSECTORS[ sectorId ] );
 }
 
 router.get('/suggest', companySuggest);
@@ -207,6 +218,7 @@ router.get('/contactlookup', contactLookup);
 router.get('/teamlookup', teamLookup);
 router.get('/meta/:metaName', getMetadata);
 router.get('/postcodelookup/:postcode', postcodelookup);
+router.get('/subsectors/:sectorId', getSubsectors);
 
 
 module.exports = {
