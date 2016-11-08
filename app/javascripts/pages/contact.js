@@ -4,6 +4,8 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ContactInteractionTable from '../components/contactinteractiontable.component';
+import Tabs from '../controls/tabs';
+import SearchBar from '../controls/searchbar';
 
 const archiveForm = document.getElementById('archive-details');
 const archiveButton = document.getElementById('archive-reveal-button');
@@ -48,3 +50,6 @@ if (archiveButton) {
   cancelButton.addEventListener('click', hideArchive);
   archiveForm.addEventListener('submit', submitArchiveForm);
 }
+
+new SearchBar(document.querySelector('.searchbar'));
+new Tabs(document.querySelector('.js-tabs'));

@@ -4,6 +4,7 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {InteractionForm} from '../forms/interactionform';
+import SearchBar from '../controls/searchbar';
 
 const editElement = document.getElementById('interaction-form');
 const contact = dh.data.contact;
@@ -41,3 +42,5 @@ ReactDOM.render(
   </div>,
   editElement
 );
+
+new SearchBar(document.querySelector('.searchbar'));
