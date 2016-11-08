@@ -19,7 +19,8 @@ const LABELS = {
   'telephone_alternative': 'Alternative phone (optional)',
   'email_alternative': 'Alternative email (optional)',
   'notes': 'Notes (optional)',
-  'primary': 'Is this person a primary contact?'
+  'primary': 'Is this person a primary contact?',
+  'teams': 'Which team is this person the primary contact for?'
 };
 
 const defaultContact = {
@@ -51,7 +52,11 @@ const defaultContact = {
   },
   telephone_alternative: '',
   email_alternative: '',
-  notes: ''
+  notes: '',
+  teams: [{
+    id: '',
+    name: ''
+  }]
 };
 
 export class ContactForm extends BaseForm {
@@ -98,6 +103,10 @@ export class ContactForm extends BaseForm {
       this.state.formData.address = defaultContact.address;
     }
 
+    if (this.state.primary === false) {
+      this.state.formData.teams = [];
+    }
+
     axios.post('/contact/', { contact: this.state.formData })
       .then((response) => {
         window.location.href = `/contact/${response.data.id}/view`;
@@ -123,6 +132,20 @@ export class ContactForm extends BaseForm {
 
     return '/';
   }
+
+  addPrimaryTeam = (event) => {
+    event.preventDefault();
+    let teams = this.state.formData.teams;
+    teams.push({id: null, name: ''});
+    this.changeFormData('teams', teams);
+  };
+
+  updatePrimaryTeam = (newValue, index) => {
+    let teams = this.state.formData.teams;
+    teams[index] = newValue.value;
+    this.changeFormData('teams', teams);
+  };
+
 
   render() {
 
@@ -209,6 +232,25 @@ export class ContactForm extends BaseForm {
             No
           </label>
         </fieldset>
+        { formData.primary &&
+          <div className="indented-info">
+            {formData.teams.each((team, index) => {
+              return (<Autosuggest
+                name="teams"
+                label={LABELS.teams}
+                value={formData.team}
+                lookupUrl='/api/teamlookup'
+                onChange={(update) => {
+                  this.updatePrimaryTeam(update, index);
+                }}
+                errors={this.getErrors('teams')}
+              />);
+            })}
+            <a className="add-another-button" onClick={this.addPrimaryTeam}>
+              Add another country
+            </a>
+          </div>
+        }
         <InputText
           label={LABELS.telephone_number}
           name="telephone_number"
@@ -247,13 +289,15 @@ export class ContactForm extends BaseForm {
           </label>
         </fieldset>
         { !this.state.formData.address_same_as_company &&
-          <Address
-            name='address'
-            label={LABELS.address}
-            onChange={this.updateField}
-            errors={this.getErrors('address')}
-            value={formData.address}
-          />
+          <div className="indented-info">
+            <Address
+                name='address'
+                label={LABELS.address}
+                onChange={this.updateField}
+                errors={this.getErrors('address')}
+                value={formData.address}
+              />
+          </div>
         }
         <InputText
           label={LABELS.telephone_alternative}
