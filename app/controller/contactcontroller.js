@@ -67,8 +67,9 @@ function edit(req, res) {
 
       res.render('contact/contact-edit', {
         term: req.query.term,
-          company: null,
-        contact
+        company: null,
+        contact,
+        lead: null
       });
     })
     .catch((error) => {
@@ -83,7 +84,8 @@ function add(req, res) {
   let userId = req.session.userId;
   let viewModel = {
     company: null,
-    contact: null
+    contact: null,
+    lead: null
   };
 
   function render( data ){
