@@ -6,9 +6,9 @@ import ReactDOM from 'react-dom';
 import {InteractionForm} from '../forms/interactionform';
 
 const editElement = document.getElementById('interaction-form');
-const contact = editElement.getAttribute('data-contact').length > 0 ? JSON.parse(editElement.getAttribute('data-contact')) : null;
-const company = editElement.getAttribute('data-company').length > 0 ? JSON.parse(editElement.getAttribute('data-company')) : null;
-const interaction = editElement.getAttribute('data-interaction').length > 0 ? JSON.parse(editElement.getAttribute('data-interaction')) : null;
+const contact = dh.data.contact;
+const company = dh.data.company;
+const interaction = dh.data.interaction;
 let backUrl, backTitle, title;
 
 if (contact) {

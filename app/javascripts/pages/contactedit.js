@@ -5,9 +5,9 @@ import ReactDOM from 'react-dom';
 import {ContactForm} from '../forms/contactform';
 
 const editElement = document.getElementById('contact-form');
-const contact = editElement.getAttribute('data-contact').length > 0 ? JSON.parse(editElement.getAttribute('data-contact')) : null;
-const company = editElement.getAttribute('data-company').length > 0 ? JSON.parse(editElement.getAttribute('data-company')) : null;
-const lead = editElement.getAttribute('data-lead').length > 0 ? JSON.parse(editElement.getAttribute('data-lead')) : null;
+const contact = dh.data.contact;
+const company = dh.data.company;
+const lead = dh.data.lead;
 let backUrl, backTitle, title;
 
 

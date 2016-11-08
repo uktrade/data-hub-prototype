@@ -16,7 +16,7 @@ function view(req, res) {
     res.redirect('/');
   }
 
-  interactionRepository.getInteraction(interaction_id)
+  interactionRepository.getInteraction( req.session.token, interaction_id)
     .then((interaction) => {
       res.render('interaction/interaction-details', {
         interaction
@@ -32,12 +32,12 @@ function view(req, res) {
 function edit(req, res) {
   let interactionId = req.params.interaction_id || null;
 
-  interactionRepository.getInteraction(interactionId)
+  interactionRepository.getInteraction( req.session.token, interactionId)
     .then((interaction) => {
       res.render('interaction/interaction-edit', {
         company: null,
         contact: null,
-        interaction
+        interaction: ( interaction || null )
       });
     });
 }
@@ -53,7 +53,8 @@ function add(req, res) {
         res.render('interaction/interaction-edit', {
           company: contact.company,
           contact,
-          interactionId: null
+          interactionId: null,
+          interaction: null
         });
       });
   } else if (companyId && companyId.length > 0) {
@@ -62,7 +63,8 @@ function add(req, res) {
         res.render('interaction/interaction-edit', {
           company,
           contact: null,
-          interactionId: null
+          interactionId: null,
+          interaction: null
         });
       });
   } else {

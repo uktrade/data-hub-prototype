@@ -1,9 +1,15 @@
 {% extends "../layouts/ukti-search-header.html" %}
 
 {% block main %}
-  <div id="interaction-form"
-       data-contact='{{ contact | dump | safe }}'
-       data-company='{{ company | dump | safe }}'
-       data-interaction='{{ interaction | dump | safe }}'>Loading...</div>
+  <div id="interaction-form">Loading...</div>
+  <script>
+  var dh = {
+    data: {
+      contact: {{ contact | dump | safe }},
+      company: {{ company | dump | safe }},
+      interaction: {{ interaction | dump | safe }}
+    }
+  };
+  </script>
   <script src="/javascripts/interactionedit.bundle.js"></script>
 {% endblock %}
