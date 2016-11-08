@@ -1,3 +1,4 @@
+/* globals expect: true */
 'use strict';
 
 const pagination = require('../../../app/lib/pagination');
@@ -18,10 +19,10 @@ describe('Pagination', () => {
 
       const pages = pagination.getPageIndexes(req, result);
 
-      pages.should.not.have.property('previousPage');
-      pages.nextPage.should.eq(2);
-      pages.startPage.should.eq(1);
-      pages.endPage.should.eq(5);
+      expect(pages).to.not.have.property('previousPage');
+      expect(pages.nextPage).to.equal(2);
+      expect(pages.startPage).to.equal(1);
+      expect(pages.endPage).to.equal(5);
 
     });
     it('should show 1..5 when on the second page of many', () => {
@@ -37,10 +38,10 @@ describe('Pagination', () => {
 
       const pages = pagination.getPageIndexes(req, result);
 
-      pages.previousPage.should.eq(1);
-      pages.nextPage.should.eq(3);
-      pages.startPage.should.eq(1);
-      pages.endPage.should.eq(5);
+      expect(pages.previousPage).to.equal(1);
+      expect(pages.nextPage).to.equal(3);
+      expect(pages.startPage).to.equal(1);
+      expect(pages.endPage).to.equal(5);
 
     });
     it('should show 3..7 when on the fifth page of many', () => {
@@ -56,10 +57,10 @@ describe('Pagination', () => {
 
       const pages = pagination.getPageIndexes(req, result);
 
-      pages.previousPage.should.eq(4);
-      pages.nextPage.should.eq(6);
-      pages.startPage.should.eq(3);
-      pages.endPage.should.eq(7);
+      expect(pages.previousPage).to.equal(4);
+      expect(pages.nextPage).to.equal(6);
+      expect(pages.startPage).to.equal(3);
+      expect(pages.endPage).to.equal(7);
     });
     it('should show 10..14 when on page 13 of 14', () => {
       const req = {
@@ -74,10 +75,10 @@ describe('Pagination', () => {
 
       const pages = pagination.getPageIndexes(req, result);
 
-      pages.previousPage.should.eq(12);
-      pages.nextPage.should.eq(14);
-      pages.startPage.should.eq(10);
-      pages.endPage.should.eq(14);
+      expect(pages.previousPage).to.equal(12);
+      expect(pages.nextPage).to.equal(14);
+      expect(pages.startPage).to.equal(10);
+      expect(pages.endPage).to.equal(14);
     });
     it('should show 1..3 when on the first page of 25 results', () => {
       const req = {
@@ -92,10 +93,10 @@ describe('Pagination', () => {
 
       const pages = pagination.getPageIndexes(req, result);
 
-      pages.should.not.have.property('previousPage');
-      pages.nextPage.should.eq(2);
-      pages.startPage.should.eq(1);
-      pages.endPage.should.eq(3);
+      expect(pages).to.not.have.property('previousPage');
+      expect(pages.nextPage).to.equal(2);
+      expect(pages.startPage).to.equal(1);
+      expect(pages.endPage).to.equal(3);
     });
     it('should show 1..3 when on the second page of 25 results', () => {
       const req = {
@@ -110,10 +111,10 @@ describe('Pagination', () => {
 
       const pages = pagination.getPageIndexes(req, result);
 
-      pages.previousPage.should.eq(1);
-      pages.nextPage.should.eq(3);
-      pages.startPage.should.eq(1);
-      pages.endPage.should.eq(3);
+      expect(pages.previousPage).to.equal(1);
+      expect(pages.nextPage).to.equal(3);
+      expect(pages.startPage).to.equal(1);
+      expect(pages.endPage).to.equal(3);
     });
     it('should not have a next link when on the last page', () => {
       const req = {
@@ -128,7 +129,7 @@ describe('Pagination', () => {
 
       const pages = pagination.getPageIndexes(req, result);
 
-      pages.should.not.have.property('nextPage');
+      expect(pages).to.not.have.property('nextPage');
     });
   });
 
