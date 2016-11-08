@@ -6,11 +6,13 @@ module.exports = {
   devtool: prod ? 'hidden-source-map' : 'source-map',
 
   entry: {
+    login: `${paths.sourceJS}/pages/login.js`,
+    index: `${paths.sourceJS}/pages/index.js`,
+    search: `${paths.sourceJS}/pages/search.js`,
     company: `${paths.sourceJS}/pages/company.js`,
     contact: `${paths.sourceJS}/pages/contact.js`,
-    facets: `${paths.sourceJS}/facets.js`,
-    datahub: `${paths.sourceJS}/datahub.js`,
-    companyadd_react: `${paths.sourceJS}/pages/companyadd.js`,
+    interaction: `${paths.sourceJS}/pages/interaction.js`,
+    companyadd: `${paths.sourceJS}/pages/companyadd.js`,
     contactedit: `${paths.sourceJS}/pages/contactedit.js`,
     interactionedit: `${paths.sourceJS}/pages/interactionedit.js`,
   },
@@ -37,7 +39,10 @@ module.exports = {
       'node_modules'
     ]
   },
-
+  externals: {
+    'react': 'React',
+    'react-dom': 'ReactDOM'
+  },
   plugins: prod ? [
     new webpack.DefinePlugin({
       'process.env': {

@@ -7,6 +7,9 @@ import {CompanyForm} from '../forms/companyform';
 import ContactTable from '../components/contacttable.component';
 import CompanyInteractionTable from '../components/companyinteractiontable.component';
 import { addClass, removeClass } from '../utils/classtuff';
+import Edit from '../controls/edit';
+import SearchBar from '../controls/searchbar';
+import Tabs from '../controls/tabs';
 
 const archiveForm = document.getElementById('archive-details');
 const archiveButton = document.getElementById('archive-reveal-button');
@@ -81,20 +84,10 @@ if (archiveButton) {
   archiveForm.addEventListener('submit', submitArchiveForm);
 }
 
-import $ from 'jquery';
-import Edit from '../edit';
-import SearchBar from '../searchbar';
-import Tabs from '../tabs';
-
-$('.js-hidden-edit').each((index, element) => {
-  new Edit(element);
-});
 
 
-new SearchBar('js-searchbar');
-$('.searchbar').each((index, element) => {
-  new SearchBar(element);
-});
-new Tabs('.js-tabs');
+new Edit(document.querySelector('.js-hidden-edit'));
+new SearchBar(document.querySelector('.searchbar'));
+new Tabs(document.querySelector('.js-tabs'));
 
 ReactDOM.render(<CompanyForm company={company}/>, document.getElementById('company-edit'));

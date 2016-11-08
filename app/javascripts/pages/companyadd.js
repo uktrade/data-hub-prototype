@@ -11,5 +11,5 @@ ReactDOM.render(
     </h1>
     <CompanyForm/>
   </div>,
-  document.getElementById('react-app')
+  document.getElementById('company-form')
 );

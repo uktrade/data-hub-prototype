@@ -131,5 +131,7 @@
     var contacts = {{ company.contacts | stringify | safe }};
     var interactions = {{ company.interactions |stringify | safe }};
   </script>
+  <script src="/javascripts/react/react.min.js"></script>
+  <script src="/javascripts/react-dom/react-dom.min.js"></script>
   <script src="{{ asset_path }}javascripts/company.bundle.js"></script>
 {% endblock %}

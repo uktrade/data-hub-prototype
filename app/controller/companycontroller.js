@@ -31,7 +31,7 @@ function postProcessCompany(company) {
 }
 
 function add(req, res) {
-  res.render('react', { app: 'companyadd_react'});
+  res.render('company/company-add');
 }
 
 function view(req, res) {
