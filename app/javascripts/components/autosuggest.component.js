@@ -207,21 +207,31 @@ export class AutosuggestComponent extends Component {
 
   // Navigate suggestions
 
+  setSelected(suggestion) {
+    this.setState({value: suggestion});
+    this.props.onChange({
+      name: this.props.name,
+      value: suggestion
+    });
+    this.clearSuggestions();
+  }
+
   leaveField() {
-    // If the current field value exactly matches the first suggestion
+    // If there is a highlighted field, select it, otherwise
+    // if the current field value exactly matches the first suggestion
     // then select that
     if (this.state.suggestions.length > 0) {
-      const currentValue = this.state.value.name.toLocaleLowerCase();
-      const firstSuggestion = this.state.suggestions[0].name.toLocaleLowerCase();
-
-      if (currentValue === firstSuggestion) {
-        this.setState({value: this.state.suggestions[0]});
-        this.props.onChange({
-          name: this.props.name,
-          value: this.state.suggestions[0]
-        });
-        this.clearSuggestions();
+      if (this.state.highlightedIndex !== null) {
+        this.setSelected(this.state.suggestions[this.state.highlightedIndex]);
         return;
+      } else {
+        const currentValue = this.state.value.name.toLocaleLowerCase();
+        const firstSuggestionName = this.state.suggestions[0].name.toLocaleLowerCase();
+
+        if (currentValue === firstSuggestionName) {
+          this.setSelected(this.state.suggestions[0]);
+          return;
+        }
       }
     }
 
