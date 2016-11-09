@@ -9,23 +9,15 @@ const PREVIOUSLABEL = 'Previous';
 // for pagination
 function getPageIndexes(req, result) {
   let pageIndex = {};
-  let currentPage = parseInt(req.query.page, 10) || 1;
+  let currentPage = Math.max( parseInt(req.query.page, 10), 1 );
 
   let totalPages = Math.ceil(result.total / 10);
 
-  pageIndex.startPage = currentPage - 2;
-  if (pageIndex.startPage < 1) {
-    pageIndex.startPage = 1;
-  }
+  pageIndex.startPage = Math.max( ( currentPage - 2 ), 1 );
+  pageIndex.endPage = Math.min( (pageIndex.startPage + 4), totalPages);
 
   if (currentPage !== 1) {
     pageIndex.previousPage = currentPage - 1;
-  }
-
-
-  pageIndex.endPage = pageIndex.startPage + 4;
-  if (pageIndex.endPage > totalPages) {
-    pageIndex.endPage = totalPages;
   }
 
   if (currentPage !== totalPages) {
