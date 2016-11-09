@@ -81,7 +81,9 @@
     "build": "gulp build",
     "build:prod": "NODE_ENV=production; gulp build",
     "develop": "gulp watch",
-    "test": "JASMINE_CONFIG_PATH=test/jasmine.json jasmine",
+    "test": "npm run test:jasmine && npm run test:mocha",
+    "test:jasmine": "JASMINE_CONFIG_PATH=test/jasmine.json jasmine",
+    "test:mocha": "mocha --require test/unit/common.js --ui bdd test/unit/**/*.test.js",
     "postinstall": "gulp build",
     "lint": "gulp lint-js",
     "watch": "nodemon app.js --ignore 'app/javascripts/**/*'"
