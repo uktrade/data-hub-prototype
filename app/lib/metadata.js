@@ -3,25 +3,65 @@
 const request = require('request-promise');
 const config = require('../../config');
 const transformSectors = require( './transformers/metadata-sectors' );
+let redisClient;
 
 function getMetadata( path, key ){
 
   let url = `${config.apiRoot}/metadata/${ path }/`;
 
-  return request({
-    url,
-    json: true
-  })
-  .then((data) => {
+  if( redisClient ){
 
-    module.exports[ key ] = data;
-    return data;
+    return new Promise( ( resolve, reject ) => {
 
-  }).catch( ( err ) => {
+      redisClient.get( url, function( err, data ){
 
-    console.error( 'Error fetching metadata for url: %s', url );
-    throw err;
-  } );
+        if( !err && data ){
+
+          data = JSON.parse( data );
+
+          module.exports[ key ] = data;
+          resolve( data );
+
+        } else {
+
+          request({
+            url,
+            json: true
+          })
+          .then((data) => {
+
+            module.exports[ key ] = data;
+            redisClient.set( url, JSON.stringify( data ) );
+            resolve( data );
+
+          }).catch( ( err ) => {
+
+            console.error( 'Error fetching metadata for url: %s', url );
+            reject( err );
+            throw err;
+          } );
+        }
+      } );
+    } );
+
+  } else {
+
+    return request({
+      url,
+      json: true
+    })
+    .then((data) => {
+
+      module.exports[ key ] = data;
+      return data;
+
+    }).catch( ( err ) => {
+
+      console.error( 'Error fetching metadata for url: %s', url );
+      throw err;
+    } );
+  }
+
 }
 
 function createSubSectors( data ){
@@ -42,6 +82,10 @@ const metadataItems = [
   [ 'team', 'TEAMS' ]
 ];
 
+module.exports.setRedisClient = function( client ){
+
+  redisClient = client;
+};
 
 module.exports.fetchAll = function( cb ){
 
