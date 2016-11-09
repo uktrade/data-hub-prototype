@@ -96,9 +96,9 @@ function post(req, res) {
   // Flatten selected fields
   let company = Object.assign({}, req.body.company);
 
-  controllerUtils.flattenIdFields(company);
   controllerUtils.flattenAddress(company, 'registered');
   controllerUtils.flattenAddress(company, 'trading');
+  controllerUtils.flattenIdFields(company);
   controllerUtils.nullEmptyFields(company);
 
   if (company.export_to_countries === null) company.export_to_countries = [];

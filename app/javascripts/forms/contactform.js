@@ -48,7 +48,10 @@ const defaultContact = {
     address_town: '',
     address_county: '',
     address_postcode: '',
-    address_country: ''
+    address_country: {
+      id: null,
+      name: ''
+    }
   },
   telephone_alternative: '',
   email_alternative: '',
@@ -81,19 +84,11 @@ export class ContactForm extends BaseForm {
       state.formData.company = props.company;
     }
 
-    if (props.lead) {
-
-      let lead = props.lead;
-
-      state.formData.first_name = lead.firstName;
-      state.formData.last_name = lead.lastName;
-      state.formData.notes = lead.notes;
-      state.formData.telephone_number = lead.phone;
-      state.formData.email = lead.email;
-      state.formData.leadId = lead._id;
-    }
-
     this.setDefaults(state.formData, defaultContact);
+
+    if (state.formData.primary === true && state.formData.teams.length === 0) {
+      state.formData.teams = defaultContact.teams;
+    }
 
     this.state = state;
   }
@@ -106,6 +101,8 @@ export class ContactForm extends BaseForm {
     if (this.state.primary === false) {
       this.state.formData.teams = [];
     }
+
+    this.setState({saving: true});
 
     axios.post('/contact/', { contact: this.state.formData })
       .then((response) => {
@@ -126,8 +123,6 @@ export class ContactForm extends BaseForm {
       return `/company/company_company/${this.props.company.id}#contacts`;
     } else if (this.props.contact) {
       return `/contact/${this.props.contact.id}/view`;
-    } else if (this.props.lead) {
-      return null;
     }
 
     return '/';
@@ -140,14 +135,53 @@ export class ContactForm extends BaseForm {
     this.changeFormData('teams', teams);
   };
 
+  clearPrimaryTeam = () => {
+    this.changeFormData('teams', defaultContact.teams);
+  };
+
+  clearAddress = () => {
+    this.changeFormData('address', defaultContact.address);
+  };
+
   updatePrimaryTeam = (newValue, index) => {
     let teams = this.state.formData.teams;
     teams[index] = newValue.value;
     this.changeFormData('teams', teams);
   };
 
+  getTeams() {
+
+    const teamList = this.state.formData.teams.map((team, index) => {
+      const label = index === 0 ? LABELS.teams : null;
+      const error = index === 0 ? this.getErrors('teams') : null;
+
+      return (<Autosuggest
+        name="teams"
+        label={label}
+        value={team}
+        lookupUrl='/api/teamlookup'
+        onChange={(update) => {
+          this.updatePrimaryTeam(update, index);
+        }}
+        errors={error}
+      />);
+    });
+
+    return (
+      <div className={this.getErrors('teams') === null ? 'indented-info' : 'indented-info error'}>
+        { teamList }
+        <a className="add-another-button" onClick={this.addPrimaryTeam}>
+          Add another team
+        </a>
+      </div>
+    );
+
+  }
 
   render() {
+    if (this.state.saving) {
+      return this.getSaving();
+    }
 
     const formData = this.state.formData;
     const backUrl = this.getBackUrl();
@@ -227,30 +261,15 @@ export class ContactForm extends BaseForm {
               name="primary"
               value="No"
               checked={!formData.primary}
-              onChange={this.updateField}
+              onChange={(update) => {
+                this.clearPrimaryTeam();
+                this.updateField(update);
+              }}
             />
             No
           </label>
         </fieldset>
-        { formData.primary &&
-          <div className="indented-info">
-            {formData.teams.each((team, index) => {
-              return (<Autosuggest
-                name="teams"
-                label={LABELS.teams}
-                value={formData.team}
-                lookupUrl='/api/teamlookup'
-                onChange={(update) => {
-                  this.updatePrimaryTeam(update, index);
-                }}
-                errors={this.getErrors('teams')}
-              />);
-            })}
-            <a className="add-another-button" onClick={this.addPrimaryTeam}>
-              Add another country
-            </a>
-          </div>
-        }
+        { formData.primary && this.getTeams() }
         <InputText
           label={LABELS.telephone_number}
           name="telephone_number"
@@ -273,7 +292,10 @@ export class ContactForm extends BaseForm {
               value="Yes"
               name="address_same_as_company"
               checked={this.state.formData.address_same_as_company}
-              onChange={this.updateField}
+              onChange={(update) => {
+                this.updateField(update);
+                this.clearAddress();
+              }}
             />
             Yes
           </label>

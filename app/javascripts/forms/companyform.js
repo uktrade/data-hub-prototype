@@ -48,7 +48,10 @@ const defaultCompany = {
     address_town: '',
     address_county: '',
     address_postcode: '',
-    address_country: null
+    address_country: {
+      id: null,
+      name: ''
+    }
   },
   alias: '',
   trading_address: {
@@ -57,7 +60,10 @@ const defaultCompany = {
     address_town: '',
     address_county: '',
     address_postcode: '',
-    address_country: null
+    address_country: {
+      id: null,
+      name: ''
+    }
   },
   website: '',
   description: '',

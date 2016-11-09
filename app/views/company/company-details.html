@@ -56,7 +56,9 @@
             {% if company.registered_address.address_town.length > 0 %}{{ company.registered_address.address_town }},{% endif %}
             {% if company.registered_address.address_county.length > 0 %}{{ company.registered_address.address_county }},{% endif %}
             {% if company.registered_address.address_postcode.length > 0 %}{{ company.registered_address.address_postcode }},{% endif %}
-            {% if company.registered_address.address_country_name.length > 0 %}{{ company.registered_address.address_country_name }}{% endif %}
+            {% if company.registered_address.address_country and company.registered_address.address_country.name %}
+              {{ company.registered_address.address_country.name }}
+            {% endif %}
           </td>
         </tr>
         <tr>
@@ -82,7 +84,9 @@
             {% if company.trading_address.address_town.length > 0 %}{{ company.trading_address.address_town }},{% endif %}
             {% if company.trading_address.addresss_county.length > 0 %}{{ company.trading_address.address_county }},{% endif %}
             {% if company.trading_address.address_postcode.length > 0 %}{{ company.trading_address.address_postcode }},{% endif %}
-            {% if company.trading_address.address_country_name.length > 0 %}{{ company.trading_address.address_country_name }}{% endif %}
+            {% if company.trading_address.address_country and company.trading_address.address_country.name %}
+              {{ company.trading_address.address_country.name }}
+            {% endif %}
           </td>
         </tr>
         <tr>
