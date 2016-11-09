@@ -24,7 +24,8 @@ const LABELS = {
   'turnover_range': 'Annual turnover (optional)',
   'account_manager': 'Account manager',
   'export_to_countries': 'Export market',
-  'future_interest_countries': 'Future countries of interest (optional)'
+  'future_interest_countries': 'Future countries of interest (optional)',
+  'lead': 'Is this company a lead?'
 };
 
 const defaultCompany = {
@@ -78,7 +79,8 @@ const defaultCompany = {
   ],
   future_interest_countries: [
     {id: null, name: ''}
-  ]
+  ],
+  lead: false
 };
 
 export class CompanyForm extends BaseForm {
@@ -413,6 +415,35 @@ export class CompanyForm extends BaseForm {
             />
           </div>
           }
+        </fieldset>
+        <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
+          <legend className="form-label">{LABELS.lead}</legend>
+          <label
+            className={formData.lead ? 'block-label selected' : 'block-label'}
+            htmlFor="lead-yes">
+            <input
+              id="lead-yes"
+              type="radio"
+              name="lead"
+              value="Yes"
+              checked={formData.lead}
+              onChange={this.updateField}
+            />
+            Yes
+          </label>
+          <label
+            className={!formData.lead ? 'block-label selected' : 'block-label'}
+            htmlFor="lead-no">
+            <input
+              id="lead-no"
+              type="radio"
+              name="lead"
+              value="No"
+              checked={!formData.lead}
+              onChange={this.updateField}
+            />
+            No
+          </label>
         </fieldset>
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">Is this company currently exporting to a market?</legend>
