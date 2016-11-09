@@ -6,7 +6,7 @@ const transformSectors = require( './transformers/metadata-sectors' );
 
 function getMetadata( path, key ){
 
-  let url = `${config.apiRoot}/metadata/${ path }`;
+  let url = `${config.apiRoot}/metadata/${ path }/`;
 
   return request({
     url,
@@ -33,7 +33,7 @@ function createSubSectors( data ){
 }
 
 const metadataItems = [
-  [ 'sector/', 'SECTOR_OPTIONS', createSubSectors ],
+  [ 'sector', 'SECTOR_OPTIONS', createSubSectors ],
   [ 'turnover', 'TURNOVER_OPTIONS' ],
   [ 'uk-region', 'REGION_OPTIONS' ],
   [ 'country', 'COUNTRYS' ],
