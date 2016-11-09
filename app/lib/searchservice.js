@@ -34,7 +34,7 @@ function search({token, term, limit = 10, page = 1, filters}) {
   }
 
   let options = {
-    url: `${config.apiRoot}/search`,
+    url: `${config.apiRoot}/search/`,
     body,
     json: true,
     method: 'POST',
