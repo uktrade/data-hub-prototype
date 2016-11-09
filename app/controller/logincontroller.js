@@ -47,6 +47,8 @@ function loginToApi( req, res ){
       res.redirect('/');
     })
     .catch((error) => {
+    
+      console.log('hello, computer');
 
       if (error.response.statusCode === 401) {
 
