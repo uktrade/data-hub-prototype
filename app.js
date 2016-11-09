@@ -146,6 +146,7 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
+metadata.setRedisClient( client );
 metadata.fetchAll( ( errors ) => {
 
   if( errors ){
