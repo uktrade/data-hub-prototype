@@ -8,16 +8,10 @@ module.exports = function( req, res, next ){
   const token = req.session.token;
   const user = req.session.user;
 
-  console.log( 'token: %s', token );
-  console.log( 'user:' );
-  console.dir( user );
-
   if( token && !user ){
 
-    console.log( 'Fetching user info' );
-
     const opts = {
-      url: `${config.apiRoot}/whoami`,
+      url: `${config.apiRoot}/whoami/`,
       json: true
     };
 
@@ -35,7 +29,6 @@ module.exports = function( req, res, next ){
 
     } ).catch( ( error ) => {
 
-      console.log( 'Error getting user' );
       res.render( 'error', { error } );
     } );
 

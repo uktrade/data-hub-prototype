@@ -48,8 +48,6 @@ function loginToApi( req, res ){
     })
     .catch((error) => {
 
-      console.log('hello, computer');
-
       if (error.response.statusCode === 401) {
 
         req.flash('error-message', 'Invalid user id or password');
