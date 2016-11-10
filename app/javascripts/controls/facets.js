@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import { getQueryParam } from '../utils/urlstuff';
+import {toggleClass} from '../utils/elementstuff';
 
 const term = getQueryParam('term');
 

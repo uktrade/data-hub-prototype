@@ -1,6 +1,6 @@
 'use strict';
 
-import {addClass, removeClass} from '../utils/classtuff';
+import {addClass, removeClass} from '../utils/elementstuff';
 
 function addEventListenerList(list, event, fn) {
   for (var i = 0, len = list.length; i < len; i++) {

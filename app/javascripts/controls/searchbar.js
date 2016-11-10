@@ -1,6 +1,6 @@
 'use strict';
 
-import {addClass, removeClass} from '../utils/classtuff';
+import {addClass, removeClass} from '../utils/elementstuff';
 
 class SearchBar {
 

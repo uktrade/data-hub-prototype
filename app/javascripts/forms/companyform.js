@@ -1,11 +1,12 @@
 import React from 'react';
 import {BaseForm} from './baseform';
-import {RadioWithIdComponent as RadioWithId} from '../components/radiowithid.component';
+import {SelectWithIdComponent as SelectWithId} from '../components/seletwithid.component';
 import {AddressComponent as Address} from '../components/address.component';
 import {AutosuggestComponent as Autosuggest} from '../components/autosuggest.component';
 import {inputTextComponent as InputText} from '../components/inputtext.component';
 import {errorListComponent as ErrorList} from '../components/errorlist.component';
 import {DidYouMeanCompanyComponent as DidYouMeanCompany} from '../components/didyoumeancompany.component';
+import {RadioComponent as Radio} from '../components/radio.component';
 
 import axios from 'axios';
 
@@ -261,28 +262,20 @@ export class CompanyForm extends BaseForm {
             }
             <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
               <legend className="form-label">Is the business based in the UK?</legend>
-              <label className={formData.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-yes">
-                <input
-                  id="uk_based-yes"
-                  type="radio"
-                  name="uk_based"
-                  value="Yes"
-                  checked={formData.uk_based}
-                  onChange={this.updateField}
-                />
-                Yes
-              </label>
-              <label className={!formData.uk_based ? 'block-label selected' : 'block-label'} htmlFor="uk_based-no">
-                <input
-                id="uk_based-no"
-                type="radio"
+              <Radio
                 name="uk_based"
+                label="Yes"
+                value="Yes"
+                checked={formData.uk_based}
+                onChange={this.updateField}
+              />
+              <Radio
+                name="uk_based"
+                label="No"
                 value="No"
                 checked={!formData.uk_based}
                 onChange={this.updateField}
-                />
-                No
-              </label>
+              />
               { formData.uk_based &&
                 <p className="js-radiohide-content">
                 You can add any type of company except UK based private and public limited
@@ -292,7 +285,7 @@ export class CompanyForm extends BaseForm {
                 </p>
               }
             </fieldset>
-            <RadioWithId
+            <SelectWithId
               value={formData.business_type.id || null}
               url="/api/meta/typesofbusiness"
               name="business_type"
@@ -303,7 +296,7 @@ export class CompanyForm extends BaseForm {
           </div>
         }
 
-        <RadioWithId
+        <SelectWithId
           value={formData.sector.id}
           url="/api/meta/sector"
           name="sector"
@@ -321,7 +314,7 @@ export class CompanyForm extends BaseForm {
           />
         }
         { (formData.uk_based || formData.company_number && formData.company_number.length > 0) &&
-          <RadioWithId
+          <SelectWithId
             value={formData.uk_region.id}
             url="/api/meta/region"
             name="uk_region"
@@ -362,7 +355,7 @@ export class CompanyForm extends BaseForm {
             onChange={this.updateField}
             value={formData.description}/>
         </div>
-        <RadioWithId
+        <SelectWithId
           value={formData.employee_range.id}
           url="/api/meta/employee_range"
           name="employee_range"
@@ -370,7 +363,7 @@ export class CompanyForm extends BaseForm {
           label="Number of employees (optional)"
           onChange={this.updateField}
         />
-        <RadioWithId
+        <SelectWithId
           value={formData.turnover_range.id}
           url="/api/meta/turnover_range"
           name="turnover_range"
@@ -380,34 +373,20 @@ export class CompanyForm extends BaseForm {
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">Is there an agreed DIT account manager for this company?</legend>
-          <label
-            className={this.state.show_account_manager ? 'block-label selected' : 'block-label'}
-            htmlFor="show_account_manager_yes"
-          >
-            <input
-              id="show_account_manager_yes"
-              type="radio"
-              name="show_account_manager"
-              value="Yes"
-              checked={this.state.show_account_manager}
-              onChange={this.updateExpandingSection}
-            />
-            Yes
-          </label>
-          <label
-            className={this.state.show_account_manager ? 'block-label' : 'block-label selected'}
-            htmlFor="show_account_manager_no"
-          >
-            <input
-              id="show_account_manager_no"
-              type="radio"
-              name="show_account_manager"
-              value="No"
-              checked={!this.state.show_account_manager}
-              onChange={this.updateExpandingSection}
-            />
-            No
-          </label>
+          <Radio
+            name="show_account_manager"
+            label="Yes"
+            value="Yes"
+            checked={this.state.show_account_manager}
+            onChange={this.updateExpandingSection}
+          />
+          <Radio
+            name="show_account_manager"
+            label="No"
+            value="No"
+            checked={!this.state.show_account_manager}
+            onChange={this.updateExpandingSection}
+          />
 
           { this.state.show_account_manager &&
           <div className="js-radiohide-content">
@@ -424,64 +403,38 @@ export class CompanyForm extends BaseForm {
         </fieldset>
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">{LABELS.lead}</legend>
-          <label
-            className={formData.lead ? 'block-label selected' : 'block-label'}
-            htmlFor="lead-yes">
-            <input
-              id="lead-yes"
-              type="radio"
-              name="lead"
-              value="Yes"
-              checked={formData.lead}
-              onChange={this.updateField}
-            />
-            Yes
-          </label>
-          <label
-            className={!formData.lead ? 'block-label selected' : 'block-label'}
-            htmlFor="lead-no">
-            <input
-              id="lead-no"
-              type="radio"
-              name="lead"
-              value="No"
-              checked={!formData.lead}
-              onChange={this.updateField}
-            />
-            No
-          </label>
+          <Radio
+            name="lead"
+            label="Yes"
+            value="Yes"
+            checked={formData.lead}
+            onChange={this.updateField}
+          />
+          <Radio
+            name="lead"
+            label="No"
+            value="No"
+            checked={!formData.lead}
+            onChange={this.updateField}
+          />
+
         </fieldset>
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">Is this company currently exporting to a market?</legend>
-          <label
-            className={this.state.show_exporting_to ? 'block-label selected' : 'block-label'}
-            htmlFor="show_exporting_to_yes"
-          >
-            <input
-              id="show_exporting_to_yes"
-              type="radio"
-              name="show_exporting_to"
-              value="Yes"
-              checked={this.state.show_exporting_to}
-              onChange={this.updateExpandingSection}
-            />
-            Yes
-          </label>
-          <label
-            className={this.state.show_exporting_to ? 'block-label' : 'block-label selected'}
-            htmlFor="show_exporting_to_no"
-          >
-            <input
-              id="show_exporting_to_no"
-              type="radio"
-              name="show_exporting_to"
-              value="No"
-              checked={!this.state.show_exporting_to}
-              onChange={this.updateExpandingSection}
-            />
-            No
-          </label>
-
+          <Radio
+            name="show_exporting_to"
+            label="Yes"
+            value="Yes"
+            checked={this.state.show_exporting_to}
+            onChange={this.updateExpandingSection}
+          />
+          <Radio
+            name="show_exporting_to"
+            label="No"
+            value="No"
+            checked={!this.state.show_exporting_to}
+            onChange={this.updateExpandingSection}
+          />
           { this.state.show_exporting_to &&
           <div className="js-radiohide-content">
             { this.getCurrentlyExportingTo() }

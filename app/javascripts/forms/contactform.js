@@ -3,6 +3,7 @@ import axios from 'axios';
 import {BaseForm} from './baseform';
 import {AddressComponent as Address} from '../components/address.component';
 import {AutosuggestComponent as Autosuggest} from '../components/autosuggest.component';
+import {RadioComponent as Radio} from '../components/radio.component';
 import {inputTextComponent as InputText} from '../components/inputtext.component';
 import {errorListComponent as ErrorList} from '../components/errorlist.component';
 
@@ -239,35 +240,20 @@ export class ContactForm extends BaseForm {
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">{LABELS.primary}</legend>
-          <label
-            className={formData.primary ? 'block-label selected' : 'block-label'}
-            htmlFor="primary-yes">
-            <input
-              id="primary-yes"
-              type="radio"
-              name="primary"
-              value="Yes"
-              checked={formData.primary}
-              onChange={this.updateField}
-            />
-            Yes
-          </label>
-          <label
-            className={!formData.primary ? 'block-label selected' : 'block-label'}
-            htmlFor="primary-no">
-            <input
-              id="primary-no"
-              type="radio"
-              name="primary"
-              value="No"
-              checked={!formData.primary}
-              onChange={(update) => {
-                this.clearPrimaryTeam();
-                this.updateField(update);
-              }}
-            />
-            No
-          </label>
+          <Radio
+            name="primary"
+            label="Yes"
+            value="Yes"
+            checked={formData.primary}
+            onChange={this.updateField}
+          />
+          <Radio
+            name="primary"
+            label="No"
+            value="No"
+            checked={!formData.primary}
+            onChange={this.updateField}
+          />
         </fieldset>
         { formData.primary && this.getTeams() }
         <InputText
@@ -286,29 +272,23 @@ export class ContactForm extends BaseForm {
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">Is the contact's address the same as the company address?</legend>
-          <label className={this.state.formData.address_same_as_company ? 'block-label selected' : 'block-label'}>
-            <input
-              type="radio"
-              value="Yes"
-              name="address_same_as_company"
-              checked={this.state.formData.address_same_as_company}
-              onChange={(update) => {
-                this.updateField(update);
-                this.clearAddress();
-              }}
-            />
-            Yes
-          </label>
-          <label className={this.state.formData.address_same_as_company ? 'block-label' : 'block-label selected'}>
-            <input
-              type="radio"
-              value="No"
-              name="address_same_as_company"
-              checked={!this.state.formData.address_same_as_company}
-              onChange={this.updateField}
-            />
-            No
-          </label>
+          <Radio
+            name="address_same_as_company"
+            label="Yes"
+            value="Yes"
+            checked={formData.address_same_as_company}
+            onChange={(update) => {
+              this.updateField(update);
+              this.clearAddress();
+            }}
+          />
+          <Radio
+            name="address_same_as_company"
+            label="No"
+            value="No"
+            checked={!formData.address_same_as_company}
+            onChange={this.updateField}
+          />
         </fieldset>
         { !this.state.formData.address_same_as_company &&
           <div className="indented-info">
