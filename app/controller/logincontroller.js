@@ -47,8 +47,6 @@ function loginToApi( req, res ){
       res.redirect('/');
     })
     .catch((error) => {
-    
-      console.log('hello, computer');
 
       if (error.response.statusCode === 401) {
 
@@ -57,10 +55,7 @@ function loginToApi( req, res ){
 
       } else {
 
-        console.log( 'Error logging in' );
-        console.error( error );
-        req.error = error.error;
-        res.redirect('/error');
+        res.render( 'error', { error } );
       }
     });
 }
@@ -68,6 +63,7 @@ function loginToApi( req, res ){
 function logout( req, res ){
 
   req.session.token = null;
+  req.session.user = null;
   req.flash( 'success-message', 'Signed out' );
   res.redirect( '/login' );
 }
