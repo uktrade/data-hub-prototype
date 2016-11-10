@@ -4,7 +4,6 @@
 const express = require('express');
 const router = express.Router();
 const controllerUtils = require('../lib/controllerutils');
-const userLeads = require( '../lib/userLeads' );
 
 let contactRepository = require('../repository/contactrepository');
 let companyRepository = require('../repository/companyrepository');
@@ -68,8 +67,7 @@ function edit(req, res) {
       res.render('contact/contact-edit', {
         term: req.query.term,
         company: null,
-        contact,
-        lead: null
+        contact
       });
     })
     .catch((error) => {
@@ -80,12 +78,9 @@ function edit(req, res) {
 function add(req, res) {
 
   let companyId = req.query.company_id || null;
-  let leadId = req.query.lead;
-  let userId = req.session.userId;
   let viewModel = {
     company: null,
-    contact: null,
-    lead: null
+    contact: null
   };
 
   function render( data ){
@@ -97,13 +92,7 @@ function add(req, res) {
     res.render('contact/contact-edit', viewModel);
   }
 
-  if (leadId && userId) {
-
-    userLeads.getById( userId, leadId ).then( ( lead ) => {
-      render( { lead } );
-    });
-
-  } else if (companyId) {
+  if (companyId) {
     companyRepository.getDitCompany(req.session.token, companyId)
       .then((company) => {
         render({company});
@@ -130,27 +119,17 @@ function cleanErrors(errors) {
 
 function post(req, res) {
   // Flatten selected fields
-
-  let leadId = req.body.contact.leadId;
   let contact = Object.assign({}, req.body.contact);
 
-  controllerUtils.flattenIdFields(contact);
   controllerUtils.flattenAddress(contact);
+  controllerUtils.flattenIdFields(contact);
   controllerUtils.nullEmptyFields(contact);
 
   contact.telephone_countrycode = '+44';
 
   contactRepository.saveContact(req.session.token, contact)
     .then((data) => {
-      if (leadId){
-        userLeads
-          .remove( req.session.userId, leadId )
-          .then(() => {
-            res.json(data);
-          });
-      } else {
-        res.json(data);
-      }
+      res.json(data);
     })
     .catch((error) => {
 

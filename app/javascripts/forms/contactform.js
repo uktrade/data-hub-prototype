@@ -19,7 +19,8 @@ const LABELS = {
   'telephone_alternative': 'Alternative phone (optional)',
   'email_alternative': 'Alternative email (optional)',
   'notes': 'Notes (optional)',
-  'primary': 'Is this person a primary contact?'
+  'primary': 'Is this person a primary contact?',
+  'teams': 'Which team is this person the primary contact for?'
 };
 
 const defaultContact = {
@@ -47,11 +48,18 @@ const defaultContact = {
     address_town: '',
     address_county: '',
     address_postcode: '',
-    address_country: ''
+    address_country: {
+      id: null,
+      name: ''
+    }
   },
   telephone_alternative: '',
   email_alternative: '',
-  notes: ''
+  notes: '',
+  teams: [{
+    id: '',
+    name: ''
+  }]
 };
 
 export class ContactForm extends BaseForm {
@@ -76,19 +84,11 @@ export class ContactForm extends BaseForm {
       state.formData.company = props.company;
     }
 
-    if (props.lead) {
-
-      let lead = props.lead;
-
-      state.formData.first_name = lead.firstName;
-      state.formData.last_name = lead.lastName;
-      state.formData.notes = lead.notes;
-      state.formData.telephone_number = lead.phone;
-      state.formData.email = lead.email;
-      state.formData.leadId = lead._id;
-    }
-
     this.setDefaults(state.formData, defaultContact);
+
+    if (state.formData.primary === true && state.formData.teams.length === 0) {
+      state.formData.teams = defaultContact.teams;
+    }
 
     this.state = state;
   }
@@ -97,6 +97,12 @@ export class ContactForm extends BaseForm {
     if (this.state.showAddress === false) {
       this.state.formData.address = defaultContact.address;
     }
+
+    if (this.state.primary === false) {
+      this.state.formData.teams = [];
+    }
+
+    this.setState({saving: true});
 
     axios.post('/contact/', { contact: this.state.formData })
       .then((response) => {
@@ -117,14 +123,65 @@ export class ContactForm extends BaseForm {
       return `/company/company_company/${this.props.company.id}#contacts`;
     } else if (this.props.contact) {
       return `/contact/${this.props.contact.id}/view`;
-    } else if (this.props.lead) {
-      return null;
     }
 
     return '/';
   }
 
+  addPrimaryTeam = (event) => {
+    event.preventDefault();
+    let teams = this.state.formData.teams;
+    teams.push({id: null, name: ''});
+    this.changeFormData('teams', teams);
+  };
+
+  clearPrimaryTeam = () => {
+    this.changeFormData('teams', defaultContact.teams);
+  };
+
+  clearAddress = () => {
+    this.changeFormData('address', defaultContact.address);
+  };
+
+  updatePrimaryTeam = (newValue, index) => {
+    let teams = this.state.formData.teams;
+    teams[index] = newValue.value;
+    this.changeFormData('teams', teams);
+  };
+
+  getTeams() {
+
+    const teamList = this.state.formData.teams.map((team, index) => {
+      const label = index === 0 ? LABELS.teams : null;
+      const error = index === 0 ? this.getErrors('teams') : null;
+
+      return (<Autosuggest
+        name="teams"
+        label={label}
+        value={team}
+        lookupUrl='/api/teamlookup'
+        onChange={(update) => {
+          this.updatePrimaryTeam(update, index);
+        }}
+        errors={error}
+      />);
+    });
+
+    return (
+      <div className={this.getErrors('teams') === null ? 'indented-info' : 'indented-info error'}>
+        { teamList }
+        <a className="add-another-button" onClick={this.addPrimaryTeam}>
+          Add another team
+        </a>
+      </div>
+    );
+
+  }
+
   render() {
+    if (this.state.saving) {
+      return this.getSaving();
+    }
 
     const formData = this.state.formData;
     const backUrl = this.getBackUrl();
@@ -204,11 +261,15 @@ export class ContactForm extends BaseForm {
               name="primary"
               value="No"
               checked={!formData.primary}
-              onChange={this.updateField}
+              onChange={(update) => {
+                this.clearPrimaryTeam();
+                this.updateField(update);
+              }}
             />
             No
           </label>
         </fieldset>
+        { formData.primary && this.getTeams() }
         <InputText
           label={LABELS.telephone_number}
           name="telephone_number"
@@ -231,7 +292,10 @@ export class ContactForm extends BaseForm {
               value="Yes"
               name="address_same_as_company"
               checked={this.state.formData.address_same_as_company}
-              onChange={this.updateField}
+              onChange={(update) => {
+                this.updateField(update);
+                this.clearAddress();
+              }}
             />
             Yes
           </label>
@@ -247,13 +311,15 @@ export class ContactForm extends BaseForm {
           </label>
         </fieldset>
         { !this.state.formData.address_same_as_company &&
-          <Address
-            name='address'
-            label={LABELS.address}
-            onChange={this.updateField}
-            errors={this.getErrors('address')}
-            value={formData.address}
-          />
+          <div className="indented-info">
+            <Address
+                name='address'
+                label={LABELS.address}
+                onChange={this.updateField}
+                errors={this.getErrors('address')}
+                value={formData.address}
+              />
+          </div>
         }
         <InputText
           label={LABELS.telephone_alternative}

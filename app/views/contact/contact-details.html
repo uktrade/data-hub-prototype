@@ -35,7 +35,13 @@
       <tr>
         <th>Address</th>
         <td>
-          {{ contact.address_1 }}, {% if contact.address_2 %}{{ contact.address_2 }},{% endif %} {{ contact.address_town }}, {{ contact.address_postcode }}
+          {% if not contact.address_same_as_company %}
+            {% if contact.address_1 %}{{ contact.address_2 }},{% endif %}
+            {% if contact.address_2 %}{{ contact.address_2 }},{% endif %}
+            {% if contact.address_town %}{{ contact.address_town }},{% endif %}
+            {% if contact.address_postcode %}{{ contact.address_postcode }}, {% endif %}
+            {% if contact.address.country and contact.address.country.name %}{{ contact.address.country.name }}{% endif %}
+          {% endif %}
         </td>
       </tr>
     {% endif %}

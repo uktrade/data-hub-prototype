@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {AutosuggestComponent as Autosuggest} from './autosuggest.component';
 import axios from 'axios';
 
+
 export class AddressComponent extends Component {
 
   constructor(props) {
@@ -40,7 +41,7 @@ export class AddressComponent extends Component {
 
   countryChange = (country) => {
     let address = this.state.address;
-    address.address_country = country.value.id;
+    address.address_country = country.value;
     this.updateAddress(address);
   };
 
@@ -86,22 +87,18 @@ export class AddressComponent extends Component {
     this.setAddressToSuggestion(this.state.addressSuggestions[index]);
   };
 
-  countryForId(countryId) {
-    for (const country of this.state.countryOptions) {
-      if (country.id === countryId) {
-        return country;
-      }
-    }
-    return null;
+
+  hasValidCountry() {
+    return !(!this.state.address || !this.state.address.address_country || !this.state.address.address_country.id ||
+    this.state.address.address_country.id.length === 0);
   }
 
 
   // Rendering
   getMainAddressSection() {
+    if (!this.hasValidCountry()) return null;
+
     const address = this.state.address;
-    if (!address.address_country || address.address_country === null || address.address_country.length === 0) {
-      return null;
-    }
 
     return (
       <div>
@@ -185,19 +182,16 @@ export class AddressComponent extends Component {
   }
 
   getPostcodeLookupSection() {
+    if (!this.hasValidCountry()) return null;
 
-    if (this.state.address.address_country === null || this.state.address.address_country.length === 0) {
-      return null;
-    }
+    const country = this.state.address.address_country;
 
-    const country = this.countryForId(this.state.address.address_country);
-
-    if (country && country.name && country.name === 'United Kingdom') {
+    if (country.name && country.name === 'United Kingdom') {
       const addressSuggestions = this.addressSuggestions();
 
       return (
         <div className="address__lookup-wrapper">
-          <div className="form-group form-group--postcode" id="operatingAddress.postcode-wrapper">
+          <div className="form-group form-group--postcode">
             <label className="form-label">Postcode</label>
             <input
               className="form-control postcode-lookup-value"
@@ -229,7 +223,7 @@ export class AddressComponent extends Component {
       groupClass += ' incomplete';
     }
 
-    const country = this.countryForId(this.state.address.address_country);
+    const country = this.state.address.address_country;
 
     return (
       <fieldset className={groupClass} id={this.props.name + '-wrapper'}>
