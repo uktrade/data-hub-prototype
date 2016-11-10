@@ -31,6 +31,16 @@ class FlashMessage {
 
     this.element.appendChild( closeLink );
   }
+
+  static activateAll(){
+
+    const flashes = document.querySelectorAll('.flash-message' );
+
+    flashes.forEach( ( elem ) => {
+
+      new FlashMessage( elem );
+    } );
+  }
 }
 
 export default FlashMessage;

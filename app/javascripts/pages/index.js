@@ -6,8 +6,4 @@ import FlashMessage from '../controls/flash-message';
 
 new SearchBar(document.querySelector('.searchbar'));
 
-const flashes = document.querySelectorAll('.flash-message' );
-
-for (let pos = flashes.length; pos; pos -= 1) {
-  new FlashMessage( flashes[pos] );
-}
+FlashMessage.activateAll();
