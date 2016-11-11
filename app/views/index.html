@@ -6,121 +6,65 @@
   {{ search.searchbar('term', label="Search for company name or contact", value=query) }}
 
   <div class="grid-row dashboard">
-    <div class="column-half">
-
-      <div class="dashboard-section">
-        <div class="data">
-          <h2 class="bold-xlarge data__title">6</h2>
-          <p class="bold-xsmall data__description">out of your 18 export wins targets have been completed since 1 Apr 2016</p>
-        </div>
-      </div>
-
-      <div class="dashboard-section">
-        <h2 class="dashboard-section-title">Updates</h2>
-        <div class="event-list">
-          <div class="event-day">
-            <h3 class="event-date">06 Jun 2016</h3>
-            <ul class="event-list">
-              <li class="event">
-                <a href="#">Siemens Energy</a> raised interest in energy sector
-              </li>
-              <li class="event">
-                <a href="#">Siemens Energy</a> raised interest in energy sector
-              </li>
-            </ul>
-          </div>
-          <div class="event-day">
-            <h3 class="event-date">18 May 2016</h3>
-            <ul class="event-list">
-              <li class="event">
-                <a href="#">New interaction</a> activity on <a href="#">Siemens Energy</a>
-              </li>
-              <li class="event">
-                <a href="#">New interaction</a> activity on <a href="#">Samsung UK</a>
-              </li>
-            </ul>
-          </div>
-          <div class="event-day">
-            <h3 class="event-date">12 May 2016</h3>
-            <ul class="event-list">
-              <li class="event">
-                <a href="#">Siemens UK</a> company details changed
-              </li>
-            </ul>
-          </div>
-          <div class="event-day">
-            <h3 class="event-date">10 May 2016</h3>
-            <ul class="event-list">
-              <li class="event">
-                <a href="#">Samsung mobile</a> company details changed
-              </li>
-            </ul>
-          </div>
-          <div class="event-day">
-            <h3 class="event-date">06 Jun 2016</h3>
-            <ul class="event-list">
-              <li class="event">
-                <a href="#">New interaction</a> activity on <a href="#">Wind Power UK</a>
-              </li>
-              <li class="event">
-                <a href="#">New interaction</a> activity on <a href="#">Samsung UK</a>
-              </li>
-              <li class="event">
-                <a href="#">New interaction</a> activity on <a href="#">British Gas</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <p><a href="#"><br/>See more updates</a></p>
-      </div>
-    </div>
 
     <div class="column-half">
-
-      <div class="dashboard-section">
-        <div class="data">
-          <h2 class="bold-xlarge data__title">21</h2>
-          <p class="bold-xsmall data__description">out of your team's 42 export wins have been completed since 1 Apr 2016</p>
-        </div>
-      </div>
-
-      <div class="dashboard-section">
-        <h2 class="dashboard-section-title">Reminders</h2>
-        <p>No interactions have been added in the last 3 months with:</p>
-        <p>
-          <a href="#">Siemens Energy</a>, <a href="#">Shell</a>, <a href="#">NPower</a>
-        </p>
-        <hr/>
-        <p>Catch up with 7 companies are due for this week:</p>
-        <p>
-          <a href="#">Siemens Energy</a>, <a href="#">Shell</a>, <a href="#">NPower</a>, <a href="#">British Gas</a>,
-          <a href="#">Samsung UK</a>, <a href="#">Samsung UK</a>, <a href="#">Wind Power UK</a>, <a href="#">ProPower</a>
-        </p>
-      </div>
       <div class="dashboard-section">
         <h2 class="dashboard-section-title">Interactions</h2>
-        <p>You added 8 new interactions in the last 30 days:</p>
-        <p><a href="#">Company visit by NICE & British Consulate General</a></p>
-        <p><a href="#">Details about DIT services for new exporters</a></p>
-        <p><a href="#">Advise on company stand at Paris Tech Show 2016</a></p>
-        <p><a href="#">Details about DIT services for new exporters</a></p>
-        <p><a href="#">Advise on company stand at Paris Tech Show 2016</a></p>
-        <p><a href="#"><br/>See all new interactions</a></p>
-      </div>
+        {% if interactions.length %}
 
-      <div class="dashboard-section">
-        <h2 class="dashboard-section-title">Contacts</h2>
-        <p>You added 12 new contacts in the last 30 days:</p>
-        <p><a href="#">Jane Smith</a> from <a href="#">Samsung UK</a></p>
-        <p><a href="#">Tom Shell</a> from <a href="#">Wind Power UK</a></p>
-        <p><a href="#">June Walker</a> from <a href="#">Wind Power UK</a></p>
-        <p><a href="#">Susan Lewis</a> from <a href="#">Shell</a></p>
-        <p><a href="#">Mary Brown</a> from <a href="#">British Gas</a></p>
-        <p><a href="#"><br/>See all new contacts</a></p>
-      </div>
+          <p class="dashboard-section-intro">
+            You have added {{ interactions.length | pluralise( 'interaction' ) }} in the last {{ totalDays | pluralise( 'day') }}
+          </p>
 
+          <ol id="interactions-list" class="dashboard-list">
+          {% for interaction in interactions %}
+            <li>
+              <a href="{{ interaction.url }}">{{ interaction.subject }}</a>
+            </li>
+          {% endfor %}
+          </ol>
+
+        {% else %}
+
+          <p class="dashboard-section-intro">
+            No interactions have been added in the last {{ totalDays | pluralise( 'day') }}
+          </p>
+
+        {% endif %}
     </div>
   </div>
+
+  <div class="column-half">
+
+    <div class="dashboard-section">
+      <h2 class="dashboard-section-title">Contacts</h2>
+
+      {% if contacts.length %}
+
+        <p class="dashboard-section-intro">
+          {{ contacts.length | pluralise( 'new contact' ) }} {% if contacts.length == 1 %} has {% else %} have {% endif %} been added in the last {{ totalDays | pluralise( 'day') }}
+        </p>
+
+        <ol id="contacts-list" class="dashboard-list">
+        {% for contact in contacts %}
+          <li>
+            <a href="{{ contact.url }}">{{ contact.name }}</a> from <a href="{{ contact.company.url }}">{{ contact.company.name }}</a>
+          </li>
+        {% endfor %}
+        </ol>
+
+      {% else %}
+
+        <p class="dashboard-section-intro">
+          No contacts have been added in the last {{ totalDays | pluralise( 'day') }}
+        </p>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+</div>
 {% endblock %}
 
 {% block body_end %}

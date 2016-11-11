@@ -194,4 +194,15 @@ filter.date = function( date, format ) {
   return formatted;
 };
 
+
+filter.pluralise = function( number, string ){
+
+  if( number != 1 ){
+    string += 's';
+  }
+
+  return number + ' ' + string;
+};
+
+
 module.exports = filter;

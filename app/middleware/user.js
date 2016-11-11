@@ -15,12 +15,12 @@ module.exports = function( req, res, next ){
       json: true
     };
 
-    authorisedRequest( token, opts ).then( ( user ) => {
+    authorisedRequest( token, opts ).then( ( userInfo ) => {
 
       req.session.user = {
-        id: user.id,
-        name: user.name,
-        username: user.username
+        id: userInfo.id, // DIT Advisor id
+        name: userInfo.name,
+        team: userInfo.dit_team
       };
 
       res.locals.user = req.session.user;

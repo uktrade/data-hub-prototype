@@ -21,6 +21,7 @@ const searchController = require('./app/controller/searchcontroller');
 const apiController = require('./app/controller/apicontroller');
 const loginController = require('./app/controller/logincontroller');
 const myAccountController = require('./app/controller/myaccountcontroller');
+const indexController = require('./app/controller/indexcontroller');
 
 const customValidators = require('./app/lib/validators');
 const customSanitizers = require('./app/lib/sanitizers');
@@ -143,10 +144,8 @@ app.use('/contact', contactController.router);
 app.use('/interaction', interactionController.router);
 app.use('/search', searchController.router);
 app.use('/api', apiController.router);
+app.get('/', indexController);
 
-app.get('/', function(req, res) {
-  res.render('index');
-});
 
 metadata.setRedisClient( client );
 metadata.fetchAll( ( errors ) => {

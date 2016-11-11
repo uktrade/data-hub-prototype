@@ -1,9 +1,10 @@
 .dashboard-section {
 
   border-top: 5px solid $black;
+  @include core-16;
 
   &:first-child {
-    border-top: 0;
+    margin-top: 1.5em;
   }
 
   .dashboard-section-title {
@@ -11,27 +12,21 @@
     margin: 20px 0;
   }
 
+  .dashboard-section-intro {
+    margin-top: -15px;
+  }
+
+  .dashboard-list {
+
+    margin-bottom: 1.5em;
+
+    li {
+
+      padding-bottom: 1em;
+    }
+  }
 }
 
-.event-day {
-
-  margin-top: 30px;
-  padding-top: 30px;
-  border-top: 1px solid $border-colour;
-
-  &:first-child {
-    border-top: 0;
-    padding-top: 0;
-    margin-top: 0;
-  }
-
-  .event-date {
-    @include bold-24;
-    margin-bottom: 10px;
-  }
-  .event-list {
-    margin-left: 20px;
-    list-style: disc;
-  }
-
+.clipped-hide {
+  display: none;
 }
