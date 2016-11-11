@@ -11,6 +11,10 @@ import Edit from '../controls/edit';
 import SearchBar from '../controls/searchbar';
 import Tabs from '../controls/tabs';
 
+new Edit(document.querySelector('.js-hidden-edit'));
+new SearchBar(document.querySelector('.searchbar'));
+new Tabs(document.querySelector('.js-tabs'));
+
 const archiveForm = document.getElementById('archive-details');
 const archiveButton = document.getElementById('archive-reveal-button');
 const cancelButton = document.getElementById('cancel-archive-button');
@@ -84,10 +88,5 @@ if (archiveButton) {
   archiveForm.addEventListener('submit', submitArchiveForm);
 }
 
-
-
-new Edit(document.querySelector('.js-hidden-edit'));
-new SearchBar(document.querySelector('.searchbar'));
-new Tabs(document.querySelector('.js-tabs'));
 
 ReactDOM.render(<CompanyForm company={company}/>, document.getElementById('company-edit'));

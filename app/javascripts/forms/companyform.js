@@ -108,6 +108,7 @@ export class CompanyForm extends BaseForm {
       show_account_manager: (company.account_manager.id !== null),
       show_exporting_to: (company.export_to_countries[0].id !== null),
       saving: false,
+      canceling: false,
       formData: company,
       isCDMS: (!company.company_number || company.company_number.length === 0)
     };
@@ -226,7 +227,17 @@ export class CompanyForm extends BaseForm {
       });
   };
 
+  cancel = () => {
+    this.setState({cancelling: true});
+    window.location.reload();
+  };
+
   render() {
+    if (this.state.cancelling) {
+      return (
+        <div className="saving">Cancelling...</div>
+      );
+    }
 
     if (this.state.saving) {
       return this.getSaving();
@@ -453,7 +464,7 @@ export class CompanyForm extends BaseForm {
 
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
-          <a className="button-link button--cancel js-button-cancel" href="/">Cancel</a>
+          <a className="button-link button--cancel js-button-cancel" href="#" onClick={this.cancel}>Cancel</a>
         </div>
       </div>
     );
