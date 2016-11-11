@@ -1,34 +1,44 @@
-'user strict';
+'use strict';
 
 const dashboardService = require( '../lib/service/dashboard' );
 
 function mapContacts( contacts ){
 
-  return contacts.map( ( contact ) => {
+  if( contacts && ( typeof contacts.map ) === 'function' ){
 
-    return {
-      url: `contact/${ contact.id }/view`,
-      name: contact.name,
-      id: contact.id,
-      company: {
-        url: `/company/company_company/${ contact.company.id }`,
-        name: contact.company.name,
-        id: contact.company.id
-      }
-    };
-  } );
+    return contacts.map( ( contact ) => {
+
+      return {
+        url: `contact/${ contact.id }/view`,
+        name: contact.name,
+        id: contact.id,
+        company: {
+          url: `/company/company_company/${ contact.company.id }`,
+          name: contact.company.name,
+          id: contact.company.id
+        }
+      };
+    } );
+  }
+
+  return contacts;
 }
 
 function mapInteractions( interactions ){
 
-  return interactions.map( ( interaction ) => {
+  if( interactions && ( typeof interactions.map ) === 'function' ){
 
-    return {
-      url: `/interaction/${ interaction.id }/view`,
-      id: interaction.id,
-      subject: interaction.subject
-    };
-  } );
+    return interactions.map( ( interaction ) => {
+
+      return {
+        url: `/interaction/${ interaction.id }/view`,
+        id: interaction.id,
+        subject: interaction.subject
+      };
+    } );
+  }
+
+  return interactions;
 }
 
 module.exports = function( req, res ){

@@ -1,13 +1,14 @@
 'use strict';
 
+import * as classUtils from '../utils/classtuff';
+
 const HIDE = 'hide';
 const SHOW = 'show';
+const HIDDEN_CLASS = 'clipped-hide';
 
 class ClippedList {
 
   constructor( element, showMessage, hideMessage, itemsToShow = 5 ){
-
-    console.log( 'new ClippedList', element );
 
     if( !element ){ return; }
 
@@ -25,32 +26,32 @@ class ClippedList {
 
     } else {
 
-      console.log( 'Not enough elements: ' + this.items.length );
-
       this.items = null;
     }
   }
 
-  setExtraItemsStyle( style ){
+  hideItems( setHidden ){
 
     let i = this.itemsToShow;
     let l = this.items.length;
 
+    const action = ( setHidden ? 'addClass' : 'removeClass' );
+
     for( ; i < l; i++ ){
 
-      this.items[ i ].style.display = style;
+      classUtils[ action ]( this.items[ i ], HIDDEN_CLASS );
     }
   }
 
   hideExtraItems(){
 
-    this.setExtraItemsStyle( 'none' );
+    this.hideItems( true );
     this.updateControl( this.showMessage );
   }
 
   showExtraItems(){
 
-    this.setExtraItemsStyle( '' );
+    this.hideItems( false );
     this.updateControl( this.hideMessage );
   }
 
