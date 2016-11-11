@@ -1,6 +1,6 @@
 'use strict';
 
-import * as classUtils from '../utils/classtuff';
+import * as classUtils from '../utils/elementstuff';
 
 const HIDE = 'hide';
 const SHOW = 'show';
