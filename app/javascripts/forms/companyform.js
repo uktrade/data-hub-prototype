@@ -1,6 +1,6 @@
 import React from 'react';
 import {BaseForm} from './baseform';
-import {SelectWithIdComponent as SelectWithId} from '../components/seletwithid.component';
+import {SelectWithIdComponent as SelectWithId} from '../components/selectwithid.component';
 import {AddressComponent as Address} from '../components/address.component';
 import {AutosuggestComponent as Autosuggest} from '../components/autosuggest.component';
 import {inputTextComponent as InputText} from '../components/inputtext.component';

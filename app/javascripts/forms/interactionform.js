@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import {BaseForm} from './baseform';
 import {AutosuggestComponent as Autosuggest} from '../components/autosuggest.component';
-import {SelectWithIdComponent as SelectWithId} from '../components/seletwithid.component';
+import {SelectWithIdComponent as SelectWithId} from '../components/selectwithid.component';
 import {DateInputComponent as DateInput} from '../components/dateinput.component';
 
 import {inputTextComponent as InputText} from '../components/inputtext.component';
