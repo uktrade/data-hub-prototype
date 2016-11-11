@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {CompanyForm} from '../forms/companyform';
 import ContactTable from '../components/contacttable.component';
-import CompanyInteractionTable from '../components/companyinteractiontable.component';
+import {InteractionTableComponent as InteractionTable} from '../components/interactiontable.component';
 import { addClass, removeClass } from '../utils/elementstuff';
 import Edit from '../controls/edit';
 import SearchBar from '../controls/searchbar';
@@ -48,7 +48,7 @@ if (contacts && contacts.length > 0) {
 
 if (interactions && interactions.length > 0) {
   ReactDOM.render(
-    <CompanyInteractionTable interactions={interactions} company={company}/>,
+    <InteractionTable interactions={interactions}/>,
     document.querySelector('#interaction-table-wrapper')
   );
 }

@@ -1,4 +1,5 @@
-{% if contact.interactions.length > 0 %}
+<div class="contact-interactions">
+  {% if contact.interactions.length > 0 %}
   <div class="grid-row">
     <div class="column-one-third">
       <div class="data">
@@ -23,14 +24,14 @@
     </div>
   </div>
   <div id="interaction-table-wrapper"></div>
-
-{% else %}
-  <p class="actions">
-    {% if not contact.archived %}
-      <a class="button button-secondary" href="/interaction/add?contact_id={{ contact.id }}">Add new interaction</a>
-    {% else %}
-      <a class="button button-disabled">Add new interaction</a>
-    {% endif %}
-  </p>
-  <h2 class="heading-medium">This contact has no interactions</h2>
-{% endif %}
+  {% else %}
+    <p class="actions">
+      {% if not contact.archived %}
+        <a class="button button-secondary" href="/interaction/add?contact_id={{ contact.id }}">Add new interaction</a>
+      {% else %}
+        <a class="button button-disabled">Add new interaction</a>
+      {% endif %}
+    </p>
+    <h2 class="heading-medium">This contact has no interactions</h2>
+  {% endif %}
+</div>

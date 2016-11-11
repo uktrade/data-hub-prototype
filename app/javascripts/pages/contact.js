@@ -3,7 +3,7 @@ import { addClass, removeClass } from '../utils/elementstuff';
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ContactInteractionTable from '../components/contactinteractiontable.component';
+import {InteractionTableComponent as InteractionTable} from '../components/interactiontable.component';
 import Tabs from '../controls/tabs';
 import SearchBar from '../controls/searchbar';
 
@@ -13,10 +13,12 @@ const cancelButton = document.getElementById('cancel-archive-button');
 const archiveReasonElement = document.getElementById('archived_reason');
 const archiveReasonGroup = document.getElementById('archived_reason-wrapper');
 
+new SearchBar(document.querySelector('.searchbar'));
+new Tabs(document.querySelector('.js-tabs'));
 
 if (interactions && interactions.length > 0) {
   ReactDOM.render(
-    <ContactInteractionTable interactions={interactions} company={company} />,
+    <InteractionTable interactions={interactions} />,
     document.querySelector('#interaction-table-wrapper')
   );
 }
@@ -50,6 +52,3 @@ if (archiveButton) {
   cancelButton.addEventListener('click', hideArchive);
   archiveForm.addEventListener('submit', submitArchiveForm);
 }
-
-new SearchBar(document.querySelector('.searchbar'));
-new Tabs(document.querySelector('.js-tabs'));
