@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import {CompanyForm} from '../forms/companyform';
 import ContactTable from '../components/contacttable.component';
 import CompanyInteractionTable from '../components/companyinteractiontable.component';
-import { addClass, removeClass } from '../utils/classtuff';
+import { addClass, removeClass } from '../utils/elementstuff';
 import Edit from '../controls/edit';
 import SearchBar from '../controls/searchbar';
 import Tabs from '../controls/tabs';

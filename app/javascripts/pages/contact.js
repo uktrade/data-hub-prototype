@@ -1,5 +1,5 @@
 /* globals interactions: true, company: true */
-import { addClass, removeClass } from '../utils/classtuff';
+import { addClass, removeClass } from '../utils/elementstuff';
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';

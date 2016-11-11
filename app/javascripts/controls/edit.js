@@ -1,5 +1,5 @@
 'use strict';
-import {addClass, removeClass, hasClass} from '../utils/classtuff';
+import {addClass, removeClass, hasClass} from '../utils/elementstuff';
 
 
 class Edit {

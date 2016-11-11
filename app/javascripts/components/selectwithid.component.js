@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-export class RadioWithIdComponent extends Component {
+export class SelectWithIdComponent extends Component {
 
   constructor(props) {
     super(props);
@@ -91,7 +91,7 @@ export class RadioWithIdComponent extends Component {
   }
 }
 
-RadioWithIdComponent.propTypes = {
+SelectWithIdComponent.propTypes = {
   value: React.PropTypes.string,
   url: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
