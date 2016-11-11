@@ -228,8 +228,8 @@ export class CompanyForm extends BaseForm {
   };
 
   cancel = () => {
-    window.location.reload();
     this.setState({cancelling: true});
+    window.location.reload();
   };
 
   render() {
