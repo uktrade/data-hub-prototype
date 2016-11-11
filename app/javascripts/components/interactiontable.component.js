@@ -18,7 +18,12 @@ function formatDate(date) {
   return `${day} ${monthNames[monthIndex]} ${year}`;
 }
 
-class ContactInteractionTable extends Component {
+function truncate(string, length) {
+  if (!string || string.length <= length) return string;
+  return `${string.substring(0, length)}...`;
+}
+
+export class InteractionTableComponent extends Component {
 
   constructor(props) {
     super(props);
@@ -76,10 +81,15 @@ class ContactInteractionTable extends Component {
 
     return (
       <tr key={interaction.id}>
-        <td className="date">{ formatDate(interaction.date_of_interaction) }</td>
-        <td className="type">{ interaction.interaction_type.name }</td>
-        <td className="advisor">{ interaction.dit_advisor.first_name } { interaction.dit_advisor.last_name }</td>
-        <td className="subject"><a href={link}>{interaction.subject }</a></td>
+        <td className="date">{formatDate(interaction.date_of_interaction)}</td>
+        <td className="type">{interaction.interaction_type.name}</td>
+        <td className="advisor">{interaction.dit_advisor.first_name} {interaction.dit_advisor.last_name}</td>
+        <td className="contact">
+          <a href={`/contact/${interaction.contact.id}/view`}>
+            {interaction.contact.first_name} {interaction.contact.last_name}
+            </a>
+        </td>
+        <td className="subject"><a href={link}>{truncate(interaction.subject, 70)}</a></td>
       </tr>
     );
   };
@@ -118,6 +128,10 @@ class ContactInteractionTable extends Component {
             onClick={() => {this.changeSort('advisor');}}
           >Advisor</th>
           <th
+            className={this.columnClass('contact')}
+            onClick={() => {this.changeSort('contact');}}
+          >Company contact</th>
+          <th
             className={this.columnClass('subject')}
             onClick={() => { this.changeSort('subject');}}
           >Subject</th>
@@ -134,9 +148,6 @@ class ContactInteractionTable extends Component {
 
 }
 
-ContactInteractionTable.propTypes = {
-  company: React.PropTypes.object.isRequired,
-  interactions: React.PropTypes.array
+InteractionTableComponent.propTypes = {
+  interactions: React.PropTypes.array.isRequired
 };
-
-export default ContactInteractionTable;
