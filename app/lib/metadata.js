@@ -7,6 +7,7 @@ let redisClient;
 
 function getMetadata( path, key ){
 
+  const ttl = config.redis.metadataTtl;
   let url = `${config.apiRoot}/metadata/${ path }/`;
 
   if( redisClient ){
@@ -31,7 +32,7 @@ function getMetadata( path, key ){
           .then((data) => {
 
             module.exports[ key ] = data;
-            redisClient.set( url, JSON.stringify( data ) );
+            redisClient.setex( url, ttl, JSON.stringify( data ) );
             resolve( data );
 
           }).catch( ( err ) => {
