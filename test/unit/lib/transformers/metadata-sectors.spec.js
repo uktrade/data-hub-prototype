@@ -1,4 +1,4 @@
-const transformSectors = require( '../../../../app/lib/transformers/metadata-sectors' );
+const transformSectors = require( '../../../../app/lib/transformers/metadataRepository-sectors' );
 
 const input = require( '../../data/sector-list_input' );
 const output = require( '../../data/sector-list_output' );
