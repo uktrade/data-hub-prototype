@@ -1,7 +1,7 @@
 'use strict';
 
 const config = require( '../../config' );
-const authorisedRequest = require( '../lib/authorisedRequest' );
+const authorisedRequest = require( '../lib/authorisedrequest' );
 
 module.exports = function( req, res, next ){
 

@@ -51,8 +51,8 @@ function convertAutosuggestCollection(form, targetFieldName) {
 }
 
 
-// Scans the properties of an object (form) and turns data.x = {id:123, name:'y'} into data.x=123
-// This is used so that when a form posts back an nested object (in the same format it was given the data
+// Scans the properties of an object (forms) and turns data.x = {id:123, name:'y'} into data.x=123
+// This is used so that when a forms posts back an nested object (in the same format it was given the data
 // it is flattened in to the alternative format used by the server.
 
 function flattenIdFields(data) {

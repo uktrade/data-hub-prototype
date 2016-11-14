@@ -4,7 +4,7 @@
 const moment = require('moment');
 const itemCollectionService = require('../../../app/lib/itemcollectionservice');
 
-describe('item collection service', () => {
+describe('item collection services', () => {
 
   let contacts;
 

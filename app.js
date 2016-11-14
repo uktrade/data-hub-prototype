@@ -14,21 +14,21 @@ const redisCrypto = require('connect-redis-crypto');
 const flash = require( 'connect-flash' );
 const url = require('url');
 
-const companyController = require('./app/controller/companycontroller');
-const contactController = require('./app/controller/contactcontroller');
-const interactionController = require('./app/controller/interactioncontroller');
-const searchController = require('./app/controller/searchcontroller');
-const apiController = require('./app/controller/apicontroller');
-const loginController = require('./app/controller/logincontroller');
-const myAccountController = require('./app/controller/myaccountcontroller');
-const indexController = require('./app/controller/indexcontroller');
+const companyController = require('./app/controllers/companycontroller');
+const contactController = require('./app/controllers/contactcontroller');
+const interactionController = require('./app/controllers/interactioncontroller');
+const searchController = require('./app/controllers/searchcontroller');
+const apiController = require('./app/controllers/apicontroller');
+const loginController = require('./app/controllers/logincontroller');
+const myAccountController = require('./app/controllers/myaccountcontroller');
+const indexController = require('./app/controllers/indexcontroller');
 
 const customValidators = require('./app/lib/validators');
 const customSanitizers = require('./app/lib/sanitizers');
 const filters = require('./app/lib/nunjuckfilters');
 const auth = require( './app/middleware/auth');
 const user = require( './app/middleware/user' );
-let metadata = require( './app/lib/metadata' );
+let metadata = require( './app/repositorys/metadatarepository' );
 
 const app = express();
 const isDev = app.get('env') === 'development';
@@ -152,7 +152,7 @@ metadata.fetchAll( ( errors ) => {
 
   if( errors ){
 
-    console.log( 'Unable to load all metadata, cannot start app' );
+    console.log( 'Unable to load all metadataRepository, cannot start app' );
 
     for( let err of errors ){
       throw err;

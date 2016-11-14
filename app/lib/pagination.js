@@ -5,7 +5,7 @@ const controllerUtils = require('./controllerutils');
 const NEXTLABEL = 'Next';
 const PREVIOUSLABEL = 'Previous';
 
-// Figure out the start, end, next and previous page indexes
+// Figure out the start, end, next and previous pages indexes
 // for pagination
 function getPageIndexes(req, result) {
   let pageIndex = {};
@@ -74,7 +74,7 @@ function getPagination(req, result) {
 }
 
 function getPageLink(page, req) {
-  // Get the current params, remove the existing page param and put in the desired
+  // Get the current params, remove the existing pages param and put in the desired
   let params = req.query;
   delete params.page;
   params.page = page;
