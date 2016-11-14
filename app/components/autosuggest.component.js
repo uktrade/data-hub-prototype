@@ -224,14 +224,14 @@ export class AutosuggestComponent extends Component {
       if (this.state.highlightedIndex !== null) {
         this.setSelected(this.state.suggestions[this.state.highlightedIndex]);
         return;
-      } else {
-        const currentValue = this.state.value.name.toLocaleLowerCase();
-        const firstSuggestionName = this.state.suggestions[0].name.toLocaleLowerCase();
+      }
 
-        if (currentValue === firstSuggestionName) {
-          this.setSelected(this.state.suggestions[0]);
-          return;
-        }
+      const currentValue = this.state.value.name.toLocaleLowerCase();
+      const firstSuggestionName = this.state.suggestions[0].name.toLocaleLowerCase();
+
+      if (currentValue === firstSuggestionName) {
+        this.setSelected(this.state.suggestions[0]);
+        return;
       }
     }
 

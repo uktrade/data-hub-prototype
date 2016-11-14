@@ -123,17 +123,18 @@ function saveCompany(token, company) {
       json: true,
       body: company
     });
-  } else {
-    return setCHDefaults(token, company)
-      .then(parsedCompany => {
-        return authorisedRequest(token, {
-          url: `${config.apiRoot}/company/`,
-          method: 'POST',
-          json: true,
-          body: parsedCompany
-        });
-      });
   }
+
+  return setCHDefaults(token, company)
+    .then(parsedCompany => {
+      return authorisedRequest(token, {
+        url: `${config.apiRoot}/company/`,
+        method: 'POST',
+        json: true,
+        body: parsedCompany
+      });
+    });
+
 }
 
 function archiveCompany(token, companyId, reason) {

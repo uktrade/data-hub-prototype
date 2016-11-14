@@ -1,4 +1,4 @@
-/* globals interactions: true, company: true */
+/* globals interactions: true */
 import { addClass, removeClass } from '../lib/elementstuff';
 import 'babel-polyfill';
 import React from 'react';

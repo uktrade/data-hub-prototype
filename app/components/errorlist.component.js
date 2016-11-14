@@ -14,7 +14,6 @@ export function errorListComponent(props) {
     );
   });
 
-  
   return (
     <div className="error-summary" role="group" tabIndex="-1">
       <h1 className="heading-medium error-summary-heading" id="error-summary-heading">

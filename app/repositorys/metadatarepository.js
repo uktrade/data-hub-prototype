@@ -3,65 +3,54 @@
 const request = require('request-promise');
 const config = require('../../config');
 const transformSectors = require( '../lib/metadata-sectors' );
+
 let redisClient;
 
-function getMetadata( path, key ){
+function getMetadata(path, key){
 
   const ttl = config.redis.metadataTtl;
-  let url = `${config.apiRoot}/metadata/${ path }/`;
+  const url = `${config.apiRoot}/metadata/${path}/`;
 
-  if( redisClient ){
+  if (redisClient){
 
-    return new Promise( ( resolve, reject ) => {
+    return new Promise((resolve, reject) => {
 
-      redisClient.get( url, function( err, data ){
+      redisClient.get(url, function(err, data) {
 
-        if( !err && data ){
-
-          data = JSON.parse( data );
-
-          module.exports[ key ] = data;
-          resolve( data );
-
+        if (!err && data) {
+          data = JSON.parse(data);
+          module.exports[key] = data;
+          resolve(data);
         } else {
-
           request({
             url,
             json: true
           })
-          .then((data) => {
-
-            module.exports[ key ] = data;
-            redisClient.setex( url, ttl, JSON.stringify( data ) );
-            resolve( data );
-
-          }).catch( ( err ) => {
-
-            console.error( 'Error fetching metadataRepository for url: %s', url );
-            reject( err );
-            throw err;
-          } );
+          .then(responseData => {
+            module.exports[key] = responseData;
+            redisClient.setex(url, ttl, JSON.stringify(responseData));
+            resolve(responseData);
+          })
+          .catch(reponseError => {
+            console.error('Error fetching metadataRepository for url: %s', url);
+            reject(reponseError);
+            throw reponseError;
+          });
         }
-      } );
-    } );
-
-  } else {
-
-    return request({
-      url,
-      json: true
-    })
-    .then((data) => {
-
-      module.exports[ key ] = data;
-      return data;
-
-    }).catch( ( err ) => {
-
-      console.error( 'Error fetching metadataRepository for url: %s', url );
-      throw err;
-    } );
+      });
+    });
   }
+
+  return request({url, json: true})
+    .then(responseData => {
+      module.exports[key] = responseData;
+      return responseData;
+    })
+    .catch(err => {
+      console.error('Error fetching metadataRepository for url: %s', url);
+      throw err;
+    });
+
 
 }
 
@@ -83,46 +72,48 @@ const metadataItems = [
   [ 'team', 'TEAMS' ]
 ];
 
-module.exports.setRedisClient = function( client ){
+module.exports.setRedisClient = function(client) {
 
   redisClient = client;
 };
 
-module.exports.fetchAll = function( cb ){
+module.exports.fetchAll = function(cb) {
+
+  // todo
+  // refactor to create an array of jobs to do and then use promise all
+  // before returning back via a promise.
 
   let caughtErrors;
   let totalRequests = 0;
   let completeRequests = 0;
 
-  function checkResults(){
+  function checkResults() {
 
     completeRequests++;
 
-    if( completeRequests === totalRequests ){
+    if (completeRequests === totalRequests){
       console.log( 'All metadataRepository requests complete' );
-      cb( caughtErrors );
+      cb(caughtErrors);
     }
   }
 
-  for( let item of metadataItems ){
+  for (let item of metadataItems) {
 
     totalRequests++;
 
-    getMetadata( item[ 0 ], item[ 1 ] ).then( ( data ) => {
+    getMetadata(item[0], item[1])
+      .then(data => {
+        if (item[2]) {
+          item[2](data);
+        }
 
-      if( item[ 2 ] ){
-
-        item[ 2 ]( data );
-      }
-
-      checkResults();
-
-    } ).catch( ( err ) => {
-
-      caughtErrors = caughtErrors || [];
-      caughtErrors.push( err );
-      checkResults();
-    } );
+        checkResults();
+      })
+      .catch(err => {
+        caughtErrors = caughtErrors || [];
+        caughtErrors.push(err);
+        checkResults();
+      });
   }
 };
 

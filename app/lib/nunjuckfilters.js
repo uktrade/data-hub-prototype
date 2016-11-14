@@ -1,7 +1,7 @@
 'use strict';
 
-var moment = require('moment');
-var pkgJson = require('../../package.json');
+const moment = require('moment');
+const pkgJson = require('../../package.json');
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -16,7 +16,7 @@ function replaceAll(str, find, replace) {
  * filter.foo("input") here, becomes {{ "input" | foo }} within nunjucks templates
  * @type {Object}
  */
-var filter = {};
+const filter = {};
 
 /**
  * logs an object in the template to the console on the client.
@@ -71,7 +71,7 @@ filter.attributeArray = function attributeArray(list) {
 
   let result = '[';
 
-  for (var iPos = 0; iPos < list.length - 1; iPos += 1) {
+  for (let iPos = 0; iPos < list.length - 1; iPos += 1) {
     result += '&#34;' + list[iPos] + '&#34;,';
   }
 
@@ -195,9 +195,8 @@ filter.date = function( date, format ) {
 };
 
 
-filter.pluralise = function( number, string ){
-
-  if( number != 1 ){
+filter.pluralise = function(number, string){
+  if (number != 1) {
     string += 's';
   }
 

@@ -5,7 +5,7 @@ module.exports = {
   output: `${projectDir}/build`,
   outputStyles: `${projectDir}/build/stylesheets`,
   outputJS: `${projectDir}/build/javascripts`,
-  sourceStyles: `${projectDir}/app/stylesheets`,
+  sourceStyles: `${projectDir}/app/sass`,
   sourceJS: `${projectDir}/app`,
   react: `${projectDir}/app/react`,
   webpackConfig: `${projectDir}/webpack.config.js`,
