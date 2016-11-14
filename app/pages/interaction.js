@@ -1,6 +1,6 @@
 'use strict';
 
-import 'babel-polyfill';
-import SearchBar from '../controls/searchbar';
+require('babel-polyfill');
+const SearchBar = require('../controls/searchbar');
 
 new SearchBar(document.querySelector('.searchbar'));

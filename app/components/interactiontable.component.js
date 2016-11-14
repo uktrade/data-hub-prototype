@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+'use strict';
+
+const React = require('react');
 
 var monthNames = [
   'Jan', 'Feb', 'Mar',
@@ -23,7 +25,7 @@ function truncate(string, length) {
   return `${string.substring(0, length)}...`;
 }
 
-export class InteractionTableComponent extends Component {
+class InteractionTableComponent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -151,3 +153,5 @@ export class InteractionTableComponent extends Component {
 InteractionTableComponent.propTypes = {
   interactions: React.PropTypes.array.isRequired
 };
+
+module.exports = InteractionTableComponent;

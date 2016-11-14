@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
-import {AutosuggestComponent as Autosuggest} from './autosuggest.component';
-import axios from 'axios';
+'use strict';
+
+const React = require('react');
+const axios = require('axios');
+const Autosuggest = require('./autosuggest.component');
 
 
-export class DidYouMeanCompanyComponent extends Component {
+class DidYouMeanCompanyComponent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -112,3 +114,5 @@ DidYouMeanCompanyComponent.propTypes = {
   value: React.PropTypes.string,
   name: React.PropTypes.string
 };
+
+module.exports = DidYouMeanCompanyComponent;

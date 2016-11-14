@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 
-import 'babel-polyfill';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {InteractionForm} from '../forms/interactionform';
-import SearchBar from '../controls/searchbar';
+require('babel-polyfill');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const InteractionForm = require('../forms/interactionform');
+const SearchBar = require('../controls/searchbar');
 
 const editElement = document.getElementById('interaction-forms');
 const contact = dh.data.contact;

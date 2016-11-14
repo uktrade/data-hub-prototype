@@ -1,11 +1,11 @@
-import React from 'react';
-import axios from 'axios';
-import {BaseForm} from './baseform';
-import {AutosuggestComponent as Autosuggest} from '../components/autosuggest.component';
-import {SelectWithIdComponent as SelectWithId} from '../components/selectwithid.component';
-import {DateInputComponent as DateInput} from '../components/dateinput.component';
-import {inputTextComponent as InputText} from '../components/inputtext.component';
-import {errorListComponent as ErrorList} from '../components/errorlist.component';
+const React = require('react');
+const axios = require('axios');
+const BaseForm = require('./baseform');
+const Autosuggest = require('../components/autosuggest.component');
+const SelectWithId = require('../components/selectwithid.component');
+const DateInput = require('../components/dateinput.component');
+const InputText = require('../components/inputtext.component');
+const ErrorList = require('../components/errorlist.component');
 
 
 const LABELS = {
@@ -50,7 +50,7 @@ const defaultInteraction = {
   }
 };
 
-export class InteractionForm extends BaseForm {
+class InteractionForm extends BaseForm {
 
   constructor(props) {
     super(props);
@@ -238,3 +238,5 @@ export class InteractionForm extends BaseForm {
   }
 
 }
+
+module.exports = InteractionForm;

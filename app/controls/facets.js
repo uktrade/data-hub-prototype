@@ -1,8 +1,8 @@
 /* eslint new-cap: 0 */
 
-import 'babel-polyfill';
-import { getQueryParam } from '../lib/urlstuff';
-import {toggleClass} from '../lib/elementstuff';
+require('babel-polyfill');
+const getQueryParam = require('../lib/urlstuff').getQueryParam;
+const toggleClass = require('../lib/elementstuff').toggleClass;
 
 const term = getQueryParam('term');
 

@@ -1,9 +1,9 @@
 'use strict';
 
-import 'babel-polyfill';
-import SearchBar from '../controls/searchbar';
-import FlashMessage from '../controls/flash-message';
-import ClippedList from '../controls/clipped-list';
+require('babel-polyfill');
+const SearchBar = require('../controls/searchbar');
+const FlashMessage = require('../controls/flash-message');
+const ClippedList = require('../controls/clipped-list');
 
 new SearchBar(document.querySelector('.searchbar'));
 new ClippedList( document.getElementById( 'interactions-list' ), 'See all new interactions', 'See less interactions' );

@@ -1,6 +1,6 @@
 'use strict';
 
-import {addClass, removeClass} from '../lib/elementstuff';
+const {addClass, removeClass} = require('../lib/elementstuff');
 
 class SearchBar {
 

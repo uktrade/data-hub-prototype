@@ -1,5 +1,5 @@
 'use strict';
-import {addClass, removeClass, hasClass} from '../lib/elementstuff';
+const {addClass, removeClass, hasClass} = require('../lib/elementstuff');
 
 
 class Edit {

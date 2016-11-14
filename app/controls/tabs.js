@@ -1,6 +1,6 @@
 'use strict';
 
-import {addClass, removeClass} from '../lib/elementstuff';
+const {addClass, removeClass} = require('../lib/elementstuff');
 
 function addEventListenerList(list, event, fn) {
   for (var i = 0, len = list.length; i < len; i++) {
