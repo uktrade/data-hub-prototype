@@ -1,11 +1,11 @@
 /* globals interactions: true */
-import { addClass, removeClass } from '../lib/elementstuff';
-import 'babel-polyfill';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {InteractionTableComponent as InteractionTable} from '../components/interactiontable.component';
-import Tabs from '../controls/tabs';
-import SearchBar from '../controls/searchbar';
+require('babel-polyfill');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const { addClass, removeClass } = require('../lib/elementstuff');
+const InteractionTable = require('../components/interactiontable.component');
+const Tabs = require('../controls/tabs');
+const SearchBar = require('../controls/searchbar');
 
 const archiveForm = document.getElementById('archive-details');
 const archiveButton = document.getElementById('archive-reveal-button');

@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+'use strict';
 
-export class SelectWithIdComponent extends Component {
+const React = require('react');
+const axios = require('axios');
+
+class SelectWithIdComponent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -99,3 +101,5 @@ SelectWithIdComponent.propTypes = {
   label: React.PropTypes.string.isRequired,
   errors: React.PropTypes.array
 };
+
+module.exports = SelectWithIdComponent;

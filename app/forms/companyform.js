@@ -1,14 +1,16 @@
-import React from 'react';
-import {BaseForm} from './baseform';
-import {SelectWithIdComponent as SelectWithId} from '../components/selectwithid.component';
-import {AddressComponent as Address} from '../components/address.component';
-import {AutosuggestComponent as Autosuggest} from '../components/autosuggest.component';
-import {inputTextComponent as InputText} from '../components/inputtext.component';
-import {errorListComponent as ErrorList} from '../components/errorlist.component';
-import {DidYouMeanCompanyComponent as DidYouMeanCompany} from '../components/didyoumeancompany.component';
-import {RadioComponent as Radio} from '../components/radio.component';
+'use strict';
 
-import axios from 'axios';
+const React = require('react');
+const axios = require('axios');
+const BaseForm = require('./baseform');
+const SelectWithId = require('../components/selectwithid.component');
+const Address = require('../components/address.component');
+const Autosuggest = require('../components/autosuggest.component');
+const InputText = require('../components/inputtext.component');
+const ErrorList = require('../components/errorlist.component');
+const DidYouMeanCompany = require('../components/didyoumeancompany.component');
+const Radio = require('../components/radio.component');
+
 
 const LABELS = {
   'name': 'Registered name',
@@ -90,7 +92,7 @@ const defaultCompany = {
   lead: false
 };
 
-export class CompanyForm extends BaseForm {
+class CompanyForm extends BaseForm {
 
   constructor(props) {
     super(props);
@@ -475,3 +477,5 @@ export class CompanyForm extends BaseForm {
   };
 
 }
+
+module.exports = CompanyForm;

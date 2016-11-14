@@ -1,6 +1,8 @@
-import React from 'react';
+'use strict';
 
-export function errorListComponent(props) {
+const React = require('react');
+
+function errorListComponent(props) {
   if (!props.errors) return null;
 
   const errorFields = Object.keys(props.errors);
@@ -28,3 +30,5 @@ errorListComponent.propTypes = {
   errors: React.PropTypes.object,
   labels: React.PropTypes.object.isRequired,
 };
+
+module.exports = errorListComponent;

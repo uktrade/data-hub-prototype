@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
-import 'babel-polyfill';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {ContactForm} from '../forms/contactform';
-import SearchBar from '../controls/searchbar';
+require('babel-polyfill');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const ContactForm = require('../forms/contactform');
+const SearchBar = require('../controls/searchbar');
 
 const editElement = document.getElementById('contact-forms');
 const contact = dh.data.contact;

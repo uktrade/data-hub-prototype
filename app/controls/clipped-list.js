@@ -1,6 +1,6 @@
 'use strict';
 
-import * as classUtils from '../lib/elementstuff';
+const classUtils = require('../lib/elementstuff');
 
 const HIDE = 'hide';
 const SHOW = 'show';

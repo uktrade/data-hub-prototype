@@ -1,15 +1,16 @@
 /* globals interactions: true, company: true, contacts: true */
 
-import 'babel-polyfill';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {CompanyForm} from '../forms/companyform';
-import ContactTable from '../components/contacttable.component';
-import {InteractionTableComponent as InteractionTable} from '../components/interactiontable.component';
-import { addClass, removeClass } from '../lib/elementstuff';
-import Edit from '../controls/edit';
-import SearchBar from '../controls/searchbar';
-import Tabs from '../controls/tabs';
+require('babel-polyfill');
+const React = require('react');
+const ReactDOM = require('react-dom');
+
+const CompanyForm = require('../forms/companyform');
+const ContactTable = require( '../components/contacttable.component');
+const InteractionTable = require('../components/interactiontable.component');
+const { addClass, removeClass } = require('../lib/elementstuff');
+const Edit = require('../controls/edit');
+const SearchBar = require('../controls/searchbar');
+const Tabs = require('../controls/tabs');
 
 new Edit(document.querySelector('.js-hidden-edit'));
 new SearchBar(document.querySelector('.searchbar'));

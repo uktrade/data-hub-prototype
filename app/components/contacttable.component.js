@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+'use strict';
 
-class ContactTable extends Component {
+const React = require('react');
+
+class ContactTable extends React.Component {
 
   constructor(props) {
     super(props);
@@ -115,4 +117,4 @@ ContactTable.propTypes = {
   contacts: React.PropTypes.array.isRequired
 };
 
-export default ContactTable;
+module.exports = ContactTable;

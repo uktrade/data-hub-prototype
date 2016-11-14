@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+'use strict';
 
-export class BaseForm extends Component {
+const React = require('react');
+
+class BaseForm extends React.Component {
 
   updateField = (update) => {
     let fieldName;
@@ -53,3 +55,5 @@ export class BaseForm extends Component {
     }
   }
 }
+
+module.exports = BaseForm;

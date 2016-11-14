@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
-import { generateID } from '../lib/elementstuff';
+'use strict';
 
+const React = require('react');
+const generateID = require('../lib/elementstuff').generateID;
 
-export class RadioComponent extends Component {
+class RadioComponent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -55,3 +56,5 @@ RadioComponent.propTypes = {
   checked: React.PropTypes.bool,
   onChange: React.PropTypes.func.isRequired
 };
+
+module.exports = RadioComponent;

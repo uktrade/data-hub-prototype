@@ -1,8 +1,8 @@
 'use strict';
 
-import 'babel-polyfill';
-import SearchBar from '../controls/searchbar';
-import Facets from '../controls/facets';
+require('babel-polyfill');
+const SearchBar = require('../controls/searchbar');
+const Facets = require('../controls/facets');
 
 document.addEventListener(
   'DOMContentLoaded',

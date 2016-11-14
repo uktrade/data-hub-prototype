@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+'use strict';
+
+const React = require('react');
 
 function getDateParts(dateStr) {
   try {
@@ -8,7 +10,7 @@ function getDateParts(dateStr) {
   }
 }
 
-export class DateInputComponent extends Component {
+class DateInputComponent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -113,3 +115,5 @@ DateInputComponent.propTypes = {
   onChange: React.PropTypes.func.isRequired,
   errors: React.PropTypes.array
 };
+
+module.exports = DateInputComponent;

@@ -1,6 +1,8 @@
-import React from 'react';
+'use strict';
 
-export function inputTextComponent(props) {
+const React = require('react');
+
+function inputTextComponent(props) {
 
   const value = props.value || '';
 
@@ -39,3 +41,5 @@ inputTextComponent.propTypes = {
   onChange: React.PropTypes.func.isRequired,
   errors: React.PropTypes.array
 };
+
+module.exports = inputTextComponent;

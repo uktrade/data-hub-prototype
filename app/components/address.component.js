@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
-import {AutosuggestComponent as Autosuggest} from './autosuggest.component';
-import axios from 'axios';
+'use strict';
+
+const React = require('react');
+const Autosuggest = require('./autosuggest.component');
+const axios = require('axios');
 
 
-export class AddressComponent extends Component {
+class AddressComponent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -256,3 +258,5 @@ export class AddressComponent extends Component {
   }
 
 }
+
+module.exports = AddressComponent;

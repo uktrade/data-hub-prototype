@@ -1,12 +1,13 @@
-import React from 'react';
-import axios from 'axios';
-import {BaseForm} from './baseform';
-import {AddressComponent as Address} from '../components/address.component';
-import {AutosuggestComponent as Autosuggest} from '../components/autosuggest.component';
-import {RadioComponent as Radio} from '../components/radio.component';
-import {inputTextComponent as InputText} from '../components/inputtext.component';
-import {errorListComponent as ErrorList} from '../components/errorlist.component';
+'use strict';
 
+const React = require('react');
+const axios = require('axios');
+const BaseForm = require('./baseform');
+const Address = require('../components/address.component');
+const Autosuggest = require('../components/autosuggest.component');
+const Radio = require('../components/radio.component');
+const InputText = require('../components/inputtext.component');
+const ErrorList = require('../components/errorlist.component');
 
 const LABELS = {
   'company': 'Company',
@@ -63,7 +64,7 @@ const defaultContact = {
   }]
 };
 
-export class ContactForm extends BaseForm {
+class ContactForm extends BaseForm {
 
   constructor(props) {
     super(props);
@@ -335,3 +336,5 @@ export class ContactForm extends BaseForm {
   }
 
 }
+
+module.exports = ContactForm;

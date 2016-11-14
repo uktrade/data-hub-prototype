@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
-import Highlight from 'react-highlighter';
-import axios from 'axios';
-import debounce from 'lodash/debounce';
+'use strict';
+
+const React = require('react');
+const Highlight = rquire('react-highlighter');
+const axios = require('axios');
+const debounce = require('lodash/debounce');
 
 
-export class AutosuggestComponent extends Component {
+class AutosuggestComponent extends React.Component {
 
   // Component lifecycle
 
@@ -356,7 +358,6 @@ export class AutosuggestComponent extends Component {
 
 }
 
-
 AutosuggestComponent.propTypes = {
   onChange: React.PropTypes.func.isRequired,
   label: React.PropTypes.string.isRequired,
@@ -372,3 +373,5 @@ AutosuggestComponent.propTypes = {
   allowOwnValue: React.PropTypes.bool,
   errors: React.PropTypes.array
 };
+
+module.exports = AutosuggestComponent;
