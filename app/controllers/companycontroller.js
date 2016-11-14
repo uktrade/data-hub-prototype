@@ -1,6 +1,6 @@
 /* eslint new-cap: 0 */
-
 'use strict';
+
 const express = require('express');
 const router = express.Router();
 

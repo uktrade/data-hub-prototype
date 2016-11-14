@@ -1,3 +1,5 @@
+/* eslint new-cap: 0 */
+
 import 'babel-polyfill';
 import { getQueryParam } from '../lib/urlstuff';
 import {toggleClass} from '../lib/elementstuff';

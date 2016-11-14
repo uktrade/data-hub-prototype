@@ -1,23 +1,22 @@
+/* eslint new-cap: 0 */
 'use strict';
 
-const config = require('../../config');
 const express = require('express');
 const router = express.Router();
 const rp = require( 'request-promise' );
+const config = require('../../config');
 
 function authenticate(username, password) {
-  var options = {
+  const options = {
     method: 'POST',
-    url: ( config.apiRoot + config.api.authUrl ),
+    url: (config.apiRoot + config.api.authUrl),
 
-    headers:
-    {
+    headers: {
       'cache-control': 'no-cache',
-      authorization: `Basic ${new Buffer(config.api.clientId + ':' + config.api.clientSecret).toString('base64')}`,
+      'authorization': `Basic ${new Buffer(config.api.clientId + ':' + config.api.clientSecret).toString('base64')}`,
       'content-type': 'multipart/forms-data; boundary=---011000010111000001101001'
     },
-    formData:
-    {
+    formData: {
       username: username,
       password: password,
       grant_type: 'password'
@@ -28,12 +27,11 @@ function authenticate(username, password) {
   return rp(options);
 }
 
-function login( req, res ){
-
-  res.render( 'login', { action: '/login' } );
+function login(req, res) {
+  res.render('login', {action: '/login'});
 }
 
-function loginToApi( req, res ){
+function loginToApi(req, res) {
 
   if (!req.body.username || !req.body.password) {
     req.flash('error-message', 'Invalid user id or password');
@@ -49,23 +47,20 @@ function loginToApi( req, res ){
     .catch((error) => {
 
       if (error.response.statusCode === 401) {
-
         req.flash('error-message', 'Invalid user id or password');
         res.redirect('/login');
-
       } else {
-
         res.render( 'error', { error } );
       }
     });
 }
 
-function logout( req, res ){
+function logout(req, res){
 
   req.session.token = null;
   req.session.user = null;
-  req.flash( 'success-message', 'Signed out' );
-  res.redirect( '/login' );
+  req.flash('success-message', 'Signed out');
+  res.redirect('/login');
 }
 
 router.get('/', login);

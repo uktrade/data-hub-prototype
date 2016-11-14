@@ -1,3 +1,4 @@
+'use strict';
 
 function getUrlVars() {
   var url = window.location.href;

@@ -1,3 +1,5 @@
+'use strict';
+
 var regularExp1 = '(\\s|^)',
   regularExp2 = '(\\s|$)';
 
