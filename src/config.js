@@ -3,8 +3,8 @@ const defaultLogLevel = (process.env.NODE_ENV === 'development') ? 'debug' : 'er
 
 module.exports = {
   env: process.env.NODE_ENV,
-  port,
-  apiRoot: process.env.API_ROOT || 'http://localhost:8000',
+  port: port,
+  apiRoot: process.env.API_ROOT || 'http://leeloo:8000',
   api: {
     authUrl: '/token/',
     clientId: process.env.API_CLIENT_ID,
@@ -17,8 +17,8 @@ module.exports = {
   redis: {
     url: process.env.REDIS_URL || process.env.REDISTOGO_URL,
     port: process.env.REDIS_PORT || 6379,
-    host: process.env.REDIS_HOST || '127.0.0.1',
-    metadataTtl: (process.env.METADATA_TTL || (15 * 60)),
+    host: process.env.REDIS_HOST || 'redis-rhod',
+    metadataTtl: ( process.env.METADATA_TTL || ( 15 * 60 ) )
   },
   session: {
     secret: process.env.SESSION_SECRET || 'howdoesyourgardengrow',
