@@ -2,7 +2,7 @@
 'use strict';
 
 const moment = require('moment');
-const itemCollectionService = require('../../../app/lib/itemcollectionservice');
+const itemCollectionService = require('../../../app/services/itemcollectionservice');
 
 describe('item collection services', () => {
 
