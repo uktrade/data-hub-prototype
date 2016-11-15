@@ -6,7 +6,7 @@ const toggleClass = require('../lib/elementstuff').toggleClass;
 
 const term = getQueryParam('term');
 
-export default class Facets {
+class Facets {
 
   constructor(targetElement) {
     this.initElements(targetElement);
@@ -63,3 +63,5 @@ export default class Facets {
   }
 
 }
+
+module.exports = Facets;

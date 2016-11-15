@@ -6,7 +6,7 @@ gulp.task('serve', (cb) => {
 
 	return nodemon({
     verbose: true,
-    exec: 'node --debug',
+    exec: './node_modules/.bin/babel-node --debug',
 		script: 'app.js',
     ignore: ['build/javascripts']
 	}).on('start', function() {

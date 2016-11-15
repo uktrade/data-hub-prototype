@@ -45,4 +45,4 @@ class Edit {
 
 }
 
-export default Edit;
+module.exports = Edit;

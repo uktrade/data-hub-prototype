@@ -12,9 +12,9 @@ function getUrlVars() {
   return myJson;
 }
 
-export function getQueryParam(param) {
+function getQueryParam(param) {
   let params = getUrlVars();
   return params[param];
 }
 
-
+module.exports = { getQueryParam};

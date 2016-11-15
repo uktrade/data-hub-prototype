@@ -83,4 +83,4 @@ class ClippedList {
   }
 }
 
-export default ClippedList;
+module.exports = ClippedList;

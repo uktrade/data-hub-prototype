@@ -9,6 +9,9 @@ const metadataRepository = require('../repositorys/metadatarepository');
 const companyRepository = require('../repositorys/companyrepository');
 const itemCollectionService = require('../services/itemcollectionservice');
 
+const React = require('react');
+const ReactDom = require('react-dom/server');
+const CompanyForm = require('../forms/companyform');
 
 // Add some extra default info into the company to make it easier to edit
 function postProcessCompany(company) {
@@ -32,7 +35,8 @@ function postProcessCompany(company) {
 }
 
 function add(req, res) {
-  res.render('company/company-add');
+  let markup = ReactDom.renderToString(<CompanyForm/>);
+  res.render('company/company-add', {markup});
 }
 
 function view(req, res) {

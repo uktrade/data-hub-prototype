@@ -43,4 +43,4 @@ class FlashMessage {
   }
 }
 
-export default FlashMessage;
+module.exports = FlashMessage;

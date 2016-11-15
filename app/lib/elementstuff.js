@@ -3,7 +3,7 @@
 var regularExp1 = '(\\s|^)',
   regularExp2 = '(\\s|$)';
 
-export function addClass(element, className) {
+function addClass(element, className) {
   if (isNodeList(element)) {
     for (var pos = element.length - 1; pos > -1; pos -= 1) {
       addClass(element[pos], className);
@@ -15,7 +15,7 @@ export function addClass(element, className) {
   }
 }
 
-export function removeClass(element, className) {
+function removeClass(element, className) {
   if (isNodeList(element)) {
     for (var pos = element.length - 1; pos > -1; pos -= 1) {
       removeClass(element[pos], className);
@@ -28,14 +28,14 @@ export function removeClass(element, className) {
   }
 }
 
-export function hasClass(element, className) {
+function hasClass(element, className) {
   if (element.classList) {
     return element.classList.contains(className);
   }
   return element.className.match(new RegExp(regularExp1 + className + regularExp2));
 }
 
-export function toggleClass(element, className) {
+function toggleClass(element, className) {
   if (isNodeList(element)) {
     for (var pos = element.length - 1; pos > -1; pos -= 1) {
       toggleClass(element[pos], className);
@@ -47,7 +47,7 @@ export function toggleClass(element, className) {
   }
 }
 
-export function generateID() {
+function generateID() {
   let d = new Date().getTime();
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = (d + Math.random() * 16) % 16 | 0;
@@ -59,3 +59,7 @@ export function generateID() {
 function isNodeList(el) {
   return (typeof el === 'object' && typeof el.length === 'number');
 }
+
+module.exports = {
+  addClass, removeClass, hasClass, toggleClass, generateID, isNodeList
+};

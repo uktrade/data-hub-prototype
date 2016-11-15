@@ -1,7 +1,7 @@
 'use strict';
 
 const React = require('react');
-const Highlight = rquire('react-highlighter');
+const Highlight = require('react-highlighter');
 const axios = require('axios');
 const debounce = require('lodash/debounce');
 

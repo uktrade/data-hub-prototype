@@ -33,4 +33,4 @@ class SearchBar {
 
 }
 
-export default SearchBar;
+module.exports = SearchBar;

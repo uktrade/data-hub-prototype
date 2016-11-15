@@ -26,9 +26,11 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loaders: [
-          // 'react-hot',
           'babel-loader'
-        ]
+        ],
+        cacheDirectory: 'babel_cache',
+        "presets": ["es2015", "react"],
+        "plugins": ["transform-class-properties"]
       }
     ]
   },
