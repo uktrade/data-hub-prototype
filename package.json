@@ -78,7 +78,7 @@
     "sinon-chai": "^2.8.0"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "babel-node app.js",
     "build": "gulp build",
     "build:prod": "NODE_ENV=production; gulp build",
     "develop": "gulp watch",
