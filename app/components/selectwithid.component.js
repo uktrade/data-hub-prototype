@@ -62,7 +62,7 @@ class SelectWithIdComponent extends React.Component {
     let optionElements = this.state.options.map((option) =>
       <option key={option.id} value={option.id}>{option.name}</option>);
 
-    let groupClass = 'forms-group';
+    let groupClass = 'form-group';
 
     let error;
     if (this.props.errors && this.props.errors.length > 0) {

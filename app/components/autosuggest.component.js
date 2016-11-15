@@ -318,7 +318,7 @@ class AutosuggestComponent extends React.Component {
   render() {
     const { value } = this.state;
     const suggestions = this.renderSuggestions(this.state.suggestions);
-    let className = 'forms-group autosuggest__container';
+    let className = 'form-group autosuggest__container';
 
     let error;
     if (this.props.errors && this.props.errors.length > 0) {

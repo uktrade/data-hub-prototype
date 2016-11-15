@@ -46,7 +46,7 @@ class DateInputComponent extends React.Component {
 
   render() {
 
-    let groupClass = 'forms-group forms-date';
+    let groupClass = 'form-group forms-date';
 
     let error;
     if (this.props.errors && this.props.errors.length > 0) {

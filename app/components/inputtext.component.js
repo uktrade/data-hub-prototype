@@ -6,7 +6,7 @@ function inputTextComponent(props) {
 
   const value = props.value || '';
 
-  let groupClass = 'forms-group';
+  let groupClass = 'form-group';
 
   let error;
   if (props.errors && props.errors.length > 0) {
