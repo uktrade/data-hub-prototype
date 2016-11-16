@@ -5,7 +5,7 @@ const ReactDOM = require('react-dom');
 const ContactForm = require('../forms/contactform');
 const SearchBar = require('../controls/searchbar');
 
-const editElement = document.getElementById('contact-forms');
+const editElement = document.getElementById('contact-form');
 const contact = dh.data.contact;
 const company = dh.data.company;
 const lead = dh.data.lead;
