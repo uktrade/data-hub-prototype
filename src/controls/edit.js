@@ -40,7 +40,7 @@ class Edit {
     if (event) event.preventDefault();
     removeClass(this.editView, 'hidden');
     addClass(this.dataView, 'hidden');
-    this.editView.querySelectorAll('.forms-controls')[0].focus();
+    this.editView.querySelectorAll('.form-control')[0].focus();
   };
 
 }
