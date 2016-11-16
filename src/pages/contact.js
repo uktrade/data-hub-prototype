@@ -5,7 +5,6 @@ const ReactDOM = require('react-dom');
 const { addClass, removeClass } = require('../lib/elementstuff');
 const InteractionTable = require('../components/interactiontable.component');
 const Tabs = require('../controls/tabs');
-const SearchBar = require('../controls/searchbar');
 
 const archiveForm = document.getElementById('archive-details');
 const archiveButton = document.getElementById('archive-reveal-button');
@@ -13,7 +12,6 @@ const cancelButton = document.getElementById('cancel-archive-button');
 const archiveReasonElement = document.getElementById('archived_reason');
 const archiveReasonGroup = document.getElementById('archived_reason-wrapper');
 
-new SearchBar(document.querySelector('.searchbar'));
 new Tabs(document.querySelector('.js-tabs'));
 
 if (interactions && interactions.length > 0) {

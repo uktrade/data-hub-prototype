@@ -10,7 +10,6 @@ module.exports = {
     search: './src/pages/search.js',
     company: './src/pages/company.js',
     contact: './src/pages/contact.js',
-    interaction: './src/pages/interaction.js',
     companyadd: './src/pages/companyadd.js',
     contactedit: './src/pages/contactedit.js',
     interactionedit: './src/pages/interactionedit.js',

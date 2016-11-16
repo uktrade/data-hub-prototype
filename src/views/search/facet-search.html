@@ -2,7 +2,6 @@
 {% import "macros/search.html" as search %}
 
 {% block main %}
-<a class="back-link" href='/'>Back to homepage</a>
 {{ search.searchbar('term', label="Search companies and contacts", value=result.term) }}
 
 <div class="grid-row">

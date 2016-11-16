@@ -3,7 +3,6 @@ require('babel-polyfill');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ContactForm = require('../forms/contactform');
-const SearchBar = require('../controls/searchbar');
 
 const editElement = document.getElementById('contact-form');
 const contact = dh.data.contact;
@@ -35,5 +34,3 @@ ReactDOM.render(
   </div>,
   editElement
 );
-
-new SearchBar(document.querySelector('.searchbar'));
