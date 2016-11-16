@@ -330,7 +330,7 @@ class AutosuggestComponent extends React.Component {
     }
 
     return (
-      <div className={className} onClick={this.test} ref={(div) => {this.container = div;}}>
+      <div className={className} id={this.props.name + '-wrapper'} onClick={this.test} ref={(div) => {this.container = div;}}>
         { this.props.label &&
           <label className="form-label">
             {this.props.label}
