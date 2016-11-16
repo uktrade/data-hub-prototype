@@ -11,5 +11,5 @@
     "API_CLIENT_SECRET": { "required": true },
     "REDIS_URL": { "required": true }
   },
-  "addons":[]
+  "addons":["heroku-redis"]
 }
