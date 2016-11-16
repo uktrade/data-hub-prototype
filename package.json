@@ -56,7 +56,7 @@
     "sinon-chai": "^2.8.0"
   },
   "scripts": {
-    "clean": "rm -r build/*",
+    "clean": "rm -rf build",
     "start": "node build/server.js",
     "build": "npm run clean && npm run sass && npm run js",
     "test": "mocha --require test/common.js --ui bdd test/**/*.test.js",
