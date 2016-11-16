@@ -131,6 +131,23 @@ describe('Pagination', () => {
 
       expect(pages).to.not.have.property('nextPage');
     });
+    it('should show 1..5 when many results and no page number in url', () => {
+      const req = {
+        query: {}
+      };
+
+      const result = {
+        total: 1000
+      };
+
+      const pages = pagination.getPageIndexes(req, result);
+
+      expect(pages).to.not.have.property('previousPage');
+      expect(pages.nextPage).to.equal(2);
+      expect(pages.startPage).to.equal(1);
+      expect(pages.endPage).to.equal(5);
+
+    });
   });
 
 });
