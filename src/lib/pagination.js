@@ -9,7 +9,7 @@ const PREVIOUSLABEL = 'Previous';
 // for pagination
 function getPageIndexes(req, result) {
   let pageIndex = {};
-  let currentPage = Math.max( parseInt(req.query.page, 10), 1 );
+  let currentPage = Math.max(parseInt((req.query.page || 1), 10), 1 );
 
   let totalPages = Math.ceil(result.total / 10);
 
@@ -35,7 +35,7 @@ function getPageIndexes(req, result) {
 
 function getPagination(req, result) {
   let pagination = [];
-  let currentPage = parseInt(req.query.page, 10) || 1;
+  let currentPage = parseInt((req.query.page || 1), 10) || 1;
 
   if (result.total === 0) {
     return pagination;
