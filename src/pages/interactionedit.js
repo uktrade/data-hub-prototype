@@ -1,4 +1,5 @@
-/* eslint-disable max-len */
+/* global dh:true */
+'use strict';
 
 require('babel-polyfill');
 const React = require('react');

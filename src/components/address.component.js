@@ -255,7 +255,7 @@ class AddressComponent extends React.Component {
     value: React.PropTypes.object.isRequired,
     name: React.PropTypes.string.isRequired,
     errors: React.PropTypes.array
-  }
+  };
 
 }
 
