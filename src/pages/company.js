@@ -9,11 +9,9 @@ const ContactTable = require( '../components/contacttable.component');
 const InteractionTable = require('../components/interactiontable.component');
 const { addClass, removeClass } = require('../lib/elementstuff');
 const Edit = require('../controls/edit');
-const SearchBar = require('../controls/searchbar');
 const Tabs = require('../controls/tabs');
 
 new Edit(document.querySelector('.js-hidden-edit'));
-new SearchBar(document.querySelector('.searchbar'));
 new Tabs(document.querySelector('.js-tabs'));
 
 const archiveForm = document.getElementById('archive-details');
