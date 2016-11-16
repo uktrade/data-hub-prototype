@@ -1,23 +1,22 @@
 const webpack = require('webpack');
-const paths = require('./gulp/paths');
 const prod = process.env.NODE_ENV === 'production';
 
 module.exports = {
   devtool: prod ? 'hidden-source-map' : 'source-map',
 
   entry: {
-    login: `${paths.sourceJS}/pages/login.js`,
-    index: `${paths.sourceJS}/pages/index.js`,
-    search: `${paths.sourceJS}/pages/search.js`,
-    company: `${paths.sourceJS}/pages/company.js`,
-    contact: `${paths.sourceJS}/pages/contact.js`,
-    interaction: `${paths.sourceJS}/pages/interaction.js`,
-    companyadd: `${paths.sourceJS}/pages/companyadd.js`,
-    contactedit: `${paths.sourceJS}/pages/contactedit.js`,
-    interactionedit: `${paths.sourceJS}/pages/interactionedit.js`,
+    login: './src/pages/login.js',
+    index: './src/pages/index.js',
+    search: './src/pages/search.js',
+    company: './src/pages/company.js',
+    contact: './src/pages/contact.js',
+    interaction: './src/pages/interaction.js',
+    companyadd: './src/pages/companyadd.js',
+    contactedit: './src/pages/contactedit.js',
+    interactionedit: './src/pages/interactionedit.js',
   },
   output: {
-    path: paths.outputJS,
+    path: 'build/javascripts',
     filename: '[name].bundle.js'
   },
   module: {
@@ -25,19 +24,20 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loaders: [
-          'babel-loader'
-        ],
-        cacheDirectory: 'babel_cache',
-        "presets": ["es2015", "react"],
-        "plugins": ["transform-class-properties"]
+        loader: 'babel-loader',
+        query: {
+          cacheDirectory: './babel_cache',
+          babelrc: false,
+          presets: ['es2015', 'react'],
+          plugins: ['transform-class-properties']
+        }
       }
     ]
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
     modules: [
-      paths.sourceJS,
+      'app',
       'node_modules'
     ]
   },
@@ -57,7 +57,8 @@ module.exports = {
       output: {
         comments: false
       },
-      sourceMap: false }),
+      sourceMap: false
+    }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin('common.js')
   ] : [

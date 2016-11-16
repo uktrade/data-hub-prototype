@@ -10,6 +10,12 @@
     },
     "POSTCODE_KEY": {
       "required": true
+    },
+    "API_CLIENT_ID": {
+      "required": true
+    },
+    "API_CLIENT_SECRET": {
+      "required": true
     }
   },
   "addons":[]
