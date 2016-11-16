@@ -5,18 +5,11 @@
     "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-nodejs.git",
     "NODE_MODULES_CACHE": "false",
     "NPM_CONFIG_PRODUCTION": "false",
-    "API_ROOT": {
-      "required": true
-    },
-    "POSTCODE_KEY": {
-      "required": true
-    },
-    "API_CLIENT_ID": {
-      "required": true
-    },
-    "API_CLIENT_SECRET": {
-      "required": true
-    }
+    "API_ROOT": { "required": true },
+    "POSTCODE_KEY": { "required": true },
+    "API_CLIENT_ID": { "required": true },
+    "API_CLIENT_SECRET": { "required": true },
+    "REDIS_URL": { "required": true }
   },
   "addons":[]
 }
