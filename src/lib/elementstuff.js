@@ -1,11 +1,11 @@
 'use strict';
 
-var regularExp1 = '(\\s|^)',
-  regularExp2 = '(\\s|$)';
+const regularExp1 = '(\\s|^)';
+const regularExp2 = '(\\s|$)';
 
 function addClass(element, className) {
   if (isNodeList(element)) {
-    for (var pos = element.length - 1; pos > -1; pos -= 1) {
+    for (let pos = element.length - 1; pos > -1; pos -= 1) {
       addClass(element[pos], className);
     }
   } else if (element.classList) {
@@ -17,7 +17,7 @@ function addClass(element, className) {
 
 function removeClass(element, className) {
   if (isNodeList(element)) {
-    for (var pos = element.length - 1; pos > -1; pos -= 1) {
+    for (let pos = element.length - 1; pos > -1; pos -= 1) {
       removeClass(element[pos], className);
     }
   } else if (element.classList) {
@@ -37,7 +37,7 @@ function hasClass(element, className) {
 
 function toggleClass(element, className) {
   if (isNodeList(element)) {
-    for (var pos = element.length - 1; pos > -1; pos -= 1) {
+    for (let pos = element.length - 1; pos > -1; pos -= 1) {
       toggleClass(element[pos], className);
     }
   } else if (hasClass(element, className)) {
@@ -50,14 +50,15 @@ function toggleClass(element, className) {
 function generateID() {
   let d = new Date().getTime();
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = (d + Math.random() * 16) % 16 | 0;
+    const r = (d + Math.random() * 16) % 16 | 0;
     d = Math.floor(d / 16);
     return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
   });
 }
 
 function isNodeList(el) {
-  return (typeof el === 'object' && typeof el.length === 'number');
+  // Only NodeList has the "item()" function
+  return typeof el.item !== 'undefined';
 }
 
 module.exports = {
