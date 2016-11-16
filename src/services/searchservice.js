@@ -7,7 +7,7 @@ const includes = require('lodash/includes');
 const FACETS = {
   'Category': [
     {name: 'doc_type', value: 'company', label: 'Company' },
-    {name: 'doc_type', value: 'contact', label: 'Contact' }
+    {name: 'doc_type', value: 'company_contact', label: 'Contact' }
   ]
 };
 
@@ -33,13 +33,12 @@ function search({token, term, limit = 10, page = 1, filters}) {
     body.doc_type = newDocTypeArray;
   }
 
-  let options = {
+  const options = {
     url: `${config.apiRoot}/search/`,
     body,
     json: true,
     method: 'POST',
   };
-
 
   return authorisedRequest(token, options)
     .then(result => {
