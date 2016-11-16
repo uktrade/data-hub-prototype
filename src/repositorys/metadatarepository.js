@@ -1,5 +1,6 @@
 'use strict';
 
+const winston = require('winston');
 const request = require('request-promise');
 const config = require('../config');
 const transformSectors = require( '../lib/metadata-sectors' );
@@ -32,7 +33,7 @@ function getMetadata(path, key){
             resolve(responseData);
           })
           .catch(reponseError => {
-            console.error('Error fetching metadataRepository for url: %s', url);
+            winston.log('error', 'Error fetching metadataRepository for url: %s', url);
             reject(reponseError);
             throw reponseError;
           });
@@ -47,7 +48,7 @@ function getMetadata(path, key){
       return responseData;
     })
     .catch(err => {
-      console.error('Error fetching metadataRepository for url: %s', url);
+      winston.log('error', 'Error fetching metadataRepository for url: %s', url);
       throw err;
     });
 
@@ -92,7 +93,7 @@ module.exports.fetchAll = function(cb) {
     completeRequests++;
 
     if (completeRequests === totalRequests){
-      console.log( 'All metadataRepository requests complete' );
+      winston.log('debug', 'All metadataRepository requests complete' );
       cb(caughtErrors);
     }
   }

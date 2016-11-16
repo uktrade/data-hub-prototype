@@ -81,12 +81,16 @@ function post(req, res) {
   controllerUtils.nullEmptyFields(interaction);
 
   interactionRepository.saveInteraction(req.session.token, interaction)
-    .then((data) => {
+    .then(data => {
       res.json(data);
     })
-    .catch((error) => {
+    .catch(error => {
+      if (typeof error.error === 'string') {
+        return res.status(error.response.statusCode).json({errors: [{'error': error.response.statusMessage}]});
+      }
+
       let errors = error.error;
-      res.status(400).json({errors});
+      return res.status(400).json({errors});
     });
 }
 

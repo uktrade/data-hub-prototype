@@ -132,11 +132,14 @@ function post(req, res) {
       res.json(data);
     })
     .catch((error) => {
+      if (typeof error.error === 'string') {
+        return res.status(error.response.statusCode).json({errors: [{'error': error.response.statusMessage}]});
+      }
 
       let errors = error.error;
       cleanErrors(errors);
 
-      res.status(400).json({errors});
+      return res.status(400).json({errors});
     });
 
 }

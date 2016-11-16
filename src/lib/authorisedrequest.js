@@ -1,6 +1,7 @@
 'use strict';
 
 const request = require( 'request-promise' );
+const winston = require('winston');
 
 module.exports = function( token, opts ){
 
@@ -8,7 +9,7 @@ module.exports = function( token, opts ){
 
   opts.headers.Authorization = `Bearer ${token}`;
 
-  console.log( 'Sending ' + ( opts.method || 'GET' ) + ' request to %s', opts.url );
+  winston.log('debug', 'Sending ' + ( opts.method || 'GET' ) + ' request to %s', opts.url );
 
   return request( opts );
 };
