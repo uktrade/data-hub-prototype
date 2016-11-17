@@ -16,8 +16,8 @@ const LABELS = {
   'subject': 'Subject',
   'notes': 'Interaction notes',
   'data_of_interaction': 'Date of interaction',
-  'service': 'Service offer (optional)',
-  'dit_team': 'Service provider (optional)'
+  'service': 'Service offer',
+  'dit_team': 'Service provider'
 };
 
 const defaultInteraction = {
