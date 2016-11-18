@@ -102,6 +102,7 @@ CompanyApp.propTypes = {
   routes: React.PropTypes.array
 };
 
+
 const routes = (
   <Route path="/company/:source/:sourceId" component={CompanyApp}>
     <IndexRoute component={CompanyDetails} />
