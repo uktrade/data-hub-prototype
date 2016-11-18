@@ -1,4 +1,3 @@
-'use strict';
 const authorisedRequest = require('../lib/authorisedrequest');
 const config = require('../config');
 const interactionRepository = require('./interactionrepository');

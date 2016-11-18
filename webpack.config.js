@@ -8,7 +8,7 @@ module.exports = {
     login: './src/pages/login.js',
     index: './src/pages/index.js',
     search: './src/pages/search.js',
-    company: './src/pages/company.js',
+    company: './src/pages/companypage.js',
     contact: './src/pages/contact.js',
     companyadd: './src/pages/companyadd.js',
     contactedit: './src/pages/contactedit.js',
@@ -28,17 +28,17 @@ module.exports = {
           cacheDirectory: './babel_cache',
           babelrc: false,
           presets: ['es2015', 'react'],
-          plugins: ['transform-class-properties']
-        }
-      }
-    ]
+          plugins: ['transform-class-properties'],
+        },
+      },
+    ],
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
     modules: [
       'app',
-      'node_modules'
-    ]
+      'node_modules',
+    ],
   },
   externals: {
     'react': 'React',
