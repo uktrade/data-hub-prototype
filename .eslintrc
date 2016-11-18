@@ -1,6 +1,8 @@
 {
   "extends": ["airbnb"],
   "rules": {
+    'camelcase': [0],
+    'no-param-reassign': [0],
     'max-len': ['error', 150, 2, {
       ignoreUrls: true,
       ignoreComments: false,
