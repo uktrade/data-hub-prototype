@@ -49,9 +49,9 @@ class Tabs {
     if (!tab || tab.length === 0) return;
 
     removeClass(this.tabs, 'is-selected');
+    removeClass(this.errors, 'is-selected');
     addClass(tab, 'is-selected');
     addClass(this.panels, 'hidden');
-    addClass(this.errors, 'hidden');
 
 
     if (tab.length < 1) {

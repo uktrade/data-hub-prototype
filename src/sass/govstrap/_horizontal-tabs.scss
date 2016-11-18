@@ -81,6 +81,10 @@
   .tabs-errors {
     // initially hide to avoid flashes waiting for js to load and render.
     display: none;
+
+    &.is-selected {
+      display: block;
+    }
   }
 
 }
