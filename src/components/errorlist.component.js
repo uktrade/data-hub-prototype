@@ -1,12 +1,7 @@
-'use strict';
-
 const React = require('react');
 
 function containsServerError(errors) {
-  for (const error of errors) {
-    if (error.error) return true;
-  }
-  return false;
+  return errors.error;
 }
 
 
@@ -28,11 +23,13 @@ function errorListComponent(props) {
 
   const errorFields = Object.keys(props.errors);
 
-  const errorListMarkup = errorFields.map(fieldName => {
-    const error = props.errors[fieldName];
+  const errorListMarkup = errorFields.map((fieldName) => {
+    const error = Array.isArray(props.errors[fieldName]) ? props.errors[fieldName][0] : props.errors[fieldName];
+    const label = props.labels[fieldName] || fieldName;
+
     return (
       <li key={fieldName}>
-        <a href={'#' + fieldName + '-wrapper'}>{props.labels[fieldName]} - { error[0] }</a>
+        <a href={`#${fieldName}-wrapper`}>{label} - {error}</a>
       </li>
     );
   });
