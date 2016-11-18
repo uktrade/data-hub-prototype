@@ -118,9 +118,9 @@ app.use('/javascripts/react', express.static(`${__dirname}/../node_modules/react
 app.use('/javascripts/react-dom', express.static(`${__dirname}/../node_modules/react-dom/dist`));
 app.use(express.static(`${__dirname}/../node_modules/govuk_template_jinja/assets`));
 
-app.use( logger( ( isDev ? 'dev' : 'combined' ) ) );
+app.use(logger((isDev ? 'dev' : 'combined' )));
 
-app.use(function(req, res, next){
+app.use((req, res, next) => {
 
   const formErrors = req.flash( 'error' );
 
@@ -140,7 +140,7 @@ app.use(auth);
 app.use(user);
 app.use('/login', loginController.router);
 app.use('/myaccount', myAccountController.router);
-app.use('/company', companyController.router);
+app.use(companyController.router);
 app.use('/contact', contactController.router);
 app.use('/interaction', interactionController.router);
 app.use('/search', searchController.router);

@@ -1,56 +1,86 @@
-/* eslint new-cap: 0 */
-'use strict';
-
 const express = require('express');
-const router = express.Router();
-
 const controllerUtils = require('../lib/controllerutils');
 const metadataRepository = require('../repositorys/metadatarepository');
 const companyRepository = require('../repositorys/companyrepository');
 const itemCollectionService = require('../services/itemcollectionservice');
-
 const React = require('react');
 const ReactDom = require('react-dom/server');
 const CompanyForm = require('../forms/companyform');
+const router = express.Router();
+
+function cleanErrors(errors) {
+  const formattedErrors = errors;
+
+  if (formattedErrors.registered_address_1 || formattedErrors.registered_address_2 ||
+    formattedErrors.registered_address_town || formattedErrors.registered_address_county ||
+    formattedErrors.registered_address_postcode || formattedErrors.registered_address_country) {
+    formattedErrors.registered_address = ['Invalid address'];
+    delete formattedErrors.registered_address_1;
+    delete formattedErrors.registered_address_2;
+    delete formattedErrors.registered_address_town;
+    delete formattedErrors.registered_address_county;
+    delete formattedErrors.registered_address_postcode;
+    delete formattedErrors.registered_address_country;
+  }
+
+  if (formattedErrors.trading_address_1 || formattedErrors.trading_address_2 ||
+    formattedErrors.trading_address_town || formattedErrors.trading_address_county ||
+    errors.trading_address_postcode || errors.trading_address_country) {
+    formattedErrors.trading_address = ['Invalid address'];
+    delete formattedErrors.trading_address_1;
+    delete formattedErrors.trading_address_2;
+    delete formattedErrors.trading_address_town;
+    delete formattedErrors.trading_address_county;
+    delete formattedErrors.trading_address_postcode;
+    delete formattedErrors.trading_address_country;
+  }
+
+  return formattedErrors;
+}
+
 
 // Add some extra default info into the company to make it easier to edit
 function postProcessCompany(company) {
-  if (!company.export_to_countries || company.export_to_countries.length === 0) {
-    company.export_to_countries = [{id: null, name: ''}];
+  const updatedCompany = company;
+
+  if (!updatedCompany.export_to_countries || updatedCompany.export_to_countries.length === 0) {
+    updatedCompany.export_to_countries = [{ id: null, name: '' }];
   }
-  if (!company.future_interest_countries || company.future_interest_countries.length === 0) {
-    company.future_interest_countries = [{id: null, name: ''}];
+  if (!updatedCompany.future_interest_countries || updatedCompany.future_interest_countries.length === 0) {
+    updatedCompany.future_interest_countries = [{ id: null, name: '' }];
   }
 
-  if (company.trading_address && !company.trading_address.address_country) {
-    company.trading_address = {
+  if (updatedCompany.trading_address && !updatedCompany.trading_address.address_country) {
+    updatedCompany.trading_address = {
       address_1: '',
       address_2: '',
       address_town: '',
       address_county: '',
       address_postcode: '',
-      address_country: null
+      address_country: null,
     };
   }
+
+  return updatedCompany;
 }
 
 function add(req, res) {
-  let markup = ReactDom.renderToString(<CompanyForm/>);
-  res.render('company/company-add', {markup});
+  const markup = ReactDom.renderToString(<CompanyForm />);
+  res.render('company/company-add', { markup });
 }
 
 function view(req, res) {
-  let id = req.params.sourceId;
-  let source = req.params.source;
+  const id = req.params.sourceId;
+  const source = req.params.source;
 
   if (!id) {
     res.redirect('/');
     return;
   }
 
-  companyRepository.getCompany( req.session.token, id, source)
+  companyRepository.getCompany(req.session.token, id, source)
     .then((company) => {
-      postProcessCompany(company);
+      const updatedCompany = postProcessCompany(company);
       let formData;
 
       if (!req.body || Object.keys(req.body).length === 0) {
@@ -61,20 +91,20 @@ function view(req, res) {
         formData = req.body;
       }
 
-      const timeSinceNewContact = itemCollectionService.getTimeSinceLastAddedItem(company.contacts);
-      const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(company.interactions);
-      const contactsInLastYear = itemCollectionService.getItemsAddedSince(company.contacts);
-      const interactionsInLastYear = itemCollectionService.getItemsAddedSince(company.interactions);
+      const timeSinceNewContact = itemCollectionService.getTimeSinceLastAddedItem(updatedCompany.contacts);
+      const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(updatedCompany.interactions);
+      const contactsInLastYear = itemCollectionService.getItemsAddedSince(updatedCompany.contacts);
+      const interactionsInLastYear = itemCollectionService.getItemsAddedSince(updatedCompany.interactions);
 
       let title;
-      if (!company.name && company.companies_house_data.name) {
-        title = company.companies_house_data.name;
+      if (!updatedCompany.name && updatedCompany.companies_house_data.name) {
+        title = updatedCompany.companies_house_data.name;
       } else {
-        title = company.name;
+        title = updatedCompany.name;
       }
 
       res.render('company/company', {
-        company,
+        company: updatedCompany,
         title,
         SECTOR_OPTIONS: metadataRepository.SECTOR_OPTIONS,
         REGION_OPTIONS: metadataRepository.REGION_OPTIONS,
@@ -88,18 +118,17 @@ function view(req, res) {
         timeSinceNewContact,
         timeSinceNewInteraction,
         contactsInLastYear,
-        interactionsInLastYear
+        interactionsInLastYear,
       });
     })
     .catch((error) => {
-      res.render('error', {error});
+      res.render('error', { error });
     });
 }
 
 function post(req, res) {
-
   // Flatten selected fields
-  let company = Object.assign({}, req.body.company);
+  const company = Object.assign({}, req.body.company);
 
   controllerUtils.flattenAddress(company, 'registered');
   controllerUtils.flattenAddress(company, 'trading');
@@ -115,42 +144,14 @@ function post(req, res) {
     })
     .catch((error) => {
       if (typeof error.error === 'string') {
-        return res.status(error.response.statusCode).json({errors: [{'error': error.response.statusMessage}]});
+        return res.status(error.response.statusCode)
+          .json({ errors: [{ error: error.response.statusMessage }] });
       }
-
-      let errors = error.error;
-      cleanErrors(errors);
-      return res.status(400).json({errors});
+      const errors = cleanErrors(error.error);
+      return res.status(400).json({ errors });
     });
 }
 
-function cleanErrors(errors) {
-  if (errors.registered_address_1 || errors.registered_address_2 ||
-    errors.registered_address_town || errors.registered_address_county ||
-    errors.registered_address_postcode || errors.registered_address_country)
-  {
-    errors.registered_address = ['Invalid address'];
-    delete errors.registered_address_1;
-    delete errors.registered_address_2;
-    delete errors.registered_address_town;
-    delete errors.registered_address_county;
-    delete errors.registered_address_postcode;
-    delete errors.registered_address_country;
-  }
-
-  if (errors.trading_address_1 || errors.trading_address_2 ||
-    errors.trading_address_town || errors.trading_address_county ||
-    errors.trading_address_postcode || errors.trading_address_country)
-  {
-    errors.trading_address = ['Invalid address'];
-    delete errors.trading_address_1;
-    delete errors.trading_address_2;
-    delete errors.trading_address_town;
-    delete errors.trading_address_county;
-    delete errors.trading_address_postcode;
-    delete errors.trading_address_country;
-  }
-}
 
 function archive(req, res) {
   companyRepository.archiveCompany(req.session.token, req.params.company_id, req.body.archived_reason)
@@ -175,18 +176,17 @@ function getJson(req, res) {
       res.json(company);
     })
     .catch((error) => {
-      res.render('error', {error});
+      res.render('error', { error });
     });
 }
 
+function index(req, res) {
+  res.render('company/company');
+}
 
-router.get('/add', add);
-router.get('/json/:company_id', getJson);
-router.get('/:company_id/unarchive', unarchive);
-router.get('/:source/:sourceId/json?', getJson);
-router.get('/:source/:sourceId?', view);
-router.post('/:company_id/archive', archive);
-router.post(['/'], post);
-
+router.get('/company/add', add);
+router.get('/company/*', index);
+router.post('/company', post);
+router.get('/api/company/:source/:sourceId', getJson);
 
 module.exports = { view, post, router };

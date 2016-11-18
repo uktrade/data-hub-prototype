@@ -1,17 +1,15 @@
 /* eslint new-cap: 0 */
-'use strict';
 
 const express = require('express');
-const router = express.Router();
 const rp = require('request-promise');
-
 const config = require('../config');
 const postcodeService = require('../services/postcodeservice');
 const searchService = require('../services/searchservice');
 const companyRepository = require('../repositorys/companyrepository');
 const metadataRepository = require('../repositorys/metadatarepository');
-
 const authorisedRequest = require( '../lib/authorisedrequest' );
+
+const router = express.Router();
 
 function postcodelookup(req, res) {
   let postcode = req.params.postcode;

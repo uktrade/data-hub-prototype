@@ -217,7 +217,7 @@ class CompanyForm extends BaseForm {
   save = () => {
     // Just post the company and let the server do the rest. (Get it.. REST)
     this.setState({saving: true});
-    axios.post('/company/', { company: this.state.formData })
+    axios.post('/company', { company: this.state.formData })
       .then((response) => {
         window.location.href = `/company/combined/${response.data.id}`;
       })
