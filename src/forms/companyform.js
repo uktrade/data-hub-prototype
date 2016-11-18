@@ -107,6 +107,7 @@ class CompanyForm extends BaseForm {
 
     this.state = {
       countryOptions: [],
+      businessTypes: [],
       show_account_manager: (company.account_manager.id !== null),
       show_exporting_to: (company.export_to_countries[0].id !== null),
       saving: false,
@@ -122,6 +123,26 @@ class CompanyForm extends BaseForm {
       .then(result => {
         this.setState({countryOptions: result.data});
       });
+    axios.get('/api/meta/typesofbusiness')
+      .then(result => {
+        this.setTypesOfBusiness(result.data);
+      });
+  }
+
+  setTypesOfBusiness(types) {
+    // Record ALL types of business and a stripped down UK types of business
+    // So we can change the drop down list depending on if set to UK or not.
+    this.allBusinessTypes = types;
+    this.ukBusinessTypes = types.filter((businessType) =>
+      !(businessType.name.toLowerCase() === 'private limited company' || businessType.name.toLowerCase() === 'public limited company'));
+
+    console.log(this.state.formData.uk_based);
+
+    if (this.state.formData.uk_based) {
+      this.setState({businessTypes: this.ukBusinessTypes});
+    } else {
+      this.setState({businessTypes: this.allBusinessTypes});
+    }
   }
 
   updateExpandingSection = (event) => {
@@ -163,6 +184,24 @@ class CompanyForm extends BaseForm {
     futureExportCountries.push({ id: null, name: '' });
     this.changeFormData('future_interest_countries', futureExportCountries);
   };
+
+  updateUkBased = (event) => {
+    this.updateField(event);
+
+    if (event.target.value === 'Yes') {
+      // If this is a uk business restrict the business types to choose from
+      // and reset the current business type if it is not allowed
+
+      this.setState({businessTypes: this.ukBusinessTypes});
+      const lowerCurrentType = this.state.formData.business_type.name.toLowerCase();
+
+      if (lowerCurrentType === 'private limited company' || lowerCurrentType === 'public limited company') {
+        this.setState({business_type: defaultCompany.business_type});
+      }
+    } else {
+      this.setState({businessTypes: this.allBusinessTypes});
+    }
+  }
 
   getCurrentlyExportingTo() {
     return this.state.formData.export_to_countries.map((country, index) => {
@@ -280,14 +319,14 @@ class CompanyForm extends BaseForm {
                 label="Yes"
                 value="Yes"
                 checked={formData.uk_based}
-                onChange={this.updateField}
+                onChange={this.updateUkBased}
               />
               <Radio
                 name="uk_based"
                 label="No"
                 value="No"
                 checked={!formData.uk_based}
-                onChange={this.updateField}
+                onChange={this.updateUkBased}
               />
               { formData.uk_based &&
                 <p className="js-radiohide-content">
@@ -300,7 +339,7 @@ class CompanyForm extends BaseForm {
             </fieldset>
             <SelectWithId
               value={formData.business_type.id || null}
-              url="/api/meta/typesofbusiness"
+              options={this.state.businessTypes}
               name="business_type"
               label="Type of business"
               errors={this.getErrors('business_type')}

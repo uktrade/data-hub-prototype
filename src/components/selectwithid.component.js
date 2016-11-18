@@ -3,29 +3,24 @@
 const React = require('react');
 const axios = require('axios');
 
+const defaultProps = {
+  value: '',
+  options: []
+};
+
 class SelectWithIdComponent extends React.Component {
 
   constructor(props) {
     super(props);
-
-    if (this.props.value) {
-      this.state = {
-        value: this.props.value,
-        options: []
-      };
-
-    } else {
-      this.state = {
-        value: '',
-        options: []
-      };
-    }
-
+    this.state = Object.assign({}, props, defaultProps);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.value) {
       this.setState({value: nextProps.value});
+    }
+    if (nextProps && nextProps.options) {
+      this.setState({options: nextProps.options});
     }
   }
 
@@ -37,7 +32,9 @@ class SelectWithIdComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.getOptions();
+    if (this.state.url) {
+      this.getOptions();
+    }
   }
 
   onChange = (event) => {
@@ -99,7 +96,8 @@ SelectWithIdComponent.propTypes = {
   name: React.PropTypes.string.isRequired,
   onChange: React.PropTypes.func.isRequired,
   label: React.PropTypes.string.isRequired,
-  errors: React.PropTypes.array
+  errors: React.PropTypes.array,
+  options: React.PropTypes.array,
 };
 
 module.exports = SelectWithIdComponent;
