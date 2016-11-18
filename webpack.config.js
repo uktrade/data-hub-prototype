@@ -8,7 +8,7 @@ module.exports = {
     login: './src/pages/login.js',
     index: './src/pages/index.js',
     search: './src/pages/search.js',
-    company: './src/pages/companypage.js',
+    company: './src/pages/company/companypage.js',
     contact: './src/pages/contact.js',
     companyadd: './src/pages/companyadd.js',
     contactedit: './src/pages/contactedit.js',

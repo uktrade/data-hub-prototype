@@ -1,14 +1,14 @@
 const React = require('react');
-const { Route, IndexRoute } = require('react-router');
-const ContactTable = require('../components/contacttable.component');
-const InteractionTable = require('../components/interactiontable.component');
-const CompanyDetails = require('../sections/companydetails.section');
-const CompanyEdit = require('../sections/companyedit.section');
+const axios = require('axios');
+const { Route, IndexRoute, Link } = require('react-router');
+const ContactTable = require('../../components/contacttable.component.js');
+const InteractionTable = require('../../components/interactiontable.component.js');
+const CompanyDetails = require('../../sections/companydetails.section.js');
+const CompanyEdit = require('../../sections/companyedit.section.js');
 
 class CompanyApp extends React.Component {
 
   static loadProps(context, cb) {
-    console.log(context);
     axios.get(`/api/company/${context.params.source}/${context.params.sourceId}`)
       .then((response) => {
         const company = response.data;

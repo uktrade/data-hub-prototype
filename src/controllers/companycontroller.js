@@ -6,12 +6,7 @@ const itemCollectionService = require('../services/itemcollectionservice');
 const React = require('react');
 const ReactDom = require('react-dom/server');
 const CompanyForm = require('../forms/companyform');
-const CompanyPage = require('../pages/company');
-const AsyncProps = require('async-props').default;
-const Router = require('react-router');
-const routesConfig = require('../pages/companyroutes');
 const router = express.Router();
-const loadPropsOnServer = AsyncProps.loadPropsOnServer;
 
 function cleanErrors(errors) {
   const formattedErrors = errors;
@@ -186,25 +181,7 @@ function getJson(req, res) {
 }
 
 function index(req, res) {
-  Router.match({routes: routesConfig, location: req.url}, (error, redirectLocation, renderProps) => {
-    if (error) {
-      res.status(500).send(error.message)
-    } else if (redirectLocation) {
-      res.redirect(302, redirectLocation.pathname + redirectLocation.search)
-    } else if (renderProps) {
-      loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
-        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
-        res.render('index', {markup, scriptTag});
-
-      });
-    } else {
-      res.status(404).send('Not found')
-    }
-  });
-
-
-  const markup = ReactDom.renderToString(<CompanyPage />);
-  res.render('company/company', { markup });
+  res.render('company/company');
 }
 
 router.get('/company/add', add);

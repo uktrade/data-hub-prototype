@@ -1,7 +1,7 @@
 const AsyncProps = require('async-props').default;
 const React = require('react');
 const { Router, browserHistory } = require('react-router');
-const routes = require('./companyroutes');
+const routes = require('./routes');
 
 
 function company(props) {
