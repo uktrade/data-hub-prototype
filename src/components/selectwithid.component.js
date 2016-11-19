@@ -92,7 +92,7 @@ class SelectWithIdComponent extends React.Component {
 
 SelectWithIdComponent.propTypes = {
   value: React.PropTypes.string,
-  url: React.PropTypes.string.isRequired,
+  url: React.PropTypes.string,
   name: React.PropTypes.string.isRequired,
   onChange: React.PropTypes.func.isRequired,
   label: React.PropTypes.string.isRequired,

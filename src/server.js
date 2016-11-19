@@ -1,7 +1,4 @@
-'use strict';
-
 const config = require('./config');
-
 const express = require('express');
 const expressValidator = require('express-validator');
 const bodyParser = require('body-parser');
@@ -11,10 +8,9 @@ const logger = require('morgan');
 const session = require('express-session');
 const redis = require('redis');
 const redisCrypto = require('connect-redis-crypto');
-const flash = require( 'connect-flash' );
+const flash = require('connect-flash');
 const url = require('url');
 const winston = require('winston');
-
 
 const companyController = require('./controllers/companycontroller');
 const contactController = require('./controllers/contactcontroller');
@@ -28,60 +24,60 @@ const indexController = require('./controllers/indexcontroller');
 const customValidators = require('./lib/validators');
 const customSanitizers = require('./lib/sanitizers');
 const filters = require('./lib/nunjuckfilters');
-const auth = require( './middleware/auth');
-const user = require( './middleware/user' );
-let metadata = require( './repositorys/metadatarepository' );
+const auth = require('./middleware/auth');
+const user = require('./middleware/user');
+const metadata = require('./repositorys/metadatarepository');
 
 const app = express();
 const isDev = app.get('env') === 'development';
 
-let RedisStore = redisCrypto(session);
+const RedisStore = redisCrypto(session);
 
 let client;
 
 if (config.redis.url) {
   const redisURL = url.parse(config.redis.url);
   /* eslint-disable camelcase */
-  client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+  client = redis.createClient(redisURL.port, redisURL.hostname, { no_ready_check: true });
   /* eslint-enable camelcase */
   client.auth(redisURL.auth.split(':')[1]);
 } else {
   client = redis.createClient(config.redis.port, config.redis.host);
 }
 
-client.on('error', function clientErrorHandler(e) {
+client.on('error', (e) => {
   winston.log('error', 'Error connecting to redis');
   winston.log('error', e);
   throw e;
 });
 
-client.on('connect', function() {
+client.on('connect', () => {
   winston.log('info', 'connected to redis');
 });
 
-client.on('ready', function() {
+client.on('ready', () => {
   winston.log('info', 'connection to redis is ready to use');
 });
 
-let redisStore = new RedisStore({
-  client: client,
+const redisStore = new RedisStore({
+  client,
   // config ttl defined in milliseconds
   ttl: config.session.ttl / 1000,
-  secret: config.session.secret
+  secret: config.session.secret,
 });
 
 app.use(session({
   store: redisStore,
-  proxy: (isDev ? false : true ),
+  proxy: !isDev,
   cookie: {
-    secure: (isDev ? false : true ),
-    maxAge: config.session.ttl
+    secure: !isDev,
+    maxAge: config.session.ttl,
   },
   rolling: true,
   key: 'datahub.sid',
   secret: config.session.secret,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
 }));
 app.use(flash());
 
@@ -92,7 +88,7 @@ app.use(expressValidator({ customValidators, customSanitizers }));
 app.use(compression());
 app.set('views', [
   `${__dirname}/../src/views`,
-  `${__dirname}/../node_modules/govuk_template_jinja/views`
+  `${__dirname}/../node_modules/govuk_template_jinja/views`,
 ]);
 
 filters.stringify = JSON.stringify;
@@ -100,7 +96,7 @@ filters.stringify = JSON.stringify;
 expressNunjucks(app, {
   watch: isDev,
   noCache: isDev,
-  filters: filters
+  filters,
 });
 
 
@@ -118,15 +114,14 @@ app.use('/javascripts/react', express.static(`${__dirname}/../node_modules/react
 app.use('/javascripts/react-dom', express.static(`${__dirname}/../node_modules/react-dom/dist`));
 app.use(express.static(`${__dirname}/../node_modules/govuk_template_jinja/assets`));
 
-app.use( logger( ( isDev ? 'dev' : 'combined' ) ) );
+app.use(logger((isDev ? 'dev' : 'combined')));
 
-app.use(function(req, res, next){
-
-  const formErrors = req.flash( 'error' );
+app.use((req, res, next) => {
+  const formErrors = req.flash('error');
 
   res.locals.messages = {
     success: req.flash('success-message'),
-    error: req.flash('error-message')
+    error: req.flash('error-message'),
   };
 
   if (formErrors && formErrors.length) {
@@ -138,6 +133,31 @@ app.use(function(req, res, next){
 
 app.use(auth);
 app.use(user);
+
+app.use((req, res, next) => {
+  if (req.method !== 'POST' || req.url === '/login') {
+    return next();
+  }
+
+  try {
+    const requestCsrf = req.get('X-CSRF-TOKEN');
+    const sessionCsrf = req.session.csrfToken;
+
+    // Not matter what, reset the token.
+    req.session.csrfToken = null;
+
+    if (!requestCsrf || !sessionCsrf || requestCsrf !== sessionCsrf) {
+      throw true;
+    }
+
+  } catch (e) {
+    return res.sendStatus(400);
+  }
+
+  return next();
+});
+
+
 app.use('/login', loginController.router);
 app.use('/myaccount', myAccountController.router);
 app.use('/company', companyController.router);
@@ -149,19 +169,15 @@ app.get('/', indexController);
 
 
 metadata.setRedisClient(client);
-metadata.fetchAll(errors => {
-
+metadata.fetchAll((errors) => {
   if (errors) {
-
-    winston.log('error', 'Unable to load all metadataRepository, cannot start app' );
+    winston.log('error', 'Unable to load all metadataRepository, cannot start app');
 
     for (const err of errors) {
       throw err;
     }
-
   } else {
-
-    app.listen(config.port, function(){
+    app.listen(config.port, () => {
       winston.log('info', 'app listening on port %s', config.port);
     });
   }
