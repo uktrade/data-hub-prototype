@@ -10,6 +10,6 @@
 </div>
 <script src="/javascripts/react/react.min.js"></script>
 <script src="/javascripts/react-dom/react-dom.min.js"></script>
-<script>window.csrfToken='{{csrfToken}}';</script>
+<script>window.csrfToken={{ csrfToken | stringify }};</script>
 <script src="/javascripts/companyadd.bundle.js"></script>
 {% endblock %}

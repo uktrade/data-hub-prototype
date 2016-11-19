@@ -129,7 +129,8 @@
   <script>
     var company = {{ company | stringify | safe }};
     var contacts = {{ company.contacts | stringify | safe }};
-    var interactions = {{ company.interactions |stringify | safe }};
+    var interactions = {{ company.interactions | stringify | safe }};
+    window.csrfToken={{ csrfToken | stringify }};
   </script>
   <script src="/javascripts/react/react.min.js"></script>
   <script src="/javascripts/react-dom/react-dom.min.js"></script>
