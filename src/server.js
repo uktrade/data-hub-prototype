@@ -24,8 +24,11 @@ const indexController = require('./controllers/indexcontroller');
 const customValidators = require('./lib/validators');
 const customSanitizers = require('./lib/sanitizers');
 const filters = require('./lib/nunjuckfilters');
+const datahubFlash = require('./middleware/flash');
 const auth = require('./middleware/auth');
 const user = require('./middleware/user');
+const csrf = require('./middleware/csrf');
+
 const metadata = require('./repositorys/metadatarepository');
 
 const app = express();
@@ -116,47 +119,10 @@ app.use(express.static(`${__dirname}/../node_modules/govuk_template_jinja/assets
 
 app.use(logger((isDev ? 'dev' : 'combined')));
 
-app.use((req, res, next) => {
-  const formErrors = req.flash('error');
-
-  res.locals.messages = {
-    success: req.flash('success-message'),
-    error: req.flash('error-message'),
-  };
-
-  if (formErrors && formErrors.length) {
-    res.locals.messages.formErrors = formErrors;
-  }
-
-  next();
-});
-
+app.use(datahubFlash);
 app.use(auth);
 app.use(user);
-
-app.use((req, res, next) => {
-  if (req.method !== 'POST' || req.url === '/login') {
-    return next();
-  }
-
-  try {
-    const requestCsrf = req.get('X-CSRF-TOKEN');
-    const sessionCsrf = req.session.csrfToken;
-
-    // Not matter what, reset the token.
-    req.session.csrfToken = null;
-
-    if (!requestCsrf || !sessionCsrf || requestCsrf !== sessionCsrf) {
-      throw true;
-    }
-
-  } catch (e) {
-    return res.sendStatus(400);
-  }
-
-  return next();
-});
-
+app.use(csrf);
 
 app.use('/login', loginController.router);
 app.use('/myaccount', myAccountController.router);
