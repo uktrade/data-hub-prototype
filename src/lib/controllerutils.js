@@ -64,7 +64,7 @@ function flattenIdFields(data) {
             ((item && item.id && item.id !== null && item.id.length > 0)
             || (item !== null && item.length > 0)))
           .map(item => item.id);
-      } else if (fieldValue.id) {
+      } else if (typeof fieldValue === 'object' && 'id' in fieldValue) {
         data[fieldName] = fieldValue.id;
       }
     }
