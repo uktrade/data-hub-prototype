@@ -1,10 +1,11 @@
-/* eslint new-cap: 0 */
 const express = require('express');
 const interactionRepository = require('../repositorys/interactionrepository');
 const contactRepository = require('../repositorys/contactrepository');
 const companyRepository = require('../repositorys/companyrepository');
 const controllerUtils = require('../lib/controllerutils');
-
+const React = require('react');
+const ReactDom = require('react-dom/server');
+const InteractionForm = require('../forms/interactionform');
 const router = express.Router();
 
 function view(req, res) {
@@ -36,12 +37,13 @@ function edit(req, res) {
       if (interaction.dit_advisor && !interaction.name) {
         interaction.dit_advisor.name = `${interaction.dit_advisor.first_name || ''} ${interaction.dit_advisor.last_name || ''}`;
       }
-
+      const markup = ReactDom.renderToString(<InteractionForm interaction={ interaction } />);
       res.render('interaction/interaction-edit', {
         company: null,
         contact: null,
         interaction: (interaction || null),
         csrfToken,
+        markup
       });
     });
 }
@@ -54,23 +56,28 @@ function add(req, res) {
   if (contactId && contactId.length > 0) {
     contactRepository.getContact(req.session.token, contactId)
       .then((contact) => {
+        const markup = ReactDom.renderToString(<InteractionForm contact={contact} company={contact.company} />);
+
         res.render('interaction/interaction-edit', {
           company: contact.company,
           contact,
           interactionId: null,
           interaction: null,
           csrfToken,
+          markup,
         });
       });
   } else if (companyId && companyId.length > 0) {
     companyRepository.getDitCompany(req.session.token, companyId)
       .then((company) => {
+        const markup = ReactDom.renderToString(<InteractionForm company={contact.company} />);
         res.render('interaction/interaction-edit', {
           company,
           contact: null,
           interactionId: null,
           interaction: null,
           csrfToken,
+          markup,
         });
       });
   } else {

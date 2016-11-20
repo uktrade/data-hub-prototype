@@ -1,7 +1,20 @@
 {% extends "../layouts/ukti-search-header.html" %}
 
 {% block main %}
-  <div id="interaction-form">Loading...</div>
+  {% if company %}
+    <a class="back-link" href='/company/company_company/{{company.id}}#interactions'>Back to company</a>
+    <h1 class="heading-xlarge">Add new interaction</h1>
+  {% elseif contact %}
+    <a class="back-link" href='/contact/{{contact.id}}/view#interactions'>Back to contact</a>
+    <h1 class="heading-xlarge">Add new interaction</h1>
+  {% elseif interaction %}
+    <a class="back-link" href='/interaction/{{interaction.id}}/view'>Back to interaction</a>
+    <h1 class="heading-xlarge">Edit interaction</h1>
+  {% else %}
+    <a class="back-link" href='/'>Back to home</a>
+    <h1 class="heading-xlarge">Add new interaction</h1>
+  {% endif %}
+  <div id="interaction-form"><div>{{ markup | safe }}</div></div>
   <script>
     var dh = {
       data: {
