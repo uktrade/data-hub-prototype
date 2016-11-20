@@ -9,6 +9,7 @@ const router = express.Router();
 
 function view(req, res) {
   const interaction_id = req.params.interaction_id;
+  const csrfToken = controllerUtils.genCSRF(req);
 
   if (!interaction_id) {
     res.redirect('/');
@@ -18,6 +19,7 @@ function view(req, res) {
     .then((interaction) => {
       res.render('interaction/interaction-details', {
         interaction,
+        csrfToken,
       });
     })
     .catch((error) => {
@@ -27,6 +29,7 @@ function view(req, res) {
 
 function edit(req, res) {
   const interactionId = req.params.interaction_id || null;
+  const csrfToken = controllerUtils.genCSRF(req);
 
   interactionRepository.getInteraction(req.session.token, interactionId)
     .then((interaction) => {
@@ -38,6 +41,7 @@ function edit(req, res) {
         company: null,
         contact: null,
         interaction: (interaction || null),
+        csrfToken,
       });
     });
 }
@@ -45,6 +49,7 @@ function edit(req, res) {
 function add(req, res) {
   const companyId = req.query.company_id;
   const contactId = req.query.contact_id;
+  const csrfToken = controllerUtils.genCSRF(req);
 
   if (contactId && contactId.length > 0) {
     contactRepository.getContact(req.session.token, contactId)
@@ -54,6 +59,7 @@ function add(req, res) {
           contact,
           interactionId: null,
           interaction: null,
+          csrfToken,
         });
       });
   } else if (companyId && companyId.length > 0) {
@@ -64,6 +70,7 @@ function add(req, res) {
           contact: null,
           interactionId: null,
           interaction: null,
+          csrfToken,
         });
       });
   } else {
@@ -76,6 +83,7 @@ function post(req, res) {
 
   controllerUtils.flattenIdFields(interaction);
   controllerUtils.nullEmptyFields(interaction);
+  controllerUtils.genCSRF(req, res);
 
   interactionRepository.saveInteraction(req.session.token, interaction)
     .then((data) => {

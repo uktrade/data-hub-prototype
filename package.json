@@ -60,7 +60,7 @@
   },
   "scripts": {
     "clean": "rm -rf build",
-    "start": "node build/server.js",
+    "start": "node --use-strict build/server.js",
     "build": "npm run clean && npm run sass && npm run js",
     "test": "mocha --require test/common.js --ui bdd test/**/*.test.js",
     "lint": "npm run lint:js & npm run lint:sass",

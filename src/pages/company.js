@@ -1,11 +1,11 @@
-/* globals interactions: true, company: true, contacts: true */
+/* globals interactions: true, company: true, contacts: true, document: true */
 
 require('babel-polyfill');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
 const CompanyForm = require('../forms/companyform');
-const ContactTable = require( '../components/contacttable.component');
+const ContactTable = require('../components/contacttable.component');
 const InteractionTable = require('../components/interactiontable.component');
 const { addClass, removeClass } = require('../lib/elementstuff');
 const Edit = require('../controls/edit');
@@ -22,17 +22,17 @@ const archiveReasonGroup = document.getElementById('archived_reason-wrapper');
 
 
 if (contacts && contacts.length > 0) {
-  const validContacts = contacts.filter((contact) => !contact.archived);
-  const archivedContacts = contacts.filter((contact) => contact.archived);
+  const validContacts = contacts.filter(contact => !contact.archived);
+  const archivedContacts = contacts.filter(contact => contact.archived);
 
   ReactDOM.render(
-    <ContactTable contacts={validContacts}/>,
-    document.querySelector('#contact-table-wrapper')
+    <ContactTable contacts={validContacts} />,
+    document.querySelector('#contact-table-wrapper'),
   );
 
   ReactDOM.render(
     <ContactTable contacts={archivedContacts} archived />,
-    document.querySelector('#archived-contact-table-wrapper')
+    document.querySelector('#archived-contact-table-wrapper'),
   );
 
   if (archivedContacts.length === 0) {
@@ -41,7 +41,6 @@ if (contacts && contacts.length > 0) {
   if (validContacts.length === 0) {
     addClass(document.getElementById('contact-table-wrapper'), 'hidden');
   }
-
 } else {
   const section = document.getElementById('archived-section');
   if (section) {
@@ -51,8 +50,8 @@ if (contacts && contacts.length > 0) {
 
 if (interactions && interactions.length > 0) {
   ReactDOM.render(
-    <InteractionTable interactions={interactions}/>,
-    document.querySelector('#interaction-table-wrapper')
+    <InteractionTable interactions={interactions} />,
+    document.querySelector('#interaction-table-wrapper'),
   );
 }
 
@@ -74,7 +73,7 @@ function showArchiveError() {
 }
 
 function submitArchiveForm(event) {
-  let reason = archiveReasonElement.options[archiveReasonElement.selectedIndex].value;
+  const reason = archiveReasonElement.options[archiveReasonElement.selectedIndex].value;
   if (!reason) {
     event.preventDefault();
     showArchiveError();
@@ -88,4 +87,4 @@ if (archiveButton) {
 }
 
 
-ReactDOM.render(<CompanyForm company={company}/>, document.getElementById('company-edit'));
+ReactDOM.render(<CompanyForm company={company} />, document.getElementById('company-edit'));

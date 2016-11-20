@@ -1,14 +1,12 @@
-'use strict';
-
 function transformErrors(expressErrors) {
 
   if (!expressErrors) {
     return null;
   }
 
-  let errors = {};
+  const errors = {};
 
-  for (let error of expressErrors) {
+  for (const error of expressErrors) {
     errors[error.param] = error.msg;
   }
 
@@ -16,12 +14,12 @@ function transformErrors(expressErrors) {
 }
 
 function encodeQueryData(data) {
-  var ret = [];
-  for (var key in data) {
-    let item = data[key];
+  const ret = [];
+  for (const key in data) {
+    const item = data[key];
 
     if (Array.isArray(item)) {
-      for (let innerValue of item) {
+      for (const innerValue of item) {
         ret.push(encodeURIComponent(key) + '=' + encodeURIComponent(innerValue));
       }
     } else {
@@ -42,14 +40,13 @@ function convertAutosuggestCollection(form, targetFieldName) {
     if (fieldName.toLocaleLowerCase().substr(0, targetFieldName.length) === lowerTargetFieldName) {
       form[targetFieldName].push({
         id: form[fieldName],
-        name: form[`${fieldName}-display`]
+        name: form[`${fieldName}-display`],
       });
       delete form[`${fieldName}-display`];
       delete form[fieldName];
     }
   }
 }
-
 
 // Scans the properties of an object (forms) and turns data.x = {id:123, name:'y'} into data.x=123
 // This is used so that when a forms posts back an nested object (in the same format it was given the data
@@ -63,22 +60,20 @@ function flattenIdFields(data) {
       if (Array.isArray(fieldValue)) {
         // Scan through the array of values, strip out any that are null, empty or have a null or empty id
         data[fieldName] = fieldValue
-          .filter((item) =>
-            (item && item.hasOwnProperty('id') && item.id !== null && item.id.length > 0
-            || item !== null && item.length > 0))
-          .map((item) => item.id);
-      } else if (fieldValue.hasOwnProperty('id')) {
+          .filter(item =>
+            ((item && item.id && item.id !== null && item.id.length > 0)
+            || (item !== null && item.length > 0)))
+          .map(item => item.id);
+      } else if (typeof fieldValue === 'object' && 'id' in fieldValue) {
         data[fieldName] = fieldValue.id;
       }
     }
   }
 }
 
-
 function flattenAddress(data, addressName) {
 
   if (addressName) {
-
     if (data[`${addressName}_address`]) {
       const address = data[`${addressName}_address`];
       const addressKeys = Object.keys(address);
@@ -105,11 +100,31 @@ function nullEmptyFields(data) {
   }
 }
 
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
+
+function genCSRF(req, res) {
+  const token = guid();
+  req.session.csrfToken = token;
+  if (res) {
+    res.set('x-csrf-token', token);
+  }
+  return token;
+}
+
 module.exports = {
   transformErrors,
   encodeQueryData,
   convertAutosuggestCollection,
   flattenIdFields,
   flattenAddress,
-  nullEmptyFields
+  nullEmptyFields,
+  genCSRF,
 };

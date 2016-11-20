@@ -8,8 +8,9 @@
         contact: {{ contact | dump | safe }},
         company: {{ company | dump | safe }},
         interaction: {{ interaction | dump | safe }}
-      }
+      },
     };
+    window.csrfToken='{{ csrfToken }}';
   </script>
   <script src="/javascripts/react/react.min.js"></script>
   <script src="/javascripts/react-dom/react-dom.min.js"></script>

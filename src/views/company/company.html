@@ -20,6 +20,7 @@
   {% if company.id %}
     {% if not company.archived %}
       <form id="archive-details" class="hidden" action="/company/{{ company.id }}/archive" method="post">
+        <input type="hidden" name="_csrf_token" value="{{csrfToken}}"/>
         {{ forms.dropdown('archived_reason',
           label="Reason for archiving company",
           emptyLabel="Select a value",
@@ -129,7 +130,8 @@
   <script>
     var company = {{ company | stringify | safe }};
     var contacts = {{ company.contacts | stringify | safe }};
-    var interactions = {{ company.interactions |stringify | safe }};
+    var interactions = {{ company.interactions | stringify | safe }};
+    window.csrfToken='{{ csrfToken }}';
   </script>
   <script src="/javascripts/react/react.min.js"></script>
   <script src="/javascripts/react-dom/react-dom.min.js"></script>

@@ -1,5 +1,3 @@
-'use strict';
-
 const React = require('react');
 const axios = require('axios');
 const BaseForm = require('./baseform');
@@ -10,7 +8,6 @@ const InputText = require('../components/inputtext.component');
 const ErrorList = require('../components/errorlist.component');
 const DidYouMeanCompany = require('../components/didyoumeancompany.component');
 const Radio = require('../components/radio.component');
-
 
 const LABELS = {
   'name': 'Registered name',
@@ -115,7 +112,6 @@ class CompanyForm extends BaseForm {
       formData: company,
       isCDMS: (!company.company_number || company.company_number.length === 0)
     };
-
   }
 
   componentDidMount() {
@@ -135,8 +131,6 @@ class CompanyForm extends BaseForm {
     this.allBusinessTypes = types;
     this.ukBusinessTypes = types.filter((businessType) =>
       !(businessType.name.toLowerCase() === 'private limited company' || businessType.name.toLowerCase() === 'public limited company'));
-
-    console.log(this.state.formData.uk_based);
 
     if (this.state.formData.uk_based) {
       this.setState({businessTypes: this.ukBusinessTypes});
@@ -256,11 +250,15 @@ class CompanyForm extends BaseForm {
   save = () => {
     // Just post the company and let the server do the rest. (Get it.. REST)
     this.setState({saving: true});
-    axios.post('/company/', { company: this.state.formData })
+    axios.post('/company/',
+        { company: this.state.formData },
+        { headers: {'x-csrf-token': this.csrfToken }}
+      )
       .then((response) => {
         window.location.href = `/company/combined/${response.data.id}`;
       })
       .catch((error) => {
+        this.csrfToken = error.response.headers['x-csrf-token'];
         this.setState({
           errors: error.response.data.errors,
           saving: false
@@ -512,7 +510,8 @@ class CompanyForm extends BaseForm {
   }
 
   static propTypes = {
-    company: React.PropTypes.object
+    company: React.PropTypes.object,
+    csrfToken: React.PropTypes.string
   };
 
 }
