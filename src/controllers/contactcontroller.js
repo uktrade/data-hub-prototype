@@ -4,6 +4,9 @@ const controllerUtils = require('../lib/controllerutils');
 const contactRepository = require('../repositorys/contactrepository');
 const companyRepository = require('../repositorys/companyrepository');
 const itemCollectionService = require('../services/itemcollectionservice');
+const React = require('react');
+const ReactDom = require('react-dom/server');
+const ContactForm = require('../forms/contactform');
 
 const router = express.Router();
 const REASONS_FOR_ARCHIVE = [
@@ -59,12 +62,14 @@ function edit(req, res) {
       }
 
       const csrfToken = controllerUtils.genCSRF(req);
+      const markup = ReactDom.renderToString(<ContactForm contact={contact} company={null} />);
 
       res.render('contact/contact-edit', {
         term: req.query.term,
         company: null,
         contact,
         csrfToken,
+        markup
       });
     })
     .catch((error) => {
@@ -75,27 +80,26 @@ function edit(req, res) {
 function add(req, res) {
   const companyId = req.query.company_id || null;
   const csrfToken = controllerUtils.genCSRF(req);
-  const viewModel = {
-    company: null,
-    contact: null,
-    csrfToken,
-  };
-
-  function render(data) {
-    if (data) {
-      Object.assign(viewModel, data);
-    }
-
-    res.render('contact/contact-edit', viewModel);
-  }
 
   if (companyId) {
     companyRepository.getDitCompany(req.session.token, companyId)
       .then((company) => {
-        render({ company });
+        const markup = ReactDom.renderToString(<ContactForm company={company} />);
+        res.render('contact/contact-edit', {
+          contact: null,
+          company,
+          csrfToken,
+          markup,
+        });
       });
   } else {
-    render();
+    const markup = ReactDom.renderToString(<ContactForm />);
+    res.render('contact/contact-edit', {
+      contact: null,
+      company: null,
+      csrfToken,
+      markup,
+    });
   }
 }
 

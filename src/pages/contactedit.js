@@ -8,7 +8,6 @@ const ContactForm = require('../forms/contactform');
 const editElement = document.getElementById('contact-form');
 const contact = dh.data.contact;
 const company = dh.data.company;
-const lead = dh.data.lead;
 let backUrl;
 let backTitle;
 let title;
@@ -29,10 +28,6 @@ if (company) {
 
 
 ReactDOM.render(
-  <div>
-    <a className="back-link" href={backUrl}>Back to {backTitle}</a>
-    <h1 className="heading-xlarge">{ title }</h1>
-    <ContactForm contact={contact} company={company} lead={lead} />
-  </div>,
+  <ContactForm contact={contact} company={company} />,
   editElement,
 );
