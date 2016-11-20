@@ -114,7 +114,7 @@ function genCSRF(req, res) {
   const token = guid();
   req.session.csrfToken = token;
   if (res) {
-    res.set('X-CSRF-TOKEN', token);
+    res.set('x-csrf-token', token);
   }
   return token;
 }

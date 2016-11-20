@@ -1,23 +1,19 @@
 /* eslint new-cap: 0 */
-'use strict';
-
 const express = require('express');
-const router = express.Router();
 const controllerUtils = require('../lib/controllerutils');
-
-let contactRepository = require('../repositorys/contactrepository');
-let companyRepository = require('../repositorys/companyrepository');
+const contactRepository = require('../repositorys/contactrepository');
+const companyRepository = require('../repositorys/companyrepository');
 const itemCollectionService = require('../services/itemcollectionservice');
 
-
+const router = express.Router();
 const REASONS_FOR_ARCHIVE = [
   'Contact has left the company',
   'Contact does not want to be contacted',
   'Contact changed role/responsibility',
-  'Other'
+  'Other',
 ];
-function view(req, res) {
 
+function view(req, res) {
   const contact_id = req.params.contact_id;
 
   if (!contact_id) {
@@ -26,14 +22,13 @@ function view(req, res) {
 
   contactRepository.getContact(req.session.token, contact_id)
     .then((contact) => {
-
       if (!contact.interactions) {
         contact.interactions = [];
       }
 
       const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(contact.interactions);
       const interactionsInLastYear = itemCollectionService.getItemsAddedSince(contact.interactions);
-
+      const csrfToken = controllerUtils.genCSRF(req);
 
       res.render(
         'contact/contact', {
@@ -41,16 +36,16 @@ function view(req, res) {
           contact,
           REASONS_FOR_ARCHIVE,
           timeSinceNewInteraction,
-          interactionsInLastYear
+          interactionsInLastYear,
+          csrfToken,
         });
     })
     .catch((error) => {
-      res.render('error', {error});
+      res.render('error', { error });
     });
 }
 
 function edit(req, res) {
-
   const contact_id = req.params.contact_id;
 
   if (!contact_id) {
@@ -59,34 +54,36 @@ function edit(req, res) {
 
   contactRepository.getContact(req.session.token, contact_id)
     .then((contact) => {
-
       if (!contact.interactions) {
         contact.interactions = [];
       }
 
+      const csrfToken = controllerUtils.genCSRF(req);
+
       res.render('contact/contact-edit', {
         term: req.query.term,
         company: null,
-        contact
+        contact,
+        csrfToken,
       });
     })
     .catch((error) => {
-      res.render('error', {error});
+      res.render('error', { error });
     });
 }
 
 function add(req, res) {
-
-  let companyId = req.query.company_id || null;
-  let viewModel = {
+  const companyId = req.query.company_id || null;
+  const csrfToken = controllerUtils.genCSRF(req);
+  const viewModel = {
     company: null,
-    contact: null
+    contact: null,
+    csrfToken,
   };
 
-  function render( data ){
-
+  function render(data) {
     if (data) {
-      Object.assign( viewModel, data );
+      Object.assign(viewModel, data);
     }
 
     res.render('contact/contact-edit', viewModel);
@@ -95,7 +92,7 @@ function add(req, res) {
   if (companyId) {
     companyRepository.getDitCompany(req.session.token, companyId)
       .then((company) => {
-        render({company});
+        render({ company });
       });
   } else {
     render();
@@ -105,8 +102,7 @@ function add(req, res) {
 function cleanErrors(errors) {
   if (errors.address_1 || errors.address_2 ||
     errors.address_town || errors.address_county ||
-    errors.address_postcode || errors.address_country)
-  {
+    errors.address_postcode || errors.address_country) {
     errors.registered_address = ['Invalid address'];
     delete errors.address_1;
     delete errors.address_2;
@@ -119,7 +115,7 @@ function cleanErrors(errors) {
 
 function post(req, res) {
   // Flatten selected fields
-  let contact = Object.assign({}, req.body.contact);
+  const contact = Object.assign({}, req.body.contact);
 
   controllerUtils.flattenAddress(contact);
   controllerUtils.flattenIdFields(contact);
@@ -127,21 +123,22 @@ function post(req, res) {
 
   contact.telephone_countrycode = '+44';
 
+  controllerUtils.genCSRF(req, res);
+
   contactRepository.saveContact(req.session.token, contact)
     .then((data) => {
       res.json(data);
     })
     .catch((error) => {
       if (typeof error.error === 'string') {
-        return res.status(error.response.statusCode).json({errors: [{'error': error.response.statusMessage}]});
+        return res.status(error.response.statusCode).json({ errors: [{ error: error.response.statusMessage }] });
       }
 
-      let errors = error.error;
+      const errors = error.error;
       cleanErrors(errors);
 
-      return res.status(400).json({errors});
+      return res.status(400).json({ errors });
     });
-
 }
 
 function archive(req, res) {

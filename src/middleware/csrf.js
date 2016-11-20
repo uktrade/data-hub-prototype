@@ -4,10 +4,17 @@ module.exports = (req, res, next) => {
   }
 
   try {
-    const requestCsrf = req.get('X-CSRF-TOKEN');
     const sessionCsrf = req.session.csrfToken;
+    let requestCsrf;
 
-    // Not matter what, reset the token.
+    // Look for the csrf token first in the form body, if not then the http headers
+    if (req.body && req.body._csrf_token) {
+      requestCsrf = req.body._csrf_token;
+    } else {
+      requestCsrf = req.get('x-csrf-token');
+    }
+
+    // Not matter what, reset the token now it has been used.
     req.session.csrfToken = null;
 
     if (!requestCsrf || !sessionCsrf || requestCsrf !== sessionCsrf) {

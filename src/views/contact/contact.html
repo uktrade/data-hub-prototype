@@ -19,6 +19,7 @@
 
   {% if not contact.archived %}
     <form id="archive-details" class="hidden" action="/contact/{{ contact.id }}/archive" method="post">
+      <input type="hidden" name="_csrf_token" value="{{csrfToken}}"/>
       {{ forms.dropdown('archived_reason',
       label="Reason for archiving contact",
       emptyLabel="Select a value",

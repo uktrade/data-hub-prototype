@@ -1,6 +1,5 @@
 /* eslint new-cap: 0 */
 const express = require('express');
-const router = express.Router();
 const controllerUtils = require('../lib/controllerutils');
 const metadataRepository = require('../repositorys/metadatarepository');
 const companyRepository = require('../repositorys/companyrepository');
@@ -9,13 +8,15 @@ const React = require('react');
 const ReactDom = require('react-dom/server');
 const CompanyForm = require('../forms/companyform');
 
+const router = express.Router();
+
 // Add some extra default info into the company to make it easier to edit
 function postProcessCompany(company) {
   if (!company.export_to_countries || company.export_to_countries.length === 0) {
-    company.export_to_countries = [{id: null, name: ''}];
+    company.export_to_countries = [{ id: null, name: '' }];
   }
   if (!company.future_interest_countries || company.future_interest_countries.length === 0) {
-    company.future_interest_countries = [{id: null, name: ''}];
+    company.future_interest_countries = [{ id: null, name: '' }];
   }
 
   if (company.trading_address && !company.trading_address.address_country) {
@@ -25,7 +26,7 @@ function postProcessCompany(company) {
       address_town: '',
       address_county: '',
       address_postcode: '',
-      address_country: null
+      address_country: null,
     };
   }
 }
@@ -33,8 +34,7 @@ function postProcessCompany(company) {
 function cleanErrors(errors) {
   if (errors.registered_address_1 || errors.registered_address_2 ||
     errors.registered_address_town || errors.registered_address_county ||
-    errors.registered_address_postcode || errors.registered_address_country)
-  {
+    errors.registered_address_postcode || errors.registered_address_country) {
     errors.registered_address = ['Invalid address'];
     delete errors.registered_address_1;
     delete errors.registered_address_2;
@@ -46,8 +46,7 @@ function cleanErrors(errors) {
 
   if (errors.trading_address_1 || errors.trading_address_2 ||
     errors.trading_address_town || errors.trading_address_county ||
-    errors.trading_address_postcode || errors.trading_address_country)
-  {
+    errors.trading_address_postcode || errors.trading_address_country) {
     errors.trading_address = ['Invalid address'];
     delete errors.trading_address_1;
     delete errors.trading_address_2;
@@ -65,15 +64,16 @@ function add(req, res) {
 }
 
 function view(req, res) {
-  let id = req.params.sourceId;
-  let source = req.params.source;
+  const id = req.params.sourceId;
+  const source = req.params.source;
+  const csrfToken = controllerUtils.genCSRF(req);
 
   if (!id) {
     res.redirect('/');
     return;
   }
 
-  companyRepository.getCompany( req.session.token, id, source)
+  companyRepository.getCompany(req.session.token, id, source)
     .then((company) => {
       postProcessCompany(company);
       let formData;
@@ -113,16 +113,16 @@ function view(req, res) {
         timeSinceNewContact,
         timeSinceNewInteraction,
         contactsInLastYear,
-        interactionsInLastYear
+        interactionsInLastYear,
+        csrfToken,
       });
     })
     .catch((error) => {
-      res.render('error', {error});
+      res.render('error', { error });
     });
 }
 
 function post(req, res) {
-
   // Flatten selected fields
   const company = Object.assign({}, req.body.company);
 
@@ -173,7 +173,7 @@ function getJson(req, res) {
       res.json(company);
     })
     .catch((error) => {
-      res.render('error', {error});
+      res.render('error', { error });
     });
 }
 

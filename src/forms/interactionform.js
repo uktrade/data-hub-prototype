@@ -87,12 +87,15 @@ class InteractionForm extends BaseForm {
   }
 
   save = () => {
-
-    axios.post('/interaction/', { interaction: this.state.formData })
+    axios.post('/interaction/',
+      { interaction: this.state.formData },
+      { headers: {'x-csrf-token': this.csrfToken }}
+      )
       .then((response) => {
         window.location.href = `/interaction/${response.data.id}/view`;
       })
       .catch((error) => {
+        this.csrfToken = error.response.headers['x-csrf-token'];
         this.setState({
           errors: error.response.data.errors,
           saving: false

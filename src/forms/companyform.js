@@ -112,10 +112,6 @@ class CompanyForm extends BaseForm {
       formData: company,
       isCDMS: (!company.company_number || company.company_number.length === 0)
     };
-
-    if (typeof window !== 'undefined' && window.csrfToken) {
-      this.csrfToken = window.csrfToken;
-    }
   }
 
   componentDidMount() {
@@ -256,13 +252,13 @@ class CompanyForm extends BaseForm {
     this.setState({saving: true});
     axios.post('/company/',
         { company: this.state.formData },
-        { headers: {'X-CSRF-TOKEN': this.csrfToken }}
+        { headers: {'x-csrf-token': this.csrfToken }}
       )
       .then((response) => {
         window.location.href = `/company/combined/${response.data.id}`;
       })
       .catch((error) => {
-        console.log(error);
+        this.csrfToken = error.response.headers['x-csrf-token'];
         this.setState({
           errors: error.response.data.errors,
           saving: false
