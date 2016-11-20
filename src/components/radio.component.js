@@ -23,7 +23,7 @@ class RadioComponent extends React.Component {
   render() {
     const id = generateID();
 
-    let className = 'block-label';
+    let className = 'block-label selection-button-radio';
     if (this.props.checked) className += ' selected';
     if (this.state.focused) className += ' focused';
 
