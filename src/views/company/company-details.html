@@ -148,8 +148,8 @@
         <a href="#" class="button button-secondary js-button-edit">Edit company details</a>
       {% else  %}
         {% if not company.archived %}
-          <a href="#" class="button button-secondary js-button-edit">Edit company details</a>
-          <a href="#" id="archive-reveal-button" class="button button-secondary">Archive company</a>
+          <button class="button button-secondary js-button-edit">Edit company details</button>
+          <button id="archive-reveal-button" class="button button-secondary">Archive company</button>
         {% else %}
           <a class="button button-disabled">Edit company details</a>
           <a href="/company/{{ company.id }}/unarchive" class="button button-secondary">Unarchive now</a>

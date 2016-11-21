@@ -58,13 +58,14 @@ if (interactions && interactions.length > 0) {
 
 function revealArchive(event) {
   event.preventDefault();
-  removeClass(document.getElementById('archive-details'), 'hidden');
+  removeClass(archiveForm, 'hidden');
   addClass(archiveButton, 'hidden');
+  archiveForm.scrollIntoView();
 }
 
 function hideArchive(event) {
   event.preventDefault();
-  addClass(document.getElementById('archive-details'), 'hidden');
+  addClass(archiveForm, 'hidden');
   removeClass(archiveButton, 'hidden');
 }
 

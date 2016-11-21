@@ -1,5 +1,6 @@
 /* eslint new-cap: 0 */
 const express = require('express');
+const winston = require('winston');
 const controllerUtils = require('../lib/controllerutils');
 const contactRepository = require('../repositorys/contactrepository');
 const companyRepository = require('../repositorys/companyrepository');
@@ -149,6 +150,10 @@ function archive(req, res) {
   contactRepository.archiveContact(req.session.token, req.params.contact_id, req.body.archived_reason)
     .then(() => {
       res.redirect(`/contact/${req.params.contact_id}/view`);
+    })
+    .catch((error) => {
+      winston.log('error', error.error);
+      res.render('error', { error: 'Unable to archive contact' });
     });
 }
 
@@ -156,6 +161,10 @@ function unarchive(req, res) {
   contactRepository.unarchiveContact(req.session.token, req.params.contact_id)
     .then(() => {
       res.redirect(`/contact/${req.params.contact_id}/view`);
+    })
+    .catch((error) => {
+      winston.log('error', error.error);
+      res.render('error', { error: 'Unable to unarchive contact' });
     });
 }
 

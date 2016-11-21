@@ -1,5 +1,6 @@
 /* eslint new-cap: 0 */
 const express = require('express');
+const winston = require('winston');
 const controllerUtils = require('../lib/controllerutils');
 const metadataRepository = require('../repositorys/metadatarepository');
 const companyRepository = require('../repositorys/companyrepository');
@@ -154,6 +155,10 @@ function archive(req, res) {
   companyRepository.archiveCompany(req.session.token, req.params.company_id, req.body.archived_reason)
     .then(() => {
       res.redirect(`/company/COMBINED/${req.params.company_id}`);
+    })
+    .catch((error) => {
+      winston.log('error', error.error);
+      res.render('error', { error: 'Unable to archive company' });
     });
 }
 
@@ -161,6 +166,10 @@ function unarchive(req, res) {
   companyRepository.unarchiveCompany(req.session.token, req.params.company_id)
     .then(() => {
       res.redirect(`/company/COMBINED/${req.params.company_id}`);
+    })
+    .catch((error) => {
+      winston.log('error', error.error);
+      res.render('error', { error: 'Unable to unarchive company' });
     });
 }
 

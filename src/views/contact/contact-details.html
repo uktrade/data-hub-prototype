@@ -64,7 +64,7 @@
   {% if not contact.company.archived %}
     {% if not contact.archived %}
       <a href="/contact/{{ contact.id }}/edit" class="button button-secondary">Edit contact details</a>
-      <a href="#" id="archive-reveal-button" class="button button-secondary">Archive contact</a>
+      <button id="archive-reveal-button" class="button button-secondary">Archive contact</button>
     {% else %}
       <a class="button button-disabled">Edit contact details</a>
       <a href="/contact/{{ contact.id }}/unarchive" class="button button-secondary">Unarchive now</a>
