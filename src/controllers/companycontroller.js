@@ -8,6 +8,10 @@ const itemCollectionService = require('../services/itemcollectionservice');
 const React = require('react');
 const ReactDom = require('react-dom/server');
 const CompanyForm = require('../forms/companyform');
+const Router = require('react-router');
+const routesConfig = require('../pages/company/routesconfig');
+const AsyncProps = require('async-props').default;
+const loadPropsOnServer = require('async-props').loadPropsOnServer;
 
 const router = express.Router();
 
@@ -173,26 +177,27 @@ function unarchive(req, res) {
     });
 }
 
-function getJson(req, res) {
-  const id = req.params.sourceId;
-  const source = req.params.source;
+function index(req, res) {
+  const token = req.session.token;
 
-  companyRepository.getCompany(req.session.token, id, source)
-    .then((company) => {
-      res.json(company);
-    })
-    .catch((error) => {
-      res.render('error', { error });
-    });
+  Router.match({ routes: routesConfig, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+    if (error) {
+      res.status(500).send(error.message);
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+    } else if (renderProps) {
+      renderProps.params.token = token;
+      loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
+        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
+        res.render('company/company-react', { markup, scriptTag });
+      });
+    } else {
+      res.status(404).send('Not found');
+    }
+  });
 }
 
-
-router.get('/add', add);
-router.get('/json/:company_id', getJson);
-router.get('/:company_id/unarchive', unarchive);
-router.get('/:source/:sourceId/json?', getJson);
-router.get('/:source/:sourceId?', view);
-router.post('/:company_id/archive', archive);
+router.get('*', index);
 router.post(['/'], post);
 
 

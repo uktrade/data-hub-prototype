@@ -1,5 +1,3 @@
-'use strict';
-
 const config = require('../config');
 const authorisedRequest = require( '../lib/authorisedrequest' );
 const interactionRepository = require('./interactionrepository');
@@ -57,7 +55,7 @@ function getCompany(token, id, source) {
             company_number: id,
             companies_house_data,
             contacts: [],
-            interactions: []
+            interactions: [],
           });
         })
         .catch((error) => {

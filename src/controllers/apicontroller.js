@@ -213,6 +213,20 @@ function getSubsectors( req, res ){
   res.json( metadataRepository.SUBSECTORS[ sectorId ] );
 }
 
+function getCompany(req, res) {
+  const id = req.params.sourceId;
+  const source = req.params.source;
+
+  companyRepository.getCompany(req.session.token, id, source)
+    .then((company) => {
+      res.json(company);
+    })
+    .catch((error) => {
+      res.render('error', { error });
+    });
+}
+
+
 router.get('/suggest', companySuggest);
 router.get('/countrylookup', countryLookup);
 router.get('/accountmanagerlookup', accountManagerLookup);
@@ -221,7 +235,7 @@ router.get('/teamlookup', teamLookup);
 router.get('/meta/:metaName', getMetadata);
 router.get('/postcodelookup/:postcode', postcodelookup);
 router.get('/subsectors/:sectorId', getSubsectors);
-
+router.get('/company/:source/:sourceId', getCompany);
 
 module.exports = {
   postcodelookup,

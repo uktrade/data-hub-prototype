@@ -1,5 +1,8 @@
 const webpack = require('webpack');
+
 const prod = process.env.NODE_ENV === 'production';
+const moduleReplacementPlugin =
+  new webpack.NormalModuleReplacementPlugin(/companyrepository.js$/, 'remotecompanyrepository.js');
 
 module.exports = {
   devtool: prod ? 'hidden-source-map' : 'source-map',
@@ -28,21 +31,21 @@ module.exports = {
           cacheDirectory: './babel_cache',
           babelrc: false,
           presets: ['es2015', 'react'],
-          plugins: ['transform-class-properties']
-        }
-      }
-    ]
+          plugins: ['transform-class-properties'],
+        },
+      },
+    ],
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
     modules: [
       'app',
-      'node_modules'
+      'node_modules',
     ]
   },
   externals: {
     'react': 'React',
-    'react-dom': 'ReactDOM'
+    'react-dom': 'ReactDOM',
   },
   plugins: prod ? [
     new webpack.DefinePlugin({
@@ -51,17 +54,19 @@ module.exports = {
       }}),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
+        warnings: false,
       },
       output: {
-        comments: false
+        comments: false,
       },
-      sourceMap: false
+      sourceMap: false,
     }),
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.CommonsChunkPlugin('common.js')
+    new webpack.optimize.CommonsChunkPlugin('common.js'),
+    moduleReplacementPlugin,
   ] : [
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.CommonsChunkPlugin('common.js')
-  ]
+    new webpack.optimize.CommonsChunkPlugin('common.js'),
+    moduleReplacementPlugin,
+  ],
 };
