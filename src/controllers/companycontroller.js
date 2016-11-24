@@ -1,40 +1,17 @@
 /* eslint new-cap: 0 */
 const express = require('express');
 const winston = require('winston');
-const controllerUtils = require('../lib/controllerutils');
-const metadataRepository = require('../repositorys/metadatarepository');
-const companyRepository = require('../repositorys/companyrepository');
-const itemCollectionService = require('../services/itemcollectionservice');
 const React = require('react');
 const ReactDom = require('react-dom/server');
-const CompanyForm = require('../forms/companyform');
 const Router = require('react-router');
-const routesConfig = require('../pages/company/routesconfig');
 const AsyncProps = require('async-props').default;
 const loadPropsOnServer = require('async-props').loadPropsOnServer;
+const controllerUtils = require('../lib/controllerutils');
+const companyRepository = require('../repositorys/companyrepository');
+const routesConfig = require('../reactrouting/companyroutes').routesConfig;
+
 
 const router = express.Router();
-
-// Add some extra default info into the company to make it easier to edit
-function postProcessCompany(company) {
-  if (!company.export_to_countries || company.export_to_countries.length === 0) {
-    company.export_to_countries = [{ id: null, name: '' }];
-  }
-  if (!company.future_interest_countries || company.future_interest_countries.length === 0) {
-    company.future_interest_countries = [{ id: null, name: '' }];
-  }
-
-  if (company.trading_address && !company.trading_address.address_country) {
-    company.trading_address = {
-      address_1: '',
-      address_2: '',
-      address_town: '',
-      address_county: '',
-      address_postcode: '',
-      address_country: null,
-    };
-  }
-}
 
 function cleanErrors(errors) {
   if (errors.registered_address_1 || errors.registered_address_2 ||
@@ -60,71 +37,6 @@ function cleanErrors(errors) {
     delete errors.trading_address_postcode;
     delete errors.trading_address_country;
   }
-}
-
-function add(req, res) {
-  const csrfToken = controllerUtils.genCSRF(req);
-  const markup = ReactDom.renderToString(<CompanyForm />);
-  res.render('company/company-add', { markup, csrfToken });
-}
-
-function view(req, res) {
-  const id = req.params.sourceId;
-  const source = req.params.source;
-  const csrfToken = controllerUtils.genCSRF(req);
-
-  if (!id) {
-    res.redirect('/');
-    return;
-  }
-
-  companyRepository.getCompany(req.session.token, id, source)
-    .then((company) => {
-      postProcessCompany(company);
-      let formData;
-
-      if (!req.body || Object.keys(req.body).length === 0) {
-        formData = Object.assign({}, company);
-        delete formData.contact;
-        delete formData.interaction;
-      } else {
-        formData = req.body;
-      }
-
-      const timeSinceNewContact = itemCollectionService.getTimeSinceLastAddedItem(company.contacts);
-      const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(company.interactions);
-      const contactsInLastYear = itemCollectionService.getItemsAddedSince(company.contacts);
-      const interactionsInLastYear = itemCollectionService.getItemsAddedSince(company.interactions);
-
-      let title;
-      if (!company.name && company.companies_house_data.name) {
-        title = company.companies_house_data.name;
-      } else {
-        title = company.name;
-      }
-
-      res.render('company/company', {
-        company,
-        title,
-        SECTOR_OPTIONS: metadataRepository.SECTOR_OPTIONS,
-        REGION_OPTIONS: metadataRepository.REGION_OPTIONS,
-        EMPLOYEE_OPTIONS: metadataRepository.EMPLOYEE_OPTIONS,
-        TURNOVER_OPTIONS: metadataRepository.TURNOVER_OPTIONS,
-        TYPES_OF_BUSINESS: metadataRepository.TYPES_OF_BUSINESS,
-        REASONS_FOR_ARCHIVE: metadataRepository.REASONS_FOR_ARCHIVE,
-        COUNTRYS: metadataRepository.COUNTRYS,
-        errors: req.errors,
-        formData,
-        timeSinceNewContact,
-        timeSinceNewInteraction,
-        contactsInLastYear,
-        interactionsInLastYear,
-        csrfToken,
-      });
-    })
-    .catch((error) => {
-      res.render('error', { error });
-    });
 }
 
 function post(req, res) {
@@ -156,29 +68,44 @@ function post(req, res) {
 }
 
 function archive(req, res) {
-  companyRepository.archiveCompany(req.session.token, req.params.company_id, req.body.archived_reason)
-    .then(() => {
-      res.redirect(`/company/COMBINED/${req.params.company_id}`);
+  controllerUtils.genCSRF(req, res);
+
+  companyRepository.archiveCompany(req.session.token, req.body.id, req.body.reason)
+    .then((company) => {
+      res.json(company);
     })
     .catch((error) => {
-      winston.log('error', error.error);
-      res.render('error', { error: 'Unable to archive company' });
+      winston.log('error', error);
+      if (typeof error.error === 'string') {
+        return res.status(error.response.statusCode).json({ errors: [{ error: error.response.statusMessage }] });
+      }
+      const errors = error.error;
+      cleanErrors(errors);
+      return res.status(400).json({ errors });
     });
 }
 
 function unarchive(req, res) {
-  companyRepository.unarchiveCompany(req.session.token, req.params.company_id)
-    .then(() => {
-      res.redirect(`/company/COMBINED/${req.params.company_id}`);
+  controllerUtils.genCSRF(req, res);
+
+  companyRepository.unarchiveCompany(req.session.token, req.body.id)
+    .then((company) => {
+      res.json(company);
     })
     .catch((error) => {
-      winston.log('error', error.error);
-      res.render('error', { error: 'Unable to unarchive company' });
+      winston.error('error', error);
+      if (typeof error.error === 'string') {
+        return res.status(error.response.statusCode).json({ errors: [{ error: error.response.statusMessage }] });
+      }
+      const errors = error.error;
+      cleanErrors(errors);
+      return res.status(400).json({ errors });
     });
 }
 
 function index(req, res) {
   const token = req.session.token;
+  const csrfToken = controllerUtils.genCSRF(req);
 
   Router.match({ routes: routesConfig, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
     if (error) {
@@ -189,7 +116,7 @@ function index(req, res) {
       renderProps.params.token = token;
       loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
         const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
-        res.render('company/company-react', { markup, scriptTag });
+        res.render('company/company-react', { markup, scriptTag, csrfToken });
       });
     } else {
       res.status(404).send('Not found');
@@ -198,7 +125,10 @@ function index(req, res) {
 }
 
 router.get('*', index);
-router.post(['/'], post);
+router.post('/archive', archive);
+router.post('/unarchive', unarchive);
+
+router.post('/', post);
 
 
-module.exports = { view, post, router };
+module.exports = { router };

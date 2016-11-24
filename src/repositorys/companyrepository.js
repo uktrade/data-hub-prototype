@@ -129,7 +129,7 @@ function saveCompany(token, company) {
         url: `${config.apiRoot}/company/`,
         method: 'POST',
         json: true,
-        body: parsedCompany
+        body: parsedCompany,
       });
     });
 
@@ -138,9 +138,9 @@ function saveCompany(token, company) {
 function archiveCompany(token, companyId, reason) {
   const options = {
     json: true,
-    body: {reason},
+    body: { reason },
     url: `${config.apiRoot}/company/${companyId}/archive/`,
-    method: 'POST'
+    method: 'POST',
   };
   return authorisedRequest(token, options);
 }

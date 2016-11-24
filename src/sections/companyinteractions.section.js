@@ -1,14 +1,56 @@
 const React = require('react');
+const InteractionTable = require('../components/interactiontable.component');
+const itemCollectionService = require('../services/itemcollectionservice');
 
 function CompanyInteractions(props) {
+  const { company, interactions } = props;
+
+  if (!interactions || interactions.length === 0) {
+    return (<a className="button button-secondary" href={`/interaction/add?company_id=${company.id}`}>Add new interaction</a>);
+  }
+
+  // calculate times
+  const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(company.interactions);
+  const interactionsInLastYear = itemCollectionService.getItemsAddedSince(company.interactions);
+
+  if (typeof window !== 'undefined') {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+  }
 
   return (
     <div>
-      <h2>Company interactions</h2>
-      {props.company.interactions.length}
+      <div className="grid-row">
+        <div className="column-one-third">
+          <div className="data">
+            <h2 className="bold-xlarge data__title">{ timeSinceNewInteraction.amount }</h2>
+            <p className="bold-xsmall data__description">{ timeSinceNewInteraction.unit } since last new interaction entry</p>
+          </div>
+        </div>
+        <div className="column-one-third">
+          <div className="data">
+            <h2 id="added-count" className="bold-xlarge data__title">{ interactionsInLastYear.length }</h2>
+            <p className="bold-xsmall data__description">interactions added in the last 12 months</p>
+          </div>
+        </div>
+        <div className="column-one-third">
+          <p className="actions">
+            { !company.archived ?
+              <a className="button button-secondary" href={`/interaction/add?company_id=${company.id}`}>Add new interaction</a>
+              :
+              <a className="button button-disabled">Add new interaction</a>
+            }
+          </p>
+        </div>
+      </div>
+
+      <InteractionTable interactions={interactions} />
     </div>
   );
 }
 
+CompanyInteractions.propTypes = {
+  company: React.PropTypes.object.isRequired,
+  interactions: React.PropTypes.array.isRequired,
+};
 
 module.exports = CompanyInteractions;

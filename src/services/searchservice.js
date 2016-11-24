@@ -1,8 +1,7 @@
-'use strict';
-
-const authorisedRequest = require( '../lib/authorisedrequest' );
+const authorisedRequest = require('../lib/authorisedrequest');
 const config = require('../config');
 const includes = require('lodash/includes');
+const winston = require('winston');
 
 const FACETS = {
   'Category': [
@@ -11,8 +10,7 @@ const FACETS = {
   ]
 };
 
-
-function search({token, term, limit = 10, page = 1, filters}) {
+function search({ token, term, limit = 10, page = 1, filters }) {
 
   let body = { term, limit };
   body.offset = (page * body.limit) - body.limit;
@@ -50,31 +48,34 @@ function search({token, term, limit = 10, page = 1, filters}) {
 }
 
 function suggestCompany(token, term, types) {
-
   if (!types) {
     types = ['company_company'];
   }
-
-  term += '*';
-
-  let options = {
+  const options = {
     url: `${config.apiRoot}/search`,
-    body: {term, doc_type: types},
+    body: {
+      term,
+      doc_type: types,
+      limit: 10,
+      offset: 0,
+    },
     json: true,
-    method: 'POST'
+    method: 'POST',
   };
-
+winston.debug('----');
   return authorisedRequest(token, options).
     then((result) => {
+      winston.debug('suggestion raw result', result);
       return result.hits
-        .map(hit => {
-          return {
+        .map((hit) => ({
             name: hit._source.name,
             id: hit._id,
             _type: hit._type
-          };
-        });
+          }));
 
+    })
+    .catch((error) => {
+      winston.error('Error calling auth reguest for suggestions', error);
     });
 }
 

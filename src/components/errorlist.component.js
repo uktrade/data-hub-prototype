@@ -15,7 +15,7 @@ function errorListComponent(props) {
           Error
         </h1>
         <ul className="error-summary-list">
-          <li>{props.errors[0].error}</li>
+          <li>{props.errors.error}</li>
         </ul>
       </div>
     );
@@ -46,7 +46,7 @@ function errorListComponent(props) {
 
 errorListComponent.propTypes = {
   errors: React.PropTypes.object,
-  labels: React.PropTypes.object.isRequired,
+  labels: React.PropTypes.object,
 };
 
 module.exports = errorListComponent;

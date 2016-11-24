@@ -5,5 +5,5 @@ const CompanyForm = require('../forms/companyform');
 
 ReactDOM.render(
    <CompanyForm />,
-  document.getElementById('company-form'),
+  document.getElementById('company-form')
 );

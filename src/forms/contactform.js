@@ -108,13 +108,13 @@ class ContactForm extends BaseForm {
 
     axios.post('/contact/',
       { contact: this.state.formData },
-      { headers: {'x-csrf-token': this.csrfToken }}
+      { headers: {'x-csrf-token': window.csrfToken }}
       )
       .then((response) => {
         window.location.href = `/contact/${response.data.id}/view`;
       })
       .catch((error) => {
-        this.csrfToken = error.response.headers['x-csrf-token'];
+        window.csrfToken = error.response.headers['x-csrf-token'];
         this.setState({
           errors: error.response.data.errors,
           saving: false

@@ -8,14 +8,14 @@ module.exports = {
   devtool: prod ? 'hidden-source-map' : 'source-map',
 
   entry: {
-    login: './src/pages/login.js',
-    index: './src/pages/index.js',
-    search: './src/pages/search.js',
-    company: './src/pages/company.js',
-    contact: './src/pages/contact.js',
+    company: './src/pages/company.page.js',
     companyadd: './src/pages/companyadd.js',
+    contact: './src/pages/contact.js',
     contactedit: './src/pages/contactedit.js',
+    index: './src/pages/index.js',
     interactionedit: './src/pages/interactionedit.js',
+    login: './src/pages/login.js',
+    search: './src/pages/search.js',
   },
   output: {
     path: 'build/javascripts',
@@ -60,6 +60,7 @@ module.exports = {
         comments: false,
       },
       sourceMap: false,
+      dead_code: true,
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin('common.js'),
