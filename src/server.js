@@ -91,10 +91,7 @@ app.use(bodyParser.json({ limit: '1mb' }));
 app.use(expressValidator({ customValidators, customSanitizers }));
 
 app.use(compression());
-app.set('views', [
-  `${__dirname}/../src/views`,
-  `${__dirname}/../node_modules/govuk_template_jinja/views`,
-]);
+app.set('views', [`${__dirname}/../src/views`]);
 
 filters.stringify = JSON.stringify;
 
@@ -113,7 +110,6 @@ app.use('/javascripts', express.static(`${__dirname}/../build/javascripts`));
 app.use('/stylesheets', express.static(`${__dirname}/../build/stylesheets`));
 app.use(express.static(`${__dirname}/../src/public`));
 app.use('/images', express.static(`${__dirname}/../node_modules/govuk_frontend_toolkit/images`));
-app.use('/fonts', express.static(`${__dirname}/../node_modules/govuk_template_mustache/assets/stylesheets`));
 app.use('/fonts', express.static(`${__dirname}/../node_modules/font-awesome/fonts`));
 app.use('/javascripts/react', express.static(`${__dirname}/../node_modules/react/dist`));
 app.use('/javascripts/react-dom', express.static(`${__dirname}/../node_modules/react-dom/dist`));
