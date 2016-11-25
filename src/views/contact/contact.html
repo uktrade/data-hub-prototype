@@ -5,7 +5,7 @@
   {% if referer and referer.indexOf('search') != -1 %}
     <a class="back-link" href="/search?term={{ term }}">Back to search</a>
   {% else %}
-    <a class="back-link" href="/company/DIT/{{ contact.company.id }}#contacts">Back to company</a>
+    <a class="back-link" href="/company/DIT/{{ contact.company.id }}/contacts">Back to company</a>
   {% endif %}
   <h1 class="heading-xlarge record-title">
     {{ contact.first_name }} {{ contact.last_name }}

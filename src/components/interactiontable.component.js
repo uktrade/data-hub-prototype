@@ -134,7 +134,7 @@ class InteractionTableComponent extends React.Component {
 }
 
 InteractionTableComponent.propTypes = {
-  interactions: React.PropTypes.array.isRequired
+  interactions: React.PropTypes.array
 };
 
 module.exports = InteractionTableComponent;

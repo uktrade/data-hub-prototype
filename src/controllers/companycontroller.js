@@ -42,9 +42,6 @@ function cleanErrors(errors) {
 function post(req, res) {
   // Flatten selected fields
   const company = Object.assign({}, req.body.company);
-
-  controllerUtils.flattenAddress(company, 'registered');
-  controllerUtils.flattenAddress(company, 'trading');
   controllerUtils.flattenIdFields(company);
   controllerUtils.nullEmptyFields(company);
 

@@ -10,11 +10,24 @@ class AddressComponent extends React.Component {
   constructor(props) {
     super(props);
 
+    const prefix = props.prefix ? `${props.prefix}_` : '';
+    const value = props.value;
+
+    const address = {
+      address_1: value[prefix + 'address_1'],
+      address_2: value[prefix + 'address_2'],
+      address_town: value[prefix + 'address_town'],
+      address_county: value[prefix + 'address_county'],
+      address_postcode: value[prefix + 'address_postcode'],
+      address_country: value[prefix + 'address_country']
+    };
+
+
     this.state = {
       reveal: false,
       addressSuggestions: [],
       countryOptions: [],
-      address: props.value,
+      address,
       lookupPostcode: ''
     };
 
@@ -29,7 +42,14 @@ class AddressComponent extends React.Component {
 
   updateAddress(address) {
     this.setState({address});
-    this.props.onChange({name: this.props.name, value: address});
+
+    const prefix = this.props.prefix ? `${this.props.prefix}_` : '';
+    this.props.onChange({ name: prefix + 'address_1', value: address.address_1});
+    this.props.onChange({ name: prefix + 'address_2', value: address.address_2});
+    this.props.onChange({ name: prefix + 'address_town', value: address.address_town});
+    this.props.onChange({ name: prefix + 'address_county', value: address.address_county});
+    this.props.onChange({ name: prefix + 'address_postcode', value: address.address_postcode});
+    this.props.onChange({ name: prefix + 'address_country', value: address.address_country});
   }
 
   updateAddressField = (event) => {
@@ -177,6 +197,7 @@ class AddressComponent extends React.Component {
           className="form-control"
           onChange={this.selectSuggestion}
         >
+          <option>Select an address</option>
           {options}
         </select>
       </div>
@@ -254,7 +275,8 @@ class AddressComponent extends React.Component {
     label: React.PropTypes.string.isRequired,
     value: React.PropTypes.object.isRequired,
     name: React.PropTypes.string.isRequired,
-    errors: React.PropTypes.array
+    errors: React.PropTypes.array,
+    prefix: React.PropTypes.string
   };
 
 }

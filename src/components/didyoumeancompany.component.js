@@ -60,13 +60,26 @@ class DidYouMeanCompanyComponent extends React.Component {
       id = company.id;
       type = 'company_company';
 
-      if (company.trading_address
-        && company.trading_address.address_1
-        && company.trading_address.address_1.length > 0)
+      if (company.trading_address_1
+        && company.trading_address_1.length > 0)
       {
-        address = company.trading_address;
+        address = {
+          address_1: company.trading_address_1,
+          address_2: company.trading_address_2,
+          address_town: company.trading_address_town,
+          address_county: company.trading_address_county,
+          address_postcode: company.trading_address_postcode,
+          address_country: company.trading_address_country,
+        }
       } else {
-        address = company.registered_address;
+        address = {
+          address_1: company.registered_address_1,
+          address_2: company.registered_address_2,
+          address_town: company.registered_address_town,
+          address_county: company.registered_address_county,
+          address_postcode: company.registered_address_postcode,
+          address_country: company.registered_address_country,
+        }
       }
 
       addressStr = address.address_1;

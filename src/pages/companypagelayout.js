@@ -7,6 +7,8 @@ const formatDate = require('../lib/date').formatDate;
 const InputText = require('../components/inputtext.component');
 
 
+const DISSOLVED_REASON = 'Company is dissolved';
+
 class CompanyPage extends React.Component {
   static loadProps(context, cb) {
     const params = context.params;
@@ -22,12 +24,24 @@ class CompanyPage extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    const state = {
       archiveVisible: false,
       saving: false,
       errors: null,
-      company: props.company,
+      company: props.company
     };
+
+    if (props.company.archived_reason && props.company.archived_reason.length > 0) {
+      if (props.company.archive_reason = DISSOLVED_REASON) {
+        state.archived_reason_dropdown = DISSOLVED_REASON;
+        state.archived_reason_other = null;
+      } else {
+        state.archived_reason_dropdown = 'Other';
+        state.archived_reason_other = props.company.archived_reason;
+      }
+    }
+
+    this.state = state;
   }
 
   updateToken(response) {
@@ -39,6 +53,7 @@ class CompanyPage extends React.Component {
   unarchive = (event) => {
     event.preventDefault();
     event.target.blur();
+    this.setState({ saving: true });
     const token = window.csrfToken;
     axios.post(`/company/unarchive`,
       { id: this.state.company.id},
@@ -66,11 +81,17 @@ class CompanyPage extends React.Component {
     event.preventDefault();
     this.setState({ saving: true });
     const {company} = this.state;
+    const reason = this.state.archived_reason_dropdown === DISSOLVED_REASON ? DISSOLVED_REASON : this.state.archived_reason_other;
+
+    if (!reason || reason.length === 0) {
+      this.setState({ errors : { error: 'You must provide a reason to archive' }});
+      return;
+    }
 
     const token = window.csrfToken;
     axios.post(`/company/archive`, {
         id: company.id,
-        reason: company.archive_reason
+        reason
       },
       { headers: {'x-csrf-token': token }})
       .then((response) => {
@@ -92,9 +113,12 @@ class CompanyPage extends React.Component {
   }
 
   changeArchiveReason = (event) => {
-    const company = Object.assign({}, this.state.company);
-    company.archive_reason = event.target.value;
-    this.setState({company});
+    console.log(event.target.name);
+    if (event.target.name === 'archived_reason') {
+      this.setState({ archived_reason_dropdown: event.target.value });
+    } else {
+      this.setState({ archived_reason_other: event.target.value });
+    }
   }
 
   showArchiveSection = (event) => {
@@ -107,23 +131,13 @@ class CompanyPage extends React.Component {
   hideArchiveSection = (event) => {
     event.preventDefault();
     event.target.blur();
-    this.setState({ archiveVisible: false});
+    this.setState({
+      archiveVisible: false,
+      errors: null,
+    });
   }
 
   archiveSection() {
-    const reason = this.state.company.archive_reason;
-    let selectOption = '';
-    let otherReason;
-
-    if (reason && reason.length > 0) {
-      if (reason === 'Company is dissolved') {
-        selectOption = reason;
-      } else {
-        selectOption = 'Other';
-        otherReason = reason;
-      }
-    }
-
     return (
       <form onSubmit={this.archive}>
         <div className="form-group">
@@ -131,15 +145,15 @@ class CompanyPage extends React.Component {
             Reason for archiving company
           </label>
 
-          <select className="form-control" name="archived_reason" onChange={this.changeArchiveReason} value={selectOption}>
+          <select className="form-control" name="archived_reason" onChange={this.changeArchiveReason} value={this.state.archived_reason_dropdown}>
             <option value="">Select a value</option>
-            <option value="Company is dissolved">Company is dissolved</option>
+            <option value={DISSOLVED_REASON}>{DISSOLVED_REASON}</option>
             <option value="Other">Other</option>
           </select>
         </div>
 
-        { otherReason &&
-          <InputText name="archived_reason" label="Other" value={otherReason} onChange={this.changeArchiveReason} />
+        { (this.state.archived_reason_dropdown === 'Other') &&
+          <InputText name="archived_reason_other" label="Other" value={this.state.archived_reason_other} onChange={this.changeArchiveReason} />
         }
 
         <div className="button-bar">
@@ -164,7 +178,7 @@ class CompanyPage extends React.Component {
     const { source, sourceId } = this.props.params;
     return (
       <div id="tab-error-contacts" className="tabs-errors">
-        <div className="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+        <div className="error-summary" role="group" aria-labelledby="error-summary-heading" tabIndex="-1">
           <h1 className="heading-medium error-summary-heading" id="error-summary-heading">
             Complete company profile details before adding a new contact
           </h1>
@@ -186,7 +200,7 @@ class CompanyPage extends React.Component {
 
     return (
       <div id="tab-error-interactions" className="tabs-errors">
-        <div className="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+        <div className="error-summary" role="group" aria-labelledby="error-summary-heading" tabIndex="-1">
           <h1 className="heading-medium error-summary-heading" id="error-summary-heading">
             Add related company contacts before adding a new interaction
           </h1>
@@ -202,11 +216,15 @@ class CompanyPage extends React.Component {
         </div>
       </div>
     )
-
-
   }
 
   render() {
+    if (this.state.saving) {
+      return (
+        <div className="saving">Saving...</div>
+      );
+    }
+
     const { source, sourceId, children } = this.props;
     const { company } = this.state;
     const path = this.props.routes[1].path;
@@ -230,18 +248,17 @@ class CompanyPage extends React.Component {
             <span className="status-badge status-badge--archived">Archived</span>
           }
         </h1>
-
-        { this.state.archiveVisible && this.archiveSection() }
         { company.archived && this.archivedInfoSection() }
         { this.state.errors && <ErrorList errors={this.state.errors} /> }
-        { (path === 'contacts' && !company.id) && this.companyRequiredForContactsSection() }
-        { (path === 'interactions' && company.contacts.length === 0) && this.contactsRequiredForInteractionSection() }
+        { this.state.archiveVisible && this.archiveSection() }
+        { (!company.archived && path === 'contacts' && !company.id) && this.companyRequiredForContactsSection() }
+        { (!company.archived && path === 'interactions' && company.contacts.length === 0) && this.contactsRequiredForInteractionSection() }
 
         <div className="tabs tabs--inline">
           <nav className="tabs-nav">
             <ul className="tabs-list">
               <li>
-                <Link className={!path && 'is-selected'} to={`/company/${source}/${sourceId}`}>Details</Link>
+                <Link className={(!path || path === 'edit') && 'is-selected'} to={`/company/${source}/${sourceId}`}>Details</Link>
               </li>
               <li>
                 <Link className={(path === 'contacts') && 'is-selected'} to={`/company/${source}/${sourceId}/contacts`}>Contacts</Link>

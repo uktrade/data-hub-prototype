@@ -3,19 +3,26 @@ const InteractionTable = require('../components/interactiontable.component');
 const itemCollectionService = require('../services/itemcollectionservice');
 
 function CompanyInteractions(props) {
-  const { company, interactions } = props;
+  const { company, interactions, contacts } = props;
 
-  if (!interactions || interactions.length === 0) {
-    return (<a className="button button-secondary" href={`/interaction/add?company_id=${company.id}`}>Add new interaction</a>);
+  if (typeof window !== 'undefined') {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+  }
+
+  if (interactions.length === 0 && !company.archived && contacts.length > 0) {
+    return (
+      <a className="button button-secondary" href={`/interaction/add?company_id=${company.id}`}>Add new interaction</a>
+    );
+  } else if (interactions.length === 0 && (company.archived || contacts.length === 0)) {
+    return (
+      <a className="button button-disabled">Add new interaction</a>
+    );
   }
 
   // calculate times
   const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(company.interactions);
   const interactionsInLastYear = itemCollectionService.getItemsAddedSince(company.interactions);
 
-  if (typeof window !== 'undefined') {
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
-  }
 
   return (
     <div>
@@ -43,14 +50,14 @@ function CompanyInteractions(props) {
         </div>
       </div>
 
-      <InteractionTable interactions={interactions} />
+      <InteractionTable interactions={interactions} company={company} />
     </div>
   );
 }
 
 CompanyInteractions.propTypes = {
-  company: React.PropTypes.object.isRequired,
-  interactions: React.PropTypes.array.isRequired,
+  company: React.PropTypes.object,
+  interactions: React.PropTypes.array,
 };
 
 module.exports = CompanyInteractions;

@@ -20,13 +20,17 @@ function companyDetailsSection(props) {
           <tr>
             <th>Registered address</th>
             <td>
-              { company.registered_address_1 && company.registered_address_1.toLocaleLowerCase() + ',' }
-              { company.registered_address_2 && company.registered_address_2.toLocaleLowerCase() + ',' }
-              { company.registered_address_town && company.registered_address_town.toLocaleLowerCase() + ',' }
+              { company.registered_address_1 && `${company.registered_address_1}, ` }
+              { company.registered_address_2 && `${company.registered_address_2}, ` }
+              { company.registered_address_town && `${company.registered_address_town}, ` }
+              { company.registered_address_county && `${company.registered_address_county}, ` }
               { company.registered_address_postcode &&
               <span className="meta--address__postcode">
-                        company.registered_address_postcode.toLocaleLowerCase()
-                      </span>
+                {`${company.registered_address_postcode}, `}
+              </span>
+              }
+              { (company.registered_address_country && company.registered_address_country) &&
+                company.registered_address_country.name
               }
             </td>
           </tr>
@@ -50,13 +54,17 @@ function companyDetailsSection(props) {
           <tr>
             <th>Trading address</th>
             <td>
-              { company.trading_address_1 && company.trading_address_1.toLocaleLowerCase() + ',' }
-              { company.trading_address_2 && company.trading_address_2.toLocaleLowerCase() + ',' }
-              { company.trading_address_town && company.trading_address_town.toLocaleLowerCase() + ',' }
+              { company.trading_address_1 && `${company.trading_address_1}, ` }
+              { company.trading_address_2 && `${company.trading_address_2}, ` }
+              { company.trading_address_town && `${company.trading_address_town}, ` }
+              { company.trading_address_county && `${company.trading_address_county}, ` }
               { company.trading_address_postcode &&
               <span className="meta--address__postcode">
-                        company.trading_address_postcode.toLocaleLowerCase()
-                      </span>
+                {`${company.trading_address_postcode}, `}
+              </span>
+              }
+              { (company.trading_address_country && company.trading_address_country) &&
+              company.trading_address_country.name
               }
             </td>
           </tr>

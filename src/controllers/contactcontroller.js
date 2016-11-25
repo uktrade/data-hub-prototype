@@ -122,7 +122,6 @@ function post(req, res) {
   // Flatten selected fields
   const contact = Object.assign({}, req.body.contact);
 
-  controllerUtils.flattenAddress(contact);
   controllerUtils.flattenIdFields(contact);
   controllerUtils.nullEmptyFields(contact);
 

@@ -44,28 +44,24 @@ const defaultCompany = {
     id: null,
     name: null
   },
-  registered_address: {
-    address_1: '',
-    address_2: '',
-    address_town: '',
-    address_county: '',
-    address_postcode: '',
-    address_country: {
-      id: null,
-      name: ''
-    }
+  registered_address_1: '',
+  registered_address_2: '',
+  registered_address_town: '',
+  registered_address_county: '',
+  registered_address_postcode: '',
+  registered_address_country: {
+    id: null,
+    name: ''
   },
   alias: '',
-  trading_address: {
-    address_1: '',
-    address_2: '',
-    address_town: '',
-    address_county: '',
-    address_postcode: '',
-    address_country: {
-      id: null,
-      name: ''
-    }
+  trading_address_1: '',
+  trading_address_2: '',
+  trading_address_town: '',
+  trading_address_county: '',
+  trading_address_postcode: '',
+  trading_address_country: {
+    id: null,
+    name: ''
   },
   website: '',
   description: '',
@@ -355,7 +351,8 @@ class CompanyForm extends BaseForm {
             label='Registered address'
             onChange={this.updateField}
             errors={this.getErrors('registered_address')}
-            value={formData.registered_address}
+            value={formData}
+            prefix="registered"
           />
         }
         { (formData.uk_based || formData.company_number && formData.company_number.length > 0) &&
@@ -381,7 +378,8 @@ class CompanyForm extends BaseForm {
           label='Trading address'
           errors={this.getErrors('trading_address')}
           onChange={this.updateField}
-          value={formData.trading_address}
+          value={formData}
+          prefix="trading"
         />
         <InputText
           label={LABELS.website}

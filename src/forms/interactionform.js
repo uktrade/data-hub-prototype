@@ -116,9 +116,9 @@ class InteractionForm extends BaseForm {
     if (this.props.interaction) {
       return `/interaction/${this.props.interaction.id}/view`;
     } else if (this.props.contact) {
-      return `/contact/${this.props.contact.id}/view#interactions`;
+      return `/contact/${this.props.contact.id}/view/interactions`;
     } else if (this.props.company) {
-      return `/company/${this.props.company.id}#interactions`;
+      return `/company/${this.props.company.id}/interactions`;
     }
 
     return '/';
