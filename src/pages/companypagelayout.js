@@ -17,7 +17,6 @@ class CompanyPage extends React.Component {
         cb(null, { company, source: params.source, sourceId: params.sourceId });
       })
       .catch((error) => {
-        console.log(error);
         cb(error);
       });
   }
@@ -113,7 +112,6 @@ class CompanyPage extends React.Component {
   }
 
   changeArchiveReason = (event) => {
-    console.log(event.target.name);
     if (event.target.name === 'archived_reason') {
       this.setState({ archived_reason_dropdown: event.target.value });
     } else {
