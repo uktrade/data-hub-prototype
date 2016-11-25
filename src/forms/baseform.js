@@ -4,9 +4,6 @@ class BaseForm extends React.Component {
 
   constructor(props) {
     super(props);
-    if (typeof window !== 'undefined' && window.csrfToken) {
-      this.csrfToken = window.csrfToken;
-    }
   }
 
   updateField = (update) => {

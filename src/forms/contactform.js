@@ -44,16 +44,14 @@ const defaultContact = {
   telephone_number: '',
   email: '',
   primary: false,
-  address: {
-    address_1: '',
-    address_2: '',
-    address_town: '',
-    address_county: '',
-    address_postcode: '',
-    address_country: {
-      id: null,
-      name: ''
-    }
+  address_1: '',
+  address_2: '',
+  address_town: '',
+  address_county: '',
+  address_postcode: '',
+  address_country: {
+    id: null,
+    name: ''
   },
   telephone_alternative: '',
   email_alternative: '',
@@ -96,10 +94,6 @@ class ContactForm extends BaseForm {
   }
 
   save = () => {
-    if (this.state.showAddress === false) {
-      this.state.formData.address = defaultContact.address;
-    }
-
     if (this.state.primary === false) {
       this.state.formData.teams = [];
     }
@@ -108,13 +102,13 @@ class ContactForm extends BaseForm {
 
     axios.post('/contact/',
       { contact: this.state.formData },
-      { headers: {'x-csrf-token': this.csrfToken }}
+      { headers: {'x-csrf-token': window.csrfToken }}
       )
       .then((response) => {
         window.location.href = `/contact/${response.data.id}/view`;
       })
       .catch((error) => {
-        this.csrfToken = error.response.headers['x-csrf-token'];
+        window.csrfToken = error.response.headers['x-csrf-token'];
         this.setState({
           errors: error.response.data.errors,
           saving: false
@@ -126,7 +120,7 @@ class ContactForm extends BaseForm {
 
     // if called with a company id, go back to company
     if (this.props.company) {
-      return `/company/company_company/${this.props.company.id}#contacts`;
+      return `/company/company_company/${this.props.company.id}/contacts`;
     } else if (this.props.contact) {
       return `/contact/${this.props.contact.id}/view`;
     }
@@ -298,12 +292,12 @@ class ContactForm extends BaseForm {
         { !this.state.formData.address_same_as_company &&
           <div className="indented-info">
             <Address
-                name='address'
-                label={LABELS.address}
-                onChange={this.updateField}
-                errors={this.getErrors('address')}
-                value={formData.address}
-              />
+              name='address'
+              label={LABELS.address}
+              onChange={this.updateField}
+              errors={this.getErrors('address')}
+              value={formData}
+            />
           </div>
         }
         <InputText

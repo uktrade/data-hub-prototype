@@ -1,5 +1,6 @@
 const React = require('react');
 const axios = require('axios');
+const { Link } = require('react-router');
 const BaseForm = require('./baseform');
 const SelectWithId = require('../components/selectwithid.component');
 const Address = require('../components/address.component');
@@ -43,28 +44,24 @@ const defaultCompany = {
     id: null,
     name: null
   },
-  registered_address: {
-    address_1: '',
-    address_2: '',
-    address_town: '',
-    address_county: '',
-    address_postcode: '',
-    address_country: {
-      id: null,
-      name: ''
-    }
+  registered_address_1: '',
+  registered_address_2: '',
+  registered_address_town: '',
+  registered_address_county: '',
+  registered_address_postcode: '',
+  registered_address_country: {
+    id: null,
+    name: ''
   },
   alias: '',
-  trading_address: {
-    address_1: '',
-    address_2: '',
-    address_town: '',
-    address_county: '',
-    address_postcode: '',
-    address_country: {
-      id: null,
-      name: ''
-    }
+  trading_address_1: '',
+  trading_address_2: '',
+  trading_address_town: '',
+  trading_address_county: '',
+  trading_address_postcode: '',
+  trading_address_country: {
+    id: null,
+    name: ''
   },
   website: '',
   description: '',
@@ -106,11 +103,12 @@ class CompanyForm extends BaseForm {
       countryOptions: [],
       businessTypes: [],
       show_account_manager: (company.account_manager.id !== null),
-      show_exporting_to: (company.export_to_countries[0].id !== null),
+      show_exporting_to: (company.export_to_countries && company.export_to_countries.length > 0 && company.export_to_countries[0].id !== null),
       saving: false,
       canceling: false,
       formData: company,
-      isCDMS: (!company.company_number || company.company_number.length === 0)
+      isCDMS: (!company.company_number || company.company_number.length === 0),
+      edit: ('company' in props)
     };
   }
 
@@ -252,13 +250,13 @@ class CompanyForm extends BaseForm {
     this.setState({saving: true});
     axios.post('/company/',
         { company: this.state.formData },
-        { headers: {'x-csrf-token': this.csrfToken }}
+        { headers: {'x-csrf-token': window.csrfToken }}
       )
       .then((response) => {
         window.location.href = `/company/combined/${response.data.id}`;
       })
       .catch((error) => {
-        this.csrfToken = error.response.headers['x-csrf-token'];
+        window.csrfToken = error.response.headers['x-csrf-token'];
         this.setState({
           errors: error.response.data.errors,
           saving: false
@@ -266,26 +264,19 @@ class CompanyForm extends BaseForm {
       });
   };
 
-  cancel = () => {
-    this.setState({cancelling: true});
-    window.location.reload();
-  };
-
   render() {
-    if (this.state.cancelling) {
-      return (
-        <div className="saving">Cancelling...</div>
-      );
-    }
-
     if (this.state.saving) {
       return this.getSaving();
     }
 
     const formData = this.state.formData;
+    const { source, sourceId } = this.props;
 
     return (
       <div>
+        { !this.state.edit &&
+          <h1 className="heading-xlarge record-title">Add new company</h1>
+        }
 
         { this.state.errors &&
           <ErrorList labels={LABELS} errors={this.state.errors}/>
@@ -360,7 +351,8 @@ class CompanyForm extends BaseForm {
             label='Registered address'
             onChange={this.updateField}
             errors={this.getErrors('registered_address')}
-            value={formData.registered_address}
+            value={formData}
+            prefix="registered"
           />
         }
         { (formData.uk_based || formData.company_number && formData.company_number.length > 0) &&
@@ -386,7 +378,8 @@ class CompanyForm extends BaseForm {
           label='Trading address'
           errors={this.getErrors('trading_address')}
           onChange={this.updateField}
-          value={formData.trading_address}
+          value={formData}
+          prefix="trading"
         />
         <InputText
           label={LABELS.website}
@@ -503,7 +496,11 @@ class CompanyForm extends BaseForm {
 
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
-          <a className="button-link button--cancel js-button-cancel" href="#" onClick={this.cancel}>Cancel</a>
+          { this.state.edit ?
+            <Link to={`/company/${source}/${sourceId}`} className="button-link button--cancel js-button-cancel" >Cancel</Link>
+            :
+            <a className="button-link button--cancel js-button-cancel" href="/">Cancel</a>
+          }
         </div>
       </div>
     );
@@ -511,7 +508,8 @@ class CompanyForm extends BaseForm {
 
   static propTypes = {
     company: React.PropTypes.object,
-    csrfToken: React.PropTypes.string
+    source: React.PropTypes.string,
+    sourceId: React.PropTypes.string,
   };
 
 }

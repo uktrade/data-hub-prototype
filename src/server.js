@@ -33,6 +33,8 @@ const metadata = require('./repositorys/metadatarepository');
 
 const app = express();
 const isDev = app.get('env') === 'development';
+winston.level = isDev ? 'debug' : 'error';
+
 
 const RedisStore = redisCrypto(session);
 

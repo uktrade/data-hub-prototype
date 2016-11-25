@@ -1,5 +1,3 @@
-'use strict';
-
 const React = require('react');
 
 function inputTextComponent(props) {
@@ -39,7 +37,7 @@ inputTextComponent.propTypes = {
   label: React.PropTypes.string.isRequired,
   value: React.PropTypes.string,
   onChange: React.PropTypes.func.isRequired,
-  errors: React.PropTypes.array
+  errors: React.PropTypes.array,
 };
 
 module.exports = inputTextComponent;

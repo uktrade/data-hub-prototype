@@ -89,13 +89,13 @@ class InteractionForm extends BaseForm {
   save = () => {
     axios.post('/interaction/',
       { interaction: this.state.formData },
-      { headers: {'x-csrf-token': this.csrfToken }}
+      { headers: {'x-csrf-token': window.csrfToken }}
       )
       .then((response) => {
         window.location.href = `/interaction/${response.data.id}/view`;
       })
       .catch((error) => {
-        this.csrfToken = error.response.headers['x-csrf-token'];
+        window.csrfToken = error.response.headers['x-csrf-token'];
         this.setState({
           errors: error.response.data.errors,
           saving: false
@@ -116,9 +116,9 @@ class InteractionForm extends BaseForm {
     if (this.props.interaction) {
       return `/interaction/${this.props.interaction.id}/view`;
     } else if (this.props.contact) {
-      return `/contact/${this.props.contact.id}/view#interactions`;
+      return `/contact/${this.props.contact.id}/view/interactions`;
     } else if (this.props.company) {
-      return `/company/${this.props.company.id}#interactions`;
+      return `/company/${this.props.company.id}/interactions`;
     }
 
     return '/';

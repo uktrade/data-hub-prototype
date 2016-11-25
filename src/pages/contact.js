@@ -3,7 +3,7 @@ require('babel-polyfill');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const { addClass, removeClass } = require('../lib/elementstuff');
-const InteractionTable = require('../components/interactiontable.component');
+const InteractionTable = require('../components/interactiontable.component.js');
 const Tabs = require('../controls/tabs');
 
 const archiveForm = document.getElementById('archive-details');

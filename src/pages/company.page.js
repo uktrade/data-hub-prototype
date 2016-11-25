@@ -1,9 +1,9 @@
 require('babel-polyfill');
 const React = require('react');
 const ReactDOM = require('react-dom');
-const CompanyForm = require('../forms/companyform');
+const Routes = require('./../reactrouting/companyroutes').Routes;
 
 ReactDOM.render(
-   <CompanyForm />,
-  document.getElementById('company-form')
+  <Routes />,
+  document.getElementById('company'),
 );

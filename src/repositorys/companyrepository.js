@@ -1,5 +1,3 @@
-'use strict';
-
 const config = require('../config');
 const authorisedRequest = require( '../lib/authorisedrequest' );
 const interactionRepository = require('./interactionrepository');
@@ -57,7 +55,7 @@ function getCompany(token, id, source) {
             company_number: id,
             companies_house_data,
             contacts: [],
-            interactions: []
+            interactions: [],
           });
         })
         .catch((error) => {
@@ -131,7 +129,7 @@ function saveCompany(token, company) {
         url: `${config.apiRoot}/company/`,
         method: 'POST',
         json: true,
-        body: parsedCompany
+        body: parsedCompany,
       });
     });
 
@@ -140,9 +138,9 @@ function saveCompany(token, company) {
 function archiveCompany(token, companyId, reason) {
   const options = {
     json: true,
-    body: {reason},
+    body: { reason },
     url: `${config.apiRoot}/company/${companyId}/archive/`,
-    method: 'POST'
+    method: 'POST',
   };
   return authorisedRequest(token, options);
 }

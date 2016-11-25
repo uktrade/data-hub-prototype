@@ -1,3 +1,6 @@
+const winston = require('winston');
+
+
 module.exports = (req, res, next) => {
   if (req.method !== 'POST' || req.url === '/login') {
     return next();
@@ -18,6 +21,7 @@ module.exports = (req, res, next) => {
     req.session.csrfToken = null;
 
     if (!requestCsrf || !sessionCsrf || requestCsrf !== sessionCsrf) {
+      winston.debug('Invalid token:', { requestCsrf, sessionCsrf });
       throw true;
     }
   } catch (e) {

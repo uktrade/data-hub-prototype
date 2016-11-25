@@ -70,7 +70,7 @@ function add(req, res) {
   } else if (companyId && companyId.length > 0) {
     companyRepository.getDitCompany(req.session.token, companyId)
       .then((company) => {
-        const markup = ReactDom.renderToString(<InteractionForm company={contact.company} />);
+        const markup = ReactDom.renderToString(<InteractionForm company={company} />);
         res.render('interaction/interaction-edit', {
           company,
           contact: null,

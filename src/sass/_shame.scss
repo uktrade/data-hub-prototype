@@ -75,3 +75,8 @@ hr {
 .contact-interactions .interaction-table .contact {
   display: none;
 }
+
+.saving {
+  @include bold-24();
+  margin-top: 40px;
+}

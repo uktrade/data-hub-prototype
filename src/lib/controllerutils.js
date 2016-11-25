@@ -71,25 +71,6 @@ function flattenIdFields(data) {
   }
 }
 
-function flattenAddress(data, addressName) {
-
-  if (addressName) {
-    if (data[`${addressName}_address`]) {
-      const address = data[`${addressName}_address`];
-      const addressKeys = Object.keys(address);
-      for (const key of addressKeys) {
-        data[`${addressName}_${key}`] = address[key];
-      }
-      delete data[`${addressName}_address`];
-    }
-  } else {
-    for (const key of Object.keys(data.address)) {
-      data[key] = data.address[key];
-    }
-    delete data.address;
-  }
-}
-
 function nullEmptyFields(data) {
   const fieldNames = Object.keys(data);
   for (const fieldName of fieldNames) {
@@ -124,7 +105,6 @@ module.exports = {
   encodeQueryData,
   convertAutosuggestCollection,
   flattenIdFields,
-  flattenAddress,
   nullEmptyFields,
   genCSRF,
 };
