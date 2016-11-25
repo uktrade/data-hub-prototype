@@ -212,37 +212,28 @@ describe('item collection services', () => {
 
   describe('get items in time range', () => {
     it('should return 1 single contact in the last year', () => {
-      const filtered = itemCollectionService.getItemsAddedSince(contacts);
+      contacts[0].created_on = moment().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
+      contacts[1].created_on = moment().subtract(18, 'months').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
+      const filtered = itemCollectionService.getItemsAddedInLastYear(contacts);
       expect(filtered).to.have.lengthOf(1);
     });
     it('should return 2 contacts in the last year', () => {
       contacts[0].created_on = moment().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
       contacts[1].created_on = moment().subtract(2, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
-      const filtered = itemCollectionService.getItemsAddedSince(contacts);
+      const filtered = itemCollectionService.getItemsAddedInLastYear(contacts);
       expect(filtered).to.have.lengthOf(2);
-    });
-    it('should return 1 contacts in the last week', () => {
-      contacts[0].created_on = moment().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
-      contacts[1].created_on = moment().subtract(2, 'months').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
-      const filtered = itemCollectionService.getItemsAddedSince(contacts, 'days', 7);
-      expect(filtered).to.have.lengthOf(1);
     });
     it('should handle a null', () => {
       contacts[0].created_on = null;
-      const filtered = itemCollectionService.getItemsAddedSince(contacts);
+      const filtered = itemCollectionService.getItemsAddedInLastYear(contacts);
       expect(filtered).to.have.lengthOf(1);
     });
     it('should handle all null', () => {
       contacts[0].created_on = null;
       contacts[1].created_on = null;
-      const filtered = itemCollectionService.getItemsAddedSince(contacts);
+      const filtered = itemCollectionService.getItemsAddedInLastYear(contacts);
       expect(filtered).to.have.lengthOf(0);
     });
   });
 
-
 });
-
-
-
-

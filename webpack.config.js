@@ -9,7 +9,6 @@ module.exports = {
 
   entry: {
     company: './src/pages/company.page.js',
-    companyadd: './src/pages/companyadd.js',
     contact: './src/pages/contact.js',
     contactedit: './src/pages/contactedit.js',
     index: './src/pages/index.js',

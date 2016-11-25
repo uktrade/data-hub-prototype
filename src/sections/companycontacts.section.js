@@ -27,7 +27,7 @@ function CompanyContacts(props) {
 
   // calculate times
   const timeSinceNewContact = itemCollectionService.getTimeSinceLastAddedItem(contacts);
-  const contactsInLastYear = itemCollectionService.getItemsAddedSince(contacts);
+  const contactsInLastYear = itemCollectionService.getItemsAddedInLastYear(contacts);
   const validContacts = contacts.filter(contact => !contact.archived);
   const archivedContacts = contacts.filter(contact => contact.archived);
 

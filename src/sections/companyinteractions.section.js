@@ -21,7 +21,7 @@ function CompanyInteractions(props) {
 
   // calculate times
   const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(company.interactions);
-  const interactionsInLastYear = itemCollectionService.getItemsAddedSince(company.interactions);
+  const interactionsInLastYear = itemCollectionService.getItemsAddedInLastYear(company.interactions);
 
 
   return (

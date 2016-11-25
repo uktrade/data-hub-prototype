@@ -31,7 +31,7 @@ function view(req, res) {
       }
 
       const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(contact.interactions);
-      const interactionsInLastYear = itemCollectionService.getItemsAddedSince(contact.interactions);
+      const interactionsInLastYear = itemCollectionService.getItemsAddedInLastYear(contact.interactions);
       const csrfToken = controllerUtils.genCSRF(req);
 
       res.render(
