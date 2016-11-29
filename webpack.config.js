@@ -11,8 +11,8 @@ module.exports = {
   devtool: prod ? 'hidden-source-map' : 'source-map',
 
   entry: {
-    company: './src/pages/company.page.js',
-    contact: './src/pages/contact.page.js',
+    company: './src/pages/company.js',
+    contact: './src/pages/contact.js',
     index: './src/pages/index.js',
     interactionedit: './src/pages/interactionedit.js',
     login: './src/pages/login.js',

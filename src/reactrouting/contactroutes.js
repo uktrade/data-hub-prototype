@@ -1,18 +1,19 @@
 const React = require('react');
 const AsyncProps = require('async-props').default;
 const ReactRouter = require('react-router');
-const ContactPageLayout = require('../pages/contactpagelayout');
-const NotFound = require('../pages/notfound');
+const ContactApp = require('../apps/contact.app.js');
 const ContactDetails = require('../sections/contactdetails.section.js');
 const ContactInteractions = require('../sections/contactinteractions.section.js');
 const ContactForm = require('../forms/contactform');
+const NotFound = require('./notfound');
+
 const Router = ReactRouter.Router;
 const browserHistory = ReactRouter.browserHistory;
 
 const routesConfig = [
   {
     path: '/contact/:contactId',
-    component: ContactPageLayout,
+    component: ContactApp,
     indexRoute: { component: ContactDetails },
     childRoutes: [
       { path: 'interactions', component: ContactInteractions },

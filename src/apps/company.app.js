@@ -2,14 +2,14 @@ const React = require('react');
 const Link = require('react-router').Link;
 const companyRepository = require('../repositorys/companyrepository');
 const axios = require('axios');
-const ErrorList = require('../components/errorlist.component');
+const ErrorList = require('../components/errorlist.component.js');
 const formatDate = require('../lib/date').formatDate;
-const InputText = require('../components/inputtext.component');
+const InputText = require('../components/inputtext.component.js');
 
 
 const DISSOLVED_REASON = 'Company is dissolved';
 
-class CompanyPage extends React.Component {
+class CompanyApp extends React.Component {
   static loadProps(context, cb) {
     const params = context.params;
     companyRepository.getCompany(params.token, params.sourceId, params.source)
@@ -290,4 +290,4 @@ class CompanyPage extends React.Component {
   }
 }
 
-module.exports = CompanyPage;
+module.exports = CompanyApp;

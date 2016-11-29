@@ -2,9 +2,9 @@ const React = require('react');
 const Link = require('react-router').Link;
 const contactRepository = require('../repositorys/contactrepository');
 const axios = require('axios');
-const ErrorList = require('../components/errorlist.component');
+const ErrorList = require('../components/errorlist.component.js');
 const formatDate = require('../lib/date').formatDate;
-const InputText = require('../components/inputtext.component');
+const InputText = require('../components/inputtext.component.js');
 
 const REASONS_FOR_ARCHIVE = [
   'Contact has left the company',
@@ -12,7 +12,7 @@ const REASONS_FOR_ARCHIVE = [
   'Contact changed role/responsibility'
 ];
 
-class ContactPage extends React.Component {
+class ContactApp extends React.Component {
   static loadProps(context, cb) {
     const params = context.params;
     contactRepository.getContact(params.token, params.contactId)
@@ -245,4 +245,4 @@ class ContactPage extends React.Component {
   }
 }
 
-module.exports = ContactPage;
+module.exports = ContactApp;
