@@ -104,7 +104,7 @@ class ContactForm extends BaseForm {
 
     this.setState({saving: true});
 
-    axios.post('/contact/',
+    axios.post('/api/contact',
       { contact: this.state.formData },
       { headers: {'x-csrf-token': window.csrfToken }}
       )

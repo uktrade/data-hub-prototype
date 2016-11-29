@@ -65,7 +65,7 @@ class ContactPage extends React.Component {
     event.target.blur();
     this.setState({ saving: true });
     const token = window.csrfToken;
-    axios.post(`/contact/unarchive`,
+    axios.post('/api/contact/unarchive',
       { id: this.state.contact.id},
       { headers: {'x-csrf-token': token }}
     )
@@ -103,7 +103,7 @@ class ContactPage extends React.Component {
     this.setState({ saving: true });
     const token = window.csrfToken;
 
-    axios.post(`/contact/archive`, {
+    axios.post('/api/contact/archive', {
         id: contact.id,
         reason
       },

@@ -26,6 +26,44 @@ function cleanErrors(errors) {
   }
 }
 
+function index(req, res) {
+  const token = req.session.token;
+  const csrfToken = controllerUtils.genCSRF(req);
+
+  Router.match({ routes: routesConfig, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+    if (error) {
+      res.status(500).send(error.message);
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+    } else if (renderProps) {
+      renderProps.params.token = token;
+      loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
+        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
+        res.render('contact/contact-react', { markup, scriptTag, csrfToken });
+      });
+    } else {
+      res.status(404).send('Not found');
+    }
+  });
+
+}
+
+function get(req, res) {
+  const contact_id = req.params.contact_id;
+
+  if (!contact_id) {
+    res.redirect('/');
+  }
+
+  contactRepository.getContact(req.session.token, contact_id)
+    .then((contact) => {
+      res.json(contact);
+    })
+    .catch((error) => {
+      res.render('error', { error });
+    });
+}
+
 function post(req, res) {
   // Flatten selected fields
   const contact = Object.assign({}, req.body.contact);
@@ -89,31 +127,10 @@ function unarchive(req, res) {
     });
 }
 
-function index(req, res) {
-  const token = req.session.token;
-  const csrfToken = controllerUtils.genCSRF(req);
-
-  Router.match({ routes: routesConfig, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
-    if (error) {
-      res.status(500).send(error.message);
-    } else if (redirectLocation) {
-      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-    } else if (renderProps) {
-      renderProps.params.token = token;
-      loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
-        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
-        res.render('contact/contact-react', { markup, scriptTag, csrfToken });
-      });
-    } else {
-      res.status(404).send('Not found');
-    }
-  });
-
-}
-
-router.get('*', index);
-router.post('/archive', archive);
-router.post('/unarchive', unarchive);
-router.post(['/'], post);
+router.get('/contact/*', index);
+router.get('/api/contact/:contact_id', get);
+router.post('/api/contact', post);
+router.post('/api/contact/archive', archive);
+router.post('/api/contact/unarchive', unarchive);
 
 module.exports = { router };

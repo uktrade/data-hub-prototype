@@ -57,7 +57,7 @@ class CompanyPage extends React.Component {
     event.target.blur();
     this.setState({ saving: true });
     const token = window.csrfToken;
-    axios.post(`/company/unarchive`,
+    axios.post('/api/company/unarchive',
       { id: this.state.company.id},
       { headers: {'x-csrf-token': token }}
     )
@@ -91,7 +91,7 @@ class CompanyPage extends React.Component {
     }
 
     const token = window.csrfToken;
-    axios.post(`/company/archive`, {
+    axios.post('/api/company/archive', {
         id: company.id,
         reason
       },

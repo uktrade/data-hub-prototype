@@ -10,7 +10,6 @@ const controllerUtils = require('../lib/controllerutils');
 const companyRepository = require('../repositorys/companyrepository');
 const routesConfig = require('../reactrouting/companyroutes').routesConfig;
 
-
 const router = express.Router();
 
 function cleanErrors(errors) {
@@ -37,6 +36,40 @@ function cleanErrors(errors) {
     delete errors.trading_address_postcode;
     delete errors.trading_address_country;
   }
+}
+
+function index(req, res) {
+  const token = req.session.token;
+  const csrfToken = controllerUtils.genCSRF(req);
+
+  Router.match({ routes: routesConfig, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+    if (error) {
+      res.status(500).send(error.message);
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+    } else if (renderProps) {
+      renderProps.params.token = token;
+      loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
+        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
+        res.render('company/company-react', { markup, scriptTag, csrfToken });
+      });
+    } else {
+      res.status(404).send('Not found');
+    }
+  });
+}
+
+function get(req, res) {
+  const id = req.params.sourceId;
+  const source = req.params.source;
+
+  companyRepository.getCompany(req.session.token, id, source)
+    .then((company) => {
+      res.json(company);
+    })
+    .catch((error) => {
+      res.render('error', { error });
+    });
 }
 
 function post(req, res) {
@@ -100,32 +133,10 @@ function unarchive(req, res) {
     });
 }
 
-function index(req, res) {
-  const token = req.session.token;
-  const csrfToken = controllerUtils.genCSRF(req);
-
-  Router.match({ routes: routesConfig, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
-    if (error) {
-      res.status(500).send(error.message);
-    } else if (redirectLocation) {
-      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-    } else if (renderProps) {
-      renderProps.params.token = token;
-      loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
-        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
-        res.render('company/company-react', { markup, scriptTag, csrfToken });
-      });
-    } else {
-      res.status(404).send('Not found');
-    }
-  });
-}
-
-router.get('*', index);
-router.post('/archive', archive);
-router.post('/unarchive', unarchive);
-
-router.post('/', post);
-
+router.get('/company/*', index);
+router.get('/api/company/:source/:sourceId', get);
+router.post('/api/company', post);
+router.post('/api/company/archive', archive);
+router.post('/api/company/unarchive', unarchive);
 
 module.exports = { router };

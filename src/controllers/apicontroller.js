@@ -6,7 +6,6 @@ const postcodeService = require('../services/postcodeservice');
 const searchService = require('../services/searchservice');
 const companyRepository = require('../repositorys/companyrepository');
 const metadataRepository = require('../repositorys/metadatarepository');
-const contactRepository = require('../repositorys/contactrepository');
 const authorisedRequest = require('../lib/authorisedrequest');
 
 const router = express.Router();
@@ -197,46 +196,15 @@ function getSubsectors(req, res) {
   res.json(metadataRepository.SUBSECTORS[sectorId]);
 }
 
-function getCompany(req, res) {
-  const id = req.params.sourceId;
-  const source = req.params.source;
 
-  companyRepository.getCompany(req.session.token, id, source)
-    .then((company) => {
-      res.json(company);
-    })
-    .catch((error) => {
-      res.render('error', { error });
-    });
-}
-
-function getContact(req, res) {
-  const contact_id = req.params.contact_id;
-
-  if (!contact_id) {
-    res.redirect('/');
-  }
-
-  contactRepository.getContact(req.session.token, contact_id)
-    .then((contact) => {
-      res.json(contact);
-    })
-    .catch((error) => {
-      res.render('error', { error });
-    });
-}
-
-
-router.get('/suggest', companySuggest);
-router.get('/countrylookup', countryLookup);
-router.get('/accountmanagerlookup', accountManagerLookup);
-router.get('/contactlookup', contactLookup);
-router.get('/teamlookup', teamLookup);
-router.get('/meta/:metaName', getMetadata);
-router.get('/postcodelookup/:postcode', postcodelookup);
-router.get('/subsectors/:sectorId', getSubsectors);
-router.get('/company/:source/:sourceId', getCompany);
-router.get('/contact/:contact_id', getContact);
+router.get('/api/suggest', companySuggest);
+router.get('/api/countrylookup', countryLookup);
+router.get('/api/accountmanagerlookup', accountManagerLookup);
+router.get('/api/contactlookup', contactLookup);
+router.get('/api/teamlookup', teamLookup);
+router.get('/api/meta/:metaName', getMetadata);
+router.get('/api/postcodelookup/:postcode', postcodelookup);
+router.get('/api/subsectors/:sectorId', getSubsectors);
 
 module.exports = {
   postcodelookup,

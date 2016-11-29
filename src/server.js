@@ -124,11 +124,11 @@ app.use(csrf);
 
 app.use('/login', loginController.router);
 app.use('/myaccount', myAccountController.router);
-app.use('/company', companyController.router);
-app.use('/contact', contactController.router);
+app.use(companyController.router);
+app.use(contactController.router);
 app.use('/interaction', interactionController.router);
 app.use('/search', searchController.router);
-app.use('/api', apiController.router);
+app.use(apiController.router);
 app.get('/', indexController);
 
 
