@@ -28,6 +28,7 @@ const datahubFlash = require('./middleware/flash');
 const auth = require('./middleware/auth');
 const user = require('./middleware/user');
 const csrf = require('./middleware/csrf');
+const locals = require('./middleware/locals');
 
 const metadata = require('./repositorys/metadatarepository');
 
@@ -101,10 +102,6 @@ expressNunjucks(app, {
   filters,
 });
 
-
-// Insert useful variables into response for all controllers
-app.use(require('./middleware/locals'));
-
 // Static files
 app.use('/javascripts', express.static(`${__dirname}/../build/javascripts`));
 app.use('/stylesheets', express.static(`${__dirname}/../build/stylesheets`));
@@ -117,6 +114,7 @@ app.use(express.static(`${__dirname}/../node_modules/govuk_template_jinja/assets
 
 app.use(logger((isDev ? 'dev' : 'combined')));
 
+app.use(locals);
 app.use(datahubFlash);
 app.use(auth);
 app.use(user);

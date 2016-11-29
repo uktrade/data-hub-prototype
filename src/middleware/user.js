@@ -1,32 +1,44 @@
-const config = require('../config');
-const authorisedRequest = require('../lib/authorisedrequest');
+'use strict';
 
-module.exports = (req, res, next) => {
+const config = require( '../config' );
+const authorisedRequest = require( '../lib/authorisedrequest' );
+
+module.exports = function( req, res, next ){
+
   const token = req.session.token;
   const user = req.session.user;
 
-  if (token && !user) {
+  if( token && !user ){
+
     const opts = {
       url: `${config.apiRoot}/whoami/`,
-      json: true,
+      json: true
     };
 
-    authorisedRequest(token, opts)
-      .then((userInfo) => {
-        req.session.user = {
-          id: userInfo.id, // DIT Advisor id
-          name: userInfo.name,
-          team: userInfo.dit_team,
-        };
+    authorisedRequest( token, opts ).then( ( userInfo ) => {
 
-        res.locals.user = req.session.user;
-        next();
-      })
-      .catch((error) => {
-        res.render('error', { error });
-      });
-  } else if (user) {
-    res.locals.user = user;
+      req.session.user = {
+        id: userInfo.id, // DIT Advisor id
+        name: userInfo.name,
+        team: userInfo.dit_team
+      };
+
+      res.locals.user = req.session.user;
+
+      next();
+
+    } ).catch( ( error ) => {
+
+      res.render( 'error', { error } );
+    } );
+
+  } else {
+
+    if( user ){
+
+      res.locals.user = user;
+    }
+
+    next();
   }
-  next();
 };
