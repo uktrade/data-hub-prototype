@@ -3,7 +3,7 @@
 
 {% block main %}
 
-  <h2 class="leads-heading bold-xlarge">Login</h2>
+  <h2 class="bold-xlarge">Login</h2>
 
   {% if messages.error.length %}
     <div class="flash-message error-message">
@@ -28,13 +28,9 @@
   {{ forms.errorPanel( messages.formErrors ) }}
 
   <form action="{{ action }}" method="post">
-
-    {{ forms.textbox('username', label="User name", value=lead.username, error=errors.username, autofocus=true) }}
-
-    {{ forms.textbox('password', label="Password", value=lead.password, error=errors.password, type='password') }}
-
+    {{ forms.textbox('username', label="User name", error=errors.username, autofocus=true) }}
+    {{ forms.textbox('password', label="Password", error=errors.password, type='password') }}
     {{ forms.save(buttonText='Login') }}
-
   </form>
 
 {% endblock %}

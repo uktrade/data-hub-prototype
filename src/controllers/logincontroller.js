@@ -1,10 +1,10 @@
 /* eslint new-cap: 0 */
-'use strict';
 
 const express = require('express');
-const router = express.Router();
 const rp = require( 'request-promise' );
 const config = require('../config');
+
+const router = express.Router();
 
 function authenticate(username, password) {
   const options = {
@@ -28,7 +28,7 @@ function authenticate(username, password) {
 }
 
 function login(req, res) {
-  res.render('login', {action: '/login'});
+  res.render('login', { action: '/login' });
 }
 
 function loginToApi(req, res) {
@@ -55,8 +55,7 @@ function loginToApi(req, res) {
     });
 }
 
-function logout(req, res){
-
+function logout(req, res) {
   req.session.token = null;
   req.session.user = null;
   req.flash('success-message', 'Signed out');

@@ -70,7 +70,7 @@ class InteractionTableComponent extends React.Component {
         <td className="type">{interaction.interaction_type.name}</td>
         <td className="advisor">{interaction.dit_advisor.first_name} {interaction.dit_advisor.last_name}</td>
         <td className="contact">
-          <a href={`/contact/${interaction.contact.id}/view`}>
+          <a href={`/contact/${interaction.contact.id}`}>
             {interaction.contact.first_name} {interaction.contact.last_name}
             </a>
         </td>

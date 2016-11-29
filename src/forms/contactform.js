@@ -2,6 +2,7 @@
 
 const React = require('react');
 const axios = require('axios');
+const { Link } = require('react-router');
 const BaseForm = require('./baseform');
 const Address = require('../components/address.component');
 const Autosuggest = require('../components/autosuggest.component');
@@ -72,16 +73,19 @@ class ContactForm extends BaseForm {
       showCompanyField: true
     };
 
-    if (props.contact) {
+    if (props.company) {
       state.formData = Object.assign({}, props.contact);
       state.showCompanyField = false;
     } else {
       state.formData = {};
     }
 
-    if (props.company) {
+    if (props.contact) {
+      state.edit = true;
       state.showCompanyField = false;
-      state.formData.company = props.company;
+      state.formData.contact = props.contact;
+    } else {
+      state.edit = false;
     }
 
     this.setDefaults(state.formData, defaultContact);
@@ -105,7 +109,7 @@ class ContactForm extends BaseForm {
       { headers: {'x-csrf-token': window.csrfToken }}
       )
       .then((response) => {
-        window.location.href = `/contact/${response.data.id}/view`;
+        window.location.href = `/contact/${response.data.id}`;
       })
       .catch((error) => {
         window.csrfToken = error.response.headers['x-csrf-token'];
@@ -122,7 +126,7 @@ class ContactForm extends BaseForm {
     if (this.props.company) {
       return `/company/company_company/${this.props.company.id}/contacts`;
     } else if (this.props.contact) {
-      return `/contact/${this.props.contact.id}/view`;
+      return `/contact/${this.props.contact.id}`;
     }
 
     return '/';
@@ -326,7 +330,11 @@ class ContactForm extends BaseForm {
         </div>
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
-          {backUrl && <a className="button-link button--cancel" href={backUrl}>Cancel</a>}
+          { this.state.edit ?
+            <Link to={`/contact/${this.props.contactId}`} className="button-link button--cancel js-button-cancel" >Cancel</Link>
+            :
+            <a className="button-link button--cancel js-button-cancel" href="/">Cancel</a>
+          }
         </div>
       </div>
 

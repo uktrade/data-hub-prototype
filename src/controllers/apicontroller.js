@@ -6,6 +6,7 @@ const postcodeService = require('../services/postcodeservice');
 const searchService = require('../services/searchservice');
 const companyRepository = require('../repositorys/companyrepository');
 const metadataRepository = require('../repositorys/metadatarepository');
+const contactRepository = require('../repositorys/contactrepository');
 const authorisedRequest = require('../lib/authorisedrequest');
 
 const router = express.Router();
@@ -209,6 +210,22 @@ function getCompany(req, res) {
     });
 }
 
+function getContact(req, res) {
+  const contact_id = req.params.contact_id;
+
+  if (!contact_id) {
+    res.redirect('/');
+  }
+
+  contactRepository.getContact(req.session.token, contact_id)
+    .then((contact) => {
+      res.json(contact);
+    })
+    .catch((error) => {
+      res.render('error', { error });
+    });
+}
+
 
 router.get('/suggest', companySuggest);
 router.get('/countrylookup', countryLookup);
@@ -219,6 +236,7 @@ router.get('/meta/:metaName', getMetadata);
 router.get('/postcodelookup/:postcode', postcodelookup);
 router.get('/subsectors/:sectorId', getSubsectors);
 router.get('/company/:source/:sourceId', getCompany);
+router.get('/contact/:contact_id', getContact);
 
 module.exports = {
   postcodelookup,

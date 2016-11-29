@@ -1,20 +1,23 @@
 const React = require('react');
 const Link = require('react-router').Link;
-const companyRepository = require('../repositorys/companyrepository');
+const contactRepository = require('../repositorys/contactrepository');
 const axios = require('axios');
 const ErrorList = require('../components/errorlist.component');
 const formatDate = require('../lib/date').formatDate;
 const InputText = require('../components/inputtext.component');
 
+const REASONS_FOR_ARCHIVE = [
+  'Contact has left the company',
+  'Contact does not want to be contacted',
+  'Contact changed role/responsibility'
+];
 
-const DISSOLVED_REASON = 'Company is dissolved';
-
-class CompanyPage extends React.Component {
+class ContactPage extends React.Component {
   static loadProps(context, cb) {
     const params = context.params;
-    companyRepository.getCompany(params.token, params.sourceId, params.source)
-      .then((company) => {
-        cb(null, { company, source: params.source, sourceId: params.sourceId });
+    contactRepository.getContact(params.token, params.contactId)
+      .then((contact) => {
+        cb(null, { contact, contactId: params.contactId });
       })
       .catch((error) => {
         cb(error);
@@ -24,26 +27,31 @@ class CompanyPage extends React.Component {
   constructor(props) {
     super(props);
 
-    const {company} = props;
+    const {contact} = props;
 
     const state = {
       archiveVisible: false,
       saving: false,
       errors: null,
-      company,
+      contact,
     };
 
-    if (company.archived_reason && company.archived_reason.length > 0) {
-      if (company.archived_reason = DISSOLVED_REASON) {
-        state.archived_reason_dropdown = DISSOLVED_REASON;
+
+    if (contact.archived_reason && contact.archived_reason.length > 0) {
+      if (REASONS_FOR_ARCHIVE.includes(contact.archived_reason)) {
+        state.archived_reason_dropdown = contact.archived_reason;
         state.archived_reason_other = null;
       } else {
         state.archived_reason_dropdown = 'Other';
-        state.archived_reason_other = company.archived_reason;
+        state.archived_reason_other = contact.archived_reason;
       }
+    } else {
+      state.archived_reason_dropdown = null;
+      state.archived_reason_other = null
     }
 
     this.state = state;
+
   }
 
   updateToken(response) {
@@ -57,8 +65,8 @@ class CompanyPage extends React.Component {
     event.target.blur();
     this.setState({ saving: true });
     const token = window.csrfToken;
-    axios.post(`/company/unarchive`,
-      { id: this.state.company.id},
+    axios.post(`/contact/unarchive`,
+      { id: this.state.contact.id},
       { headers: {'x-csrf-token': token }}
     )
       .then((response) => {
@@ -66,7 +74,7 @@ class CompanyPage extends React.Component {
         this.setState({
           archiveVisible: false,
           saving: false,
-          company: response.data,
+          contact: response.data,
         });
       })
       .catch((error) => {
@@ -81,18 +89,22 @@ class CompanyPage extends React.Component {
 
   archive = (event) => {
     event.preventDefault();
-    this.setState({ saving: true });
-    const {company} = this.state;
-    const reason = this.state.archived_reason_dropdown === DISSOLVED_REASON ? DISSOLVED_REASON : this.state.archived_reason_other;
+    const archived_reason_dropdown = this.state.archived_reason_dropdown;
+    const archived_reason_other = this.state.archived_reason_other;
+    const contact = this.state.contact;
+
+    const reason = archived_reason_dropdown !== 'Other' ? archived_reason_dropdown : archived_reason_other;
 
     if (!reason || reason.length === 0) {
       this.setState({ errors : { error: 'You must provide a reason to archive' }});
       return;
     }
 
+    this.setState({ saving: true });
     const token = window.csrfToken;
-    axios.post(`/company/archive`, {
-        id: company.id,
+
+    axios.post(`/contact/archive`, {
+        id: contact.id,
         reason
       },
       { headers: {'x-csrf-token': token }})
@@ -101,8 +113,8 @@ class CompanyPage extends React.Component {
         this.setState({
           archiveVisible: false,
           saving: false,
-          company: response.data,
-          errors: null,
+          contact: response.data,
+          errors: null
         });
       })
       .catch((error) => {
@@ -144,18 +156,18 @@ class CompanyPage extends React.Component {
       <form onSubmit={this.archive}>
         <div className="form-group">
           <label className="form-label" htmlFor="archived_reason">
-            Reason for archiving company
+            Reason for archiving contact
           </label>
 
           <select className="form-control" name="archived_reason" onChange={this.changeArchiveReason} value={this.state.archived_reason_dropdown}>
-            <option value="">Select a value</option>
-            <option value={DISSOLVED_REASON}>{DISSOLVED_REASON}</option>
+            <option value="">Select reason</option>
+            { REASONS_FOR_ARCHIVE.map(reason => <option value={reason}>{reason}</option>) }
             <option value="Other">Other</option>
           </select>
         </div>
 
         { (this.state.archived_reason_dropdown === 'Other') &&
-          <InputText name="archived_reason_other" label="Other" value={this.state.archived_reason_other} onChange={this.changeArchiveReason} />
+        <InputText name="archived_reason_other" label="Other" value={this.state.archived_reason_other} onChange={this.changeArchiveReason} />
         }
 
         <div className="button-bar">
@@ -167,57 +179,13 @@ class CompanyPage extends React.Component {
   }
 
   archivedInfoSection() {
-    const {company} = this.state;
+    const {contact} = this.state;
     return (
       <p className="indented-info">
-        This company has been archived on {formatDate(company.archived_on)} by {company.archived_by.first_name} {company.archived_by.last_name}. <br />
-        Reason: {company.archived_reason}
+        This contact has been archived on {formatDate(contact.archived_on)} by {contact.archived_by.first_name} {contact.archived_by.last_name}. <br />
+        Reason: {contact.archived_reason}
       </p>
     );
-  }
-
-  companyRequiredForContactsSection() {
-    const { source, sourceId } = this.props.params;
-    return (
-      <div id="tab-error-contacts" className="tabs-errors">
-        <div className="error-summary" role="group" aria-labelledby="error-summary-heading" tabIndex="-1">
-          <h1 className="heading-medium error-summary-heading" id="error-summary-heading">
-            Complete company profile details before adding a new contact
-          </h1>
-          <p>
-            You need to add required details to company profile before adding a new contact
-          </p>
-          <ul className="error-summary-list">
-            <li>
-              <Link to={`/company/${source}/${sourceId}/edit`} className="button button-secondary js-button-edit">Add company details</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    );
-  }
-
-  contactsRequiredForInteractionSection() {
-    const company = this.state.company;
-
-    return (
-      <div id="tab-error-interactions" className="tabs-errors">
-        <div className="error-summary" role="group" aria-labelledby="error-summary-heading" tabIndex="-1">
-          <h1 className="heading-medium error-summary-heading" id="error-summary-heading">
-            Add related company contacts before adding a new interaction
-          </h1>
-          <p>
-            You need to add the related contacts from the company under contacts section before
-            adding a new interaction
-          </p>
-          <ul className="error-summary-list">
-            <li>
-              <a href={`/contact/add?company_id=${ company.id }`}>Add new contact</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    )
   }
 
   render() {
@@ -227,46 +195,34 @@ class CompanyPage extends React.Component {
       );
     }
 
-    const { source, sourceId, children } = this.props;
-    const { company } = this.state;
+    const { contactId, children } = this.props;
+    const { contact } = this.state;
     const path = this.props.routes[1].path;
 
-    if (!company) {
+    if (!contact) {
       return (<h1>Error...</h1>);
-    }
-
-    let title;
-    if (!company.name && company.companies_house_data.name) {
-      title = company.companies_house_data.name;
-    } else {
-      title = company.name;
     }
 
     return (
       <div>
         <h1 className="heading-xlarge record-title">
-          { title }
-          { company.archived &&
-            <span className="status-badge status-badge--archived">Archived</span>
+          { contact.first_name } { contact.last_name }
+          { contact.archived &&
+          <span className="status-badge status-badge--archived">Archived</span>
           }
         </h1>
-        { company.archived && this.archivedInfoSection() }
+        { contact.archived && this.archivedInfoSection() }
         { this.state.errors && <ErrorList errors={this.state.errors} /> }
         { this.state.archiveVisible && this.archiveSection() }
-        { (!company.archived && path === 'contacts' && !company.id) && this.companyRequiredForContactsSection() }
-        { (!company.archived && path === 'interactions' && company.contacts.length === 0) && this.contactsRequiredForInteractionSection() }
 
         <div className="tabs tabs--inline">
           <nav className="tabs-nav">
             <ul className="tabs-list">
               <li>
-                <Link className={(!path || path === 'edit') && 'is-selected'} to={`/company/${source}/${sourceId}`}>Details</Link>
+                <Link className={(!path || path === 'edit') && 'is-selected'} to={`/contact/${contactId}`}>Details</Link>
               </li>
               <li>
-                <Link className={(path === 'contacts') && 'is-selected'} to={`/company/${source}/${sourceId}/contacts`}>Contacts</Link>
-              </li>
-              <li>
-                <Link className={(path === 'interactions') && 'is-selected'} to={`/company/${source}/${sourceId}/interactions`}>Interactions</Link>
+                <Link className={(path === 'interactions') && 'is-selected'} to={`/contact/${contactId}/interactions`}>Interactions</Link>
               </li>
             </ul>
           </nav>
@@ -274,11 +230,10 @@ class CompanyPage extends React.Component {
 
         <div>
           { children && React.cloneElement(children, {
-            company,
-            contacts: company.contacts,
-            interactions: company.interactions,
-            source,
-            sourceId,
+            contact,
+            interactions: contact.interactions,
+            company: contact.company,
+            contactId,
             showArchiveSection: this.showArchiveSection,
             unarchive: this.unarchive,
             archiveVisible: this.state.archiveVisible,
@@ -290,4 +245,4 @@ class CompanyPage extends React.Component {
   }
 }
 
-module.exports = CompanyPage;
+module.exports = ContactPage;

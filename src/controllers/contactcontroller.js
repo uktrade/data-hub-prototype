@@ -1,108 +1,16 @@
 /* eslint new-cap: 0 */
 const express = require('express');
 const winston = require('winston');
-const controllerUtils = require('../lib/controllerutils');
-const contactRepository = require('../repositorys/contactrepository');
-const companyRepository = require('../repositorys/companyrepository');
-const itemCollectionService = require('../services/itemcollectionservice');
 const React = require('react');
 const ReactDom = require('react-dom/server');
-const ContactForm = require('../forms/contactform');
+const Router = require('react-router');
+const AsyncProps = require('async-props').default;
+const loadPropsOnServer = require('async-props').loadPropsOnServer;
+const controllerUtils = require('../lib/controllerutils');
+const contactRepository = require('../repositorys/contactrepository');
+const routesConfig = require('../reactrouting/contactroutes').routesConfig;
 
 const router = express.Router();
-const REASONS_FOR_ARCHIVE = [
-  'Contact has left the company',
-  'Contact does not want to be contacted',
-  'Contact changed role/responsibility',
-  'Other',
-];
-
-function view(req, res) {
-  const contact_id = req.params.contact_id;
-
-  if (!contact_id) {
-    res.redirect('/');
-  }
-
-  contactRepository.getContact(req.session.token, contact_id)
-    .then((contact) => {
-      if (!contact.interactions) {
-        contact.interactions = [];
-      }
-
-      const timeSinceNewInteraction = itemCollectionService.getTimeSinceLastAddedItem(contact.interactions);
-      const interactionsInLastYear = itemCollectionService.getItemsAddedInLastYear(contact.interactions);
-      const csrfToken = controllerUtils.genCSRF(req);
-
-      res.render(
-        'contact/contact', {
-          term: req.query.term,
-          contact,
-          REASONS_FOR_ARCHIVE,
-          timeSinceNewInteraction,
-          interactionsInLastYear,
-          csrfToken,
-        });
-    })
-    .catch((error) => {
-      res.render('error', { error });
-    });
-}
-
-function edit(req, res) {
-  const contact_id = req.params.contact_id;
-
-  if (!contact_id) {
-    res.redirect('/');
-  }
-
-  contactRepository.getContact(req.session.token, contact_id)
-    .then((contact) => {
-      if (!contact.interactions) {
-        contact.interactions = [];
-      }
-
-      const csrfToken = controllerUtils.genCSRF(req);
-      const markup = ReactDom.renderToString(<ContactForm contact={contact} company={null} />);
-
-      res.render('contact/contact-edit', {
-        term: req.query.term,
-        company: null,
-        contact,
-        csrfToken,
-        markup
-      });
-    })
-    .catch((error) => {
-      res.render('error', { error });
-    });
-}
-
-function add(req, res) {
-  const companyId = req.query.company_id || null;
-  const csrfToken = controllerUtils.genCSRF(req);
-
-  if (companyId) {
-    companyRepository.getDitCompany(req.session.token, companyId)
-      .then((company) => {
-        const markup = ReactDom.renderToString(<ContactForm company={company} />);
-        res.render('contact/contact-edit', {
-          contact: null,
-          company,
-          csrfToken,
-          markup,
-        });
-      });
-  } else {
-    const markup = ReactDom.renderToString(<ContactForm />);
-    res.render('contact/contact-edit', {
-      contact: null,
-      company: null,
-      csrfToken,
-      markup,
-    });
-  }
-}
 
 function cleanErrors(errors) {
   if (errors.address_1 || errors.address_2 ||
@@ -146,34 +54,66 @@ function post(req, res) {
 }
 
 function archive(req, res) {
-  contactRepository.archiveContact(req.session.token, req.params.contact_id, req.body.archived_reason)
-    .then(() => {
-      res.redirect(`/contact/${req.params.contact_id}/view`);
+  controllerUtils.genCSRF(req, res);
+
+  contactRepository.archiveContact(req.session.token, req.body.id, req.body.reason)
+    .then((contact) => {
+      res.json(contact);
     })
     .catch((error) => {
-      winston.log('error', error.error);
-      res.render('error', { error: 'Unable to archive contact' });
+      winston.log('error', error);
+      if (typeof error.error === 'string') {
+        return res.status(error.response.statusCode).json({ errors: [{ error: error.response.statusMessage }] });
+      }
+      const errors = error.error;
+      cleanErrors(errors);
+      return res.status(400).json({ errors });
     });
 }
 
 function unarchive(req, res) {
-  contactRepository.unarchiveContact(req.session.token, req.params.contact_id)
-    .then(() => {
-      res.redirect(`/contact/${req.params.contact_id}/view`);
+  controllerUtils.genCSRF(req, res);
+
+  contactRepository.unarchiveContact(req.session.token, req.body.id)
+    .then((contact) => {
+      res.json(contact);
     })
     .catch((error) => {
-      winston.log('error', error.error);
-      res.render('error', { error: 'Unable to unarchive contact' });
+      winston.error('error', error);
+      if (typeof error.error === 'string') {
+        return res.status(error.response.statusCode).json({ errors: [{ error: error.response.statusMessage }] });
+      }
+      const errors = error.error;
+      cleanErrors(errors);
+      return res.status(400).json({ errors });
     });
 }
 
+function index(req, res) {
+  const token = req.session.token;
+  const csrfToken = controllerUtils.genCSRF(req);
 
-router.get('/add?', add);
-router.get('/:contact_id/edit', edit);
-router.get('/:contact_id/view', view);
+  Router.match({ routes: routesConfig, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+    if (error) {
+      res.status(500).send(error.message);
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+    } else if (renderProps) {
+      renderProps.params.token = token;
+      loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
+        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
+        res.render('contact/contact-react', { markup, scriptTag, csrfToken });
+      });
+    } else {
+      res.status(404).send('Not found');
+    }
+  });
+
+}
+
+router.get('*', index);
+router.post('/archive', archive);
+router.post('/unarchive', unarchive);
 router.post(['/'], post);
-router.post('/:contact_id/archive', archive);
-router.get('/:contact_id/unarchive', unarchive);
 
-
-module.exports = { view, post, edit, router };
+module.exports = { router };

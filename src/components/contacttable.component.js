@@ -52,7 +52,7 @@ class ContactTable extends React.Component {
   };
 
   renderContact = (contact) => {
-    const link = `/contact/${contact.id}/view`;
+    const link = `/contact/${contact.id}`;
     return (
       <tr key={contact.id}>
         <td className="name"><a href={link}>{ contact.first_name } { contact.last_name }</a></td>
