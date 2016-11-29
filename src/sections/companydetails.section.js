@@ -1,3 +1,4 @@
+/* global document: true */
 const React = require('react');
 const CHSection = require('./ch.section');
 const { Link } = require('react-router');
@@ -147,6 +148,8 @@ companyDetailsSection.propTypes = {
   company: React.PropTypes.object,
   showArchiveSection: React.PropTypes.func,
   unarchive: React.PropTypes.func,
+  archiveVisible: React.PropTypes.bool,
+  params: React.PropTypes.object,
 };
 
 
