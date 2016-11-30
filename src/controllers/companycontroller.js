@@ -50,7 +50,7 @@ function index(req, res) {
     } else if (renderProps) {
       renderProps.params.token = token;
       loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
-        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
+        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} {...req.query} />);
         res.render('company/company-react', { markup, scriptTag, csrfToken });
       });
     } else {

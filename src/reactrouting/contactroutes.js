@@ -11,6 +11,7 @@ const Router = ReactRouter.Router;
 const browserHistory = ReactRouter.browserHistory;
 
 const routesConfig = [
+  { path: '/contact/add', component: ContactForm },
   {
     path: '/contact/:contactId',
     component: ContactApp,
@@ -21,7 +22,6 @@ const routesConfig = [
       { path: '*', component: NotFound },
     ],
   },
-  { path: '/contact/add', component: ContactForm },
   { path: '*', component: NotFound },
 ];
 

@@ -61,8 +61,15 @@ class InteractionTableComponent extends React.Component {
   };
 
   renderInteraction = (interaction) => {
-
-    const link = `/interaction/${interaction.id}/view`;
+    let source;
+    if (this.props.company) {
+      source = 'company';
+    } else if (this.props.contact) {
+      source = 'contact';
+    } else {
+      source = '';
+    }
+    const link = `/interaction/${interaction.id}?source=${source}`;
 
     return (
       <tr key={interaction.id}>
@@ -89,7 +96,6 @@ class InteractionTableComponent extends React.Component {
   }
 
   render() {
-
     if (!this.props.interactions) {
       return <div/>;
     }
@@ -126,11 +132,8 @@ class InteractionTableComponent extends React.Component {
         { rows }
         </tbody>
       </table>
-
     );
-
   }
-
 }
 
 InteractionTableComponent.propTypes = {

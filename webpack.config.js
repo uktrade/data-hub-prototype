@@ -5,6 +5,8 @@ const replaceCompanyRepo =
   new webpack.NormalModuleReplacementPlugin(/companyrepository.js$/, 'remotecompanyrepository.js');
 const replaceContactRepo =
   new webpack.NormalModuleReplacementPlugin(/contactrepository.js$/, 'remotecontactrepository.js');
+const replaceInteractionRepo =
+  new webpack.NormalModuleReplacementPlugin(/interactionrepository.js$/, 'remoteinteractionrepository.js');
 
 
 module.exports = {
@@ -13,8 +15,8 @@ module.exports = {
   entry: {
     company: './src/pages/company.js',
     contact: './src/pages/contact.js',
+    interaction: './src/pages/interaction.js',
     index: './src/pages/index.js',
-    interactionedit: './src/pages/interactionedit.js',
     login: './src/pages/login.js',
     search: './src/pages/search.js',
   },
@@ -69,6 +71,6 @@ module.exports = {
   ] : [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin('common.js'),
-    replaceCompanyRepo, replaceContactRepo,
+    replaceCompanyRepo, replaceContactRepo, replaceInteractionRepo,
   ],
 };

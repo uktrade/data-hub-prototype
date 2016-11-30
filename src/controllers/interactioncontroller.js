@@ -1,88 +1,51 @@
 const express = require('express');
-const interactionRepository = require('../repositorys/interactionrepository');
-const contactRepository = require('../repositorys/contactrepository');
-const companyRepository = require('../repositorys/companyrepository');
-const controllerUtils = require('../lib/controllerutils');
+
 const React = require('react');
 const ReactDom = require('react-dom/server');
-const InteractionForm = require('../forms/interactionform');
+const Router = require('react-router');
+const AsyncProps = require('async-props').default;
+const loadPropsOnServer = require('async-props').loadPropsOnServer;
+const interactionRepository = require('../repositorys/interactionrepository');
+const controllerUtils = require('../lib/controllerutils');
+const routesConfig = require('../reactrouting/interactionroutes').routesConfig;
+
+
 const router = express.Router();
 
-function view(req, res) {
-  const interaction_id = req.params.interaction_id;
+function index(req, res) {
+  const token = req.session.token;
   const csrfToken = controllerUtils.genCSRF(req);
 
-  if (!interaction_id) {
+  Router.match({ routes: routesConfig, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+    if (error) {
+      res.status(500).send(error.message);
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+    } else if (renderProps) {
+      renderProps.params = Object.assign({ token }, req.query, renderProps.params);
+      loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
+        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
+        res.render('interaction/interaction-react', { markup, scriptTag, csrfToken });
+      });
+    } else {
+      res.status(404).send('Not found');
+    }
+  });
+}
+
+function get(req, res) {
+  const interactionId = req.params.interactionId;
+  if (!interactionId) {
     res.redirect('/');
   }
 
-  interactionRepository.getInteraction(req.session.token, interaction_id)
-    .then((interaction) => {
-      res.render('interaction/interaction-details', {
-        interaction,
-        csrfToken,
-      });
+  interactionRepository.getInteraction(req.session.token, interactionId)
+    .then((contact) => {
+      res.json(contact);
     })
     .catch((error) => {
       res.render('error', { error });
     });
-}
-
-function edit(req, res) {
-  const interactionId = req.params.interaction_id || null;
-  const csrfToken = controllerUtils.genCSRF(req);
-
-  interactionRepository.getInteraction(req.session.token, interactionId)
-    .then((interaction) => {
-      if (interaction.dit_advisor && !interaction.name) {
-        interaction.dit_advisor.name = `${interaction.dit_advisor.first_name || ''} ${interaction.dit_advisor.last_name || ''}`;
-      }
-      const markup = ReactDom.renderToString(<InteractionForm interaction={ interaction } />);
-      res.render('interaction/interaction-edit', {
-        company: null,
-        contact: null,
-        interaction: (interaction || null),
-        csrfToken,
-        markup
-      });
-    });
-}
-
-function add(req, res) {
-  const companyId = req.query.company_id;
-  const contactId = req.query.contact_id;
-  const csrfToken = controllerUtils.genCSRF(req);
-
-  if (contactId && contactId.length > 0) {
-    contactRepository.getContact(req.session.token, contactId)
-      .then((contact) => {
-        const markup = ReactDom.renderToString(<InteractionForm contact={contact} company={contact.company} />);
-
-        res.render('interaction/interaction-edit', {
-          company: contact.company,
-          contact,
-          interactionId: null,
-          interaction: null,
-          csrfToken,
-          markup,
-        });
-      });
-  } else if (companyId && companyId.length > 0) {
-    companyRepository.getDitCompany(req.session.token, companyId)
-      .then((company) => {
-        const markup = ReactDom.renderToString(<InteractionForm company={company} />);
-        res.render('interaction/interaction-edit', {
-          company,
-          contact: null,
-          interactionId: null,
-          interaction: null,
-          csrfToken,
-          markup,
-        });
-      });
-  } else {
-    res.redirect('/');
-  }
 }
 
 function post(req, res) {
@@ -107,14 +70,8 @@ function post(req, res) {
 }
 
 
-router.get('/add?', add);
-router.get('/:interaction_id/edit', edit);
-router.get('/:interaction_id/view', view);
-router.post('/', post);
+router.get('/interaction/*', index);
+router.get('/api/interaction/:interactionId', get);
+router.post('/api/interaction', post);
 
-module.exports = {
-  view,
-  edit,
-  post,
-  router,
-};
+module.exports = { router };

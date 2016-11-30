@@ -4,11 +4,12 @@ const ContactTable = require('../components/contacttable.component');
 const itemCollectionService = require('../services/itemcollectionservice');
 
 function CompanyContacts(props) {
-  const { company, contacts } = props;
+  const { company } = props;
+  const contacts = company.contacts || [];
+  const addUrl = `/contact/add?companyId=${company.id}&source=company`;
 
   if ((!company.archived && !contacts) || (!company.archived && contacts.length === 0)) {
-    const url = `/contact/add?company_id=${company.id}`;
-    return (<a className="button button-secondary" href={url}>Add new contact</a>);
+    return (<a className="button button-secondary" href={addUrl}>Add new contact</a>);
   }
 
   if (typeof window !== 'undefined') {
@@ -17,7 +18,7 @@ function CompanyContacts(props) {
 
   if (contacts.length === 0 && !company.archived) {
     return (
-      <a className="button" href={`/contact/add?company_id=${company.id}`}>Add new contact</a>
+      <a className="button" href={addUrl}>Add new contact</a>
     );
   } else if (contacts.length === 0 && company.archived) {
     return (
@@ -50,7 +51,7 @@ function CompanyContacts(props) {
         <div className="column-one-third">
           <p className="actions">
             { !company.archived ?
-              <a className="button button-secondary" href={`/contact/add?company_id=${company.id}`}>Add new contact</a>
+              <a className="button button-secondary" href={addUrl}>Add new contact</a>
               :
               <a className="button button-disabled">Add new contact</a>
             }

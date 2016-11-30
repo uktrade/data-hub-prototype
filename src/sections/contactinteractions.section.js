@@ -4,19 +4,18 @@ const InteractionTable = require('../components/interactiontable.component');
 const itemCollectionService = require('../services/itemcollectionservice');
 
 function ContactInteractions(props) {
-  const { contact, interactions } = props;
+  const { contact } = props;
+  const interactions = contact.interactions || [];
   const company = contact.company;
 
   if (typeof window !== 'undefined') {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
 
-
   if (interactions.length === 0) {
     if (!company.archived && !contact.archived) {
       return (
-        <a className="button button-secondary" href={`/interaction/add?contact_id=${company.id}`}>Add new
-          interaction</a>
+        <a className="button button-secondary" href={`/interaction/add?contactId=${contact.id}`}>Add new interaction</a>
       );
     } else {
       return (
@@ -47,7 +46,7 @@ function ContactInteractions(props) {
         <div className="column-one-third">
           <p className="actions">
             { !company.archived ?
-              <a className="button button-secondary" href={`/interaction/add?company_id=${company.id}`}>Add new interaction</a>
+              <a className="button button-secondary" href={`/interaction/add?contactId=${contact.id}`}>Add new interaction</a>
               :
               <a className="button button-disabled">Add new interaction</a>
             }
