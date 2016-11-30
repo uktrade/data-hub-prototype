@@ -11,6 +11,7 @@ const redisCrypto = require('connect-redis-crypto');
 const flash = require('connect-flash');
 const url = require('url');
 const winston = require('winston');
+const forceSSL = require('express-force-ssl');
 
 const companyController = require('./controllers/companycontroller');
 const contactController = require('./controllers/contactcontroller');
@@ -113,6 +114,10 @@ app.use('/javascripts/react-dom', express.static(`${__dirname}/../node_modules/r
 app.use(express.static(`${__dirname}/../node_modules/govuk_template_jinja/assets`));
 
 app.use(logger((isDev ? 'dev' : 'combined')));
+
+if (!isDev) {
+  app.use(forceSSL);
+}
 
 app.use(locals);
 app.use(datahubFlash);
