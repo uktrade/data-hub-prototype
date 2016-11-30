@@ -1,20 +1,21 @@
 const React = require('react');
 const AsyncProps = require('async-props').default;
 const ReactRouter = require('react-router');
-const CompanyPageLayout = require('../pages/companypagelayout');
-const NotFound = require('../pages/notfound');
+const CompanyApp = require('../apps/company.app.js');
 const CompanyDetails = require('../sections/companydetails.section.js');
 const CompanyContacts = require('../sections/companycontacts.section.js');
 const CompanyInteractions = require('../sections/companyinteractions.section.js');
 const CompanyEdit = require('../sections/companyedit.section.js');
 const CompanyForm = require('../forms/companyform');
+const NotFound = require('./notfound');
+
 const Router = ReactRouter.Router;
 const browserHistory = ReactRouter.browserHistory;
 
 const routesConfig = [
   {
     path: '/company/:source/:sourceId',
-    component: CompanyPageLayout,
+    component: CompanyApp,
     indexRoute: { component: CompanyDetails },
     childRoutes: [
       { path: 'contacts', component: CompanyContacts },

@@ -196,29 +196,15 @@ function getSubsectors(req, res) {
   res.json(metadataRepository.SUBSECTORS[sectorId]);
 }
 
-function getCompany(req, res) {
-  const id = req.params.sourceId;
-  const source = req.params.source;
 
-  companyRepository.getCompany(req.session.token, id, source)
-    .then((company) => {
-      res.json(company);
-    })
-    .catch((error) => {
-      res.render('error', { error });
-    });
-}
-
-
-router.get('/suggest', companySuggest);
-router.get('/countrylookup', countryLookup);
-router.get('/accountmanagerlookup', accountManagerLookup);
-router.get('/contactlookup', contactLookup);
-router.get('/teamlookup', teamLookup);
-router.get('/meta/:metaName', getMetadata);
-router.get('/postcodelookup/:postcode', postcodelookup);
-router.get('/subsectors/:sectorId', getSubsectors);
-router.get('/company/:source/:sourceId', getCompany);
+router.get('/api/suggest', companySuggest);
+router.get('/api/countrylookup', countryLookup);
+router.get('/api/accountmanagerlookup', accountManagerLookup);
+router.get('/api/contactlookup', contactLookup);
+router.get('/api/teamlookup', teamLookup);
+router.get('/api/meta/:metaName', getMetadata);
+router.get('/api/postcodelookup/:postcode', postcodelookup);
+router.get('/api/subsectors/:sectorId', getSubsectors);
 
 module.exports = {
   postcodelookup,

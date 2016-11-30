@@ -74,7 +74,7 @@
     "js:client": "webpack",
     "js:client:watch": "webpack --watch",
     "js:server": "babel src -d build",
-    "js:server:watch": "babel-watch src/server.js",
+    "js:server:watch": "nodemon src/server.js --exec babel-node",
     "sass:watch": "node-sass src/sass/application.scss build/stylesheets/application.css --source-map build/stylesheets/application.css.map --source-map-contents --include-path ./node_modules/govuk-elements-sass/public/sass/ --include-path ./node_modules/govuk_frontend_toolkit/stylesheets --include-path ./node_modules/font-awesome/scss -w -r",
     "sass": "node-sass src/sass/application.scss build/stylesheets/application.css --include-path ./node_modules/govuk-elements-sass/public/sass/ --include-path ./node_modules/govuk_frontend_toolkit/stylesheets --include-path ./node_modules/font-awesome/scss -x --output-style compressed",
     "postinstall": "npm run build",

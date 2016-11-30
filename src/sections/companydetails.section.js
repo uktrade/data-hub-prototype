@@ -1,3 +1,4 @@
+/* global document: true */
 const React = require('react');
 const CHSection = require('./ch.section');
 const { Link } = require('react-router');
@@ -14,8 +15,9 @@ function companyDetailsSection(props) {
     <div>
       <CHSection company={company} />
 
-      <table className="table-detail">
-        <tbody>
+      { company.id &&
+        <table className="table-detail">
+          <tbody>
           {!chCompany &&
           <tr>
             <th>Registered address</th>
@@ -26,11 +28,11 @@ function companyDetailsSection(props) {
               { company.registered_address_county && `${company.registered_address_county}, ` }
               { company.registered_address_postcode &&
               <span className="meta--address__postcode">
-                {`${company.registered_address_postcode}, `}
-              </span>
+                  {`${company.registered_address_postcode}, `}
+                </span>
               }
               { (company.registered_address_country && company.registered_address_country) &&
-                company.registered_address_country.name
+              company.registered_address_country.name
               }
             </td>
           </tr>
@@ -60,8 +62,8 @@ function companyDetailsSection(props) {
               { company.trading_address_county && `${company.trading_address_county}, ` }
               { company.trading_address_postcode &&
               <span className="meta--address__postcode">
-                {`${company.trading_address_postcode}, `}
-              </span>
+                  {`${company.trading_address_postcode}, `}
+                </span>
               }
               { (company.trading_address_country && company.trading_address_country) &&
               company.trading_address_country.name
@@ -119,16 +121,11 @@ function companyDetailsSection(props) {
               }
             </td>
           </tr>
-        </tbody>
-      </table>
-
+          </tbody>
+        </table>
+      }
       { !props.archiveVisible &&
         <div className="button-bar">
-          { !company.id &&
-          <Link to={`/company/${source}/${sourceId}/edit`} className="button button-secondary js-button-edit">Edit company
-            details</Link>
-          }
-
           { (!company.archived) ?
             <div>
               <Link to={`/company/${source}/${sourceId}/edit`} className="button button-secondary js-button-edit">Edit
@@ -151,6 +148,8 @@ companyDetailsSection.propTypes = {
   company: React.PropTypes.object,
   showArchiveSection: React.PropTypes.func,
   unarchive: React.PropTypes.func,
+  archiveVisible: React.PropTypes.bool,
+  params: React.PropTypes.object,
 };
 
 

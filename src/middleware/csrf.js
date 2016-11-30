@@ -1,8 +1,11 @@
 const winston = require('winston');
 
-
 module.exports = (req, res, next) => {
+
+  winston.debug('csrf:start');
+
   if (req.method !== 'POST' || req.url === '/login') {
+    winston.debug('csrf:bypass');
     return next();
   }
 
@@ -25,8 +28,10 @@ module.exports = (req, res, next) => {
       throw true;
     }
   } catch (e) {
+    winston.error(e);
     return res.sendStatus(400);
   }
 
+  winton.debug('csrf:end');
   return next();
 };

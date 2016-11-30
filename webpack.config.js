@@ -1,16 +1,18 @@
 const webpack = require('webpack');
 
 const prod = process.env.NODE_ENV === 'production';
-const moduleReplacementPlugin =
+const replaceCompanyRepo =
   new webpack.NormalModuleReplacementPlugin(/companyrepository.js$/, 'remotecompanyrepository.js');
+const replaceContactRepo =
+  new webpack.NormalModuleReplacementPlugin(/contactrepository.js$/, 'remotecontactrepository.js');
+
 
 module.exports = {
   devtool: prod ? 'hidden-source-map' : 'source-map',
 
   entry: {
-    company: './src/pages/company.page.js',
+    company: './src/pages/company.js',
     contact: './src/pages/contact.js',
-    contactedit: './src/pages/contactedit.js',
     index: './src/pages/index.js',
     interactionedit: './src/pages/interactionedit.js',
     login: './src/pages/login.js',
@@ -63,10 +65,10 @@ module.exports = {
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin('common.js'),
-    moduleReplacementPlugin,
+    replaceCompanyRepo, replaceCompanyRepo,
   ] : [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin('common.js'),
-    moduleReplacementPlugin,
+    replaceCompanyRepo, replaceContactRepo,
   ],
 };

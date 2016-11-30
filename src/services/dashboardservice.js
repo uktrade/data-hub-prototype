@@ -5,7 +5,7 @@ function mapContacts(contacts) {
   if (contacts && (typeof contacts.map) === 'function') {
     return contacts.map((contact) => {
       return {
-        url: `contact/${contact.id}/view`,
+        url: `contact/${contact.id}`,
         name: `${contact.first_name} ${contact.last_name}`,
         id: contact.id,
         company: {

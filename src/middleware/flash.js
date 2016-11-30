@@ -1,4 +1,8 @@
+const winston = require('winston');
+
+
 module.exports = (req, res, next) => {
+  winston.debug('flash:start');
   const formErrors = req.flash('error');
 
   res.locals.messages = {
@@ -10,5 +14,6 @@ module.exports = (req, res, next) => {
     res.locals.messages.formErrors = formErrors;
   }
 
+  winston.debug('flash:end');
   next();
 };

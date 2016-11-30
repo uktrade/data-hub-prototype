@@ -1,0 +1,13 @@
+{% extends "../layouts/ukti-search-header.html" %}
+
+{% block main %}
+<div>
+  <a class="back-link" href='/'>Back to home</a>
+  <div id="contact"><div>{{markup | safe}}</div></div>
+</div>
+<script src="/javascripts/react/react.min.js"></script>
+<script src="/javascripts/react-dom/react-dom.min.js"></script>
+<script>window.csrfToken='{{ csrfToken }}';</script>
+{{ scriptTag | safe }}
+<script src="/javascripts/contact.bundle.js"></script>
+{% endblock %}

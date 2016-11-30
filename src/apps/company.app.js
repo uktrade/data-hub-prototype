@@ -2,14 +2,14 @@ const React = require('react');
 const Link = require('react-router').Link;
 const companyRepository = require('../repositorys/companyrepository');
 const axios = require('axios');
-const ErrorList = require('../components/errorlist.component');
+const ErrorList = require('../components/errorlist.component.js');
 const formatDate = require('../lib/date').formatDate;
-const InputText = require('../components/inputtext.component');
+const InputText = require('../components/inputtext.component.js');
 
 
 const DISSOLVED_REASON = 'Company is dissolved';
 
-class CompanyPage extends React.Component {
+class CompanyApp extends React.Component {
   static loadProps(context, cb) {
     const params = context.params;
     companyRepository.getCompany(params.token, params.sourceId, params.source)
@@ -23,20 +23,23 @@ class CompanyPage extends React.Component {
 
   constructor(props) {
     super(props);
+
+    const {company} = props;
+
     const state = {
       archiveVisible: false,
       saving: false,
       errors: null,
-      company: props.company
+      company,
     };
 
-    if (props.company.archived_reason && props.company.archived_reason.length > 0) {
-      if (props.company.archive_reason = DISSOLVED_REASON) {
+    if (company.archived_reason && company.archived_reason.length > 0) {
+      if (company.archived_reason = DISSOLVED_REASON) {
         state.archived_reason_dropdown = DISSOLVED_REASON;
         state.archived_reason_other = null;
       } else {
         state.archived_reason_dropdown = 'Other';
-        state.archived_reason_other = props.company.archived_reason;
+        state.archived_reason_other = company.archived_reason;
       }
     }
 
@@ -54,7 +57,7 @@ class CompanyPage extends React.Component {
     event.target.blur();
     this.setState({ saving: true });
     const token = window.csrfToken;
-    axios.post(`/company/unarchive`,
+    axios.post('/api/company/unarchive',
       { id: this.state.company.id},
       { headers: {'x-csrf-token': token }}
     )
@@ -88,7 +91,7 @@ class CompanyPage extends React.Component {
     }
 
     const token = window.csrfToken;
-    axios.post(`/company/archive`, {
+    axios.post('/api/company/archive', {
         id: company.id,
         reason
       },
@@ -99,6 +102,7 @@ class CompanyPage extends React.Component {
           archiveVisible: false,
           saving: false,
           company: response.data,
+          errors: null,
         });
       })
       .catch((error) => {
@@ -286,4 +290,4 @@ class CompanyPage extends React.Component {
   }
 }
 
-module.exports = CompanyPage;
+module.exports = CompanyApp;

@@ -248,7 +248,7 @@ class CompanyForm extends BaseForm {
   save = () => {
     // Just post the company and let the server do the rest. (Get it.. REST)
     this.setState({saving: true});
-    axios.post('/company/',
+    axios.post('/api/company',
         { company: this.state.formData },
         { headers: {'x-csrf-token': window.csrfToken }}
       )
