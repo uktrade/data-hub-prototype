@@ -32,6 +32,6 @@ module.exports = (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  winton.debug('csrf:end');
+  winston.debug('csrf:end');
   return next();
 };
