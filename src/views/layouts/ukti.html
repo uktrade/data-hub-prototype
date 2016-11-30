@@ -9,6 +9,12 @@
 {% block head %}
   <link href="{{ asset_path }}stylesheets/application.css?{{ startTime }}" rel="stylesheet" type="text/css">
   <script src="{{ asset_path }}javascripts/common.js"></script>
+  {% if user %}
+    <script>
+      if (!window.DIT) window.DIT = {};
+      window.DIT.user = {{ user | stringify | safe }};
+    </script>
+  {% endif %}
 {% endblock %}
 
 {% block content %}

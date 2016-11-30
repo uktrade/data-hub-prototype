@@ -15,7 +15,7 @@ function contactDetailsSection(props) {
         <tbody>
           <tr>
             <th width="30%">Company</th>
-            <td><a href="/company/DIT/{{ contact.company.id }}">{ contact.company.name }</a></td>
+            <td><a href={`/company/DIT/${contact.company.id}`}>{ contact.company.name }</a></td>
           </tr>
 
           <tr>

@@ -1,12 +1,15 @@
 const React = require('react');
 const axios = require('axios');
+const { Link } = require('react-router');
 const BaseForm = require('./baseform');
 const Autosuggest = require('../components/autosuggest.component');
 const SelectWithId = require('../components/selectwithid.component');
 const DateInput = require('../components/dateinput.component');
 const InputText = require('../components/inputtext.component');
 const ErrorList = require('../components/errorlist.component');
-
+const interactionRepository = require('../repositorys/interactionrepository');
+const companyRepository = require('../repositorys/companyrepository');
+const contactRepository = require('../repositorys/contactrepository');
 
 const LABELS = {
   'company': 'Company',
@@ -19,7 +22,6 @@ const LABELS = {
   'service': 'Service offer',
   'dit_team': 'Service provider'
 };
-
 const defaultInteraction = {
   company: {
     id: '',
@@ -51,7 +53,51 @@ const defaultInteraction = {
 };
 
 class InteractionForm extends BaseForm {
+  static loadProps(context, cb) {
+    const params = context.params;
+    let user;
+    if (params.user) {
+      user = params.user;
+    } else if (window && window.DIT.user) {
+      user = window.DIT.user;
+    }
 
+    if (params.interactionId) {
+      interactionRepository.getInteraction(params.token, params.interactionId)
+        .then((interaction) => {
+          cb(null, { interaction, user });
+        })
+        .catch((error) => {
+          cb(error);
+        });
+    } else if (params.companyId) {
+      companyRepository.getCompany(params.token, params.companyId, 'DIT')
+        .then((company) => {
+          cb(null, { company, user });
+        })
+        .catch((error) => {
+          cb(error);
+        });
+    } else if (params.contactId) {
+      contactRepository.getContact(params.token, params.contactId)
+        .then((contact) => {
+          cb(null, { contact, user });
+        })
+        .catch((error) => {
+          cb(error);
+        });
+    } else {
+      cb(null, { user });
+    }
+  }
+
+  // Construct the initial state
+  // The form can be called wither with an interaction to edit
+  // or from the contact and company screens, which will pre populate
+  // some information.
+  // Depending on where the user came from the form decides if it should let
+  // the user enter/edit the company/contact or simply show it.
+  // If adding a new record we also set the default advisor to the logged in user
   constructor(props) {
     super(props);
 
@@ -62,37 +108,48 @@ class InteractionForm extends BaseForm {
     };
 
     if (props.interaction) {
+      // If editing an interaction
       state.formData = props.interaction;
       state.showCompanyField = false;
       state.showContactField = false;
     } else if (props.contact) {
+      // if adding an interaction from contact screen
       state.formData = {
         company: props.contact.company,
-        contact: props.contact
+        contact: props.contact,
+        dit_advisor: props.user,
       };
       state.showCompanyField = false;
       state.showContactField = false;
     } else if (props.company) {
+      // if adding an interaction from company screen
       state.formData = {
         company: props.company,
+        dit_advisor: props.user,
       };
       state.showCompanyField = false;
     } else {
-      state.formData = {};
+      state.formData = {
+        dit_advisor: props.user,
+      };
     }
 
     this.setDefaults(state.formData, defaultInteraction);
-
     this.state = state;
   }
 
+  // Save the interaction to the json api. Note that the CSRF token for
+  // JSON calls is global on the web page, this is a pattern used as in some
+  // screens json calls are done for things other than saving, such as archiving.
   save = () => {
-    axios.post('/interaction/',
+    this.setState({saving: true});
+    axios.post('/api/interaction/',
       { interaction: this.state.formData },
       { headers: {'x-csrf-token': window.csrfToken }}
       )
       .then((response) => {
-        window.location.href = `/interaction/${response.data.id}/view`;
+        this.setState({saving: false});
+        window.location.href = `/interaction/${response.data.id}`;
       })
       .catch((error) => {
         window.csrfToken = error.response.headers['x-csrf-token'];
@@ -112,26 +169,32 @@ class InteractionForm extends BaseForm {
     });
   };
 
-  getBackUrl() {
-    if (this.props.interaction) {
-      return `/interaction/${this.props.interaction.id}/view`;
+  getBackLink() {
+    // if called with a company id, go back to company
+    if (this.props.company) {
+      return (<a className="button-link button--cancel js-button-cancel" href={`/company/company_company/${this.props.company.id}/interactions`}>Cancel</a>);
     } else if (this.props.contact) {
-      return `/contact/${this.props.contact.id}/interactions`;
-    } else if (this.props.company) {
-      return `/company/${this.props.company.id}/interactions`;
+      return (<a className="button-link button--cancel js-button-cancel" href={`/contact/${this.props.contact.id}/interactions`}>Cancel</a>);
+    } else if (this.props.interaction) {
+      return (<Link className="button-link button--cancel js-button-cancel" href={`/interaction/${this.props.interaction.id}`}>Cancel</Link>);
     }
-
-    return '/';
+    return (<a href="/" className="button-link button--cancel js-button-cancel">Cancel</a>);
   }
 
   render() {
-
+    if (this.state.saving) {
+      return this.getSaving();
+    }
     const formData = this.state.formData;
-
-    let backUrl = this.getBackUrl();
 
     return (
       <div>
+        { this.props.params.interactionId ?
+          <h1 className="heading-xlarge record-title">Edit interaction</h1>
+          :
+          <h1 className="heading-xlarge record-title">Add interaction</h1>
+        }
+
         { this.state.errors &&
         <ErrorList labels={LABELS} errors={this.state.errors}/>
         }
@@ -160,7 +223,6 @@ class InteractionForm extends BaseForm {
           errors={this.getErrors('interaction_type')}
           onChange={this.updateField}
         />
-
         <InputText
           label={LABELS.subject}
           name="subject"
@@ -168,7 +230,6 @@ class InteractionForm extends BaseForm {
           onChange={this.updateField}
           errors={this.getErrors('subject')}
         />
-
         <div className="form-group ">
           <label className="form-label" htmlFor="description">{LABELS.notes}</label>
           <textarea
@@ -203,7 +264,6 @@ class InteractionForm extends BaseForm {
           onChange={this.updateField}
           errors={this.getErrors('date_of_interaction')}
         />
-
         <Autosuggest
           name="dit_advisor"
           label={LABELS.dit_advisor}
@@ -212,7 +272,6 @@ class InteractionForm extends BaseForm {
           onChange={this.updateField}
           errors={this.getErrors('dit_advisor')}
         />
-
         <Autosuggest
           name="service"
           label={LABELS.service}
@@ -221,7 +280,6 @@ class InteractionForm extends BaseForm {
           onChange={this.updateField}
           errors={this.getErrors('service')}
         />
-
         <Autosuggest
           name="dit_team"
           label={LABELS.dit_team}
@@ -230,16 +288,13 @@ class InteractionForm extends BaseForm {
           onChange={this.updateField}
           errors={this.getErrors('dit_team')}
         />
-
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
-          <a className="button-link button--cancel js-button-cancel" href={backUrl}>Cancel</a>
+          { this.getBackLink() }
         </div>
       </div>
-
     );
   }
-
 }
 
 module.exports = InteractionForm;

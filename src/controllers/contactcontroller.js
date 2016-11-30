@@ -36,7 +36,7 @@ function index(req, res) {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
-      renderProps.params.token = token;
+      renderProps.params = Object.assign({ token }, renderProps.params, req.query);
       loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
         const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
         res.render('contact/contact-react', { markup, scriptTag, csrfToken });
@@ -49,13 +49,13 @@ function index(req, res) {
 }
 
 function get(req, res) {
-  const contact_id = req.params.contact_id;
+  const contactId = req.params.contactId;
 
-  if (!contact_id) {
+  if (!contactId) {
     res.redirect('/');
   }
 
-  contactRepository.getContact(req.session.token, contact_id)
+  contactRepository.getContact(req.session.token, contactId)
     .then((contact) => {
       res.json(contact);
     })
@@ -128,7 +128,7 @@ function unarchive(req, res) {
 }
 
 router.get('/contact/*', index);
-router.get('/api/contact/:contact_id', get);
+router.get('/api/contact/:contactId', get);
 router.post('/api/contact', post);
 router.post('/api/contact/archive', archive);
 router.post('/api/contact/unarchive', unarchive);

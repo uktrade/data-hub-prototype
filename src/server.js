@@ -34,8 +34,7 @@ const metadata = require('./repositorys/metadatarepository');
 
 const app = express();
 const isDev = app.get('env') === 'development';
-winston.level = isDev ? 'debug' : 'error';
-
+winston.level = config.logLevel;
 
 const RedisStore = redisCrypto(session);
 
@@ -125,7 +124,7 @@ app.use('/login', loginController.router);
 app.use('/myaccount', myAccountController.router);
 app.use(companyController.router);
 app.use(contactController.router);
-app.use('/interaction', interactionController.router);
+app.use(interactionController.router);
 app.use('/search', searchController.router);
 app.use(apiController.router);
 app.get('/', indexController);

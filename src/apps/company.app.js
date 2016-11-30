@@ -212,7 +212,7 @@ class CompanyApp extends React.Component {
           </p>
           <ul className="error-summary-list">
             <li>
-              <a href={`/contact/add?company_id=${ company.id }`}>Add new contact</a>
+              <a href={`/contact/add?companyId=${ company.id }`}>Add new contact</a>
             </li>
           </ul>
         </div>
@@ -275,8 +275,6 @@ class CompanyApp extends React.Component {
         <div>
           { children && React.cloneElement(children, {
             company,
-            contacts: company.contacts,
-            interactions: company.interactions,
             source,
             sourceId,
             showArchiveSection: this.showArchiveSection,

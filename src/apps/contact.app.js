@@ -36,7 +36,6 @@ class ContactApp extends React.Component {
       contact,
     };
 
-
     if (contact.archived_reason && contact.archived_reason.length > 0) {
       if (REASONS_FOR_ARCHIVE.includes(contact.archived_reason)) {
         state.archived_reason_dropdown = contact.archived_reason;
@@ -194,7 +193,6 @@ class ContactApp extends React.Component {
         <div className="saving">Saving...</div>
       );
     }
-
     const { contactId, children } = this.props;
     const { contact } = this.state;
     const path = this.props.routes[1].path;
@@ -231,8 +229,6 @@ class ContactApp extends React.Component {
         <div>
           { children && React.cloneElement(children, {
             contact,
-            interactions: contact.interactions,
-            company: contact.company,
             contactId,
             showArchiveSection: this.showArchiveSection,
             unarchive: this.unarchive,

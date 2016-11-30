@@ -9,6 +9,7 @@ const Autosuggest = require('../components/autosuggest.component');
 const Radio = require('../components/radio.component');
 const InputText = require('../components/inputtext.component');
 const ErrorList = require('../components/errorlist.component');
+const companyRepository = require('../repositorys/companyrepository');
 
 const LABELS = {
   'company': 'Company',
@@ -64,27 +65,42 @@ const defaultContact = {
 };
 
 class ContactForm extends BaseForm {
+  static loadProps(context, cb) {
+    const params = context.params;
+    if (params.companyId) {
+      companyRepository.getCompany(params.token, params.companyId, 'DIT')
+        .then((company) => {
+          cb(null, { company });
+        })
+        .catch((error) => {
+          cb(error);
+        });
+    } else {
+      cb();
+    }
+  }
 
   constructor(props) {
     super(props);
 
     let state = {
       saving: false,
-      showCompanyField: true
     };
 
-    if (props.company) {
-      state.formData = Object.assign({}, props.contact);
+    // Edit contact
+    if (props.contact && props.contact.id) {
+      state.formData = props.contact;
       state.showCompanyField = false;
-    } else {
-      state.formData = {};
-    }
-
-    if (props.contact) {
       state.edit = true;
+    } else if (props.company) {
+      // Add contact to company
+      state.formData = { company: props.company };
       state.showCompanyField = false;
-      state.formData.contact = props.contact;
+      state.edit = false;
     } else {
+      // Add contact on it's own.
+      state.formData = {}
+      state.showCompanyField = true;
       state.edit = false;
     }
 
@@ -120,16 +136,16 @@ class ContactForm extends BaseForm {
     });
   };
 
-  getBackUrl() {
+  getBackLink() {
 
     // if called with a company id, go back to company
     if (this.props.company) {
-      return `/company/company_company/${this.props.company.id}/contacts`;
+      return (<a className="button-link button--cancel js-button-cancel" href={`/company/company_company/${this.props.company.id}/contacts`}>Cancel</a>);
     } else if (this.props.contact) {
-      return `/contact/${this.props.contact.id}`;
+      return (<Link className="button-link button--cancel js-button-cancel" to={`/contact/${this.props.contact.id}`}>Cancel</Link>);
     }
 
-    return '/';
+    return (<a href="/" className="button-link button--cancel js-button-cancel">Cancel</a>);
   }
 
   addPrimaryTeam = (event) => {
@@ -186,15 +202,12 @@ class ContactForm extends BaseForm {
     if (this.state.saving) {
       return this.getSaving();
     }
-
     const formData = this.state.formData;
-    const backUrl = this.getBackUrl();
 
     return (
       <div>
-        { this.state.errors &&
-        <ErrorList labels={LABELS} errors={this.state.errors}/>
-        }
+        { !this.props.contact && <h1 className="heading-xlarge record-title">Add contact</h1> }
+        { this.state.errors && <ErrorList labels={LABELS} errors={this.state.errors}/> }
 
         { this.state.showCompanyField ?
           <Autosuggest
@@ -330,11 +343,7 @@ class ContactForm extends BaseForm {
         </div>
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
-          { this.state.edit ?
-            <Link to={`/contact/${this.props.contactId}`} className="button-link button--cancel js-button-cancel" >Cancel</Link>
-            :
-            <a className="button-link button--cancel js-button-cancel" href="/">Cancel</a>
-          }
+          {this.getBackLink()}
         </div>
       </div>
 
