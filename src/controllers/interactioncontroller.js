@@ -15,6 +15,7 @@ const router = express.Router();
 function index(req, res) {
   const token = req.session.token;
   const csrfToken = controllerUtils.genCSRF(req);
+  const user = res.locals.user;
 
   Router.match({ routes: routesConfig, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
     if (error) {
@@ -22,7 +23,7 @@ function index(req, res) {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
-      renderProps.params = Object.assign({ token }, req.query, renderProps.params);
+      renderProps.params = Object.assign({ token, user }, req.query, renderProps.params);
       loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
         const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
         res.render('interaction/interaction-react', { markup, scriptTag, csrfToken });
