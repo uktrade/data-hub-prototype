@@ -29,7 +29,7 @@ const auth = require('./middleware/auth');
 const user = require('./middleware/user');
 const csrf = require('./middleware/csrf');
 const locals = require('./middleware/locals');
-
+const forceHttps = require('./middleware/forcehttps');
 const metadata = require('./repositorys/metadatarepository');
 
 const app = express();
@@ -85,7 +85,6 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
 }));
-app.use(flash());
 
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
 app.use(bodyParser.json({ limit: '1mb' }));
@@ -114,6 +113,8 @@ app.use(express.static(`${__dirname}/../node_modules/govuk_template_jinja/assets
 
 app.use(logger((isDev ? 'dev' : 'combined')));
 
+app.use(forceHttps);
+app.use(flash());
 app.use(locals);
 app.use(datahubFlash);
 app.use(auth);
