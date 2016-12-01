@@ -67,7 +67,7 @@ module.exports = {
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin('common.js'),
-    replaceCompanyRepo, replaceCompanyRepo,
+    replaceCompanyRepo, replaceContactRepo, replaceInteractionRepo,
   ] : [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin('common.js'),
