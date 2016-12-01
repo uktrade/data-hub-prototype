@@ -60,7 +60,8 @@ function get(req, res) {
       res.json(contact);
     })
     .catch((error) => {
-      res.render('error', { error });
+      const errors = error.error;
+      return res.status(400).json({ errors });
     });
 }
 
