@@ -110,6 +110,7 @@ class DidYouMeanCompanyComponent extends React.Component {
           name={this.props.name}
           label={this.props.label}
           value={this.state.selected}
+          searchingFor="a company"
           lookupUrl={this.lookupUrl}
           onChange={this.onChange}
           allowOwnValue

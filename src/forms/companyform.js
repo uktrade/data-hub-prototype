@@ -215,6 +215,7 @@ class CompanyForm extends BaseForm {
           onChange={(countryUpdate) => {
             this.updateExportingTo(countryUpdate, index);
           }}
+          searchingFor="a country"
         />
       );
     });
@@ -236,6 +237,7 @@ class CompanyForm extends BaseForm {
           name="future_interest_countries"
           label={label}
           value={country}
+          searchingFor="a country"
           options={this.state.countryOptions}
           onChange={(countryUpdate) => {
             this.updateFutureExportTo(countryUpdate, index);
@@ -446,6 +448,7 @@ class CompanyForm extends BaseForm {
             <Autosuggest
               name="account_manager"
               label='Account manager'
+              searchingFor="an account manager"
               value={formData.account_manager}
               lookupUrl='/api/accountmanagerlookup'
               onChange={this.updateField}

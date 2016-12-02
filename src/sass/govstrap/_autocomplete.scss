@@ -36,4 +36,20 @@
     }
   }
 
+  .loading {
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 99;
+    font-size: 6px;
+    display: inline-block;
+    background: $white;
+    left: 92%;
+    bottom: 7px;
+
+    @include media(tablet) {
+      font-size: 7px;
+      left: 61%;
+    }
+  }
+
 }
