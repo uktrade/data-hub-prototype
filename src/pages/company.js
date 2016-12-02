@@ -5,5 +5,5 @@ const Routes = require('./../reactrouting/companyroutes').Routes;
 
 ReactDOM.render(
   <Routes />,
-  document.getElementById('company'),
+  document.getElementById('react'),
 );

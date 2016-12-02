@@ -5,5 +5,5 @@ const Routes = require('./../reactrouting/contactroutes').Routes;
 
 ReactDOM.render(
   <Routes />,
-  document.getElementById('contact'),
+  document.getElementById('react'),
 );

@@ -1,0 +1,15 @@
+{% extends "../layouts/ukti-search-header.html" %}
+
+{% block main %}
+<div id="react"><div>{{markup | safe}}</div></div>
+{% if env != 'production' %}
+  <script src="/javascripts/react/react.js?{{ reactVersion }}"></script>
+  <script src="/javascripts/react-dom/react-dom.js?{{ reactVersion }}"></script>
+{% else %}
+  <script src="/javascripts/react/react.min.js?{{ reactVersion }}"></script>
+  <script src="/javascripts/react-dom/react-dom.min.js?{{ reactVersion }}"></script>
+{% endif %}
+<script>window.csrfToken='{{ csrfToken }}';</script>
+{{ scriptTag | safe }}
+<script src="/javascripts/{{bundleName}}.bundle.js?{{ startTime }}"></script>
+{% endblock %}

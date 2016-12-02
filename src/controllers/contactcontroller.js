@@ -39,7 +39,7 @@ function index(req, res) {
       renderProps.params = Object.assign({ token }, renderProps.params, req.query);
       loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
         const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
-        res.render('contact/contact-react', { markup, scriptTag, csrfToken });
+        res.render('layouts/react', { markup, scriptTag, csrfToken, bundleName: 'contact' });
       });
     } else {
       res.status(404).send('Not found');
