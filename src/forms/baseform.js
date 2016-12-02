@@ -51,7 +51,7 @@ class BaseForm extends React.Component {
   setDefaults(object, defaultObject) {
     const fieldNames = Object.keys(defaultObject);
     for (const fieldName of fieldNames) {
-      if (!object[fieldName]) {
+      if (!object[fieldName] || (Array.isArray(defaultObject[fieldName]) && object[fieldName].length === 0)) {
         object[fieldName] = defaultObject[fieldName];
       }
     }

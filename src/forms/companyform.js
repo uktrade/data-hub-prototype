@@ -221,7 +221,7 @@ class CompanyForm extends BaseForm {
   }
 
   getFutureCountriesOfInterest() {
-    return this.state.formData.future_interest_countries.map((country, index) => {
+    const list = this.state.formData.future_interest_countries.map((country, index) => {
       let label;
 
       if (index === 0) {
@@ -243,6 +243,16 @@ class CompanyForm extends BaseForm {
         />
       );
     });
+
+    return (
+      <div>
+        { list }
+        <a className="add-another-button" onClick={this.addFutureExportCountry}>
+          Add another country
+        </a>
+      </div>
+    )
+
   }
 
   save = () => {
@@ -490,9 +500,6 @@ class CompanyForm extends BaseForm {
         </fieldset>
 
         {this.getFutureCountriesOfInterest()}
-        <a className="add-another-button" onClick={this.addFutureExportCountry}>
-          Add another country
-        </a>
 
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
