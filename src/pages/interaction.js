@@ -5,5 +5,5 @@ const Routes = require('./../reactrouting/interactionroutes').Routes;
 
 ReactDOM.render(
   <Routes />,
-  document.getElementById('interaction'),
+  document.getElementById('react'),
 );

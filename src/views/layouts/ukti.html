@@ -8,7 +8,7 @@
 
 {% block head %}
   <link href="{{ asset_path }}stylesheets/application.css?{{ startTime }}" rel="stylesheet" type="text/css">
-  <script src="{{ asset_path }}javascripts/common.js"></script>
+  <script src="{{ asset_path }}javascripts/common.js?{{ startTime }}"></script>
   {% if user %}
     <script>
       if (!window.DIT) window.DIT = {};

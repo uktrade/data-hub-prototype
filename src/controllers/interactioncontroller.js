@@ -26,7 +26,7 @@ function index(req, res) {
       renderProps.params = Object.assign({ token, user }, req.query, renderProps.params);
       loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
         const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
-        res.render('interaction/interaction-react', { markup, scriptTag, csrfToken });
+        res.render('layouts/react', { markup, scriptTag, csrfToken, bundleName: 'interaction' });
       });
     } else {
       res.status(404).send('Not found');
