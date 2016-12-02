@@ -41,7 +41,7 @@ DateDiff.timeDiffHuman = function timeDiffHuman(d1, d2) {
 
   if (months > 23) {
     result = `${years} years`;
-  } else if (months > 0) {
+  } else if (days > 28 && months > 0) {
     result = `${months} months`;
   } else if (weeks > 1) {
     result = `${weeks} weeks`;
