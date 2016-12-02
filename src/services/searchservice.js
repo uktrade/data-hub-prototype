@@ -52,7 +52,7 @@ function suggestCompany(token, term, types) {
     types = ['company_company'];
   }
   const options = {
-    url: `${config.apiRoot}/search`,
+    url: `${config.apiRoot}/search/`,
     body: {
       term,
       doc_type: types,
