@@ -360,7 +360,7 @@ class AutosuggestComponent extends React.Component {
 
 AutosuggestComponent.propTypes = {
   onChange: React.PropTypes.func.isRequired,
-  label: React.PropTypes.string.isRequired,
+  label: React.PropTypes.string,
   options: React.PropTypes.array,
   optionsUrl: React.PropTypes.string,
   fetchSuggestions: React.PropTypes.func,
