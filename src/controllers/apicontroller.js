@@ -106,15 +106,6 @@ function getMetadata(req, res) {
     case 'subsectors':
       result = metadataRepository.SUBSECTORS;
       break;
-    case 'role':
-      rp({
-        url: `${config.apiRoot}/metadata/role/`,
-        json: true,
-      })
-        .then((response) => {
-          res.json(response);
-        });
-      return;
     case 'title':
       rp({
         url: `${config.apiRoot}/metadata/title/`,

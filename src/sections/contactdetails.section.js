@@ -22,10 +22,12 @@ function contactDetailsSection(props) {
             <th>Title</th>
             <td>{ contact.title.name }</td>
           </tr>
-          <tr>
-            <th>Role</th>
-            <td>{ contact.role.name }</td>
-          </tr>
+          { contact.job_title &&
+            <tr>
+              <th>Role</th>
+              <td>{ contact.job_title }</td>
+            </tr>
+          }
 
           { (contact.teams && contact.teams.length > 0) &&
             <tr>
