@@ -16,7 +16,7 @@ const LABELS = {
   'title': 'Title',
   'first_name': 'First name',
   'last_name': 'Last name',
-  'role': 'Role',
+  'job_title': 'Role',
   'telephone_number': 'Phone',
   'email': 'Email address',
   'address': 'Address',
@@ -39,10 +39,7 @@ const defaultContact = {
   },
   first_name: '',
   last_name: '',
-  role: {
-    id: '',
-    name: ''
-  },
+  job_title: '',
   telephone_number: '',
   email: '',
   primary: false,
@@ -184,6 +181,7 @@ class ContactForm extends BaseForm {
           this.updatePrimaryTeam(update, index);
         }}
         errors={error}
+        key={index}
       />);
     });
 
@@ -246,13 +244,12 @@ class ContactForm extends BaseForm {
           onChange={this.updateField}
           errors={this.getErrors('last_name')}
         />
-        <Autosuggest
-          name="role"
-          label={LABELS.role}
-          value={formData.role}
-          optionsUrl='/api/meta/role'
+        <InputText
+          label={LABELS.job_title}
+          name="job_title"
+          value={formData.job_title}
           onChange={this.updateField}
-          errors={this.getErrors('role')}
+          errors={this.getErrors('job_title')}
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
           <legend className="form-label">{LABELS.primary}</legend>

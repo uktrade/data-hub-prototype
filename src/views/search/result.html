@@ -35,7 +35,7 @@
       </a>
     </h3>
     {% if (result.company and result.company != 'Undefined') %}<div class="meta">{{ result.company }}</div>{% endif %}
-    {% if (result.role and result.role != 'Undefined') %}<div class="meta">{{ result.role }}</div>{% endif %}
+    {% if (result.job_title and result.job_title.length > 0) %}<div class="meta">{{ result.job_title }}</div>{% endif %}
     <div class="meta meta--address">
       {% if result.address_1 %}
         {{result.address_1 | lower | highlightTerm(term) | safe}},

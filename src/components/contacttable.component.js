@@ -58,7 +58,7 @@ class ContactTable extends React.Component {
     return (
       <tr key={contact.id}>
         <td className="name"><a href={link}>{ contact.first_name } { contact.last_name }</a></td>
-        <td className="title">{ contact.role.name }</td>
+        <td className="title">{ contact.job_title }</td>
         <td className="phone">{ contact.telephone_number }</td>
         <td className="email"><a href={'mailto:' + contact.email }>{ contact.email }</a></td>
       </tr>
