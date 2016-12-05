@@ -49,7 +49,7 @@ const defaultContact = {
   address_county: '',
   address_postcode: '',
   address_country: {
-    id: null,
+    id: '',
     name: ''
   },
   telephone_alternative: '',
