@@ -125,13 +125,22 @@ filter.humanFieldName = function(fieldName) {
   return fieldName;
 };
 
-filter.highlightTerm = function(phrase, term) {
-  if (!phrase || phrase.length === 0) {
-    return '';
-  }
-  var regex = new RegExp('(' + term + ')', 'gi');
-  return '<span>' + phrase.replace(regex, '<strong>$1</strong>') + '</span>';
+function escapeRegExp(str) {
+  if (str || str.length === 0) return str;
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
 
+filter.highlightTerm = function highlightTerm(phrase, term = '') {
+  try {
+    if (!phrase) phrase = '';
+    if (phrase.length === 0 || term.length === 0) return phrase;
+
+    const cleanTerm = term.replace(/\*/g, '').replace(/\\/g, '\\\\');
+    const regex = new RegExp(escapeRegExp(`(${cleanTerm})`), 'gi');
+    return phrase.replace(regex, '<strong>$1</strong>');
+  } catch (e) {
+    return phrase;
+  }
 };
 
 
