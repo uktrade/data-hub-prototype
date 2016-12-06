@@ -102,7 +102,7 @@ function companyDetailsSection(props) {
           <tr>
             <th>Is the company currently <br />exporting to a market?</th>
             <td>
-              { (company.export_to_countries && company.export_to_countries.length > 0 && company.export_to_countries[0].id.length > 0) ?
+              { (company.export_to_countries && company.export_to_countries.length > 0 && company.export_to_countries[0].id !== null && company.export_to_countries[0].id.length > 0) ?
                 <div>Yes
                   { company.export_to_countries.map((country, index) => <div key={index}>{country.name}</div>)}
                 </div>

@@ -17,7 +17,6 @@ function contactDetailsSection(props) {
             <th width="30%">Company</th>
             <td><a href={`/company/DIT/${contact.company.id}`}>{ contact.company.name }</a></td>
           </tr>
-
           <tr>
             <th>Title</th>
             <td>{ contact.title.name }</td>
@@ -28,18 +27,16 @@ function contactDetailsSection(props) {
               <td>{ contact.job_title }</td>
             </tr>
           }
-
           { (contact.teams && contact.teams.length > 0) &&
             <tr>
               <th>Teams</th>
               <td>
-                { contact.teams.map((team) => {
-                  return (<span>{team.name}</span>);
+                { contact.teams.map((team, index) => {
+                  return (<span key={index}>{team.name}</span>);
                 })}
               </td>
             </tr>
           }
-
           <tr>
             <th>Phone number</th>
             <td>{ contact.telephone_number }</td>
@@ -48,7 +45,6 @@ function contactDetailsSection(props) {
             <th>Email</th>
             <td>{ contact.email }</td>
           </tr>
-
           { (!contact.address_same_as_company) &&
             <tr>
               <th>Address</th>

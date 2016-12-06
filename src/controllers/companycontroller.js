@@ -49,6 +49,7 @@ function index(req, res) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
       renderProps.params.token = token;
+      renderProps.params.referrer = req.headers.referer;
       loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
         const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} {...req.query} />);
         res.render('layouts/react', { markup, scriptTag, csrfToken, bundleName: 'company' });

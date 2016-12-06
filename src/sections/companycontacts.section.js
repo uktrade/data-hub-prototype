@@ -6,7 +6,7 @@ const itemCollectionService = require('../services/itemcollectionservice');
 function CompanyContacts(props) {
   const { company } = props;
   const contacts = company.contacts || [];
-  const addUrl = `/contact/add?companyId=${company.id}&source=company`;
+  const addUrl = `/contact/add?companyId=${company.id}`;
 
   if ((!company.archived && !contacts) || (!company.archived && contacts.length === 0)) {
     return (<a className="button button-secondary" href={addUrl}>Add new contact</a>);

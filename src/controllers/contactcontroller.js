@@ -36,7 +36,7 @@ function index(req, res) {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
-      renderProps.params = Object.assign({ token }, renderProps.params, req.query);
+      renderProps.params = Object.assign({ token, referrer: req.headers.referer }, renderProps.params, req.query);
       loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
         const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
         res.render('layouts/react', { markup, scriptTag, csrfToken, bundleName: 'contact' });
@@ -45,7 +45,6 @@ function index(req, res) {
       res.status(404).send('Not found');
     }
   });
-
 }
 
 function get(req, res) {
