@@ -207,6 +207,7 @@ class InteractionForm extends BaseForm {
             lookupUrl='/api/suggest'
             onChange={this.updateField}
             errors={this.getErrors('title')}
+            searchingFor="a company"
           />
           :
           <div className="form-group">
@@ -249,6 +250,7 @@ class InteractionForm extends BaseForm {
             fetchSuggestions={this.lookupContacts}
             onChange={this.updateField}
             errors={this.getErrors('contact')}
+            searchingFor="a contact"
           />
           :
           <div className="form-group">
@@ -271,6 +273,7 @@ class InteractionForm extends BaseForm {
           lookupUrl='/api/accountmanagerlookup'
           onChange={this.updateField}
           errors={this.getErrors('dit_advisor')}
+          searchingFor="an advisor"
         />
         <Autosuggest
           name="service"
@@ -279,6 +282,7 @@ class InteractionForm extends BaseForm {
           optionsUrl='/api/meta/service'
           onChange={this.updateField}
           errors={this.getErrors('service')}
+          searchingFor="a service"
         />
         <Autosuggest
           name="dit_team"
@@ -287,6 +291,7 @@ class InteractionForm extends BaseForm {
           lookupUrl='/api/teamlookup'
           onChange={this.updateField}
           errors={this.getErrors('dit_team')}
+          searchingFor="a team"
         />
         <div className="button-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>

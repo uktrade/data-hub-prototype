@@ -182,6 +182,7 @@ class ContactForm extends BaseForm {
         }}
         errors={error}
         key={index}
+        searchingFor="a team"
       />);
     });
 
@@ -215,6 +216,7 @@ class ContactForm extends BaseForm {
             lookupUrl='/api/suggest'
             onChange={this.updateField}
             errors={this.getErrors('title')}
+            searchingFor="a company"
           />
           :
           <div className="form-group">
@@ -229,6 +231,7 @@ class ContactForm extends BaseForm {
           optionsUrl='/api/meta/title'
           onChange={this.updateField}
           errors={this.getErrors('title')}
+          searchingFor="title"
         />
         <InputText
           label={LABELS.first_name}

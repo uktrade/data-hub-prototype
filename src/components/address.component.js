@@ -261,6 +261,7 @@ class AddressComponent extends React.Component {
           value={country}
           options={this.state.countryOptions}
           onChange={this.countryChange}
+          searchingFor="a country"
         />
 
         { this.getPostcodeLookupSection() }

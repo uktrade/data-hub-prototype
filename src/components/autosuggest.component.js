@@ -7,9 +7,7 @@ const debounce = require('lodash/debounce');
 
 
 class AutosuggestComponent extends React.Component {
-
   // Component lifecycle
-
   constructor(props) {
     super(props);
 
@@ -20,7 +18,8 @@ class AutosuggestComponent extends React.Component {
       options: [],
       invalidValue: false,
       hasFocus: false,
-      changed: false
+      changed: false,
+      loading: false,
     };
 
     if (props.options) {
@@ -41,7 +40,6 @@ class AutosuggestComponent extends React.Component {
       this.fetcher = this.fetchSuggestionsFromLocalOptions;
     }
   }
-
   componentDidMount() {
 
     document.addEventListener('mousedown', this.onDocumentMouseDown);
@@ -53,20 +51,16 @@ class AutosuggestComponent extends React.Component {
         });
     }
   }
-
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.onDocumentMouseDown);
   }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.options) {
       this.setState({options: nextProps.options});
     }
   }
 
-
   // event handlers
-
   // Listen for clicks on the document.
   // If the user clicks outside the autosuggest then clear it
   // otherwise the user clicked on the field or a suggestion, so
@@ -84,7 +78,6 @@ class AutosuggestComponent extends React.Component {
     // Must have been outside the controls, so clear the suggestions
     this.leaveField();
   };
-
   // When the user types, change any currently selcted value
   // and set the value to just be the text entered
   // reset all the checks then go look for suggestions
@@ -111,8 +104,6 @@ class AutosuggestComponent extends React.Component {
 
     this.fetchSuggestions(newValue);
   };
-
-
   // Need to use a combination of keydown and keyup to get
   // keyboard navigation events.
   keydown = (event) => {
@@ -143,7 +134,6 @@ class AutosuggestComponent extends React.Component {
         break;
     }
   };
-
   // Set a var to say if we currently have focus.
   // If the user types something in and moves off the field
   // before the results come back then this helps decide
@@ -152,10 +142,7 @@ class AutosuggestComponent extends React.Component {
     this.setState({hasFocus: true});
   };
 
-
-
   // Calculate suggestions
-
   // Decides how to get suggestions, local, remotely or via a provided function
   fetchSuggestions = (value) => {
     const inputValue = value.trim().toLowerCase();
@@ -167,7 +154,6 @@ class AutosuggestComponent extends React.Component {
 
     this.fetcher(inputValue);
   };
-
   fetchSuggestionsFromLocalOptions = (value) => {
     const suggestions = this.state.options.filter(suggestion =>
       suggestion.name.toLowerCase().slice(0, value.length) === value
@@ -175,10 +161,9 @@ class AutosuggestComponent extends React.Component {
 
     this.setState({ suggestions });
   };
-
   fetchSuggestionsFromServer = (value) => {
+    this.setState({loading: true});
     let url;
-
     if (typeof this.props.lookupUrl === 'function') {
       url = this.props.lookupUrl(value);
     } else {
@@ -188,27 +173,27 @@ class AutosuggestComponent extends React.Component {
     axios.get(url)
       .then(response => {
         if (this.state.hasFocus) {
-          this.setState({suggestions: response.data});
+          this.setState({
+            suggestions: response.data,
+            loading: false,
+          });
         }
       });
   };
-
   fetchSuggestionsFromProps = (value) => {
+    this.setState({loading: true});
     this.props.fetchSuggestions(value)
       .then(suggestions => {
         if (this.state.hasFocus) {
-          this.setState({ suggestions });
+          this.setState({ suggestions, loading: false });
         }
       });
   };
-
   clearSuggestions = () => {
     this.setState({ suggestions: [], highlightedIndex: null });
   };
 
-
   // Navigate suggestions
-
   setSelected(suggestion) {
     this.setState({value: suggestion});
     this.props.onChange({
@@ -217,7 +202,6 @@ class AutosuggestComponent extends React.Component {
     });
     this.clearSuggestions();
   }
-
   leaveField() {
     // If there is a highlighted field, select it, otherwise
     // if the current field value exactly matches the first suggestion
@@ -243,7 +227,6 @@ class AutosuggestComponent extends React.Component {
 
     this.clearSuggestions();
   }
-
   next() {
     const length = this.state.suggestions.length - 1;
     if (this.state.highlightedIndex === null || this.state.highlightedIndex === length) {
@@ -252,7 +235,6 @@ class AutosuggestComponent extends React.Component {
       this.setState({ highlightedIndex: (this.state.highlightedIndex + 1) });
     }
   }
-
   prev() {
     const length = this.state.suggestions.length - 1;
     if (!this.state.highlightedIndex || this.state.highlightedIndex === 0) {
@@ -261,7 +243,6 @@ class AutosuggestComponent extends React.Component {
       this.setState({ highlightedIndex: this.state.highlightedIndex - 1 });
     }
   }
-
   selectSuggestion(suggestion) {
 
     let selectedSuggestion;
@@ -281,7 +262,6 @@ class AutosuggestComponent extends React.Component {
     this.textInput.focus();
   }
 
-
   // Render markup
 
   renderSuggestion = (suggestion, key) => {
@@ -299,7 +279,6 @@ class AutosuggestComponent extends React.Component {
       </li>
     );
   };
-
   renderSuggestions(suggestions) {
 
     if (!suggestions || suggestions.length === 0) return null;
@@ -314,12 +293,16 @@ class AutosuggestComponent extends React.Component {
       </ul>
     );
   }
-
+  renderLoading() {
+    return (
+      <div className="loading">
+        <i className="fa fa-refresh fa-spin fa-3x fa-fw"/>
+        <span className="sr-only">Loading...</span>
+      </div>);
+  }
   render() {
-    const { value } = this.state;
-    const suggestions = this.renderSuggestions(this.state.suggestions);
+    const { value, suggestions, loading } = this.state;
     let className = 'form-group autosuggest__container';
-
     let error;
     if (this.props.errors && this.props.errors.length > 0) {
       error = this.props.errors[0];
@@ -334,7 +317,13 @@ class AutosuggestComponent extends React.Component {
         { this.props.label &&
           <label className="form-label">
             {this.props.label}
-            {error &&
+            { (this.props.searchingFor && !loading) &&
+              <span className="form-hint">Please start typing to search for {this.props.searchingFor}</span>
+            }
+            { (this.props.searchingFor && loading) &&
+              <span className="form-hint">Searching for {this.props.searchingFor}...</span>
+            }
+            { error &&
               <span className="error-message">{error}</span>
             }
           </label>
@@ -351,7 +340,8 @@ class AutosuggestComponent extends React.Component {
           autoComplete="off"
           ref={(input) => {this.textInput = input;}}
         />
-        { suggestions }
+        { loading && this.renderLoading() }
+        { (suggestions && suggestions.length > 0) && this.renderSuggestions(suggestions)}
       </div>
     );
   }
@@ -361,6 +351,7 @@ class AutosuggestComponent extends React.Component {
 AutosuggestComponent.propTypes = {
   onChange: React.PropTypes.func.isRequired,
   label: React.PropTypes.string,
+  searchingFor: React.PropTypes.string,
   options: React.PropTypes.array,
   optionsUrl: React.PropTypes.string,
   fetchSuggestions: React.PropTypes.func,
