@@ -25,7 +25,7 @@ class DidYouMeanCompanyComponent extends React.Component {
     // if the item has an ID then look it up
     if (value.id) {
       // Get the company details for did you mean
-      const url = `/api/company/${value._type}/${value.id}/json`;
+      const url = `/api/company/${value._type}/${value.id}`;
       axios.get(url)
         .then(response => {
           this.setState({didYouMeanSuggestion: response.data});
