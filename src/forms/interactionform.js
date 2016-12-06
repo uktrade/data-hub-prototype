@@ -1,6 +1,6 @@
 const React = require('react');
 const axios = require('axios');
-const { Link } = require('react-router');
+const { Link, browserHistory } = require('react-router');
 const BaseForm = require('./baseform');
 const Autosuggest = require('../components/autosuggest.component');
 const SelectWithId = require('../components/selectwithid.component');
@@ -150,15 +150,17 @@ class InteractionForm extends BaseForm {
       { headers: {'x-csrf-token': window.csrfToken }}
       )
       .then((response) => {
-        this.setState({saving: false});
-        window.location.href = `/interaction/${response.data.id}`;
-      })
+        window.csrfToken = response.headers['x-csrf-token'];
+        browserHistory.push(`/interaction/${response.data.id}`);
+    })
       .catch((error) => {
-        window.csrfToken = error.response.headers['x-csrf-token'];
-        this.setState({
-          errors: error.response.data.errors,
-          saving: false
-        });
+        if (error.response && error.response.headers) {
+          window.csrfToken = error.response.headers['x-csrf-token'];
+          this.setState({
+            errors: error.response.data.errors,
+            saving: false
+          });
+        }
       });
   };
 

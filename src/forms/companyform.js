@@ -265,6 +265,11 @@ class CompanyForm extends BaseForm {
         { headers: {'x-csrf-token': window.csrfToken }}
       )
       .then((response) => {
+
+        if (!this.state.formData.id) {
+          window.location.href = `/company/combined/${response.data.id}`;
+        }
+
         // otherwise update the company app with the updated company data
         window.csrfToken = response.headers['x-csrf-token'];
         this.props.updateCompany(this.state.formData);
@@ -277,7 +282,6 @@ class CompanyForm extends BaseForm {
             saving: false
           });
         }
-        console.log(error);
       });
   };
 

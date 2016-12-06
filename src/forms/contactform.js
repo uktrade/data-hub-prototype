@@ -2,7 +2,7 @@
 
 const React = require('react');
 const axios = require('axios');
-const { Link } = require('react-router');
+const { Link, browserHistory } = require('react-router');
 const BaseForm = require('./baseform');
 const Address = require('../components/address.component');
 const Autosuggest = require('../components/autosuggest.component');
@@ -118,19 +118,26 @@ class ContactForm extends BaseForm {
     this.setState({saving: true});
 
     axios.post('/api/contact',
-      { contact: this.state.formData },
-      { headers: {'x-csrf-token': window.csrfToken }}
+        { contact: this.state.formData },
+        { headers: {'x-csrf-token': window.csrfToken }}
       )
       .then((response) => {
-        window.location.href = `/contact/${response.data.id}`;
-      })
-      .catch((error) => {
-        window.csrfToken = error.response.headers['x-csrf-token'];
-        this.setState({
-          errors: error.response.data.errors,
-          saving: false
-        });
-    });
+        if (!this.state.formData.id) {
+          return window.location.href = `/contact/${response.data.id}`;
+        }
+        // otherwise update the company app with the updated company data
+        window.csrfToken = response.headers['x-csrf-token'];
+        this.props.updateContact(this.state.formData);
+        browserHistory.push(`/contact/${response.data.id}`);
+      }, (error) => {  // use this format so if there is a side effect setting the state it doesn't go into this catch
+        if (error.response && error.response.headers) {
+          window.csrfToken = error.response.headers['x-csrf-token'];
+          this.setState({
+            errors: error.response.data.errors,
+            saving: false
+          });
+        }
+      });
   };
 
   getBackLink() {

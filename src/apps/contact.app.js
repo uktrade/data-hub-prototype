@@ -55,6 +55,18 @@ class ContactApp extends React.Component {
 
   }
 
+  updateContact = (newContactData) => {
+    try {
+      const updatedContact = Object.assign({}, this.state.contact, newContactData);
+      if (updatedContact.teams.length === 1 && updatedContact.teams[0].id.length === 0) {
+        delete updatedContact.teams;
+      }
+      this.setState({ contact: updatedContact });
+    } catch(e) {
+      // do nothing;
+    }
+  }
+
   updateToken(response) {
     if (response && response.headers && response.headers['x-csrf-token']) {
       window.csrfToken = response.headers['x-csrf-token'];
@@ -236,6 +248,7 @@ class ContactApp extends React.Component {
             showArchiveSection: this.showArchiveSection,
             unarchive: this.unarchive,
             archiveVisible: this.state.archiveVisible,
+            updateContact: this.updateContact,
           } )}
         </div>
 
