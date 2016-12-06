@@ -23,7 +23,7 @@ function index(req, res) {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
-      renderProps.params = Object.assign({ token, user }, req.query, renderProps.params);
+      renderProps.params = Object.assign({ token, user, referrer: req.headers.referer }, req.query, renderProps.params);
       loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
         const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} />);
         res.render('layouts/react', { markup, scriptTag, csrfToken, bundleName: 'interaction' });

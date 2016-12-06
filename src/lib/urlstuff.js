@@ -17,4 +17,23 @@ function getQueryParam(param) {
   return params[param];
 }
 
-module.exports = { getQueryParam};
+
+function getBackLink(params) {
+  const referrer = (typeof document !== 'undefined') ? document.referrer : params.referrer;
+  if (!referrer || referrer.length === 0) return null;
+  // If the source was search
+  if (referrer.includes('/company/')) {
+    return { url: referrer, title: 'Back to company' };
+  } else if (referrer.includes('/contact/')) {
+    // or contact
+    return { url: referrer, title: 'Back to contact' };
+  } else if (referrer.includes('/interaction/')) {
+    // or interaction
+    return { url: referrer, title: 'Back to interaction' };
+  } else if (referrer.includes('search')) {
+    return { url: referrer, title: 'Back to search' };
+  }
+  return null;
+}
+
+module.exports = { getQueryParam, getBackLink };

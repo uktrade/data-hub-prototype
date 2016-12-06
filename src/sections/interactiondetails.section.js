@@ -3,9 +3,11 @@ const React = require('react');
 const interactionRepository = require('../repositorys/interactionrepository');
 const { Link } = require('react-router');
 const formatDate = require('../lib/date').formatDate;
+const getBackLink = require('../lib/urlstuff').getBackLink;
 
 function interactionDetailsSection(props) {
   const interaction = props.interaction;
+  const backLink = props.backLink;
 
   if (typeof window !== 'undefined') {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -13,6 +15,7 @@ function interactionDetailsSection(props) {
 
   return (
     <div>
+      { backLink && <a className="back-link" href={backLink.url}>{backLink.title}</a> }
       <h1 className="heading-xlarge record-title">
         Interaction details
       </h1>
@@ -78,9 +81,10 @@ function interactionDetailsSection(props) {
 
 interactionDetailsSection.loadProps = (context, cb) => {
   const params = context.params;
+  const backLink = getBackLink(params);
   interactionRepository.getInteraction(params.token, params.interactionId)
     .then((interaction) => {
-      cb(null, { interaction, interactionId: params.interactionId });
+      cb(null, { interaction, interactionId: params.interactionId, backLink });
     })
     .catch((error) => {
       cb(error);
@@ -90,6 +94,7 @@ interactionDetailsSection.loadProps = (context, cb) => {
 interactionDetailsSection.propTypes = {
   interaction: React.PropTypes.object,
   source: React.PropTypes.string,
+  backLink: React.PropTypes.object,
 };
 
 

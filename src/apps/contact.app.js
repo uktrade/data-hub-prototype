@@ -5,6 +5,7 @@ const axios = require('axios');
 const ErrorList = require('../components/errorlist.component.js');
 const formatDate = require('../lib/date').formatDate;
 const InputText = require('../components/inputtext.component.js');
+const getBackLink = require('../lib/urlstuff').getBackLink;
 
 const REASONS_FOR_ARCHIVE = [
   'Contact has left the company',
@@ -15,9 +16,10 @@ const REASONS_FOR_ARCHIVE = [
 class ContactApp extends React.Component {
   static loadProps(context, cb) {
     const params = context.params;
+    const backLink = getBackLink(params);
     contactRepository.getContact(params.token, params.contactId)
       .then((contact) => {
-        cb(null, { contact, contactId: params.contactId });
+        cb(null, { contact, contactId: params.contactId, backLink });
       })
       .catch((error) => {
         cb(error);
@@ -193,7 +195,7 @@ class ContactApp extends React.Component {
         <div className="saving">Saving...</div>
       );
     }
-    const { contactId, children } = this.props;
+    const { contactId, children, backLink } = this.props;
     const { contact } = this.state;
     const path = this.props.routes[1].path;
 
@@ -203,6 +205,7 @@ class ContactApp extends React.Component {
 
     return (
       <div>
+        { backLink && <a className="back-link" href={backLink.url}>{backLink.title}</a> }
         <h1 className="heading-xlarge record-title">
           { contact.first_name } { contact.last_name }
           { contact.archived &&

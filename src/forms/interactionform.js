@@ -10,6 +10,7 @@ const ErrorList = require('../components/errorlist.component');
 const interactionRepository = require('../repositorys/interactionrepository');
 const companyRepository = require('../repositorys/companyrepository');
 const contactRepository = require('../repositorys/contactrepository');
+const getBackLink = require('../lib/urlstuff').getBackLink;
 
 const LABELS = {
   'company': 'Company',
@@ -55,6 +56,7 @@ const defaultInteraction = {
 class InteractionForm extends BaseForm {
   static loadProps(context, cb) {
     const params = context.params;
+    const backLink = getBackLink(params);
     let user;
     if (params.user) {
       user = params.user;
@@ -65,7 +67,7 @@ class InteractionForm extends BaseForm {
     if (params.interactionId) {
       interactionRepository.getInteraction(params.token, params.interactionId)
         .then((interaction) => {
-          cb(null, { interaction, user });
+          cb(null, { interaction, user, backLink });
         })
         .catch((error) => {
           cb(error);
@@ -73,7 +75,7 @@ class InteractionForm extends BaseForm {
     } else if (params.companyId) {
       companyRepository.getCompany(params.token, params.companyId, 'DIT')
         .then((company) => {
-          cb(null, { company, user });
+          cb(null, { company, user, backLink });
         })
         .catch((error) => {
           cb(error);
@@ -81,13 +83,13 @@ class InteractionForm extends BaseForm {
     } else if (params.contactId) {
       contactRepository.getContact(params.token, params.contactId)
         .then((contact) => {
-          cb(null, { contact, user });
+          cb(null, { contact, user, backLink });
         })
         .catch((error) => {
           cb(error);
         });
     } else {
-      cb(null, { user });
+      cb(null, { user, backLink });
     }
   }
 
@@ -186,9 +188,11 @@ class InteractionForm extends BaseForm {
       return this.getSaving();
     }
     const formData = this.state.formData;
+    const backLink = this.props.backLink;
 
     return (
       <div>
+        { backLink && <a className="back-link" href={backLink.url}>{backLink.title}</a> }
         { this.props.params.interactionId ?
           <h1 className="heading-xlarge record-title">Edit interaction</h1>
           :

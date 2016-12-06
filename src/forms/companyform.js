@@ -1,6 +1,6 @@
 const React = require('react');
 const axios = require('axios');
-const { Link } = require('react-router');
+const { Link, browserHistory } = require('react-router');
 const BaseForm = require('./baseform');
 const SelectWithId = require('../components/selectwithid.component');
 const Address = require('../components/address.component');
@@ -265,14 +265,19 @@ class CompanyForm extends BaseForm {
         { headers: {'x-csrf-token': window.csrfToken }}
       )
       .then((response) => {
-        window.location.href = `/company/combined/${response.data.id}`;
-      })
-      .catch((error) => {
-        window.csrfToken = error.response.headers['x-csrf-token'];
-        this.setState({
-          errors: error.response.data.errors,
-          saving: false
-        });
+        // otherwise update the company app with the updated company data
+        window.csrfToken = response.headers['x-csrf-token'];
+        this.props.updateCompany(this.state.formData);
+        browserHistory.push(`/company/combined/${response.data.id}`);
+      }, (error) => {   // use this format so if there is a side effect setting the state it doesn't go into this catch
+        if (error.response && error.response.headers) {
+          window.csrfToken = error.response.headers['x-csrf-token'];
+          this.setState({
+            errors: error.response.data.errors,
+            saving: false
+          });
+        }
+        console.log(error);
       });
   };
 
@@ -520,6 +525,7 @@ class CompanyForm extends BaseForm {
     company: React.PropTypes.object,
     source: React.PropTypes.string,
     sourceId: React.PropTypes.string,
+    updateCompany: React.PropTypes.func,
   };
 
 }

@@ -61,15 +61,7 @@ class InteractionTableComponent extends React.Component {
   };
 
   renderInteraction = (interaction) => {
-    let source;
-    if (this.props.company) {
-      source = 'company';
-    } else if (this.props.contact) {
-      source = 'contact';
-    } else {
-      source = '';
-    }
-    const link = `/interaction/${interaction.id}?source=${source}`;
+    const link = `/interaction/${interaction.id}`;
 
     return (
       <tr key={interaction.id}>

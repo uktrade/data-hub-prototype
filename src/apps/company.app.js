@@ -5,16 +5,17 @@ const axios = require('axios');
 const ErrorList = require('../components/errorlist.component.js');
 const formatDate = require('../lib/date').formatDate;
 const InputText = require('../components/inputtext.component.js');
-
+const getBackLink = require('../lib/urlstuff').getBackLink;
 
 const DISSOLVED_REASON = 'Company is dissolved';
 
 class CompanyApp extends React.Component {
   static loadProps(context, cb) {
     const params = context.params;
+    const backLink = getBackLink(params);
     companyRepository.getCompany(params.token, params.sourceId, params.source)
       .then((company) => {
-        cb(null, { company, source: params.source, sourceId: params.sourceId });
+        cb(null, { company, source: params.source, sourceId: params.sourceId, backLink });
       })
       .catch((error) => {
         cb(error);
@@ -44,6 +45,15 @@ class CompanyApp extends React.Component {
     }
 
     this.state = state;
+  }
+
+  updateCompany = (newCompanyData) => {
+    try {
+      const updatedCompany = Object.assign({}, this.state.company, newCompanyData);
+      this.setState({ company: updatedCompany });
+    } catch(e) {
+      // do nothing;
+    }
   }
 
   updateToken(response) {
@@ -227,7 +237,7 @@ class CompanyApp extends React.Component {
       );
     }
 
-    const { source, sourceId, children } = this.props;
+    const { source, sourceId, children, backLink } = this.props;
     const { company } = this.state;
     const path = this.props.routes[1].path;
 
@@ -244,6 +254,7 @@ class CompanyApp extends React.Component {
 
     return (
       <div>
+        { backLink && <a className="back-link" href={backLink.url}>{backLink.title}</a> }
         <h1 className="heading-xlarge record-title">
           { title }
           { company.archived &&
@@ -280,6 +291,7 @@ class CompanyApp extends React.Component {
             showArchiveSection: this.showArchiveSection,
             unarchive: this.unarchive,
             archiveVisible: this.state.archiveVisible,
+            updateCompany: this.updateCompany
           } )}
         </div>
 
