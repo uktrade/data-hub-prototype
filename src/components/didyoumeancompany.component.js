@@ -109,7 +109,7 @@ class DidYouMeanCompanyComponent extends React.Component {
         <Autosuggest
           name={this.props.name}
           label={this.props.label}
-          value={this.state.selected}
+          value={this.state.value}
           searchingFor="a company"
           lookupUrl={this.lookupUrl}
           onChange={this.onChange}

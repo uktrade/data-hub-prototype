@@ -312,6 +312,8 @@ class AutosuggestComponent extends React.Component {
       error = 'Invalid selection';
     }
 
+    const displayValue = (value instanceof Object) ? value.name : value;
+
     return (
       <div className={className} id={this.props.name + '-wrapper'} onClick={this.test} ref={(div) => {this.container = div;}}>
         { this.props.label &&
@@ -331,7 +333,7 @@ class AutosuggestComponent extends React.Component {
         <input
           className="form-control"
           name={this.props.name}
-          value={value.name}
+          value={displayValue}
           onChange={this.onChange}
           onKeyPress={this.keypress}
           onKeyDown={this.keydown}
@@ -356,10 +358,7 @@ AutosuggestComponent.propTypes = {
   optionsUrl: React.PropTypes.string,
   fetchSuggestions: React.PropTypes.func,
   lookupUrl: React.PropTypes.any,
-  value: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
-  }),
+  value: React.PropTypes.any,
   name: React.PropTypes.string.isRequired,
   allowOwnValue: React.PropTypes.bool,
   errors: React.PropTypes.array
