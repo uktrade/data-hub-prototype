@@ -323,7 +323,7 @@ class CompanyForm extends BaseForm {
               />
             }
             <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
-              <legend className="form-label">Is the business based in the UK?</legend>
+              <legend className="form-label-bold">Is the business based in the UK?</legend>
               <Radio
                 name="uk_based"
                 label="Yes"
@@ -410,7 +410,7 @@ class CompanyForm extends BaseForm {
           onChange={this.updateField}
         />
         <div className="form-group ">
-          <label className="form-label" htmlFor="description">Business description (optional)</label>
+          <label className="form-label-bold" htmlFor="description">Business description (optional)</label>
           <textarea
             id="description"
             className="form-control"
@@ -436,7 +436,7 @@ class CompanyForm extends BaseForm {
           onChange={this.updateField}
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
-          <legend className="form-label">Is there an agreed DIT account manager for this company?</legend>
+          <legend className="form-label-bold">Is there an agreed DIT account manager for this company?</legend>
           <Radio
             name="show_account_manager"
             label="Yes"
@@ -467,7 +467,7 @@ class CompanyForm extends BaseForm {
           }
         </fieldset>
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
-          <legend className="form-label">{LABELS.lead}</legend>
+          <legend className="form-label-bold">{LABELS.lead}</legend>
           <Radio
             name="lead"
             label="Yes"
@@ -485,7 +485,7 @@ class CompanyForm extends BaseForm {
 
         </fieldset>
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
-          <legend className="form-label">Is this company currently exporting to a market?</legend>
+          <legend className="form-label-bold">Is this company currently exporting to a market?</legend>
           <Radio
             name="show_exporting_to"
             label="Yes"

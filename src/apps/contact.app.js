@@ -168,7 +168,7 @@ class ContactApp extends React.Component {
     return (
       <form onSubmit={this.archive}>
         <div className="form-group">
-          <label className="form-label" htmlFor="archived_reason">
+          <label className="form-label-bold" htmlFor="archived_reason">
             Reason for archiving contact
           </label>
 

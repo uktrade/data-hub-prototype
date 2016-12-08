@@ -312,12 +312,14 @@ class AutosuggestComponent extends React.Component {
       error = 'Invalid selection';
     }
 
+    const labelClass = this.props.labelClass || 'form-label-bold';
+
     const displayValue = (value instanceof Object) ? value.name : value;
 
     return (
       <div className={className} id={this.props.name + '-wrapper'} onClick={this.test} ref={(div) => {this.container = div;}}>
         { this.props.label &&
-          <label className="form-label">
+          <label className={labelClass}>
             {this.props.label}
             { (this.props.searchingFor && !loading) &&
               <span className="form-hint">Please start typing to search for {this.props.searchingFor}</span>
@@ -361,7 +363,8 @@ AutosuggestComponent.propTypes = {
   value: React.PropTypes.any,
   name: React.PropTypes.string.isRequired,
   allowOwnValue: React.PropTypes.bool,
-  errors: React.PropTypes.array
+  errors: React.PropTypes.array,
+  labelClass: React.PropTypes.string
 };
 
 module.exports = AutosuggestComponent;

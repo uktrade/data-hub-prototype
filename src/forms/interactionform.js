@@ -217,7 +217,7 @@ class InteractionForm extends BaseForm {
           />
           :
           <div className="form-group">
-            <div className="form-label">Company</div>
+            <div className="form-label-bold">Company</div>
             <strong>{ formData.company.name }</strong>
           </div>
         }
@@ -238,7 +238,7 @@ class InteractionForm extends BaseForm {
           errors={this.getErrors('subject')}
         />
         <div className="form-group ">
-          <label className="form-label" htmlFor="description">{LABELS.notes}</label>
+          <label className="form-label-bold" htmlFor="description">{LABELS.notes}</label>
           <textarea
             id="notes"
             className="form-control"
@@ -260,7 +260,7 @@ class InteractionForm extends BaseForm {
           />
           :
           <div className="form-group">
-            <div className="form-label">{LABELS.contact}</div>
+            <div className="form-label-bold">{LABELS.contact}</div>
             <strong>{ formData.contact.first_name } { formData.contact.last_name }</strong>
           </div>
         }

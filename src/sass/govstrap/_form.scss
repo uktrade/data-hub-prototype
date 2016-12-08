@@ -32,28 +32,28 @@
   width: 100%;
 
   .form-group {
-    .form-label {
+    .form-label,
+    .form-label-bold {
       display: none;
     }
 
     &:first-child {
-      .form-label {
+      .form-label,
+      .form-label-bold {
         display: block;
       }
     }
   }
 }
 
-.form-label {
-  font-weight: 700;
-}
-
-.form-label.hidden {
+.form-label.hidden,
+.form-label-bold.hidden{
   display: none;
 }
 
 .form-group__checkbox-group {
-  .form-label {
+  .form-label,
+  .form-label-bold {
     margin-bottom: 3px;
   }
 }

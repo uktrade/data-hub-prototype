@@ -1,5 +1,13 @@
 .fieldset--address {
 
+  .fieldset--address__legend {
+    margin-bottom: 10px;
+
+    @include media(tablet) {
+      margin-bottom: 20px;
+    }
+  }
+
   .autosuggest__suggestions {
     width: 100%;
 

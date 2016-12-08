@@ -15,7 +15,7 @@ function inputTextComponent(props) {
 
   return (
     <div className={groupClass} id={props.name + '-wrapper'}>
-      <label className="form-label" htmlFor={props.name}>
+      <label className="form-label-bold" htmlFor={props.name}>
         {props.label}
         {error &&
           <span className="error-message">{error}</span>

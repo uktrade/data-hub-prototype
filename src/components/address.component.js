@@ -1,5 +1,3 @@
-'use strict';
-
 const React = require('react');
 const Autosuggest = require('./autosuggest.component');
 const axios = require('axios');
@@ -250,7 +248,7 @@ class AddressComponent extends React.Component {
 
     return (
       <fieldset className={groupClass} id={this.props.name + '-wrapper'}>
-        <legend className="heading-medium">{this.props.label}</legend>
+        <legend className="form-label-bold fieldset--address__legend">{this.props.label}</legend>
         {error &&
           <span className="error-message">{error}</span>
         }
@@ -262,6 +260,7 @@ class AddressComponent extends React.Component {
           options={this.state.countryOptions}
           onChange={this.countryChange}
           searchingFor="a country"
+          labelClass="form-label"
         />
 
         { this.getPostcodeLookupSection() }

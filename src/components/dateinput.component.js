@@ -57,7 +57,7 @@ class DateInputComponent extends React.Component {
     return (
       <div className={groupClass}>
         <fieldset>
-          <legend className="form-label">{this.props.label}</legend>
+          <legend className="form-label-bold">{this.props.label}</legend>
           {error &&
           <span className="error-message">{error}</span>
           }

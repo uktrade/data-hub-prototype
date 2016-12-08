@@ -69,7 +69,7 @@ class SelectWithIdComponent extends React.Component {
 
     return (
       <div className={groupClass} id={this.props.name + '-wrapper'}>
-        <label className="form-label" htmlFor={this.props.name}>
+        <label className="form-label-bold" htmlFor={this.props.name}>
           {this.props.label}
           {error &&
             <span className="error-message">{error}</span>

@@ -227,7 +227,7 @@ class ContactForm extends BaseForm {
           />
           :
           <div className="form-group">
-            <div className="form-label">Company</div>
+            <div className="form-label-bold">Company</div>
             <strong>{ formData.company.name }</strong>
           </div>
         }
@@ -262,7 +262,7 @@ class ContactForm extends BaseForm {
           errors={this.getErrors('job_title')}
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
-          <legend className="form-label">{LABELS.primary}</legend>
+          <legend className="form-label-bold">{LABELS.primary}</legend>
           <Radio
             name="primary"
             label="Yes"
@@ -294,7 +294,7 @@ class ContactForm extends BaseForm {
           errors={this.getErrors('email')}
         />
         <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
-          <legend className="form-label">Is the contact's address the same as the company address?</legend>
+          <legend className="form-label-bold">Is the contact's address the same as the company address?</legend>
           <Radio
             name="address_same_as_company"
             label="Yes"
@@ -339,7 +339,7 @@ class ContactForm extends BaseForm {
           errors={this.getErrors('email_alternative')}
         />
         <div className="form-group ">
-          <label className="form-label" htmlFor="description">Notes (optional)</label>
+          <label className="form-label-bold" htmlFor="description">Notes (optional)</label>
           <textarea
             id="notes"
             className="form-control"

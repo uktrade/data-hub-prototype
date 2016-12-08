@@ -46,7 +46,7 @@ function loginToApi(req, res) {
     })
     .catch((error) => {
 
-      if (error.response.statusCode === 401) {
+      if (error.response && error.response.statusCode && error.response.statusCode === 401) {
         req.flash('error-message', 'Invalid user id or password');
         res.redirect('/login');
       } else {
