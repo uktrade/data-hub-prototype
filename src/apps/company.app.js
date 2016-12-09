@@ -96,7 +96,12 @@ class CompanyApp extends React.Component {
     const reason = this.state.archived_reason_dropdown === DISSOLVED_REASON ? DISSOLVED_REASON : this.state.archived_reason_other;
 
     if (!reason || reason.length === 0) {
-      this.setState({ errors : { error: 'You must provide a reason to archive' }});
+      this.setState({
+        errors : {
+          error: 'You must provide a reason to archive',
+        },
+        saving: false,
+      });
       return;
     }
 
@@ -186,7 +191,7 @@ class CompanyApp extends React.Component {
     );
   }
 
-  companyRequiredForContactsSection() {
+  companyRequiredForSection() {
     const { source, sourceId } = this.props.params;
     return (
       <div id="tab-error-contacts" className="tabs-errors">
@@ -199,7 +204,7 @@ class CompanyApp extends React.Component {
           </p>
           <ul className="error-summary-list">
             <li>
-              <Link to={`/company/${source}/${sourceId}/edit`} className="button button-secondary js-button-edit">Add company details</Link>
+              <Link to={`/company/${source}/${sourceId}/edit`}>Add company details</Link>
             </li>
           </ul>
         </div>
@@ -207,7 +212,7 @@ class CompanyApp extends React.Component {
     );
   }
 
-  contactsRequiredForInteractionSection() {
+  contactsRequiredForSection() {
     const company = this.state.company;
 
     return (
@@ -264,8 +269,12 @@ class CompanyApp extends React.Component {
         { company.archived && this.archivedInfoSection() }
         { this.state.errors && <ErrorList errors={this.state.errors} /> }
         { this.state.archiveVisible && this.archiveSection() }
-        { (!company.archived && path === 'contacts' && !company.id) && this.companyRequiredForContactsSection() }
-        { (!company.archived && path === 'interactions' && company.contacts.length === 0) && this.contactsRequiredForInteractionSection() }
+        { ((!company.archived && path === 'contacts' && !company.id) ||
+           (!company.archived && path === 'interactions' && !company.id))
+
+          && this.companyRequiredForSection()
+        }
+        { (!company.archived && company.id && path === 'interactions' && company.contacts.length === 0) && this.contactsRequiredForSection() }
 
         <div className="tabs tabs--inline">
           <nav className="tabs-nav">

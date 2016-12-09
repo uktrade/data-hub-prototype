@@ -10,6 +10,7 @@ function companyDetailsSection(props) {
   if (typeof window !== 'undefined') {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
+  const canArchive = (company.id && company.id.length > 0);
 
   return (
     <div>
@@ -130,12 +131,12 @@ function companyDetailsSection(props) {
             <div>
               <Link to={`/company/${source}/${sourceId}/edit`} className="button button-secondary js-button-edit">Edit
                 company details</Link>
-              <button className="button button-secondary" onClick={props.showArchiveSection}>Archive company</button>
+              { canArchive && <button className="button button-secondary" onClick={props.showArchiveSection}>Archive company</button> }
             </div>
             :
             <div>
               <a className="button button-disabled">Edit company details</a>
-              <button className="button button-secondary" onClick={props.unarchive}>Unarchive now</button>
+              { canArchive && <button className="button button-secondary" onClick={props.unarchive}>Unarchive now</button> }
             </div>
           }
         </div>

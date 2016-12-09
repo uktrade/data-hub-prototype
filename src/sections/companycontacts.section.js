@@ -9,7 +9,11 @@ function CompanyContacts(props) {
   const addUrl = `/contact/add?companyId=${company.id}`;
 
   if ((!company.archived && !contacts) || (!company.archived && contacts.length === 0)) {
-    return (<a className="button button-secondary" href={addUrl}>Add new contact</a>);
+    if (company.id) {
+      return (<a className="button button-secondary" href={addUrl}>Add new contact</a>);
+    } else {
+      return (<a className="button button-disabled">Add new contact</a>);
+    }
   }
 
   if (typeof window !== 'undefined') {
