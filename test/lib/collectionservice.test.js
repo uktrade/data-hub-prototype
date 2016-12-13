@@ -225,6 +225,7 @@ describe('item collection services', () => {
     });
     it('should handle a null', () => {
       contacts[0].created_on = null;
+      contacts[1].created_on = moment().subtract(2, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS');
       const filtered = itemCollectionService.getItemsAddedInLastYear(contacts);
       expect(filtered).to.have.lengthOf(1);
     });
