@@ -12,7 +12,12 @@ class SelectWithIdComponent extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = Object.assign({}, props, defaultProps);
+    const state = Object.assign({}, props, defaultProps);
+    if (props.value) {
+      state.value = props.value
+    }
+
+    this.state = state;
   }
 
   componentWillReceiveProps(nextProps) {
