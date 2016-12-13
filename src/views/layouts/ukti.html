@@ -26,18 +26,18 @@
         <span>This is a new service – your <a href="#">feedback</a> will help us to improve it.</span>
       </p>
     </div>
-    <div class="login-bar">
-      <div class="login-links login-links-left">
-        <a href="/">Home</a>
+    {% if user and user.name %}
+      <div class="login-bar">
+        <div class="login-links login-links-left">
+          <a href="/">Home</a>
+        </div>
+        <div class="login-links login-links-right">
+          <span class="user-name">{{ user.name }}:</span><a href="/myaccount">My account</a>
+          |
+          <a href="/login/signout">Sign out</a>
+        </div>
       </div>
-      <div class="login-links login-links-right">
-        {% if user and user.name %}
-        <span class="user-name">{{ user.name }}:</span><a href="/myaccount">My account</a>
-        |
-        <a href="/login/signout">Sign out</a>
-        {% endif %}
-      </div>
-    </div>
+    {% endif %}
     <div class="container">
       {% block main %}{% endblock %}
     </div>
