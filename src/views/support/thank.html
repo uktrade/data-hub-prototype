@@ -1,0 +1,32 @@
+{% extends "layouts/ukti.html" %}
+{% import "macros/forms.html" as forms %}
+
+{% block main %}
+{% if not user or not user.name %}<a href="/">Home</a>{% endif %}
+<h1 class="heading-xlarge">Thank you</h1>
+
+{% if messages.error.length %}
+<div class="flash-message error-message">
+  <p class="flash-message-content">
+    {% for message in messages.error %}
+    {{ message }}<br>
+    {% endfor %}
+  </p>
+</div>
+{% endif %}
+
+{% if messages.success.length %}
+<div class="flash-message success-message">
+  <p class="flash-message-content">
+    {% for message in messages.success %}
+    {{ message }}<br>
+    {% endfor %}
+  </p>
+</div>
+{% endif %}
+
+
+{% endblock %}
+
+
+

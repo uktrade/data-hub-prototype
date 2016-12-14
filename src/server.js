@@ -19,6 +19,7 @@ const apiController = require('./controllers/apicontroller');
 const loginController = require('./controllers/logincontroller');
 const myAccountController = require('./controllers/myaccountcontroller');
 const indexController = require('./controllers/indexcontroller');
+const supportController = require('./controllers/supportcontroller');
 
 const customValidators = require('./lib/validators');
 const customSanitizers = require('./lib/sanitizers');
@@ -128,6 +129,7 @@ app.use(contactController.router);
 app.use(interactionController.router);
 app.use('/search', searchController.router);
 app.use(apiController.router);
+app.use('/support', supportController.router);
 app.get('/', indexController);
 
 
