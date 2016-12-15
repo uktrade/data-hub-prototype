@@ -60,6 +60,7 @@ function get(req, res) {
     })
     .catch((error) => {
       const errors = error.error;
+      winston.error(errors);
       return res.status(400).json({ errors });
     });
 }

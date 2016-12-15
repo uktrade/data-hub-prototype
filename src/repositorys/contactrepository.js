@@ -4,9 +4,7 @@ const interactionRepository = require('./interactionrepository');
 
 function getBriefContact(token, contactId) {
   return authorisedRequest(token, {
-    url: `${config.apiRoot}/contact/${contactId}/`,
-    json: true
-  });
+    url: `${config.apiRoot}/contact/${contactId}/`});
 }
 
 
@@ -14,8 +12,7 @@ function getContact(token, contactId) {
   let result;
 
   return authorisedRequest(token, {
-    url: `${config.apiRoot}/contact/${contactId}/`,
-    json: true
+    url: `${config.apiRoot}/contact/${contactId}/`
   })
   .then((data) => {
     result = data;
@@ -29,15 +26,17 @@ function getContact(token, contactId) {
   .then((interactions) => {
     result.interactions = interactions;
     return result;
+  })
+  .catch((error) => {
+    console.log(error);
+    throw(error);
   });
 }
 
 function getContactsForCompany(token, companyId) {
   return new Promise((resolve) => {
     authorisedRequest(token, {
-      url: `${config.apiRoot}/contact/?company=${companyId}`,
-      json: true
-    })
+      url: `${config.apiRoot}/contact/?company=${companyId}`})
       .then((data) => {
         resolve(data.results);
       });
@@ -46,7 +45,6 @@ function getContactsForCompany(token, companyId) {
 
 function saveContact(token, contact) {
   let options = {
-    json: true,
     body: contact,
   };
 
@@ -75,7 +73,6 @@ function saveContact(token, contact) {
 
 function archiveContact(token, contactId, reason) {
   const options = {
-    json: true,
     body: { reason },
     url: `${config.apiRoot}/contact/${contactId}/archive/`,
     method: 'POST'

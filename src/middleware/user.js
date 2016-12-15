@@ -11,9 +11,7 @@ module.exports = function( req, res, next ){
   if( token && !user ){
 
     const opts = {
-      url: `${config.apiRoot}/whoami/`,
-      json: true
-    };
+      url: `${config.apiRoot}/whoami/`};
 
     authorisedRequest( token, opts ).then( ( userInfo ) => {
 

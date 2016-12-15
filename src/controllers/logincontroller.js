@@ -10,7 +10,7 @@ function authenticate(username, password) {
   const options = {
     method: 'POST',
     url: (config.apiRoot + config.api.authUrl),
-
+    json: true,
     headers: {
       'cache-control': 'no-cache',
       'authorization': `Basic ${new Buffer(config.api.clientId + ':' + config.api.clientSecret).toString('base64')}`,
@@ -20,8 +20,7 @@ function authenticate(username, password) {
       username: username,
       password: password,
       grant_type: 'password'
-    },
-    json: true
+    }
   };
 
   return rp(options);

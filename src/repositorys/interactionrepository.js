@@ -3,14 +3,11 @@ const config = require('../config');
 
 function getInteraction(token, interactionId) {
   return authorisedRequest(token, {
-    url: `${config.apiRoot}/interaction/${interactionId}/`,
-    json: true,
-  });
+    url: `${config.apiRoot}/interaction/${interactionId}/`});
 }
 
 function saveInteraction(token, interaction) {
   const options = {
-    json: true,
     body: interaction,
   };
 

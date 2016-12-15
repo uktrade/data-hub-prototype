@@ -55,9 +55,7 @@ function accountManagerLookup(req, res) {
   const param = req.query.term.toLocaleLowerCase();
 
   authorisedRequest(req.session.token, {
-    url: `${config.apiRoot}/advisor/`,
-    json: true,
-  })
+    url: `${config.apiRoot}/advisor/`})
   .then((data) => {
     const results = data.results.filter(advisor => (
       advisor.name.length >= param.length &&
@@ -78,8 +76,7 @@ function getMetadata(req, res) {
       break;
     case 'typesofinteraction':
       rp({
-        url: `${config.apiRoot}/metadata/interaction-type/`,
-        json: true,
+        url: `${config.apiRoot}/metadata/interaction-type/`
       })
         .then((response) => {
           res.json(response);
@@ -108,9 +105,7 @@ function getMetadata(req, res) {
       break;
     case 'title':
       rp({
-        url: `${config.apiRoot}/metadata/title/`,
-        json: true,
-      })
+        url: `${config.apiRoot}/metadata/title/`})
         .then((response) => {
           res.json(response);
         });
@@ -126,9 +121,7 @@ function getMetadata(req, res) {
       return;
     case 'service':
       rp({
-        url: `${config.apiRoot}/metadata/service/`,
-        json: true,
-      })
+        url: `${config.apiRoot}/metadata/service/`})
         .then((response) => {
           res.json(response);
         });

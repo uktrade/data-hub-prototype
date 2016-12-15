@@ -38,9 +38,7 @@ function mapInteractions(interactions) {
 module.exports = {
   getHomepageData: (token, days = 15) => {
     const opts = {
-      url: `${config.apiRoot}/dashboard/homepage/?days=${days}`,
-      json: true,
-    };
+      url: `${config.apiRoot}/dashboard/homepage/?days=${days}`};
 
     return authorisedRequest(token, opts).then((data) => {
       data.contacts = mapContacts(data.contacts);
