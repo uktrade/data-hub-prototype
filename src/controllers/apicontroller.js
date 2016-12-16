@@ -54,8 +54,7 @@ function accountManagerLookup(req, res) {
 
   const param = req.query.term.toLocaleLowerCase();
 
-  authorisedRequest(req.session.token, {
-    url: `${config.apiRoot}/advisor/`})
+  authorisedRequest(req.session.token, `${config.apiRoot}/advisor/`)
   .then((data) => {
     const results = data.results.filter(advisor => (
       advisor.name.length >= param.length &&
@@ -111,10 +110,7 @@ function getMetadata(req, res) {
         });
       return;
     case 'advisors':
-      authorisedRequest(req.session.token, {
-        url: `${config.apiRoot}/advisor/`,
-        json: true,
-      })
+      authorisedRequest(req.session.token, `${config.apiRoot}/advisor/`)
         .then((response) => {
           res.json(response.results);
         });

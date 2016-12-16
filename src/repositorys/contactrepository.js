@@ -3,17 +3,14 @@ const config = require('../config');
 const interactionRepository = require('./interactionrepository');
 
 function getBriefContact(token, contactId) {
-  return authorisedRequest(token, {
-    url: `${config.apiRoot}/contact/${contactId}/`});
+  return authorisedRequest(token, `${config.apiRoot}/contact/${contactId}/`);
 }
 
 
 function getContact(token, contactId) {
   let result;
 
-  return authorisedRequest(token, {
-    url: `${config.apiRoot}/contact/${contactId}/`
-  })
+  return authorisedRequest(token, `${config.apiRoot}/contact/${contactId}/`)
   .then((data) => {
     result = data;
     let promises = [];
@@ -35,8 +32,7 @@ function getContact(token, contactId) {
 
 function getContactsForCompany(token, companyId) {
   return new Promise((resolve) => {
-    authorisedRequest(token, {
-      url: `${config.apiRoot}/contact/?company=${companyId}`})
+    authorisedRequest(token, `${config.apiRoot}/contact/?company=${companyId}`)
       .then((data) => {
         resolve(data.results);
       });
@@ -81,13 +77,7 @@ function archiveContact(token, contactId, reason) {
 }
 
 function unarchiveContact(token, contactId) {
-  let options = {
-    json: true,
-    url: `${config.apiRoot}/contact/${contactId}/unarchive/`,
-    method: 'GET'
-  };
-
-  return authorisedRequest(token, options);
+  return authorisedRequest(token, `${config.apiRoot}/contact/${contactId}/unarchive/`);
 }
 
 module.exports = { getContact, saveContact, getContactsForCompany, archiveContact, unarchiveContact, getBriefContact };

@@ -10,8 +10,7 @@ const metadataRepository = require('./metadatarepository');
 function getDitCompany(token, id) {
   let result;
 
-  return authorisedRequest(token, {
-    url: `${config.apiRoot}/company/${id}/`})
+  return authorisedRequest(token, `${config.apiRoot}/company/${id}/`)
   .then((company) => {
     result = company;
 
@@ -39,7 +38,7 @@ function getDitCompany(token, id) {
 }
 
 function getCHCompany(token, id) {
-  return authorisedRequest(token, { url: `${config.apiRoot}/ch-company/${id}/` });
+  return authorisedRequest(token, `${config.apiRoot}/ch-company/${id}/`);
 }
 
 function getCompany(token, id, source) {
@@ -115,7 +114,8 @@ function saveCompany(token, company) {
   if (company.id && company.id.length > 0) {
     return authorisedRequest(token, {
       url: `${config.apiRoot}/company/${company.id}/`,
-      method: 'PUT', body: company
+      method: 'PUT',
+      body: company,
     });
   }
 
@@ -124,7 +124,6 @@ function saveCompany(token, company) {
       return authorisedRequest(token, {
         url: `${config.apiRoot}/company/`,
         method: 'POST',
-        json: true,
         body: parsedCompany,
       });
     });
@@ -141,11 +140,7 @@ function archiveCompany(token, companyId, reason) {
 }
 
 function unarchiveCompany(token, companyId) {
-  let options = {
-    url: `${config.apiRoot}/company/${companyId}/unarchive/`,
-    method: 'GET'
-  };
-  return authorisedRequest(token, options);
+  return authorisedRequest(token, `${config.apiRoot}/company/${companyId}/unarchive/`);
 }
 
 module.exports = {getCompany, saveCompany, getDitCompany, getCHCompany, archiveCompany, unarchiveCompany};

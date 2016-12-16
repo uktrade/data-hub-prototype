@@ -60,7 +60,7 @@ function suggestCompany(token, term, types) {
     },
     method: 'POST',
   };
-winston.debug('----');
+
   return authorisedRequest(token, options).
     then((result) => {
       winston.debug('suggestion raw result', result);

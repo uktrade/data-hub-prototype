@@ -2,8 +2,7 @@ const authorisedRequest = require('../lib/authorisedrequest');
 const config = require('../config');
 
 function getInteraction(token, interactionId) {
-  return authorisedRequest(token, {
-    url: `${config.apiRoot}/interaction/${interactionId}/`});
+  return authorisedRequest(token, `${config.apiRoot}/interaction/${interactionId}/`);
 }
 
 function saveInteraction(token, interaction) {
