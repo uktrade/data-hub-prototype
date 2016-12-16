@@ -30,9 +30,11 @@ const user = require('./middleware/user');
 const csrf = require('./middleware/csrf');
 const locals = require('./middleware/locals');
 const forceHttps = require('./middleware/forcehttps');
+const headers = require('./middleware/headers');
 const metadata = require('./repositorys/metadatarepository');
 
 const app = express();
+app.disable('x-powered-by');
 const isDev = app.get('env') === 'development';
 winston.level = config.logLevel;
 
@@ -119,6 +121,7 @@ app.use(datahubFlash);
 app.use(auth);
 app.use(user);
 app.use(csrf);
+app.use(headers);
 
 app.use('/login', loginController.router);
 app.use('/myaccount', myAccountController.router);
