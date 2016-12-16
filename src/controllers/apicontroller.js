@@ -1,6 +1,4 @@
-/* eslint new-cap: 0 */
 const express = require('express');
-const rp = require('request-promise');
 const config = require('../config');
 const postcodeService = require('../services/postcodeservice');
 const searchService = require('../services/searchservice');
@@ -74,9 +72,7 @@ function getMetadata(req, res) {
       result = metadataRepository.TYPES_OF_BUSINESS;
       break;
     case 'typesofinteraction':
-      rp({
-        url: `${config.apiRoot}/metadata/interaction-type/`
-      })
+      authorisedRequest(req.session.token, `${config.apiRoot}/metadata/interaction-type/`)
         .then((response) => {
           res.json(response);
         });
@@ -103,8 +99,7 @@ function getMetadata(req, res) {
       result = metadataRepository.SUBSECTORS;
       break;
     case 'title':
-      rp({
-        url: `${config.apiRoot}/metadata/title/`})
+      authorisedRequest(req.session.token, `${config.apiRoot}/metadata/title/`)
         .then((response) => {
           res.json(response);
         });
@@ -116,8 +111,7 @@ function getMetadata(req, res) {
         });
       return;
     case 'service':
-      rp({
-        url: `${config.apiRoot}/metadata/service/`})
+      authorisedRequest(req.session.token, `${config.apiRoot}/metadata/service/`)
         .then((response) => {
           res.json(response);
         });
