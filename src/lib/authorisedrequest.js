@@ -46,7 +46,10 @@ module.exports = (token, opts) => {
     }
   }
 
-  requestOptions.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    requestOptions.headers.Authorization = `Bearer ${token}`;
+  }
+
   winston.debug('Send authorised request: ', requestOptions);
   requestOptions.jsonReviver = jsonReviver;
 

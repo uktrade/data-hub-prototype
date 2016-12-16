@@ -1,5 +1,5 @@
 const winston = require('winston');
-const request = require('request-promise');
+const authorisedRequest = require( '../lib/authorisedrequest' );
 const config = require('../config');
 const transformSectors = require('../lib/metadata-sectors');
 
@@ -17,10 +17,7 @@ function getMetadata(path, key) {
           module.exports[key] = data;
           resolve(data);
         } else {
-          request({
-            url,
-            json: true,
-          })
+          authorisedRequest(null, url)
           .then((responseData) => {
             module.exports[key] = responseData;
             redisClient.setex(url, ttl, JSON.stringify(responseData));
@@ -36,7 +33,7 @@ function getMetadata(path, key) {
     });
   }
 
-  return request({ url, json: true })
+  return authorisedRequest(null, url)
     .then((responseData) => {
       module.exports[key] = responseData;
       return responseData;
