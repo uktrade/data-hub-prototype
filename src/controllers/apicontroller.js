@@ -1,6 +1,4 @@
-/* eslint new-cap: 0 */
 const express = require('express');
-const rp = require('request-promise');
 const config = require('../config');
 const postcodeService = require('../services/postcodeservice');
 const searchService = require('../services/searchservice');
@@ -54,10 +52,7 @@ function accountManagerLookup(req, res) {
 
   const param = req.query.term.toLocaleLowerCase();
 
-  authorisedRequest(req.session.token, {
-    url: `${config.apiRoot}/advisor/`,
-    json: true,
-  })
+  authorisedRequest(req.session.token, `${config.apiRoot}/advisor/`)
   .then((data) => {
     const results = data.results.filter(advisor => (
       advisor.name.length >= param.length &&
@@ -77,10 +72,7 @@ function getMetadata(req, res) {
       result = metadataRepository.TYPES_OF_BUSINESS;
       break;
     case 'typesofinteraction':
-      rp({
-        url: `${config.apiRoot}/metadata/interaction-type/`,
-        json: true,
-      })
+      authorisedRequest(req.session.token, `${config.apiRoot}/metadata/interaction-type/`)
         .then((response) => {
           res.json(response);
         });
@@ -107,28 +99,19 @@ function getMetadata(req, res) {
       result = metadataRepository.SUBSECTORS;
       break;
     case 'title':
-      rp({
-        url: `${config.apiRoot}/metadata/title/`,
-        json: true,
-      })
+      authorisedRequest(req.session.token, `${config.apiRoot}/metadata/title/`)
         .then((response) => {
           res.json(response);
         });
       return;
     case 'advisors':
-      authorisedRequest(req.session.token, {
-        url: `${config.apiRoot}/advisor/`,
-        json: true,
-      })
+      authorisedRequest(req.session.token, `${config.apiRoot}/advisor/`)
         .then((response) => {
           res.json(response.results);
         });
       return;
     case 'service':
-      rp({
-        url: `${config.apiRoot}/metadata/service/`,
-        json: true,
-      })
+      authorisedRequest(req.session.token, `${config.apiRoot}/metadata/service/`)
         .then((response) => {
           res.json(response);
         });

@@ -34,7 +34,6 @@ function search({ token, term, limit = 10, page = 1, filters }) {
   const options = {
     url: `${config.apiRoot}/search/`,
     body,
-    json: true,
     method: 'POST',
   };
 
@@ -59,10 +58,9 @@ function suggestCompany(token, term, types) {
       limit: 10,
       offset: 0,
     },
-    json: true,
     method: 'POST',
   };
-winston.debug('----');
+
   return authorisedRequest(token, options).
     then((result) => {
       winston.debug('suggestion raw result', result);
