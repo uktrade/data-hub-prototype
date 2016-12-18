@@ -1,4 +1,4 @@
-'use strict';
+/* global document: true */
 
 const React = require('react');
 const Highlight = require('react-highlighter');
@@ -14,8 +14,8 @@ class AutosuggestComponent extends React.Component {
     super(props);
     this.uuid = guid();
 
-    let state = {
-      value: {id: '', name: ''},
+    const state = {
+      value: { id: '', name: '' },
       highlightedIndex: null,
       suggestions: [],
       options: [],
@@ -44,23 +44,24 @@ class AutosuggestComponent extends React.Component {
     }
   }
   componentDidMount() {
-
     document.addEventListener('mousedown', this.onDocumentMouseDown);
 
     if (this.props.optionsUrl && this.props.optionsUrl.length > 0) {
       axios.get(this.props.optionsUrl)
         .then((result) => {
-          this.setState({options: result.data});
+          this.setState({ options: result.data });
         });
     }
   }
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.onDocumentMouseDown);
-  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.options) {
-      this.setState({options: nextProps.options});
+      this.setState({ options: nextProps.options });
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.onDocumentMouseDown);
   }
 
   // event handlers
@@ -68,8 +69,8 @@ class AutosuggestComponent extends React.Component {
   // If the user clicks outside the autosuggest then clear it
   // otherwise the user clicked on the field or a suggestion, so
   // keep focus on the field.
-  onDocumentMouseDown = event => {
-    let node = event.detail && event.detail.target || event.target;
+  onDocumentMouseDown = (event) => {
+    let node = (event.detail && event.detail.target) || event.target;
 
     do {
       if (node === this.container) {
@@ -90,19 +91,19 @@ class AutosuggestComponent extends React.Component {
     this.setState({
       value: {
         id: null,
-        name: newValue
+        name: newValue,
       },
       highlightedIndex: null,
       invalidValue: false,
-      changed: true
+      changed: true,
     });
 
     this.props.onChange({
       name: this.props.name,
       value: {
         id: null,
-        name: newValue
-      }
+        name: newValue,
+      },
     });
 
     this.fetchSuggestions(newValue);

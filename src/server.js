@@ -1,6 +1,5 @@
 const config = require('./config');
 const express = require('express');
-const expressValidator = require('express-validator');
 const bodyParser = require('body-parser');
 const expressNunjucks = require('express-nunjucks');
 const compression = require('compression');
