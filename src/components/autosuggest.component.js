@@ -267,8 +267,12 @@ class AutosuggestComponent extends React.Component {
   }
 
   // stuff
-  getAriaMessage() {
-    return '';
+  getAriaMessage(name, suggestions) {
+    if (!suggestions || suggestions.length === 0) {
+      return `There are no suggestions for ${name}`;
+    }
+
+    return `There are ${suggestions.length} suggestions for ${name}`;
   }
 
   // Render markup
@@ -336,7 +340,7 @@ class AutosuggestComponent extends React.Component {
     const descendant = (highlightedIndex !== null) ? `${this.uuid}-suggestion-${highlightedIndex}`: null;
     const owns = (suggestions && suggestions.length > 0) ? `${this.uuid}-options` : null;
     const id = `${this.uuid}-input`;
-    const ariaMessage = this.getAriaMessage();
+    const ariaMessage = this.getAriaMessage(this.props.name, suggestions);
 
     return (
       <div className={className} id={this.uuid + '-wrapper'} onClick={this.test} ref={(div) => {this.container = div;}}>
@@ -373,7 +377,9 @@ class AutosuggestComponent extends React.Component {
         />
         { loading && this.renderLoading() }
         { (suggestions && suggestions.length > 0) && this.renderSuggestions(suggestions)}
-        <AriaStatus message={ariaMessage} />
+        { (displayValue && displayValue.length > 0) &&
+          <AriaStatus message={ariaMessage}/>
+        }
       </div>
     );
   }
