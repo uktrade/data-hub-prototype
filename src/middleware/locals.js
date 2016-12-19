@@ -14,6 +14,7 @@ module.exports = function locals(req, res, next) {
   res.locals.referer = req.headers.referer;
   res.locals.env = config.env;
   res.locals.reactVersion = reactVersion;
+  res.locals.googleTagManager = config.googleTagManager;
   winston.debug('locals:end');
   next();
 };
