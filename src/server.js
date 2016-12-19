@@ -88,7 +88,6 @@ app.use(session({
 
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
 app.use(bodyParser.json({ limit: '1mb' }));
-app.use(expressValidator({ customValidators, customSanitizers }));
 
 app.use(compression());
 app.set('views', [`${__dirname}/../src/views`]);
