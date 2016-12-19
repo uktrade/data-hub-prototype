@@ -1,18 +1,21 @@
-'use strict';
+/* global document: true */
 
 const React = require('react');
 const Highlight = require('react-highlighter');
 const axios = require('axios');
 const debounce = require('lodash/debounce');
+const guid = require('../lib/guid');
+const AriaStatus = require('./ariastatus');
 
 
 class AutosuggestComponent extends React.Component {
   // Component lifecycle
   constructor(props) {
     super(props);
+    this.uuid = guid();
 
-    let state = {
-      value: {id: '', name: ''},
+    const state = {
+      value: { id: '', name: '' },
       highlightedIndex: null,
       suggestions: [],
       options: [],
@@ -41,23 +44,24 @@ class AutosuggestComponent extends React.Component {
     }
   }
   componentDidMount() {
-
     document.addEventListener('mousedown', this.onDocumentMouseDown);
 
     if (this.props.optionsUrl && this.props.optionsUrl.length > 0) {
       axios.get(this.props.optionsUrl)
         .then((result) => {
-          this.setState({options: result.data});
+          this.setState({ options: result.data });
         });
     }
   }
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.onDocumentMouseDown);
-  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.options) {
-      this.setState({options: nextProps.options});
+      this.setState({ options: nextProps.options });
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.onDocumentMouseDown);
   }
 
   // event handlers
@@ -65,8 +69,8 @@ class AutosuggestComponent extends React.Component {
   // If the user clicks outside the autosuggest then clear it
   // otherwise the user clicked on the field or a suggestion, so
   // keep focus on the field.
-  onDocumentMouseDown = event => {
-    let node = event.detail && event.detail.target || event.target;
+  onDocumentMouseDown = (event) => {
+    let node = (event.detail && event.detail.target) || event.target;
 
     do {
       if (node === this.container) {
@@ -87,19 +91,19 @@ class AutosuggestComponent extends React.Component {
     this.setState({
       value: {
         id: null,
-        name: newValue
+        name: newValue,
       },
       highlightedIndex: null,
       invalidValue: false,
-      changed: true
+      changed: true,
     });
 
     this.props.onChange({
       name: this.props.name,
       value: {
         id: null,
-        name: newValue
-      }
+        name: newValue,
+      },
     });
 
     this.fetchSuggestions(newValue);
@@ -262,17 +266,36 @@ class AutosuggestComponent extends React.Component {
     this.textInput.focus();
   }
 
+  // stuff
+  getAriaMessage(name, suggestions) {
+    if (!suggestions || suggestions.length === 0) {
+      return `There are no suggestions for ${name}`;
+    }
+
+    return `There are ${suggestions.length} suggestions for ${name}`;
+  }
+
   // Render markup
 
   renderSuggestion = (suggestion, key) => {
-
+    const id = `${this.uuid}-suggestion-${key}`;
     let className = 'autosuggest__suggestion';
+    let isSelected;
+
     if (key === this.state.highlightedIndex) {
       className += ' autosuggest__suggestion--active';
+      isSelected = true;
+    } else {
+      isSelected = false;
     }
 
     return (
-      <li key={key} className={className}>
+      <li id={id}
+          key={id}
+          className={className}
+          role="option"
+          aria-selected={isSelected}
+      >
         <a onClick={() => { this.selectSuggestion(suggestion); }}>
           <Highlight search={this.state.value.name}>{suggestion.name}</Highlight>
         </a>
@@ -288,7 +311,7 @@ class AutosuggestComponent extends React.Component {
     });
 
     return (
-      <ul className="autosuggest__suggestions">
+      <ul className="autosuggest__suggestions" role="listbox" id={`${this.uuid}-options`}>
         {suggestionsMarkup}
       </ul>
     );
@@ -301,7 +324,7 @@ class AutosuggestComponent extends React.Component {
       </div>);
   }
   render() {
-    const { value, suggestions, loading } = this.state;
+    const { value, suggestions, loading, highlightedIndex } = this.state;
     let className = 'form-group autosuggest__container';
     let error;
     if (this.props.errors && this.props.errors.length > 0) {
@@ -313,13 +336,16 @@ class AutosuggestComponent extends React.Component {
     }
 
     const labelClass = this.props.labelClass || 'form-label-bold';
-
     const displayValue = (value instanceof Object) ? value.name : value;
+    const descendant = (highlightedIndex !== null) ? `${this.uuid}-suggestion-${highlightedIndex}`: null;
+    const owns = (suggestions && suggestions.length > 0) ? `${this.uuid}-options` : null;
+    const id = `${this.uuid}-input`;
+    const ariaMessage = this.getAriaMessage(this.props.name, suggestions);
 
     return (
-      <div className={className} id={this.props.name + '-wrapper'} onClick={this.test} ref={(div) => {this.container = div;}}>
+      <div className={className} id={this.uuid + '-wrapper'} onClick={this.test} ref={(div) => {this.container = div;}}>
         { this.props.label &&
-          <label className={labelClass}>
+          <label className={labelClass} htmlFor={id}>
             {this.props.label}
             { (this.props.searchingFor && !loading) &&
               <span className="form-hint">Please start typing to search for {this.props.searchingFor}</span>
@@ -333,6 +359,7 @@ class AutosuggestComponent extends React.Component {
           </label>
         }
         <input
+          id={id}
           className="form-control"
           name={this.props.name}
           value={displayValue}
@@ -343,9 +370,16 @@ class AutosuggestComponent extends React.Component {
           onFocus={this.focus}
           autoComplete="off"
           ref={(input) => {this.textInput = input;}}
+          role="combobox"
+          aria-owns={owns}
+          aria-autocomplete='both'
+          aria-activedescendant={descendant}
         />
         { loading && this.renderLoading() }
         { (suggestions && suggestions.length > 0) && this.renderSuggestions(suggestions)}
+        { (displayValue && displayValue.length > 0) &&
+          <AriaStatus message={ariaMessage}/>
+        }
       </div>
     );
   }

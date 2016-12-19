@@ -1,6 +1,5 @@
 const config = require('./config');
 const express = require('express');
-const expressValidator = require('express-validator');
 const bodyParser = require('body-parser');
 const expressNunjucks = require('express-nunjucks');
 const compression = require('compression');
@@ -89,7 +88,6 @@ app.use(session({
 
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
 app.use(bodyParser.json({ limit: '1mb' }));
-app.use(expressValidator({ customValidators, customSanitizers }));
 
 app.use(compression());
 app.set('views', [`${__dirname}/../src/views`]);
