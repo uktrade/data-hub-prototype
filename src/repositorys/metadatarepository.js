@@ -1,7 +1,6 @@
 const winston = require('winston');
 const authorisedRequest = require( '../lib/authorisedrequest' );
 const config = require('../config');
-const transformSectors = require('../lib/metadata-sectors');
 
 let redisClient;
 
@@ -44,15 +43,8 @@ function getMetadata(path, key) {
     });
 }
 
-function createSubSectors(data) {
-  const splitSectors = transformSectors(data);
-
-  module.exports.PRIMARY_SECTORS = splitSectors.sectors;
-  module.exports.SUBSECTORS = splitSectors.subsectors;
-}
-
 const metadataItems = [
-  ['sector', 'SECTOR_OPTIONS', createSubSectors],
+  ['sector', 'SECTOR_OPTIONS'],
   ['turnover', 'TURNOVER_OPTIONS'],
   ['uk-region', 'REGION_OPTIONS'],
   ['country', 'COUNTRYS'],
