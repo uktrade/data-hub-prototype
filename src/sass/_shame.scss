@@ -63,9 +63,12 @@ hr {
 }
 
 .add-another-button {
-  text-decoration: underline;
+  @include core-19();
+  background-color: $white;
+  border: 0;
   color: $link-colour;
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .fieldset--address {
