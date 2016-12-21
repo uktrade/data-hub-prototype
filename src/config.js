@@ -27,4 +27,10 @@ module.exports = {
     ttl: process.env.SESSION_TTL || (2 * 60 * 60 * 1000),
   },
   logLevel: process.env.LOG_LEVEL || defaultLogLevel,
+  zenUrl: `https://${process.env.ZEN_DOMAIN}.zendesk.com/api/v2/tickets.json`,
+  zenToken: process.env.ZEN_TOKEN,
+  zenEmail: process.env.ZEN_EMAIL,
+  zenBrowser: process.env.ZEN_BROWSER,
+  zenImpact: process.env.ZEN_IMPACT,
+  zenService: process.env.ZEN_SERVICE,
 };
