@@ -1,3 +1,5 @@
+/* global window: true */
+
 const React = require('react');
 const axios = require('axios');
 const { Link, browserHistory } = require('react-router');
@@ -9,24 +11,25 @@ const InputText = require('../components/inputtext.component');
 const ErrorList = require('../components/errorlist.component');
 const DidYouMeanCompany = require('../components/didyoumeancompany.component');
 const Radio = require('../components/radio.component');
+const SectorSelect = require('../components/sectorselect.component');
 
 const LABELS = {
-  'name': 'Registered name',
-  'uk_based': 'Is the business based in the UK?',
-  'business_type': 'Type of business',
-  'sector': 'Sector',
-  'registered_address': 'Registered address',
-  'uk_region': 'Region',
-  'alias': 'Trading name (optional)',
-  'trading_address': 'Trading address (optional)',
-  'website': 'Website (optional)',
-  'description': 'Business description (optional)',
-  'employee_range': 'Number of employees (optional)',
-  'turnover_range': 'Annual turnover (optional)',
-  'account_manager': 'Account manager',
-  'export_to_countries': 'Export market',
-  'future_interest_countries': 'Future countries of interest (optional)',
-  'lead': 'Is this company a lead?'
+  name: 'Registered name',
+  uk_based: 'Is the business based in the UK?',
+  business_type: 'Type of business',
+  sector: 'Sector',
+  registered_address: 'Registered address',
+  uk_region: 'Region',
+  alias: 'Trading name (optional)',
+  trading_address: 'Trading address (optional)',
+  website: 'Website (optional)',
+  description: 'Business description (optional)',
+  employee_range: 'Number of employees (optional)',
+  turnover_range: 'Annual turnover (optional)',
+  account_manager: 'Account manager',
+  export_to_countries: 'Export market',
+  future_interest_countries: 'Future countries of interest (optional)',
+  lead: 'Is this company a lead?',
 };
 
 const defaultCompany = {
@@ -34,15 +37,15 @@ const defaultCompany = {
   uk_based: true,
   business_type: {
     id: null,
-    name: null
+    name: null,
   },
   sector: {
     id: null,
-    name: null
+    name: null,
   },
   uk_region: {
     id: null,
-    name: null
+    name: null,
   },
   registered_address_1: '',
   registered_address_2: '',
@@ -51,7 +54,7 @@ const defaultCompany = {
   registered_address_postcode: '',
   registered_address_country: {
     id: null,
-    name: ''
+    name: '',
   },
   alias: '',
   trading_address_1: '',
@@ -61,29 +64,29 @@ const defaultCompany = {
   trading_address_postcode: '',
   trading_address_country: {
     id: null,
-    name: ''
+    name: '',
   },
   website: '',
   description: '',
   employee_range: {
     id: null,
-    name: ''
+    name: '',
   },
   turnover_range: {
     id: null,
-    name: ''
+    name: '',
   },
   account_manager: {
     id: null,
-    name: ''
+    name: '',
   },
   export_to_countries: [
-    {id: null, name: ''}
+    { id: null, name: '' },
   ],
   future_interest_countries: [
-    {id: null, name: ''}
+    { id: null, name: '' },
   ],
-  lead: false
+  lead: false,
 };
 
 class CompanyForm extends BaseForm {
@@ -108,18 +111,22 @@ class CompanyForm extends BaseForm {
       canceling: false,
       formData: company,
       isCDMS: (!company.company_number || company.company_number.length === 0),
-      edit: ('company' in props)
+      edit: ('company' in props),
     };
   }
 
   componentDidMount() {
     axios.get('/api/meta/countries')
-      .then(result => {
-        this.setState({countryOptions: result.data});
+      .then(({ data }) => {
+        this.setState({ countryOptions: data });
       });
     axios.get('/api/meta/typesofbusiness')
-      .then(result => {
-        this.setTypesOfBusiness(result.data);
+      .then(({ data }) => {
+        this.setTypesOfBusiness(data);
+      });
+    axios.get('/api/meta/sector')
+      .then(({ data }) => {
+        this.setState({ allSectors: data });
       });
   }
 
@@ -127,13 +134,13 @@ class CompanyForm extends BaseForm {
     // Record ALL types of business and a stripped down UK types of business
     // So we can change the drop down list depending on if set to UK or not.
     this.allBusinessTypes = types;
-    this.ukBusinessTypes = types.filter((businessType) =>
+    this.ukBusinessTypes = types.filter(businessType =>
       !(businessType.name.toLowerCase() === 'private limited company' || businessType.name.toLowerCase() === 'public limited company'));
 
     if (this.state.formData.uk_based) {
-      this.setState({businessTypes: this.ukBusinessTypes});
+      this.setState({ businessTypes: this.ukBusinessTypes });
     } else {
-      this.setState({businessTypes: this.allBusinessTypes});
+      this.setState({ businessTypes: this.allBusinessTypes });
     }
   }
 
@@ -148,31 +155,31 @@ class CompanyForm extends BaseForm {
     } else {
       value = event.target.value;
     }
-    this.setState({[key]: value});
+    this.setState({ [key]: value });
   };
 
   updateExportingTo = (newValue, index) => {
-    let exportToCountries = this.state.formData.export_to_countries;
+    const exportToCountries = this.state.formData.export_to_countries;
     exportToCountries[index] = newValue.value;
     this.changeFormData('export_to_countries', exportToCountries);
   };
 
   updateFutureExportTo = (newValue, index) => {
-    let futureCountries = this.state.formData.future_interest_countries;
+    const futureCountries = this.state.formData.future_interest_countries;
     futureCountries[index] = newValue.value;
     this.changeFormData('future_interest_countries', futureCountries);
   };
 
   addCurrentExportCountry = (event) => {
     event.preventDefault();
-    let currentExportCountries = this.state.formData.export_to_countries;
+    const currentExportCountries = this.state.formData.export_to_countries;
     currentExportCountries.push({ id: null, name: '' });
     this.changeFormData('export_to_countries', currentExportCountries);
   };
 
   addFutureExportCountry = (event) => {
     event.preventDefault();
-    let futureExportCountries = this.state.formData.future_interest_countries;
+    const futureExportCountries = this.state.formData.future_interest_countries;
     futureExportCountries.push({ id: null, name: '' });
     this.changeFormData('future_interest_countries', futureExportCountries);
   };
@@ -184,14 +191,14 @@ class CompanyForm extends BaseForm {
       // If this is a uk business restrict the business types to choose from
       // and reset the current business type if it is not allowed
 
-      this.setState({businessTypes: this.ukBusinessTypes});
+      this.setState({ businessTypes: this.ukBusinessTypes });
       const lowerCurrentType = this.state.formData.business_type.name.toLowerCase();
 
       if (lowerCurrentType === 'private limited company' || lowerCurrentType === 'public limited company') {
-        this.setState({business_type: defaultCompany.business_type});
+        this.setState({ business_type: defaultCompany.business_type });
       }
     } else {
-      this.setState({businessTypes: this.allBusinessTypes});
+      this.setState({ businessTypes: this.allBusinessTypes });
     }
   }
 
@@ -249,23 +256,21 @@ class CompanyForm extends BaseForm {
     return (
       <div>
         { list }
-        <a className="add-another-button" onClick={this.addFutureExportCountry}>
+        <button className="add-another-button" onClick={this.addFutureExportCountry}>
           Add another country
-        </a>
+        </button>
       </div>
-    )
-
+    );
   }
 
   save = () => {
     // Just post the company and let the server do the rest. (Get it.. REST)
-    this.setState({saving: true});
+    this.setState({ saving: true });
     axios.post('/api/company',
         { company: this.state.formData },
-        { headers: {'x-csrf-token': window.csrfToken }}
+        { headers: { 'x-csrf-token': window.csrfToken } },
       )
       .then((response) => {
-
         if (!this.state.formData.id) {
           window.location.href = `/company/combined/${response.data.id}`;
         }
@@ -279,7 +284,7 @@ class CompanyForm extends BaseForm {
           window.csrfToken = error.response.headers['x-csrf-token'];
           this.setState({
             errors: error.response.data.errors,
-            saving: false
+            saving: false,
           });
         }
       });
@@ -300,7 +305,7 @@ class CompanyForm extends BaseForm {
         }
 
         { this.state.errors &&
-          <ErrorList labels={LABELS} errors={this.state.errors}/>
+          <ErrorList labels={LABELS} errors={this.state.errors} />
         }
 
         { this.state.isCDMS &&
@@ -358,25 +363,26 @@ class CompanyForm extends BaseForm {
           </div>
         }
 
-        <SelectWithId
-          value={formData.sector.id}
-          url="/api/meta/sector"
-          name="sector"
-          label="Sector"
-          errors={this.getErrors('sector')}
-          onChange={this.updateField}
-        />
+        { this.state.allSectors &&
+          <SectorSelect
+            sector={this.state.formData.sector}
+            errors={this.getErrors('sector')}
+            onChange={this.updateField}
+            allSectors={this.state.allSectors}
+          />
+        }
+
         { this.state.isCDMS &&
           <Address
-            name='registered_address'
-            label='Registered address'
+            name="registered_address"
+            label="Registered address"
             onChange={this.updateField}
             errors={this.getErrors('registered_address')}
             value={formData}
             prefix="registered"
           />
         }
-        { (formData.uk_based || formData.company_number && formData.company_number.length > 0) &&
+        { (formData.uk_based || (formData.company_number && formData.company_number.length > 0)) &&
           <SelectWithId
             value={formData.uk_region.id}
             url="/api/meta/region"
@@ -386,7 +392,7 @@ class CompanyForm extends BaseForm {
             onChange={this.updateField}
           />
         }
-        <hr/>
+        <hr />
         <InputText
           label={LABELS.alias}
           name="alias"
@@ -395,8 +401,8 @@ class CompanyForm extends BaseForm {
           onChange={this.updateField}
         />
         <Address
-          name='trading_address'
-          label='Trading address'
+          name="trading_address"
+          label="Trading address"
           errors={this.getErrors('trading_address')}
           onChange={this.updateField}
           value={formData}
@@ -417,7 +423,8 @@ class CompanyForm extends BaseForm {
             name="description"
             rows="5"
             onChange={this.updateField}
-            value={formData.description}/>
+            value={formData.description}
+          />
         </div>
         <SelectWithId
           value={formData.employee_range.id}
@@ -456,10 +463,10 @@ class CompanyForm extends BaseForm {
           <div className="js-radiohide-content">
             <Autosuggest
               name="account_manager"
-              label='Account manager'
+              label="Account manager"
               searchingFor="an account manager"
               value={formData.account_manager}
-              lookupUrl='/api/accountmanagerlookup'
+              lookupUrl="/api/accountmanagerlookup"
               onChange={this.updateField}
               errors={this.getErrors('account_manager')}
             />
@@ -503,9 +510,9 @@ class CompanyForm extends BaseForm {
           { this.state.show_exporting_to &&
           <div className="js-radiohide-content">
             { this.getCurrentlyExportingTo() }
-            <a className="add-another-button" onClick={this.addCurrentExportCountry}>
+            <button className="add-another-button" onClick={this.addCurrentExportCountry}>
               Add another country
-            </a>
+            </button>
 
           </div>
           }

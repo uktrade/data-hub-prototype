@@ -95,9 +95,6 @@ function getMetadata(req, res) {
     case 'primary_sectors':
       result = metadataRepository.PRIMARY_SECTORS;
       break;
-    case 'subsectors':
-      result = metadataRepository.SUBSECTORS;
-      break;
     case 'title':
       authorisedRequest(req.session.token, `${config.apiRoot}/metadata/title/`)
         .then((response) => {
@@ -165,12 +162,6 @@ function teamLookup(req, res) {
   res.json(results);
 }
 
-function getSubsectors(req, res) {
-  const sectorId = req.params.sectorId;
-  res.json(metadataRepository.SUBSECTORS[sectorId]);
-}
-
-
 router.get('/api/suggest', companySuggest);
 router.get('/api/countrylookup', countryLookup);
 router.get('/api/accountmanagerlookup', accountManagerLookup);
@@ -178,7 +169,6 @@ router.get('/api/contactlookup', contactLookup);
 router.get('/api/teamlookup', teamLookup);
 router.get('/api/meta/:metaName', getMetadata);
 router.get('/api/postcodelookup/:postcode', postcodelookup);
-router.get('/api/subsectors/:sectorId', getSubsectors);
 
 module.exports = {
   postcodelookup,
