@@ -34,8 +34,9 @@ function postBug(req, res) {
       body: `Steps to reproduce:\n${req.body.description}\n\nWhat happens?\n${req.body.happens}`,
     },
     custom_fields: [
-      { id: 33995605, value: req.body.browser },
-      { id: 33883629, value: req.body.impact },
+      { id: config.zenBrowser, value: req.body.browser },
+      { id: config.zenImpact, value: req.body.impact },
+      { id: config.zenService, value: 'datahub_export' },
     ],
   };
 
