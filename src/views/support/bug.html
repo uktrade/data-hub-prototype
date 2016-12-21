@@ -31,9 +31,9 @@
     {{ forms.textbox('name', label="Full name", error=errors.name, autofocus=true, value=data.name) }}
     {{ forms.textbox('subject', label="Title for bug", error=errors.title, autofocus=true, value=data.title) }}
     {{ forms.textbox('browser', label="Web browser", hint="The name of the web browser and version you are using", error=errors.browser, autofocus=true, value=data.browser) }}
-    {{ forms.textarea('description', label="Steps to reproduce", hint="Please provide step by step instructions to see the issue", error=errors.steps, autofocus=true, value=data.steps) }}
-    {{ forms.textarea('happens', label="What happens", hint="Please describe what should happen and what actually happened", error=errors.expected, autofocus=true, value=data.expected) }}
-    {{ forms.textarea('impact', label="Impact", hint="Please enter the Impact of this issue", error=errors.impact, autofocus=true, value=data.impact) }}
+    {{ forms.textarea('description', label="Steps to reproduce", hint="Please provide step by step instructions to recreate the issue", error=errors.steps, autofocus=true, value=data.steps) }}
+    {{ forms.textarea('happens', label="What happens", hint="Please describe what should happen and what actually happens", error=errors.expected, autofocus=true, value=data.expected) }}
+    {{ forms.textarea('impact', label="Impact", hint="How does this affect you ability to do your job?", error=errors.impact, autofocus=true, value=data.impact) }}
     <input type="hidden" name="_csrf_token" value="{{data.csrfToken}}"/>
     {{ forms.save(buttonText='Send') }}
   </form>
