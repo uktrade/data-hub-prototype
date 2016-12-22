@@ -130,7 +130,7 @@ app.use('/search', searchController.router);
 app.use(apiController.router);
 app.use('/support', supportController.router);
 app.get('/', indexController);
-app.use('/pingdom', pingdomController.router);
+app.use('/ping.xml', pingdomController.get);
 
 metadata.setRedisClient(client);
 metadata.fetchAll((errors) => {

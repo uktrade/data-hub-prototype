@@ -1,8 +1,5 @@
-const express = require('express');
 const axios = require('axios');
 const config = require('../config');
-
-const router = express.Router();
 
 function returnError(res, error) {
   res.set('Content-Type', 'text/xml');
@@ -25,6 +22,4 @@ function get(req, res) {
     .catch(error => returnError(res, error));
 }
 
-router.get('/', get);
-
-module.exports = { router };
+module.exports = { get };
