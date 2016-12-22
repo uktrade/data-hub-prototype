@@ -19,6 +19,7 @@ module.exports = {
     index: './src/pages/index.js',
     login: './src/pages/login.js',
     search: './src/pages/search.js',
+    radio: './src/lib/radio.js',
   },
   output: {
     path: 'build/javascripts',

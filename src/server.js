@@ -10,6 +10,7 @@ const redisCrypto = require('connect-redis-crypto');
 const flash = require('connect-flash');
 const url = require('url');
 const winston = require('winston');
+const expressValidator = require('express-validator');
 
 const companyController = require('./controllers/companycontroller');
 const contactController = require('./controllers/contactcontroller');
@@ -88,6 +89,7 @@ app.use(session({
 
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
 app.use(bodyParser.json({ limit: '1mb' }));
+app.use(expressValidator());
 
 app.use(compression());
 app.set('views', [`${__dirname}/../src/views`]);
