@@ -91,6 +91,13 @@ const defaultCompany = {
 
 class CompanyForm extends BaseForm {
 
+  static propTypes = {
+    company: React.PropTypes.object,
+    source: React.PropTypes.string,
+    sourceId: React.PropTypes.string,
+    updateCompany: React.PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
 
@@ -101,6 +108,10 @@ class CompanyForm extends BaseForm {
     } else {
       company = Object.assign({}, defaultCompany);
     }
+
+    company.trading_address_same_as_registered = !((company.trading_address_1 && company.trading_address_1.length > 1) ||
+      (company.trading_address_1 && company.trading_address_1.length > 1));
+
 
     this.state = {
       countryOptions: [],
@@ -263,6 +274,19 @@ class CompanyForm extends BaseForm {
     );
   }
 
+  clearTradingAddress() {
+    this.changeFormData('trading_address_1', '');
+    this.changeFormData('trading_address_2', '');
+    this.changeFormData('trading_address_town', '');
+    this.changeFormData('trading_address_county', '');
+    this.changeFormData('trading_address_postcode', '');
+    this.changeFormData('trading_address_country', {
+      id: null,
+      name: '',
+    });
+    this.changeFormData('trading_address_same_as_registered', true);
+  }
+
   save = () => {
     // Just post the company and let the server do the rest. (Get it.. REST)
     this.setState({ saving: true });
@@ -400,14 +424,40 @@ class CompanyForm extends BaseForm {
           errors={this.getErrors('alias')}
           onChange={this.updateField}
         />
-        <Address
-          name="trading_address"
-          label="Trading address"
-          errors={this.getErrors('trading_address')}
-          onChange={this.updateField}
-          value={formData}
-          prefix="trading"
-        />
+
+        <fieldset className="inline form-group form-group__checkbox-group form-group__radiohide">
+          <legend className="form-label-bold">Is the trading address the same as the registered address?</legend>
+          <Radio
+            name="trading_address_same_as_registered"
+            label="Yes"
+            value="Yes"
+            checked={formData.trading_address_same_as_registered}
+            onChange={(update) => {
+              this.updateField(update);
+              this.clearTradingAddress();
+            }}
+          />
+          <Radio
+            name="trading_address_same_as_registered"
+            label="No"
+            value="No"
+            checked={!formData.trading_address_same_as_registered}
+            onChange={this.updateField}
+          />
+        </fieldset>
+        { !this.state.formData.trading_address_same_as_registered &&
+          <div className="indented-info">
+            <Address
+              name="trading_address"
+              label="Trading address"
+              errors={this.getErrors('trading_address')}
+              onChange={this.updateField}
+              value={formData}
+              prefix="trading"
+            />
+          </div>
+        }
+
         <InputText
           label={LABELS.website}
           name="website"
@@ -531,13 +581,6 @@ class CompanyForm extends BaseForm {
       </div>
     );
   }
-
-  static propTypes = {
-    company: React.PropTypes.object,
-    source: React.PropTypes.string,
-    sourceId: React.PropTypes.string,
-    updateCompany: React.PropTypes.func,
-  };
 
 }
 
