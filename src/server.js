@@ -20,9 +20,8 @@ const loginController = require('./controllers/logincontroller');
 const myAccountController = require('./controllers/myaccountcontroller');
 const indexController = require('./controllers/indexcontroller');
 const supportController = require('./controllers/supportcontroller');
+const pingdomController = require('./controllers/pingdomcontroller');
 
-const customValidators = require('./lib/validators');
-const customSanitizers = require('./lib/sanitizers');
 const filters = require('./lib/nunjuckfilters');
 const datahubFlash = require('./middleware/flash');
 const auth = require('./middleware/auth');
@@ -131,7 +130,7 @@ app.use('/search', searchController.router);
 app.use(apiController.router);
 app.use('/support', supportController.router);
 app.get('/', indexController);
-
+app.use('/pingdom', pingdomController.router);
 
 metadata.setRedisClient(client);
 metadata.fetchAll((errors) => {
