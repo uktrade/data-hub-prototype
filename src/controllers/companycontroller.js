@@ -70,7 +70,7 @@ function get(req, res) {
     })
     .catch((error) => {
       const errors = error.error;
-      return res.status(400).json({ errors });
+      return res.status(error.response.statusCode).json({ errors });
     });
 }
 
@@ -91,11 +91,11 @@ function post(req, res) {
     })
     .catch((error) => {
       if (typeof error.error === 'string') {
-        return res.status(error.response.statusCode).json({ errors: [{ error: error.response.statusMessage }] });
+        return res.status(error.response.statusCode).json({ errors: { detail: error.response.statusMessage } });
       }
       const errors = error.error;
       cleanErrors(errors);
-      return res.status(400).json({ errors });
+      return res.status(error.response.statusCode).json({ errors });
     });
 }
 
@@ -109,11 +109,11 @@ function archive(req, res) {
     .catch((error) => {
       winston.log('error', error);
       if (typeof error.error === 'string') {
-        return res.status(error.response.statusCode).json({ errors: [{ error: error.response.statusMessage }] });
+        return res.status(error.response.statusCode).json({ errors: { detail: error.response.statusMessage } });
       }
       const errors = error.error;
       cleanErrors(errors);
-      return res.status(400).json({ errors });
+      return res.status(error.response.statusCode).json({ errors });
     });
 }
 
@@ -127,11 +127,11 @@ function unarchive(req, res) {
     .catch((error) => {
       winston.error('error', error);
       if (typeof error.error === 'string') {
-        return res.status(error.response.statusCode).json({ errors: [{ error: error.response.statusMessage }] });
+        return res.status(error.response.statusCode).json({ errors: { detail: error.response.statusMessage } });
       }
       const errors = error.error;
       cleanErrors(errors);
-      return res.status(400).json({ errors });
+      return res.status(error.response.statusCode).json({ errors });
     });
 }
 
