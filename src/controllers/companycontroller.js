@@ -89,13 +89,9 @@ function post(req, res) {
     .then((data) => {
       res.json(data);
     })
-    .catch((error) => {
-      if (typeof error.error === 'string') {
-        return res.status(error.response.statusCode).json({ errors: { detail: error.response.statusMessage } });
-      }
-      const errors = error.error;
+    .catch(({ statusCode, errors }) => {
       cleanErrors(errors);
-      return res.status(error.response.statusCode).json({ errors });
+      return res.status(statusCode).json({ errors });
     });
 }
 
