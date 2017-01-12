@@ -20,14 +20,14 @@ class SectorSelect extends React.Component {
     super(props);
 
     const allSectors = this.props.allSectors;
-    const sector = this.props.sector;
+    const sector = this.props.sector || { id: '', name: '' };
     const primarySector = transformSectors.getPrimarySectorName(sector.name) || '';
 
     this.allPrimarySectors = transformSectors.getAllPrimarySectors(allSectors);
 
     this.state = {
       primarySector,
-      value: this.props.sector.id,
+      value: sector.id,
       errors: this.props.errors,
       subSectors: transformSectors.getAllSubSectors(primarySector, allSectors) || [],
     };

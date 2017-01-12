@@ -17,7 +17,7 @@ function get(req, res) {
   searchService.search({
     token: req.session.token,
     term: req.query.term,
-    page: req.page,
+    page: req.query.page,
     filters,
   })
     .then((result) => {

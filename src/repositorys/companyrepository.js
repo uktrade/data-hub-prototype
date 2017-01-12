@@ -1,5 +1,5 @@
 const config = require('../config');
-const authorisedRequest = require( '../lib/authorisedrequest' );
+const authorisedRequest = require('../lib/authorisedrequest');
 const interactionRepository = require('./interactionrepository');
 const contactRepository = require('./contactrepository');
 const metadataRepository = require('./metadatarepository');
@@ -14,7 +14,7 @@ function getDitCompany(token, id) {
   .then((company) => {
     result = company;
 
-    let promises = [];
+    const promises = [];
     for (const interaction of result.interactions) {
       promises.push(interactionRepository.getInteraction(token, interaction.id));
     }
@@ -24,7 +24,7 @@ function getDitCompany(token, id) {
   .then((interactions) => {
     result.interactions = interactions;
 
-    let promises = [];
+    const promises = [];
     for (const contact of result.contacts) {
       promises.push(contactRepository.getBriefContact(token, contact.id));
     }
@@ -42,7 +42,6 @@ function getCHCompany(token, id) {
 }
 
 function getCompany(token, id, source) {
-
   return new Promise((resolve, reject) => {
     // Get DIT Company
     if (source === 'company_companieshousecompany') {
@@ -74,11 +73,9 @@ function getCompany(token, id, source) {
 
 function setCHDefaults(token, company) {
   return new Promise((resolve) => {
-
     if (company.company_number) {
       getCHCompany(token, company.company_number)
         .then((ch) => {
-
           if (!company.name) company.name = ch.name;
           if (!company.registered_address_1) company.registered_address_1 = ch.registered_address_1;
           if (!company.registered_address_2) company.registered_address_2 = ch.registered_address_2;
@@ -97,37 +94,57 @@ function setCHDefaults(token, company) {
             }
           }
           resolve(company);
-
         });
     } else {
       resolve(company);
     }
   });
-
 }
 
 function saveCompany(token, company) {
+  function saveParsedCompany(parsedCompany) {
+    let method;
+    let url;
+
+    if (parsedCompany.id && parsedCompany.id.length > 0) {
+      method = 'PUT';
+      url = `${config.apiRoot}/company/${parsedCompany.id}/`;
+    } else {
+      method = 'POST';
+      url = `${config.apiRoot}/company/`;
+    }
+
+    return new Promise((resolve, reject) => {
+      authorisedRequest(token, { url, method, body: parsedCompany })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((error) => {
+          if (typeof error.error === 'string') {
+            return reject({
+              statusCode: error.response.statusCode,
+              errors: { detail: error.response.statusMessage },
+            });
+          }
+
+          return reject({
+            statusCode: error.response.statusCode,
+            errors: error.error,
+          });
+        });
+    });
+  }
+
   delete company.companies_house_data;
   delete company.contacts;
   delete company.interactions;
 
   if (company.id && company.id.length > 0) {
-    return authorisedRequest(token, {
-      url: `${config.apiRoot}/company/${company.id}/`,
-      method: 'PUT',
-      body: company,
-    });
+    return saveParsedCompany(company);
   }
 
   return setCHDefaults(token, company)
-    .then(parsedCompany => {
-      return authorisedRequest(token, {
-        url: `${config.apiRoot}/company/`,
-        method: 'POST',
-        body: parsedCompany,
-      });
-    });
-
+    .then(parsedCompany => saveParsedCompany(parsedCompany));
 }
 
 function archiveCompany(token, companyId, reason) {
@@ -143,4 +160,4 @@ function unarchiveCompany(token, companyId) {
   return authorisedRequest(token, `${config.apiRoot}/company/${companyId}/unarchive/`);
 }
 
-module.exports = {getCompany, saveCompany, getDitCompany, getCHCompany, archiveCompany, unarchiveCompany};
+module.exports = { getCompany, saveCompany, getDitCompany, getCHCompany, archiveCompany, unarchiveCompany };
