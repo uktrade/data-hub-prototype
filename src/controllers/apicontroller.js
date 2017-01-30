@@ -72,10 +72,7 @@ function getMetadata(req, res) {
       result = metadataRepository.TYPES_OF_BUSINESS;
       break;
     case 'typesofinteraction':
-      authorisedRequest(req.session.token, `${config.apiRoot}/metadata/interaction-type/`)
-        .then((response) => {
-          res.json(response);
-        });
+      result = metadataRepository.TYPES_OF_INTERACTION;
       return;
     case 'sector':
       result = metadataRepository.SECTOR_OPTIONS;

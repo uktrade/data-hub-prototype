@@ -51,6 +51,7 @@ const metadataItems = [
   ['employee-range', 'EMPLOYEE_OPTIONS'],
   ['business-type', 'TYPES_OF_BUSINESS'],
   ['team', 'TEAMS'],
+  ['interaction-type', 'TYPES_OF_INTERACTION'],
 ];
 
 module.exports.setRedisClient = (client) => {
