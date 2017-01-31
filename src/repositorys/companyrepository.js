@@ -1,39 +1,61 @@
 const config = require('../config');
 const authorisedRequest = require('../lib/authorisedrequest');
-const interactionRepository = require('./interactionrepository');
-const contactRepository = require('./contactrepository');
 const metadataRepository = require('./metadatarepository');
+const winston = require('winston');
 
+function getContact(company, contactId) {
+  for (const contact of company.contacts) {
+    if (contact.id === contactId) return contact;
+  }
+  return contactId;
+}
 
-// Get a company and then go back and get further detail for each company contact
-// and interaction, so the company detail pages can give the detail required.
+function getInteractionType(typeId) {
+  for (const interactionType of metadataRepository.TYPES_OF_INTERACTION) {
+    if (interactionType.id === typeId) return interactionType;
+  }
+  return typeId;
+}
+
+// Get a company and then pad out the interactions with related data
 function getDitCompany(token, id) {
   let result;
+  const advisorHash = {};
 
   return authorisedRequest(token, `${config.apiRoot}/company/${id}/`)
   .then((company) => {
     result = company;
 
-    const promises = [];
+    // make a hashmap of advisors (store the id and we'll fill in the values from the server)
     for (const interaction of result.interactions) {
-      promises.push(interactionRepository.getInteraction(token, interaction.id));
+      advisorHash[interaction.dit_advisor] = true;
     }
 
-    return Promise.all(promises);
-  })
-  .then((interactions) => {
-    result.interactions = interactions;
-
+    // now create an array of requests to the server to get the advisor details
     const promises = [];
-    for (const contact of result.contacts) {
-      promises.push(contactRepository.getBriefContact(token, contact.id));
+    for (const advisor of Object.keys(advisorHash)) {
+      promises.push(authorisedRequest(token, `${config.apiRoot}/advisor/${advisor}`));
     }
-
     return Promise.all(promises);
   })
-  .then((contacts) => {
-    result.contacts = contacts;
+  .then((advisors) => {
+    // store the advisor from the server back in the hashmap, so we can look them up easy
+    for (const advisor of advisors) {
+      advisorHash[advisor.id] = advisor;
+    }
+
+    // Now pad out the company interactions with the related contact, type and advisor
+    for (const interaction of result.interactions) {
+      interaction.contact = getContact(result, interaction.contact);
+      interaction.dit_advisor = advisorHash[interaction.dit_advisor];
+      interaction.interaction_type = getInteractionType(interaction.interaction_type)
+    }
+
     return result;
+  })
+  .catch((error) => {
+    winston.error(error);
+    throw (error);
   });
 }
 
