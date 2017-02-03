@@ -73,7 +73,7 @@ function getMetadata(req, res) {
       break;
     case 'typesofinteraction':
       result = metadataRepository.TYPES_OF_INTERACTION;
-      return;
+      break;
     case 'sector':
       result = metadataRepository.SECTOR_OPTIONS;
       break;
