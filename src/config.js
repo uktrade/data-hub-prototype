@@ -17,7 +17,7 @@ module.exports = {
   redis: {
     url: process.env.REDIS_URL || process.env.REDISTOGO_URL,
     port: process.env.REDIS_PORT || 6379,
-    host: process.env.REDIS_HOST || '127.0.0.1',
+    host: process.env.REDIS_HOST || 'redis',
     metadataTtl: (process.env.METADATA_TTL || (15 * 60)),
   },
   googleTagManager: process.env.GOOGLE_TAG_MANAGER,
