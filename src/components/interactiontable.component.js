@@ -13,7 +13,7 @@ class InteractionTableComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sortKey: 'date_of_interaction',
+      sortKey: 'date',
       sortAsc: false
     };
   }
@@ -65,7 +65,7 @@ class InteractionTableComponent extends React.Component {
 
     return (
       <tr key={interaction.id}>
-        <td className="date">{formatDate(interaction.date_of_interaction)}</td>
+        <td className="date">{formatDate(interaction.date)}</td>
         <td className="type">{interaction.interaction_type.name}</td>
         <td className="advisor">{interaction.dit_advisor.first_name} {interaction.dit_advisor.last_name}</td>
         <td className="contact">

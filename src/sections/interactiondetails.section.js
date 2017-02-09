@@ -43,7 +43,7 @@ function interactionDetailsSection(props) {
           </tr>
           <tr>
             <th>Date of interaction</th>
-            <td>{ formatDate(interaction.date_of_interaction) }</td>
+            <td>{ formatDate(interaction.date) }</td>
           </tr>
           <tr>
             <th>Company contact</th>
