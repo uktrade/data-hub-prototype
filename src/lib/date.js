@@ -6,6 +6,8 @@ const monthNames = [
 ];
 
 function formatDate(date) {
+  if (!date || date.length === 0) return '';
+
   const parts = date.split('-');
   const dateTime = new Date(parseInt(parts[0], 10),
     parseInt(parts[1], 10) - 1,
