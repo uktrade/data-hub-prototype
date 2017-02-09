@@ -42,7 +42,7 @@ const defaultInteraction = {
   },
   subject: '',
   notes: '',
-  date_of_interaction: '',
+  date: '',
   service: {
     id: '',
     name: ''
@@ -267,10 +267,10 @@ class InteractionForm extends BaseForm {
 
         <DateInput
           label="Date of interaction"
-          name="date_of_interaction"
-          value={formData.date_of_interaction}
+          name="date"
+          value={formData.date}
           onChange={this.updateField}
-          errors={this.getErrors('date_of_interaction')}
+          errors={this.getErrors('date')}
         />
         <Autosuggest
           name="dit_advisor"
