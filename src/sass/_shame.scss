@@ -83,3 +83,9 @@ hr {
   @include bold-24();
   margin-top: 40px;
 }
+
+.radio-list-stacked {
+  .block-label {
+    margin-bottom: 20px;
+  }
+}

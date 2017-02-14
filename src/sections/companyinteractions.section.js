@@ -14,7 +14,7 @@ function CompanyInteractions(props) {
 
   if (interactions.length === 0 && !company.archived && contacts.length > 0) {
     return (
-      <a className="button button-secondary" href={`/interaction/add?companyId=${company.id}`}>Add new interaction</a>
+      <a className="button button-secondary" href={`/interaction/add-step-1/?companyId=${company.id}`}>Add new interaction</a>
     );
   } else if (interactions.length === 0 && (company.archived || contacts.length === 0)) {
     return (
@@ -45,7 +45,7 @@ function CompanyInteractions(props) {
         <div className="column-one-third">
           <p className="actions">
             { !company.archived ?
-              <a className="button button-secondary" href={`/interaction/add?companyId=${company.id}`}>Add new interaction</a>
+              <a className="button button-secondary" href={`/interaction/add-step-1/?companyId=${company.id}`}>Add new interaction</a>
               :
               <a className="button button-disabled">Add new interaction</a>
             }
