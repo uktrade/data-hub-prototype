@@ -1,45 +1,43 @@
-{% extends "layouts/govuk_template.html" %}
+{% extends "layouts/ukti_template.html" %}
 
-{% set global_header_text="Datahub" %}
 {% set homepage_url = "/" %}
-{% set logo_link_title = "Go to Datahub homepage" %}
+{% block service_name %}Datahub{% endblock %}
 
-{% block page_title %}Datahub{% endblock %}
+{% block head_styles %}
+<!-- This is a test -->
+<link href="{{ asset_path | default('/') }}css/application.css" media="screen" rel="stylesheet" />
+{% endblock %}
 
-{% block head %}
-  <link href="{{ asset_path }}stylesheets/application.css?{{ startTime }}" rel="stylesheet" type="text/css">
-  <script src="{{ asset_path }}javascripts/common.js?{{ startTime }}"></script>
-  {% if user %}
+{% block head_script %}
+ {% if user %}
     <script>
       if (!window.DIT) window.DIT = {};
       window.DIT.user = {{ user | stringify | safe }};
     </script>
   {% endif %}
+    <script src="{{ asset_path }}javascripts/common.js?{{ startTime }}"></script>
 {% endblock %}
 
 {% block content %}
-
-  <main id="content" role="main">
-    <div class="phase-banner-beta">
-      <p>
-        <strong class="phase-tag">BETA</strong>
-        <span>This is a new service – your <a href="/support/bug">feedback</a> will help us to improve it.</span>
-      </p>
-    </div>
-    {% if user and user.name %}
-      <div class="login-bar">
-        <div class="login-links login-links-left">
-          <a href="/">Home</a>
-        </div>
-        <div class="login-links login-links-right">
-          <span class="user-name">{{ user.name }}:</span><a href="/myaccount">My account</a>
-          |
-          <a href="/login/signout">Sign out</a>
-        </div>
+  <div class="phase-banner-beta">
+    <p>
+      <strong class="phase-tag">BETA</strong>
+      <span>This is a new service – your <a href="/support/bug">feedback</a> will help us to improve it.</span>
+    </p>
+  </div>
+  {% if user and user.name %}
+    <div class="login-bar">
+      <div class="login-links login-links-left">
+        <a href="/">Home</a>
       </div>
-    {% endif %}
-    <div class="container">
-      {% block main %}{% endblock %}
+      <div class="login-links login-links-right">
+        <span class="user-name">{{ user.name }}:</span><a href="/myaccount">My account</a>
+        |
+        <a href="/login/signout">Sign out</a>
+      </div>
     </div>
-  </main>
+  {% endif %}
+  <div class="container">
+    {% block main %}{% endblock %}
+  </div>
 {% endblock %}

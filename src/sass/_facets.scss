@@ -1,18 +1,22 @@
 #facets .controls {
   float: right;
 }
+
 #facets input:focus {
   outline: 0;
 }
+
 .facet-value-label {
   text-transform: capitalize;
 }
+
 .clear-filter-button {
-  @include core-19();
+  @include core-19;
   color: $black;
   cursor: pointer;
   margin-right: 10px;
 }
+
 .collapse-filter {
   cursor: pointer;
   color: $grey-1;
@@ -27,7 +31,8 @@
   box-sizing: border-box;
   width: 100%;
 }
-.govuk-option-select .option-select-label {
+
+#facets .govuk-option-select .option-select-label {
   margin-right: 10px;
   margin-left: 5px;
 }

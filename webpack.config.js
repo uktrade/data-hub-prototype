@@ -1,13 +1,10 @@
-const webpack = require('webpack');
+const webpack = require('webpack')
 
-const prod = process.env.NODE_ENV === 'production';
-const replaceCompanyRepo =
-  new webpack.NormalModuleReplacementPlugin(/companyrepository.js$/, 'remotecompanyrepository.js');
-const replaceContactRepo =
-  new webpack.NormalModuleReplacementPlugin(/contactrepository.js$/, 'remotecontactrepository.js');
-const replaceInteractionRepo =
-  new webpack.NormalModuleReplacementPlugin(/interactionrepository.js$/, 'remoteinteractionrepository.js');
-
+const prod = process.env.NODE_ENV === 'production'
+const replaceCompanyService =
+  new webpack.NormalModuleReplacementPlugin(/companyservice.js$/, 'remotecompanyservice.js')
+const replaceContactService =
+  new webpack.NormalModuleReplacementPlugin(/contactservice.js$/, 'remotecontactservice.js')
 
 module.exports = {
   devtool: prod ? 'hidden-source-map' : 'source-map',
@@ -15,11 +12,9 @@ module.exports = {
   entry: {
     company: './src/pages/company.js',
     contact: './src/pages/contact.js',
-    interaction: './src/pages/interaction.js',
     index: './src/pages/index.js',
-    login: './src/pages/login.js',
     search: './src/pages/search.js',
-    radio: './src/lib/radio.js',
+    sectors: './src/controls/sectors.js'
   },
   output: {
     path: 'build/javascripts',
@@ -35,21 +30,21 @@ module.exports = {
           cacheDirectory: './babel_cache',
           babelrc: false,
           presets: ['es2015', 'react'],
-          plugins: ['transform-class-properties'],
-        },
-      },
-    ],
+          plugins: ['transform-class-properties']
+        }
+      }
+    ]
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
     modules: [
       'app',
-      'node_modules',
+      'node_modules'
     ]
   },
   externals: {
     'react': 'React',
-    'react-dom': 'ReactDOM',
+    'react-dom': 'ReactDOM'
   },
   plugins: prod ? [
     new webpack.DefinePlugin({
@@ -58,20 +53,20 @@ module.exports = {
       }}),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false,
+        warnings: false
       },
       output: {
-        comments: false,
+        comments: false
       },
       sourceMap: false,
-      dead_code: true,
+      dead_code: true
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin('common.js'),
-    replaceCompanyRepo, replaceContactRepo, replaceInteractionRepo,
+    replaceCompanyService, replaceContactService
   ] : [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin('common.js'),
-    replaceCompanyRepo, replaceContactRepo, replaceInteractionRepo,
-  ],
-};
+    replaceCompanyService, replaceContactService
+  ]
+}

@@ -3,13 +3,14 @@ table.data-table thead tr {
     cursor: pointer;
 
     &.desc {
-      &:after {
-        content: "\00a0\00a0\25BC";
+      &::after {
+        content: '\00a0\00a0\25BC';
       }
     }
+
     &.asc {
-      &:after {
-        content: "\00a0\00a0\25B2";
+      &::after {
+        content: '\00a0\00a0\25B2';
       }
     }
   }
@@ -21,15 +22,19 @@ table.contact-table {
     width: 10%;
     white-space: nowrap;
   }
+
   .name {
     width: 20%;
   }
+
   .title {
-    width: 25%
+    width: 25%;
   }
+
   .phone {
     width: 20%;
   }
+
   .email {
     width: 25%;
   }
@@ -41,15 +46,19 @@ table.interaction-table {
     width: 10%;
     white-space: nowrap;
   }
+
   .type {
     width: 15%;
   }
+
   .advisor {
-    width: 25%
+    width: 25%;
   }
+
   .contact {
     width: 25%;
   }
+
   .subject {
     width: 25%;
   }

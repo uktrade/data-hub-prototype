@@ -1,5 +1,5 @@
 {% extends "layouts/ukti.html" %}
-{% import "macros/forms.html" as forms %}
+{% import "macros/trade.html" as trade %}
 
 {% block main %}
 
@@ -25,17 +25,12 @@
     </div>
   {% endif %}
 
-  {{ forms.errorPanel( messages.formErrors ) }}
+  {{ trade.errorPanel( messages.formErrors ) }}
 
   <form action="{{ action }}" method="post">
-    {{ forms.textbox('username', label="User name", error=errors.username, autofocus=true) }}
-    {{ forms.textbox('password', label="Password", error=errors.password, type='password', autocomplete=false) }}
-    {{ forms.save(buttonText='Login') }}
+    {{ trade.textbox('username', label="User name", error=errors.username, autofocus=true) }}
+    {{ trade.textbox('password', label="Password", error=errors.password, type='password', autocomplete=false) }}
+    {{ trade.save(buttonText='Login') }}
   </form>
 
 {% endblock %}
-
-{% block body_end %}
-  <script src="{{ asset_path }}javascripts/login.bundle.js?{{ startTime }}"></script>
-{% endblock %}
-

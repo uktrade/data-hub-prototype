@@ -1,31 +1,31 @@
-'use strict';
+'use strict'
 
-const React = require('react');
-const generateID = require('../lib/elementstuff').generateID;
+const React = require('react')
+const {generateID}= require('@uktrade/trade_elements').elementstuff
 
 class RadioComponent extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       focused: false
-    };
+    }
   }
 
   focus = () => {
-    this.setState({focused: true});
+    this.setState({focused: true})
   };
 
   blur = () => {
-    this.setState({focused: false});
+    this.setState({focused: false})
   };
 
-  render() {
-    const id = generateID();
+  render () {
+    const id = generateID()
 
-    let className = 'block-label selection-button-radio';
-    if (this.props.checked) className += ' selected';
-    if (this.state.focused) className += ' focused';
+    let className = 'block-label selection-button-radio'
+    if (this.props.checked) className += ' selected'
+    if (this.state.focused) className += ' focused'
 
     return (
       <label
@@ -36,7 +36,7 @@ class RadioComponent extends React.Component {
       >
         <input
           id={id}
-          type="radio"
+          type='radio'
           name={this.props.name}
           value={this.props.value}
           checked={this.props.checked}
@@ -44,7 +44,7 @@ class RadioComponent extends React.Component {
         />
         {this.props.label}
       </label>
-    );
+    )
   }
 
 }
@@ -55,6 +55,6 @@ RadioComponent.propTypes = {
   value: React.PropTypes.string.isRequired,
   checked: React.PropTypes.bool,
   onChange: React.PropTypes.func.isRequired
-};
+}
 
-module.exports = RadioComponent;
+module.exports = RadioComponent
