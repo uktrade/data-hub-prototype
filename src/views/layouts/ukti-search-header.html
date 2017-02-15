@@ -1,10 +1,8 @@
 {% extends "./ukti.html" %}
-{% import "macros/search.html" as search %}
+{% import "macros/trade.html" as trade %}
 
 {% block header_class %}with-proposition{% endblock %}
 
-{% block proposition_header %}
-  <div class="header-proposition">
-    {{ search.searchbar('term', label="Search companies and contacts", value="", type="header") }}
-  </div>
+{% block top_menu %}
+    {{ trade.searchbar('term', label="Search companies and contacts", value="", type="header") }}
 {% endblock %}

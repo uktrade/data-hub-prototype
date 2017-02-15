@@ -20,7 +20,7 @@ function interactionDetailsSection(props) {
         Interaction details
       </h1>
 
-      <table className="table-detail">
+      <table className="table--key-value  table--striped">
         <tbody>
           <tr>
             <th width="30%">Company</th>

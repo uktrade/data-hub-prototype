@@ -194,7 +194,7 @@ class ContactApp extends React.Component {
   archivedInfoSection() {
     const {contact} = this.state;
     return (
-      <p className="indented-info">
+      <p className="panel panel-border-narrow">
         This contact has been archived on {formatDate(contact.archived_on)} by {contact.archived_by.first_name} {contact.archived_by.last_name}. <br />
         Reason: {contact.archived_reason}
       </p>
@@ -232,10 +232,10 @@ class ContactApp extends React.Component {
           <nav className="tabs-nav">
             <ul className="tabs-list">
               <li>
-                <Link className={(!path || path === 'edit') && 'is-selected'} to={`/contact/${contactId}`}>Details</Link>
+                <Link className={(!path || path === 'edit') && 'selected'} to={`/contact/${contactId}`}>Details</Link>
               </li>
               <li>
-                <Link className={(path === 'interactions') && 'is-selected'} to={`/contact/${contactId}/interactions`}>Interactions</Link>
+                <Link className={(path === 'interactions') && 'selected'} to={`/contact/${contactId}/interactions`}>Interactions</Link>
               </li>
             </ul>
           </nav>

@@ -299,7 +299,7 @@ class InteractionForm extends BaseForm {
           errors={this.getErrors('dit_team')}
           searchingFor="a team"
         />
-        <div className="button-bar">
+        <div className="save-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
           { this.getBackLink() }
         </div>

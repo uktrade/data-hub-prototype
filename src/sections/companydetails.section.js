@@ -17,7 +17,7 @@ function companyDetailsSection(props) {
       <CHSection company={company} />
 
       { company.id &&
-        <table className="table-detail">
+        <table className="table--key-value  table--striped">
           <tbody>
           {!chCompany &&
           <tr>

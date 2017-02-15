@@ -7,7 +7,7 @@ function chSection(props) {
   if (!chCompany) return null;
 
   return (
-    <table className="table-detail table-detail--readonly">
+    <table className="table--key-value table--readonly">
       <tbody>
         <tr className="table-detail--readonly__section">
           <td rowSpan="6" className="spacer">&nbsp;</td>

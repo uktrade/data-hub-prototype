@@ -90,7 +90,7 @@ class DidYouMeanCompanyComponent extends React.Component {
     }
 
     return (
-      <div className="indented-info">
+      <div className="panel panel-border-narrow">
         <h3 className="heading-small indented-info__heading">Did you mean this company?</h3>
         <a className="indented-info__link" href={`/company/${type}/${id}`}>{name}</a>
         <p className="indented-info__description">

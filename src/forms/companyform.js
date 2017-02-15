@@ -368,7 +368,7 @@ class CompanyForm extends BaseForm {
                 onChange={this.updateUkBased}
               />
               { formData.uk_based &&
-                <p className="js-radiohide-content">
+                <p className="panel panel-border-narrow">
                 You can add any type of company except UK based private and public limited
                 companies. These companies are already on data hub as it uses companies
                 house data. Please search for these companies first on data hub to add or
@@ -446,7 +446,7 @@ class CompanyForm extends BaseForm {
           />
         </fieldset>
         { !this.state.formData.trading_address_same_as_registered &&
-          <div className="indented-info">
+          <div className="panel panel-border-narrow">
             <Address
               name="trading_address"
               label="Trading address"
@@ -510,7 +510,7 @@ class CompanyForm extends BaseForm {
           />
 
           { this.state.show_account_manager &&
-          <div className="js-radiohide-content">
+          <div className="panel panel-border-narrow">
             <Autosuggest
               name="account_manager"
               label="Account manager"
@@ -558,7 +558,7 @@ class CompanyForm extends BaseForm {
             onChange={this.updateExpandingSection}
           />
           { this.state.show_exporting_to &&
-          <div className="js-radiohide-content">
+          <div className="panel panel-border-narrow">
             { this.getCurrentlyExportingTo() }
             <button className="add-another-button" onClick={this.addCurrentExportCountry}>
               Add another country
@@ -570,7 +570,7 @@ class CompanyForm extends BaseForm {
 
         {this.getFutureCountriesOfInterest()}
 
-        <div className="button-bar">
+        <div className="save-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
           { this.state.edit ?
             <Link to={`/company/${source}/${sourceId}`} className="button-link button--cancel js-button-cancel" >Cancel</Link>

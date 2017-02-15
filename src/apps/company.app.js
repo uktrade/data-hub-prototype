@@ -184,7 +184,7 @@ class CompanyApp extends React.Component {
   archivedInfoSection() {
     const {company} = this.state;
     return (
-      <p className="indented-info">
+      <p className="panel panel-border-narrow">
         This company has been archived on {formatDate(company.archived_on)} by {company.archived_by.first_name} {company.archived_by.last_name}. <br />
         Reason: {company.archived_reason}
       </p>
@@ -280,13 +280,13 @@ class CompanyApp extends React.Component {
           <nav className="tabs-nav">
             <ul className="tabs-list">
               <li>
-                <Link className={(!path || path === 'edit') && 'is-selected'} to={`/company/${source}/${sourceId}`}>Details</Link>
+                <Link className={(!path || path === 'edit') && 'selected'} to={`/company/${source}/${sourceId}`}>Details</Link>
               </li>
               <li>
-                <Link className={(path === 'contacts') && 'is-selected'} to={`/company/${source}/${sourceId}/contacts`}>Contacts</Link>
+                <Link className={(path === 'contacts') && 'selected'} to={`/company/${source}/${sourceId}/contacts`}>Contacts</Link>
               </li>
               <li>
-                <Link className={(path === 'interactions') && 'is-selected'} to={`/company/${source}/${sourceId}/interactions`}>Interactions</Link>
+                <Link className={(path === 'interactions') && 'selected'} to={`/company/${source}/${sourceId}/interactions`}>Interactions</Link>
               </li>
             </ul>
           </nav>

@@ -194,7 +194,7 @@ class ContactForm extends BaseForm {
     });
 
     return (
-      <div className={this.getErrors('teams') === null ? 'indented-info' : 'indented-info error'}>
+      <div className={this.getErrors('teams') === null ? 'panel panel-border-narrow' : 'panel panel-border-narrow error'}>
         { teamList }
         <a className="add-another-button" onClick={this.addPrimaryTeam}>
           Add another team
@@ -348,7 +348,7 @@ class ContactForm extends BaseForm {
             onChange={this.updateField}
             value={formData.notes}/>
         </div>
-        <div className="button-bar">
+        <div className="save-bar">
           <button className="button button--save" type="button" onClick={this.save}>Save</button>
           {this.getBackLink()}
         </div>

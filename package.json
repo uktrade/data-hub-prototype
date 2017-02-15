@@ -8,6 +8,7 @@
     "url": "https://github.com/uktrade/data-hub-web"
   },
   "dependencies": {
+    "@uktrade/trade_elements": "^2.5.1",
     "async-props": "^0.3.2",
     "axios": "^0.15.2",
     "babel-cli": "^6.18.0",
@@ -23,12 +24,9 @@
     "connect-flash": "0.1.1",
     "connect-redis-crypto": "3.1.1",
     "express": "^4.14.0",
-    "express-nunjucks": "^2.1.2",
     "express-session": "^1.14.1",
     "express-validator": "^3.1.1",
     "font-awesome": "^4.6.3",
-    "govuk-elements-sass": "^2.2.1",
-    "govuk_template_jinja": "^0.19.1",
     "lodash": "^4.16.4",
     "moment": "^2.17.1",
     "morgan": "1.7.0",
@@ -77,8 +75,8 @@
     "js:client:watch": "webpack --watch",
     "js:server": "babel src -d build",
     "js:server:watch": "nodemon src/server.js --exec babel-node",
-    "sass:watch": "node-sass src/sass/application.scss build/stylesheets/application.css --source-map build/stylesheets/application.css.map --source-map-contents --include-path ./node_modules/govuk-elements-sass/public/sass/ --include-path ./node_modules/govuk_frontend_toolkit/stylesheets --include-path ./node_modules/font-awesome/scss -w -r",
-    "sass": "node-sass src/sass/application.scss build/stylesheets/application.css --include-path ./node_modules/govuk-elements-sass/public/sass/ --include-path ./node_modules/govuk_frontend_toolkit/stylesheets --include-path ./node_modules/font-awesome/scss -x --output-style compressed",
+    "sass:watch": "node-sass src/sass/application.scss build/css/application.css --include-path ./node_modules/@uktrade/trade_elements/dist/sass/ --include-path ./node_modules/@uktrade/trade_elements_react/sass/ --include-path ./node_modules/font-awesome/scss/ -r -w",
+    "sass": "node-sass src/sass/application.scss build/css/application.css --include-path ./node_modules/@uktrade/trade_elements/dist/sass/ --include-path ./node_modules/@uktrade/trade_elements_react/sass/ --include-path ./node_modules/font-awesome/scss/ -x --output-style compressed",
     "postinstall": "npm run build",
     "sync": "browser-sync start --proxy http://localhost:3000 --files build/stylesheets/*.css build/javascripts/*.js"
   },

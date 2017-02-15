@@ -1,9 +1,9 @@
 {% extends "layouts/ukti.html" %}
-{% import "macros/search.html" as search %}
+{% import "macros/trade.html" as trade %}
 
 {% block main %}
 
-  {{ search.searchbar('term', label="Search for company name or contact", value=query) }}
+  {{ trade.searchbar('term', label="Search for company name or contact", value=query) }}
 
   <div class="grid-row dashboard">
 
