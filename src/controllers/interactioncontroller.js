@@ -112,7 +112,6 @@ function getInteractionEdit (req, res, next) {
 
       res.render('interaction/interaction-edit')
     } catch (error) {
-      res.locals.errors = error
       winston.error(error)
       next(error)
     }
@@ -134,7 +133,11 @@ function postInteractionEdit (req, res, next) {
     } catch (response) {
       if (response.error && response.error.errors) {
         res.locals.errors = response.error.errors
-        res.locals.interaction = yield interactionService.convertFormBodyBackToInteraction(req.session.token, req.body)
+        try {
+          res.locals.interaction = yield interactionService.convertFormBodyBackToInteraction(req.session.token, req.body)
+        } catch (error) {
+          winston.error(error)
+        }
         return getInteractionEdit(req, res, next)
       }
       next(response.error)

@@ -60,7 +60,6 @@ function getServiceDeliveryEdit (req, res, next) {
 
       res.render('interaction/servicedelivery-edit')
     } catch (error) {
-      res.locals.errors = error
       winston.error(error)
       next(error)
     }
@@ -83,7 +82,11 @@ function postServiceDeliveryEdit (req, res, next) {
       try {
         if (response.error && response.error.errors) {
           res.locals.errors = controllerUtils.transformV2Errors(response.error.errors)
-          res.locals.serviceDelivery = yield serviceDeliveryService.convertFormBodyBackToServiceDelivery(req.session.token, req.body)
+          try {
+            res.locals.serviceDelivery = yield serviceDeliveryService.convertFormBodyBackToServiceDelivery(req.session.token, req.body)
+          } catch (error) {
+            winston.error(error)
+          }
           return getServiceDeliveryEdit(req, res, next)
         }
       } catch (error) {
