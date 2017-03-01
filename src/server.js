@@ -94,7 +94,7 @@ app.use(expressValidator())
 
 app.use(compression())
 app.set('view engine', 'html')
-const nunenv = nunjucks.configure([`${__dirname}/views`, `${__dirname}/../node_modules/@uktrade/trade_elements/dist/nunjucks`], {
+const nunenv = nunjucks.configure([`${__dirname}/../src/views`, `${__dirname}/../node_modules/@uktrade/trade_elements/dist/nunjucks`], {
   autoescape: true,
   express: app,
   watch: isDev
