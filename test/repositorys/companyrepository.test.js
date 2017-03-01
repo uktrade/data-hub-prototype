@@ -187,7 +187,7 @@ describe('Company repository', () => {
       })
       it('should call the API at /company/id/ if an ID is provided', (done) => {
         const authorisedRequestStub = function (token, opts) {
-          expect(opts.url).to.eq('http://localhost:8000/company/1234/')
+          expect(opts.url).to.include('/company/1234/')
           return new Promise((resolve) => {
             resolve({ id: '1234', name: 'fred' })
           })
@@ -221,7 +221,7 @@ describe('Company repository', () => {
       })
       it('should call the API at /company/ if no ID is provided', (done) => {
         const authorisedRequestStub = function (token, opts) {
-          expect(opts.url).to.eq('http://localhost:8000/company/')
+          expect(opts.url).to.include('/company/')
           return new Promise((resolve) => {
             resolve({ id: '1234', name: 'fred' })
           })
