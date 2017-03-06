@@ -10,5 +10,6 @@ module.exports = {
   dit_advisor: 'DIT advisor',
   uk_region: 'UK region',
   sector: 'Sector',
-  country_of_interest: 'Country of interest'
+  country_of_interest: 'Country of interest',
+  'event': 'Event'
 }

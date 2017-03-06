@@ -25,6 +25,9 @@ function getHydratedServiceDelivery (token, serviceDeliveryId) {
         if (validKey(related, 'contact')) {
           serviceDelivery.contact = yield contactRepository.getContact(token, related.contact.data.id)
         }
+        if (validKey(related, 'event')) {
+          serviceDelivery.event = yield metadataRepository.getMetadataItem('event', related.event.data.id)
+        }
         if (validKey(related, 'service')) {
           serviceDelivery.service = yield metadataRepository.getMetadataItem('service', related.service.data.id)
         }
@@ -56,7 +59,7 @@ function getHydratedServiceDelivery (token, serviceDeliveryId) {
 
 // Change this to do the saving
 function convertServiceDeliveryFormToApiFormat (serviceDeliveryForm) {
-  return {
+  const serviceDelivery = {
     data: {
       type: 'ServiceDelivery',
       attributes: {
@@ -68,6 +71,7 @@ function convertServiceDeliveryFormToApiFormat (serviceDeliveryForm) {
         company: {data: {type: 'Company', id: serviceDeliveryForm.company}},
         dit_team: {data: {type: 'Team', id: serviceDeliveryForm.dit_team}},
         service: {data: {type: 'Service', id: serviceDeliveryForm.service}},
+        event: {data: {type: 'Event', id: serviceDeliveryForm.event}},
         status: {data: {type: 'ServiceDeliveryStatus', id: serviceDeliveryForm.status}},
         contact: {data: {type: 'Contact', id: serviceDeliveryForm.contact}},
         dit_advisor: {data: {type: 'Advisor', id: serviceDeliveryForm.dit_advisor}},
@@ -77,6 +81,12 @@ function convertServiceDeliveryFormToApiFormat (serviceDeliveryForm) {
       }
     }
   }
+
+  if (serviceDeliveryForm.id && serviceDeliveryForm.id.length > 0) {
+    serviceDelivery.data.id = serviceDeliveryForm.id
+  }
+
+  return serviceDelivery
 }
 
 function createBlankServiceDeliveryForContact (token, dit_advisor, contactId) {
@@ -132,6 +142,7 @@ function convertFormBodyBackToServiceDelivery (token, flatServiceDelivery) {
           notes: flatServiceDelivery.notes,
           date: flatServiceDelivery.date,
           service: { id: flatServiceDelivery.service },
+          event: { id: flatServiceDelivery.event },
           dit_team: { id: flatServiceDelivery.dit_team },
           status: { id: flatServiceDelivery.status },
           uk_region: { id: flatServiceDelivery.uk_region },

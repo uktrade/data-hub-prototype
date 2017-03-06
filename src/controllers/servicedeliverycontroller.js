@@ -57,6 +57,7 @@ function getServiceDeliveryEdit (req, res, next) {
       res.locals.sectorOptions = metadataRepository.SECTOR_OPTIONS
       res.locals.regionOptions = metadataRepository.REGION_OPTIONS
       res.locals.statusOptions = metadataRepository.SERVICE_DELIVERY_STATUS_OPTIONS
+      res.locals.eventOptions = metadataRepository.EVENT_OPTIONS
 
       res.render('interaction/servicedelivery-edit')
     } catch (error) {
@@ -75,8 +76,8 @@ function postServiceDeliveryEdit (req, res, next) {
       delete req.body.date_day
 
       controllerUtils.nullEmptyFields(req.body)
-
-      const result = yield serviceDeliveryRepository.saveServiceDelivery(req.session.token, req.body)
+      const deliveryToSave = yield serviceDeliveryService.convertServiceDeliveryFormToApiFormat(req.body)
+      const result = yield serviceDeliveryRepository.saveServiceDelivery(req.session.token, deliveryToSave)
       res.redirect(`/servicedelivery/${result.data.id}/details`)
     } catch (response) {
       try {

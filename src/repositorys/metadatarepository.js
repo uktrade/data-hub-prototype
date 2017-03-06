@@ -70,7 +70,8 @@ const metadataItems = [
   ['business-type', 'TYPES_OF_BUSINESS'],
   ['team', 'TEAMS'],
   ['interaction-type', 'TYPES_OF_INTERACTION'],
-  ['service-delivery-status', 'SERVICE_DELIVERY_STATUS_OPTIONS']
+  ['service-delivery-status', 'SERVICE_DELIVERY_STATUS_OPTIONS'],
+  ['event', 'EVENT_OPTIONS']
 ]
 
 const restrictedServiceKeys = [

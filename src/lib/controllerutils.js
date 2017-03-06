@@ -18,9 +18,11 @@ function transformV2Errors (apiErrors) {
   const transformedErrors = {}
 
   apiErrors.forEach((error) => {
-    const index = error.source.pointer.lastIndexOf('/')
-    const fieldName = error.source.pointer.substr(index + 1)
-    transformedErrors[fieldName] = error.detail
+    if (error.source && error.source.pointer) {
+      const index = error.source.pointer.lastIndexOf('/')
+      const fieldName = error.source.pointer.substr(index + 1)
+      transformedErrors[fieldName] = error.detail
+    }
   })
 
   return transformedErrors

@@ -53,6 +53,14 @@
       )
     }}
 
+    {{ trade.dropdown("event",
+      label=labels.event,
+      emptyLabel="Pick a value",
+      value=serviceDelivery.event.id,
+      options=eventOptions,
+      error=errors.event)
+    }}
+
     {{ trade.dropdown("status",
       label=labels.status,
       emptyLabel="Pick a value",
