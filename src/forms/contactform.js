@@ -32,7 +32,6 @@ const defaultContact = {
     id: '',
     name: ''
   },
-  address_same_as_company: true,
   title: {
     id: '',
     name: ''
@@ -102,6 +101,7 @@ class ContactForm extends BaseForm {
     }
 
     this.setDefaults(state.formData, defaultContact);
+    state.formData.address_same_as_company = !(state.formData.address_1 && state.formData.address_1.length > 0)
 
     if (state.formData.primary === true && state.formData.teams.length === 0) {
       state.formData.teams = defaultContact.teams;
