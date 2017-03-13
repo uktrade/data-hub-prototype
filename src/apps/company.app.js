@@ -18,7 +18,11 @@ class CompanyApp extends React.Component {
         cb(null, { company, source: params.source, sourceId: params.sourceId, backLink });
       })
       .catch((error) => {
-        cb(error);
+        if (error.error && error.error.detail) {
+          cb(error.error.detail);
+        } else {
+          cb('Error loading company')
+        }
       });
   }
 
