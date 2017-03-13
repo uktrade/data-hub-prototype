@@ -22,7 +22,11 @@ class ContactApp extends React.Component {
         cb(null, { contact, contactId: params.contactId, backLink });
       })
       .catch((error) => {
-        cb(error);
+        if (error.error && error.error.detail) {
+          cb(error.error.detail);
+        } else {
+          cb('Error loading contact')
+        }
       });
   }
 

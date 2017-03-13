@@ -51,8 +51,12 @@ function index(req, res) {
       renderProps.params.token = token;
       renderProps.params.referrer = req.headers.referer;
       loadPropsOnServer(renderProps, {}, (err, asyncProps, scriptTag) => {
-        const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} {...req.query} />);
-        res.render('layouts/react', { markup, scriptTag, csrfToken, bundleName: 'company' });
+        if (err) {
+          res.render('error', {error: err})
+        } else {
+          const markup = ReactDom.renderToString(<AsyncProps {...renderProps} {...asyncProps} {...req.query} />);
+          res.render('layouts/react', { markup, scriptTag, csrfToken, bundleName: 'company' });
+        }
       });
     } else {
       res.status(404).send('Not found');
