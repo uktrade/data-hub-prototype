@@ -15,6 +15,7 @@ module.exports = function locals (req, res, next) {
   res.locals.env = config.env
   res.locals.reactVersion = reactVersion
   res.locals.googleTagManager = config.googleTagManager
+  res.locals.query = req.query
   winston.debug('locals:end')
   next()
 }
