@@ -58,7 +58,7 @@ function interactionDetailsSection (props) {
             <td>{ interaction.dit_advisor.first_name } { interaction.dit_advisor.last_name }</td>
           </tr>
           <tr>
-            <th>Service offer</th>
+            <th>Service</th>
             <td>{ interaction.service.name }</td>
           </tr>
           <tr>
