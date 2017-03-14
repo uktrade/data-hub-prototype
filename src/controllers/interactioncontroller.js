@@ -12,7 +12,7 @@ const formatDate = require('../lib/date').formatDate
 const router = express.Router()
 
 function getCommon (req, res, next) {
-  Q.spawn(function *() {
+  Q.spawn(function * () {
     try {
       const token = req.session.token
       res.locals.interaction = yield interactionService.getHydratedInteraction(token, req.params.interactionId)
@@ -83,7 +83,7 @@ function postAddStep1 (req, res) {
 }
 
 function getInteractionEdit (req, res, next) {
-  Q.spawn(function *() {
+  Q.spawn(function * () {
     try {
       const token = req.session.token
       const dit_advisor = req.session.user
@@ -119,7 +119,7 @@ function getInteractionEdit (req, res, next) {
 }
 
 function postInteractionEdit (req, res, next) {
-  Q.spawn(function *() {
+  Q.spawn(function * () {
     try {
       req.body.date = `${req.body.date_year}-${req.body.date_month}-${req.body.date_day}T00:00:00.00Z`
       delete req.body.date_year

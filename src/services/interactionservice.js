@@ -18,7 +18,7 @@ function getInteractionType (interactionTypeId) {
 
 function getHydratedInteraction (token, interactionId) {
   return new Promise((resolve, reject) => {
-    Q.spawn(function *() {
+    Q.spawn(function * () {
       try {
         const interaction = yield interactionRepository.getInteraction(token, interactionId)
         interaction.company = yield companyRepository.getDitCompany(token, interaction.company.id)
@@ -32,7 +32,7 @@ function getHydratedInteraction (token, interactionId) {
 
 function createBlankInteractionForContact (token, dit_advisor, interaction_type, contactId) {
   return new Promise((resolve, reject) => {
-    Q.spawn(function *() {
+    Q.spawn(function * () {
       try {
         const contact = yield contactRepository.getContact(token, contactId)
         const company = yield companyRepository.getDitCompany(token, contact.company.id)
@@ -61,7 +61,7 @@ function createBlankInteractionForContact (token, dit_advisor, interaction_type,
 
 function createBlankInteractionForCompany (token, dit_advisor, interaction_type, companyId) {
   return new Promise((resolve, reject) => {
-    Q.spawn(function *() {
+    Q.spawn(function * () {
       try {
         const company = yield companyRepository.getDitCompany(token, companyId)
         const interaction_type_obj = getInteractionType(interaction_type)
@@ -84,7 +84,7 @@ function createBlankInteractionForCompany (token, dit_advisor, interaction_type,
 
 function convertFormBodyBackToInteraction (token, flatInteraction) {
   return new Promise((resolve, reject) => {
-    Q.spawn(function *() {
+    Q.spawn(function * () {
       try {
         const company = yield companyRepository.getDitCompany(token, flatInteraction.company)
         const interaction_type = getInteractionType(flatInteraction.interaction_type)

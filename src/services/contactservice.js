@@ -8,7 +8,7 @@ const interactionService = require('./interactionservice')
 
 function getInflatedContact (token, id) {
   return new Promise((resolve, reject) => {
-    Q.spawn(function *() {
+    Q.spawn(function * () {
       try {
         const advisorHash = {}
         const contact = yield contactRepository.getContact(token, id)

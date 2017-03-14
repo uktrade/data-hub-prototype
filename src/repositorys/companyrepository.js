@@ -75,7 +75,7 @@ function unarchiveCompany (token, companyId) {
 
 function setCHDefaults (token, company) {
   return new Promise((resolve, reject) => {
-    Q.spawn(function *() {
+    Q.spawn(function * () {
       try {
         if (company.company_number) {
           const ch = yield getCHCompany(token, company.company_number)

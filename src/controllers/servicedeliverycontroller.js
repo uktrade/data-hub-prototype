@@ -12,7 +12,7 @@ const formatDate = require('../lib/date').formatDate
 const router = express.Router()
 
 function getCommon (req, res, next) {
-  Q.spawn(function *() {
+  Q.spawn(function * () {
     try {
       const token = req.session.token
       res.locals.serviceDelivery = yield serviceDeliveryService.getHydratedServiceDelivery(token, req.params.serviceDeliveryId)
@@ -26,7 +26,7 @@ function getCommon (req, res, next) {
 }
 
 function getServiceDeliveryEdit (req, res, next) {
-  Q.spawn(function *() {
+  Q.spawn(function * () {
     try {
       const token = req.session.token
       const dit_advisor = req.session.user
