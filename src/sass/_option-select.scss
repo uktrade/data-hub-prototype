@@ -93,7 +93,7 @@
       button {
         z-index: 100;
         position: relative;
-        border: none;
+        border: 0;
         display: block;
         width: 100%;
         text-align: left;
@@ -103,7 +103,7 @@
         background: image-url('govuk-component/option-select-toggle-sprite.png') no-repeat right 5px;
         background-color: $grey-3;
 
-        @include device-pixel-ratio() {
+        @include device-pixel-ratio {
           background-size: 32px 50px;
           background: image-url('govuk-component/option-select-toggle-sprite.png') no-repeat right 5px;
         }
