@@ -1,67 +1,66 @@
 /* eslint new-cap: 0 */
 
-require('babel-polyfill');
-const getQueryParam = require('../lib/urlstuff').getQueryParam;
-const toggleClass = require('../lib/elementstuff').toggleClass;
+require('babel-polyfill')
+const getQueryParam = require('../lib/urlstuff').getQueryParam
+const {toggleClass} = require('@uktrade/trade_elements').elementstuff
 
-const term = getQueryParam('term');
+const term = getQueryParam('term')
 
 class Facets {
 
-  constructor(targetElement) {
-    this.initElements(targetElement);
-    this.addEventHandlers();
-    targetElement.className = '';
+  constructor (targetElement) {
+    this.initElements(targetElement)
+    this.addEventHandlers()
+    targetElement.className = ''
   }
 
-  initElements(targetElement) {
-    this.element = targetElement;
-    this.clearButtons = this.element.querySelectorAll('.clear-filter-js');
-    this.collapseButtons = this.element.querySelectorAll('.collapse-filter-js');
+  initElements (targetElement) {
+    this.element = targetElement
+    this.clearButtons = this.element.querySelectorAll('.clear-filter-js')
+    this.collapseButtons = this.element.querySelectorAll('.collapse-filter-js')
   }
 
-  addEventHandlers() {
-    this.element.addEventListener('click', this.selectOptionHandler, false);
+  addEventHandlers () {
+    this.element.addEventListener('click', this.selectOptionHandler, false)
 
     for (const clearButton of this.clearButtons) {
-      clearButton.addEventListener('click', this.clearFacetSelection);
+      clearButton.addEventListener('click', this.clearFacetSelection)
     }
 
     for (const collapseButton of this.collapseButtons) {
-      collapseButton.addEventListener('click', this.toggleFacet);
+      collapseButton.addEventListener('click', this.toggleFacet)
     }
-
   }
 
   selectOptionHandler = () => {
-    let url = `?term=${term}`;
+    let url = `?term=${term}`
 
-    const checkedInputs = this.element.querySelectorAll('input[type=checkbox]:checked');
+    const checkedInputs = this.element.querySelectorAll('input[type=checkbox]:checked')
     for (const input of checkedInputs) {
-      url += `&${input.name}=${input.value}`;
+      url += `&${input.name}=${input.value}`
     }
 
-    window.location.href = url;
+    window.location.href = url
   };
 
   clearFacetSelection = (event) => {
-    const facetWrapper = event.target.parentElement.parentElement.parentElement;
-    const checkedInputs = facetWrapper.querySelectorAll('input[type=checkbox]:checked');
+    const facetWrapper = event.target.parentElement.parentElement.parentElement
+    const checkedInputs = facetWrapper.querySelectorAll('input[type=checkbox]:checked')
     for (const input of checkedInputs) {
-      input.checked = false;
+      input.checked = false
     }
-    this.selectOptionHandler();
+    this.selectOptionHandler()
   };
 
   toggleFacet = (event) => {
-    const facetWrapper = event.target.parentElement.parentElement.parentElement;
-    toggleClass(facetWrapper, 'collapse');
+    const facetWrapper = event.target.parentElement.parentElement.parentElement
+    toggleClass(facetWrapper, 'collapse')
 
-    const control = facetWrapper.querySelector('.collapse-filter-js');
-    toggleClass(control, 'fa-chevron-up');
-    toggleClass(control, 'fa-chevron-down');
+    const control = facetWrapper.querySelector('.collapse-filter-js')
+    toggleClass(control, 'fa-chevron-up')
+    toggleClass(control, 'fa-chevron-down')
   }
 
 }
 
-module.exports = Facets;
+module.exports = Facets

@@ -1,20 +1,20 @@
-const React = require('react');
-const { Link } = require('react-router');
+const React = require('react')
+const { Link } = require('react-router')
 
-function contactDetailsSection(props) {
-  const contact = props.contact;
-  const { contactId } = props.params;
+function contactDetailsSection (props) {
+  const contact = props.contact
+  const { contactId } = props.params
 
   if (typeof window !== 'undefined') {
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
+    document.body.scrollTop = document.documentElement.scrollTop = 0
   }
 
   return (
     <div>
-      <table className="table-detail">
+      <table className='table--key-value table--striped'>
         <tbody>
           <tr>
-            <th width="30%">Company</th>
+            <th width='30%'>Company</th>
             <td><a href={`/company/DIT/${contact.company.id}`}>{ contact.company.name }</a></td>
           </tr>
           <tr>
@@ -32,7 +32,7 @@ function contactDetailsSection(props) {
               <th>Teams</th>
               <td>
                 { contact.teams.map((team, index) => {
-                  return (<span key={index}>{team.name}</span>);
+                  return (<span key={index}>{team.name}</span>)
                 })}
               </td>
             </tr>
@@ -54,7 +54,7 @@ function contactDetailsSection(props) {
                 { contact.address_town && `${contact.address_town}, ` }
                 { contact.address_county && `${contact.address_county}, ` }
                 { contact.address_postcode &&
-                <span className="meta--address__postcode">
+                <span className='meta--address__postcode'>
                   {`${contact.address_postcode}, `}
                 </span>
                 }
@@ -80,38 +80,35 @@ function contactDetailsSection(props) {
       </table>
 
       { !props.archiveVisible &&
-        <div className="button-bar">
+        <div className='button-bar'>
           { !contact.id &&
-          <Link to={`/contact/${contactId}/edit`} className="button button-secondary js-button-edit">Edit contact
+          <Link to={`/contact/${contactId}/edit`} className='button button-secondary js-button-edit'>Edit contact
             details</Link>
           }
 
-          { (!contact.archived) ?
-            <div>
-              <Link to={`/contact/${contactId}/edit`} className="button button-secondary js-button-edit">
-                Edit contact details
-              </Link>
-              <button className="button button-secondary" onClick={props.showArchiveSection}>Archive contact</button>
-            </div>
-            :
-            <div>
-              <a className="button button-disabled">Edit contact details</a>
-              <button className="button button-secondary" onClick={props.unarchive}>Unarchive now</button>
-            </div>
+          { (!contact.archived) ? <div>
+            <Link to={`/contact/${contactId}/edit`} className='button button-secondary js-button-edit'>
+              Edit contact details
+            </Link>
+            <button className='button button-secondary' onClick={props.showArchiveSection}>Archive contact</button>
+          </div>
+          : <div>
+            <a className='button button-disabled'>Edit contact details</a>
+            <button className='button button-secondary' onClick={props.unarchive}>Unarchive now</button>
+          </div>
           }
         </div>
       }
 
     </div>
-  );
+  )
 }
 
 contactDetailsSection.propTypes = {
   contact: React.PropTypes.object,
   archiveVisible: React.PropTypes.bool,
   showArchiveSection: React.PropTypes.func,
-  unarchive: React.PropTypes.func,
-};
+  unarchive: React.PropTypes.func
+}
 
-
-module.exports = contactDetailsSection;
+module.exports = contactDetailsSection

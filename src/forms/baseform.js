@@ -1,63 +1,58 @@
-const React = require('react');
+const React = require('react')
 
 class BaseForm extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   updateField = (update) => {
-    let fieldName;
-    let value;
+    let fieldName
+    let value
 
     if (update.hasOwnProperty('target')) {
-      fieldName = update.target.name;
-      value = update.target.value;
+      fieldName = update.target.name
+      value = update.target.value
     } else {
-      fieldName = update.name;
-      value = update.value;
+      fieldName = update.name
+      value = update.value
     }
 
     if (typeof value === 'string') {
       if (value.toLocaleLowerCase() === 'yes') {
-        value = true;
+        value = true
       } else if (value.toLocaleLowerCase() === 'no') {
-        value = false;
+        value = false
       }
     }
 
-    this.changeFormData(fieldName, value);
+    this.changeFormData(fieldName, value)
   };
 
   changeFormData = (fieldName, value) => {
-    let newFormDataState = this.state.formData;
-    newFormDataState[fieldName] = value;
-    this.setState({formData: newFormDataState });
+    let newFormDataState = this.state.formData
+    newFormDataState[fieldName] = value
+    this.setState({ formData: newFormDataState })
   };
 
-  getErrors(name) {
+  getErrors (name) {
     if (this.state.errors && this.state.errors[name]) {
-      return this.state.errors[name];
+      return this.state.errors[name]
     }
-    return null;
+    return null
   }
 
-  getSaving() {
+  getSaving () {
     return (
-      <div className="saving">Saving...</div>
-    );
+      <div className='saving'>Saving...</div>
+    )
   }
 
-  setDefaults(object, defaultObject) {
-    const fieldNames = Object.keys(defaultObject);
+  setDefaults (object, defaultObject) {
+    const fieldNames = Object.keys(defaultObject)
     for (const fieldName of fieldNames) {
       if (!object[fieldName] ||
         (Array.isArray(defaultObject[fieldName]) && object[fieldName].length === 0) ||
         (typeof defaultObject[fieldName] === 'object' && defaultObject[fieldName].hasOwnProperty('id') && !object[fieldName].hasOwnProperty('id'))) {
-        object[fieldName] = defaultObject[fieldName];
+        object[fieldName] = defaultObject[fieldName]
       }
     }
   }
 }
 
-module.exports = BaseForm;
+module.exports = BaseForm

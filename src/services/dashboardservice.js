@@ -1,7 +1,7 @@
-const authorisedRequest = require('../lib/authorisedrequest');
-const config = require('../config');
+const authorisedRequest = require('../lib/authorisedrequest')
+const config = require('../config')
 
-function mapContacts(contacts) {
+function mapContacts (contacts) {
   if (contacts && (typeof contacts.map) === 'function') {
     return contacts.map((contact) => {
       return {
@@ -11,36 +11,35 @@ function mapContacts(contacts) {
         company: {
           url: `/company/company_company/${contact.company.id}`,
           name: contact.company.name,
-          id: contact.company.id,
-        },
-      };
-    });
+          id: contact.company.id
+        }
+      }
+    })
   }
 
-  return contacts;
+  return contacts
 }
 
-function mapInteractions(interactions) {
+function mapInteractions (interactions) {
   if (interactions && (typeof interactions.map) === 'function') {
     return interactions.map((interaction) => {
       return {
         url: `/interaction/${interaction.id}`,
         id: interaction.id,
-        subject: interaction.subject,
-      };
-    });
+        subject: interaction.subject
+      }
+    })
   }
 
-  return interactions;
+  return interactions
 }
-
 
 module.exports = {
   getHomepageData: (token, days = 15) => {
     return authorisedRequest(token, `${config.apiRoot}/dashboard/homepage/?days=${days}`).then((data) => {
-      data.contacts = mapContacts(data.contacts);
-      data.interactions = mapInteractions(data.interactions);
-      return data;
-    });
-  },
-};
+      data.contacts = mapContacts(data.contacts)
+      data.interactions = mapInteractions(data.interactions)
+      return data
+    })
+  }
+}

@@ -1,19 +1,13 @@
 $images-dir: '/images/';
-@import 'font_stack';
 
-@import 'govstrap/govstrap';
-@import 'font-awesome';
+@import 'trade-elements';
 
 // application specific
-@import 'flash-messages';
-@import 'buttons';
 @import 'dashboard';
-@import 'datahub_badges';
-@import 'event-list';
 @import 'facets';
-@import 'login-bar.scss';
-@import 'pagination';
+@import 'leads';
+@import 'login-bar';
+@import 'option-select';
 @import 'search';
 @import 'shame';
 @import 'tables';
-@import 'leads';

@@ -24,7 +24,7 @@
 
 
 .heading-xlarge {
-  margin-top: 0.625em;
+  margin-top: .625em;
   margin-bottom: 1.25em;
 }
 
@@ -46,7 +46,7 @@ hr {
   clear: both;
   padding: 5px 0 10px 10px;
   border-left: 5px solid $border-colour;
-  margin: 0 0 30px 0;
+  margin: 0 0 30px;
 }
 
 .indented-info.error {
@@ -63,11 +63,12 @@ hr {
 }
 
 .add-another-button {
-  @include core-19();
+  @include core-19;
   background-color: $white;
   border: 0;
   color: $link-colour;
   cursor: pointer;
+  margin-bottom: 30px;
   text-decoration: underline;
 }
 
@@ -80,6 +81,12 @@ hr {
 }
 
 .saving {
-  @include bold-24();
+  @include bold-24;
   margin-top: 40px;
+}
+
+.radio-list-stacked {
+  .block-label {
+    margin-bottom: 20px;
+  }
 }

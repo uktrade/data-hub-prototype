@@ -1,16 +1,21 @@
 {
-  "extends": ["airbnb"],
+  "extends": ["standard"],
   "parser": "babel-eslint",
-  "rules": {
-    "camelcase": [0],
-    "no-param-reassign": [0],
-    "max-len": ["error", 150, 2, {
-      "ignoreUrls": true,
-      "ignoreComments": false,
-      "ignoreRegExpLiterals": true,
-      "ignoreStrings": true,
-      "ignoreTemplateLiterals": true
-    }],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+  "globals": {
+    "afterEach": true,
+    "assert": true,
+    "beforeEach": true,
+    "describe": true,
+    "es": true,
+    "expect": true,
+    "ga": true,
+    "GOVUK": true,
+    "Image": true,
+    "it": true,
+    "jasmine": true,
+    "spyOn": true,
+    "$": true,
+    "_gaq": true,
+    "require": true
   }
 }

@@ -1,87 +1,87 @@
-'use strict';
+'use strict'
 
-const React = require('react');
-const axios = require('axios');
+const React = require('react')
+const axios = require('axios')
 
 const defaultProps = {
   value: '',
   options: []
-};
+}
 
 class SelectWithIdComponent extends React.Component {
 
-  constructor(props) {
-    super(props);
-    const state = Object.assign({}, props, defaultProps);
+  constructor (props) {
+    super(props)
+    const state = Object.assign({}, props, defaultProps)
     if (props.value) {
       state.value = props.value
     }
 
-    this.state = state;
+    this.state = state
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (nextProps && nextProps.value) {
-      this.setState({value: nextProps.value});
+      this.setState({value: nextProps.value})
     }
     if (nextProps && nextProps.options) {
-      this.setState({options: nextProps.options});
+      this.setState({options: nextProps.options})
     }
   }
 
-  getNameForId(id) {
+  getNameForId (id) {
     for (const option of this.state.options) {
-      if (option.id === id) return option;
+      if (option.id === id) return option
     }
-    return null;
+    return null
   }
 
-  componentDidMount() {
+  componentDidMount () {
     if (this.state.url) {
-      this.getOptions();
+      this.getOptions()
     }
   }
 
   onChange = (event) => {
-    this.setState({value: event.target.value});
+    this.setState({value: event.target.value})
 
-    const value = this.getNameForId(event.target.value);
+    const value = this.getNameForId(event.target.value)
     this.props.onChange({
       name: this.props.name,
       value
-    });
+    })
   };
 
-  getOptions() {
+  getOptions () {
     // make a call to get the available options using the url
     axios.get(this.props.url)
       .then((result) => {
-        this.setState({options: result.data});
-      });
+        this.setState({options: result.data})
+      })
   }
 
-  render() {
+  render () {
     let optionElements = this.state.options.map((option) =>
-      <option key={option.id} value={option.id}>{option.name}</option>);
+      <option key={option.id} value={option.id}>{option.name}</option>)
 
-    let groupClass = 'form-group';
+    let groupClass = 'form-group'
 
-    let error;
+    let error
     if (this.props.errors && this.props.errors.length > 0) {
-      error = this.props.errors[0];
-      groupClass += ' error';
+      error = this.props.errors[0]
+      groupClass += ' error'
     }
 
     return (
       <div className={groupClass} id={this.props.name + '-wrapper'}>
-        <label className="form-label-bold" htmlFor={this.props.name}>
+        <label className='form-label-bold' htmlFor={this.props.name}>
           {this.props.label}
           {error &&
-            <span className="error-message">{error}</span>
+            <span className='error-message'>{error}</span>
           }
         </label>
         <select
-          className="form-control"
+          className='form-control'
           id={this.props.name}
           name={this.props.name}
           onChange={this.onChange}
@@ -91,7 +91,7 @@ class SelectWithIdComponent extends React.Component {
           {optionElements}
         </select>
       </div>
-    );
+    )
   }
 }
 
@@ -102,7 +102,7 @@ SelectWithIdComponent.propTypes = {
   onChange: React.PropTypes.func.isRequired,
   label: React.PropTypes.string.isRequired,
   errors: React.PropTypes.array,
-  options: React.PropTypes.array,
-};
+  options: React.PropTypes.array
+}
 
-module.exports = SelectWithIdComponent;
+module.exports = SelectWithIdComponent

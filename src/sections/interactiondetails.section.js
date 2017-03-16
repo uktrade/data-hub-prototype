@@ -1,36 +1,36 @@
 /* global document: true */
-const React = require('react');
-const interactionRepository = require('../repositorys/interactionrepository');
-const { Link } = require('react-router');
-const formatDate = require('../lib/date').formatDate;
-const getBackLink = require('../lib/urlstuff').getBackLink;
+const React = require('react')
+const interactionRepository = require('../repositorys/interactionrepository')
+const { Link } = require('react-router')
+const formatDate = require('../lib/date').formatDate
+const getBackLink = require('../lib/urlstuff').getBackLink
 
-function interactionDetailsSection(props) {
-  const interaction = props.interaction;
-  const backLink = props.backLink;
+function interactionDetailsSection (props) {
+  const interaction = props.interaction
+  const backLink = props.backLink
 
   if (typeof window !== 'undefined') {
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
+    document.body.scrollTop = document.documentElement.scrollTop = 0
   }
 
   return (
     <div>
-      { backLink && <a className="back-link" href={backLink.url}>{backLink.title}</a> }
-      <h1 className="heading-xlarge record-title">
+      { backLink && <a className='back-link' href={backLink.url}>{backLink.title}</a> }
+      <h1 className='heading-xlarge record-title'>
         Interaction details
       </h1>
 
-      <table className="table-detail">
+      <table className='table--key-value  table--striped'>
         <tbody>
           <tr>
-            <th width="30%">Company</th>
+            <th width='30%'>Company</th>
             <td>
               <a href={`/company/DIT/${interaction.company.id}`}>
                 { interaction.company.name }</a>
             </td>
           </tr>
           <tr>
-            <th width="30%">Interaction type</th>
+            <th width='30%'>Interaction type</th>
             <td>{ interaction.interaction_type.name }</td>
           </tr>
           <tr>
@@ -58,7 +58,7 @@ function interactionDetailsSection(props) {
             <td>{ interaction.dit_advisor.first_name } { interaction.dit_advisor.last_name }</td>
           </tr>
           <tr>
-            <th>Service offer</th>
+            <th>Service</th>
             <td>{ interaction.service.name }</td>
           </tr>
           <tr>
@@ -68,34 +68,32 @@ function interactionDetailsSection(props) {
         </tbody>
       </table>
 
-      { !interaction.company.archived ?
-        <Link to={`/interaction/${interaction.id}/edit`} className="button button-secondary">
+      { !interaction.company.archived
+        ? <Link to={`/interaction/${interaction.id}/edit`} className='button button-secondary'>
           Edit interaction details
         </Link>
-        :
-        <a className="button button-disabled">Edit interaction details</a>
+        : <a className='button button-disabled'>Edit interaction details</a>
       }
     </div>
-  );
+  )
 }
 
 interactionDetailsSection.loadProps = (context, cb) => {
-  const params = context.params;
-  const backLink = getBackLink(params);
+  const params = context.params
+  const backLink = getBackLink(params)
   interactionRepository.getInteraction(params.token, params.interactionId)
     .then((interaction) => {
-      cb(null, { interaction, interactionId: params.interactionId, backLink });
+      cb(null, { interaction, interactionId: params.interactionId, backLink })
     })
     .catch((error) => {
-      cb(error);
-    });
-};
+      cb(error)
+    })
+}
 
 interactionDetailsSection.propTypes = {
   interaction: React.PropTypes.object,
   source: React.PropTypes.string,
-  backLink: React.PropTypes.object,
-};
+  backLink: React.PropTypes.object
+}
 
-
-module.exports = interactionDetailsSection;
+module.exports = interactionDetailsSection
