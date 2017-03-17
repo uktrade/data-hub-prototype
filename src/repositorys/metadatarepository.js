@@ -70,23 +70,9 @@ const metadataItems = [
   ['business-type', 'TYPES_OF_BUSINESS'],
   ['team', 'TEAMS'],
   ['interaction-type', 'TYPES_OF_INTERACTION'],
-  ['service-delivery-status', 'SERVICE_DELIVERY_STATUS_OPTIONS']
-]
-
-/*
-const metadataItems = [
-  ['sector', 'SECTOR_OPTIONS'],
-  ['turnover', 'TURNOVER_OPTIONS'],
-  ['uk-region', 'REGION_OPTIONS'],
-  ['country', 'COUNTRYS'],
-  ['employee-range', 'EMPLOYEE_OPTIONS'],
-  ['business-type', 'TYPES_OF_BUSINESS'],
-  ['team', 'TEAMS'],
-  ['interaction-type', 'TYPES_OF_INTERACTION'],
   ['service-delivery-status', 'SERVICE_DELIVERY_STATUS_OPTIONS'],
   ['event', 'EVENT_OPTIONS']
 ]
-*/
 
 const restrictedServiceKeys = [
   'Account Management',
