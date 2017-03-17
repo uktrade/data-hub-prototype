@@ -7,7 +7,7 @@ function saveServiceDelivery (token, serviceDelivery) {
   }
 
   if (serviceDelivery.data.id && serviceDelivery.data.id.length > 0) {
-    options.url = `${config.apiRoot}/v2/service-delivery/${serviceDelivery.id}/`
+    options.url = `${config.apiRoot}/v2/service-delivery/${serviceDelivery.data.id}/`
     options.method = 'PUT'
   } else {
     options.url = `${config.apiRoot}/v2/service-delivery/`
