@@ -26,8 +26,7 @@ function getCommon (req, res, next) {
 }
 
 function getAddStep1 (req, res) {
-  // const interactionTypes = [...metadataRepository.TYPES_OF_INTERACTION, { id: 999, name: 'Service delivery', selectable: true }]
-  const interactionTypes = metadataRepository.TYPES_OF_INTERACTION
+  const interactionTypes = [...metadataRepository.TYPES_OF_INTERACTION, { id: 999, name: 'Service delivery', selectable: true }]
 
   const selectableTypes = interactionTypes
     .filter(selectableType => selectableType.selectable)
