@@ -1,6 +1,6 @@
 const React = require('react');
 const Link = require('react-router').Link;
-const contactRepository = require('../repositorys/contactrepository');
+const contactService = require('../services/contactservice');
 const axios = require('axios');
 const ErrorList = require('../components/errorlist.component.js');
 const formatDate = require('../lib/date').formatDate;

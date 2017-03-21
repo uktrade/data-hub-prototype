@@ -57,6 +57,15 @@ function getHydratedServiceDelivery (token, serviceDeliveryId) {
   })
 }
 
+function stripNullProperties (object) {
+  const keys = Object.keys(object)
+  for (const key of keys) {
+    if (object[key].data.id === null || (typeof object[key].data.id === 'string' && object[key].data.id.length === 0)) {
+      delete object[key]
+    }
+  }
+}
+
 // Change this to do the saving
 function convertServiceDeliveryFormToApiFormat (serviceDeliveryForm) {
   const serviceDelivery = {
@@ -85,6 +94,8 @@ function convertServiceDeliveryFormToApiFormat (serviceDeliveryForm) {
   if (serviceDeliveryForm.id && serviceDeliveryForm.id.length > 0) {
     serviceDelivery.data.id = serviceDeliveryForm.id
   }
+
+  stripNullProperties(serviceDelivery.data.relationships)
 
   return serviceDelivery
 }
