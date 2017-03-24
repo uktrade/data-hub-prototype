@@ -24,7 +24,7 @@ function mapInteractions (interactions) {
   if (interactions && (typeof interactions.map) === 'function') {
     return interactions.map((interaction) => {
       return {
-        url: `/interaction/${interaction.id}`,
+        url: `/interaction/${interaction.id}/details`,
         id: interaction.id,
         subject: interaction.subject
       }
