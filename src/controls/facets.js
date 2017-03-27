@@ -1,8 +1,6 @@
 /* eslint new-cap: 0 */
-
-require('babel-polyfill')
 const getQueryParam = require('../lib/urlstuff').getQueryParam
-const {toggleClass} = require('@uktrade/trade_elements').elementstuff
+const {toggleClass} = require('../lib/elementstuff')
 
 const term = getQueryParam('term')
 
@@ -23,12 +21,13 @@ class Facets {
   addEventHandlers () {
     this.element.addEventListener('click', this.selectOptionHandler, false)
 
-    for (const clearButton of this.clearButtons) {
+    for (let pos = 0; pos < this.clearButtons; pos += 1) {
+      const clearButton = this.clearButtons.item(pos)
       clearButton.addEventListener('click', this.clearFacetSelection)
     }
 
-    for (const collapseButton of this.collapseButtons) {
-      collapseButton.addEventListener('click', this.toggleFacet)
+    for (let pos = 0; pos < this.collapseButtons; pos += 1) {
+      this.collapseButtons.item(pos).addEventListener('click', this.toggleFacet)
     }
   }
 
@@ -36,7 +35,8 @@ class Facets {
     let url = `?term=${term}`
 
     const checkedInputs = this.element.querySelectorAll('input[type=checkbox]:checked')
-    for (const input of checkedInputs) {
+    for (let pos = 0; pos < checkedInputs.length; pos += 1) {
+      const input = checkedInputs.item(pos)
       url += `&${input.name}=${input.value}`
     }
 
@@ -46,7 +46,8 @@ class Facets {
   clearFacetSelection = (event) => {
     const facetWrapper = event.target.parentElement.parentElement.parentElement
     const checkedInputs = facetWrapper.querySelectorAll('input[type=checkbox]:checked')
-    for (const input of checkedInputs) {
+    for (let pos = 0; pos < checkedInputs.length; pos += 1) {
+      const input = checkedInputs.item(pos)
       input.checked = false
     }
     this.selectOptionHandler()

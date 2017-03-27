@@ -15,6 +15,7 @@
       window.DIT.user = {{ user | stringify | safe }};
     </script>
   {% endif %}
+    <script src="/babel-polyfill/polyfill.min.js"></script>
     <script src="{{ asset_path }}javascripts/common.js?{{ startTime }}"></script>
 {% endblock %}
 

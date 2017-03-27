@@ -1,6 +1,6 @@
 'use strict'
 
-const classUtils = require('@uktrade/trade_elements').elementstuff
+const classUtils = require('../lib/elementstuff')
 
 const HIDE = 'hide'
 const SHOW = 'show'
