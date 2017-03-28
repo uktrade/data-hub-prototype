@@ -88,7 +88,7 @@ class ContactTable extends React.Component {
             <th
               className={this.columnClass('occupation')}
               onClick={() => { this.changeSort('occupation') }}
-          >Role</th>
+          >Job title</th>
             <th
               className={this.columnClass('telephonenumber')}
               onClick={() => { this.changeSort('telephonenumber') }}
