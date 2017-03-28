@@ -23,7 +23,7 @@ function contactDetailsSection (props) {
           </tr>
           { contact.job_title &&
             <tr>
-              <th>Role</th>
+              <th>Job title</th>
               <td>{ contact.job_title }</td>
             </tr>
           }

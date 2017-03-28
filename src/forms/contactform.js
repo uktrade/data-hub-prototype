@@ -16,7 +16,7 @@ const LABELS = {
   'title': 'Title',
   'first_name': 'First name',
   'last_name': 'Last name',
-  'job_title': 'Role',
+  'job_title': 'Job title',
   'telephone_number': 'Phone',
   'email': 'Email address',
   'address': 'Address',
