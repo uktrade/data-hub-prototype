@@ -24,6 +24,9 @@
 # Ignore node packages
 node_modules/
 
+#ignore Webstorm config
+.idea/
+
 test.sh
 apitest.js
 reports
