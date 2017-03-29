@@ -19,8 +19,10 @@ function getTimeSinceLastAddedItem (items) {
   if (sorted.length === 0) return null
 
   // Figure out how long sinse now for the latest item
-  const now = new Date().toISOString()
-  const [amount, unit] = DateDiff.timeDiffHuman(sorted[0].created_on, now).split(' ')
+  const now = new Date().toISOString().substring(0, 10)
+  const shortCreated = sorted[0].created_on.substring(0, 10)
+
+  const [amount, unit] = DateDiff.timeDiffHuman(shortCreated, now).split(' ')
   return { amount, unit }
 }
 

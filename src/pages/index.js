@@ -1,6 +1,4 @@
 /* eslint no-new: 0 */
-require('babel-polyfill')
-
 const ClippedList = require('../controls/clipped-list')
 
 new ClippedList(document.getElementById('interactions-list'), 'See all new interactions', 'See less interactions')

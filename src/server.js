@@ -117,6 +117,7 @@ app.use('/javascripts', express.static(`${__dirname}/../node_modules/@uktrade/tr
 app.use('/fonts', express.static(`${__dirname}/../node_modules/font-awesome/fonts`))
 app.use('/javascripts/react', express.static(`${__dirname}/../node_modules/react/dist`))
 app.use('/javascripts/react-dom', express.static(`${__dirname}/../node_modules/react-dom/dist`))
+app.use('/babel-polyfill', express.static(`${__dirname}/../node_modules/babel-polyfill/dist`))
 
 app.use(logger((isDev ? 'dev' : 'combined')))
 
