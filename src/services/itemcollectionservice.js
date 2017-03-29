@@ -27,7 +27,7 @@ function getTimeSinceLastAddedItem (items) {
 }
 
 function getItemsAddedInLastYear (items) {
-  const then = new Date().getTime() - 3153600000
+  const then = new Date().getTime() - DateDiff.YEAR
   return items.filter(item => (item.created_on && Date.parse(item.created_on) >= then))
 }
 

@@ -209,22 +209,28 @@ describe('item collection services', () => {
     })
   })
 
-  describe('get items in time range', () => {
+  describe('get items in the last year', () => {
     it('should return 1 single contact in the last year', () => {
-      contacts[0].created_on = moment().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS')
-      contacts[1].created_on = moment().subtract(18, 'months').format('YYYY-MM-DDTHH:mm:ss.SSSSSS')
+      contacts[0].created_on = moment.utc().subtract(1, 'days').format()
+      contacts[1].created_on = moment.utc().subtract(18, 'months').format()
       const filtered = itemCollectionService.getItemsAddedInLastYear(contacts)
       expect(filtered).to.have.lengthOf(1)
     })
     it('should return 2 contacts in the last year', () => {
-      contacts[0].created_on = moment().subtract(1, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS')
-      contacts[1].created_on = moment().subtract(2, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS')
+      contacts[0].created_on = moment.utc().subtract(1, 'days').format()
+      contacts[1].created_on = moment.utc().subtract(2, 'days').format()
       const filtered = itemCollectionService.getItemsAddedInLastYear(contacts)
       expect(filtered).to.have.lengthOf(2)
     })
+    it('handles dates close to the one-year mark', () => {
+      contacts[0].created_on = moment.utc().subtract(11, 'months').format()
+      contacts[1].created_on = moment.utc().subtract(13, 'months').format()
+      const filtered = itemCollectionService.getItemsAddedInLastYear(contacts)
+      expect(filtered).to.have.lengthOf(1)
+    })
     it('should handle a null', () => {
       contacts[0].created_on = null
-      contacts[1].created_on = moment().subtract(2, 'days').format('YYYY-MM-DDTHH:mm:ss.SSSSSS')
+      contacts[1].created_on = moment.utc().subtract(2, 'days').format()
       const filtered = itemCollectionService.getItemsAddedInLastYear(contacts)
       expect(filtered).to.have.lengthOf(1)
     })
