@@ -1,5 +1,5 @@
 /* eslint no-new: 0 */
-const { createElementFromMarkup, removeElement, hide, insertAfter } = require('@uktrade/trade_elements').elementstuff
+const { createElementFromMarkup, removeElement, hide, insertAfter } = require('../lib/elementstuff')
 const transformSectors = require('../lib/transformsectors')
 
 const PRIMARYPANELMARKUP = `
@@ -52,9 +52,8 @@ class Sectors {
     this.primarySelectElement = this.primaryPanel.querySelector('select')
 
     let primarySelectInnerMarkup = ''
-
-    for (const primarySector of this.primarySectors) {
-      primarySelectInnerMarkup += `<option>${primarySector}</option>`
+    for (let pos = 0; pos < this.primarySectors.length; pos += 1) {
+      primarySelectInnerMarkup += `<option>${this.primarySectors[pos]}</option>`
     }
     this.primarySelectElement.innerHTML = primarySelectInnerMarkup
 
@@ -96,8 +95,8 @@ class Sectors {
   createSubsectorDropdown (subSectors) {
     let markup = '<option value="">Select a sector</option>'
 
-    for (const subSector of subSectors) {
-      markup += `<option value="${subSector.id}">${subSector.name}</option>`
+    for (let pos = 0; pos < subSectors.length; pos += 1) {
+      markup += `<option value="${subSectors[pos].id}">${subSectors[pos].name}</option>`
     }
 
     this.subsectorPanel = createElementFromMarkup(SUBSECTORPANELMARKUP, this.document)

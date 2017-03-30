@@ -1,7 +1,7 @@
 {% extends "layouts/ukti_template.html" %}
 
 {% set homepage_url = "/" %}
-{% block service_name %}Datahub{% endblock %}
+{% block service_name %}Data Hub{% endblock %}
 
 {% block head_styles %}
 <!-- This is a test -->
@@ -15,6 +15,7 @@
       window.DIT.user = {{ user | stringify | safe }};
     </script>
   {% endif %}
+    <script src="/babel-polyfill/polyfill.min.js"></script>
     <script src="{{ asset_path }}javascripts/common.js?{{ startTime }}"></script>
 {% endblock %}
 

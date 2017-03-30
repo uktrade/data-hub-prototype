@@ -1,7 +1,7 @@
 'use strict'
 
 const React = require('react')
-const {generateID}= require('@uktrade/trade_elements').elementstuff
+const {generateID} = require('../lib/elementstuff')
 
 class RadioComponent extends React.Component {
 

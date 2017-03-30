@@ -19,13 +19,15 @@ function getTimeSinceLastAddedItem (items) {
   if (sorted.length === 0) return null
 
   // Figure out how long sinse now for the latest item
-  const now = new Date().toISOString()
-  const [amount, unit] = DateDiff.timeDiffHuman(sorted[0].created_on, now).split(' ')
+  const now = new Date().toISOString().substring(0, 10)
+  const shortCreated = sorted[0].created_on.substring(0, 10)
+
+  const [amount, unit] = DateDiff.timeDiffHuman(shortCreated, now).split(' ')
   return { amount, unit }
 }
 
 function getItemsAddedInLastYear (items) {
-  const then = new Date().getTime() - 3153600000
+  const then = new Date().getTime() - DateDiff.YEAR
   return items.filter(item => (item.created_on && Date.parse(item.created_on) >= then))
 }
 
