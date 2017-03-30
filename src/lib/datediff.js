@@ -1,5 +1,10 @@
 const DateDiff = {}
 
+DateDiff.MINUTE = 60*1000
+DateDiff.HOUR = 60*DateDiff.MINUTE
+DateDiff.DAY = 24*DateDiff.HOUR
+DateDiff.YEAR = 365.25*DateDiff.DAY
+
 DateDiff.inDays = function inDays (d1, d2) {
   const t2 = Date.parse(d2)
   const t1 = Date.parse(d1)
