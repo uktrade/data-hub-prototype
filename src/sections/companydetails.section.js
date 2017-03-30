@@ -81,7 +81,7 @@ function companyDetailsSection (props) {
             </tr>
             <tr>
               <th>Business description</th>
-              <td>{ company.description }</td>
+              <td className="preserve-ws">{ company.description }</td>
             </tr>
             <tr>
               <th>Number of employees</th>
