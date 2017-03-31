@@ -19,6 +19,8 @@
           <ol id="interactions-list" class="dashboard-list">
           {% for interaction in interactions %}
             <li>
+              <a href="{{ interaction.company.url }}">{{ interaction.company.name }}</a>
+               &ndash;
               <a href="{{ interaction.url }}">{{ interaction.subject }}</a>
             </li>
           {% endfor %}

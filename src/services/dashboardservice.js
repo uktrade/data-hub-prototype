@@ -23,10 +23,15 @@ function mapContacts (contacts) {
 function mapInteractions (interactions) {
   if (interactions && (typeof interactions.map) === 'function') {
     return interactions.map((interaction) => {
+      const company = interaction.company || {}
       return {
         url: `/interaction/${interaction.id}/details`,
         id: interaction.id,
-        subject: interaction.subject
+        subject: interaction.subject,
+        company: {
+          name: company.name,
+          url: `/company/company_company/${company.id}`
+        }
       }
     })
   }
