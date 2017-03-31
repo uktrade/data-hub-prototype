@@ -91,12 +91,6 @@ function getMetadata (req, res) {
     case 'primary_sectors':
       result = metadataRepository.PRIMARY_SECTORS
       break
-    case 'title':
-      authorisedRequest(req.session.token, `${config.apiRoot}/metadata/title/`)
-        .then((response) => {
-          res.json(response)
-        })
-      return
     case 'advisors':
       authorisedRequest(req.session.token, `${config.apiRoot}/advisor/`)
         .then((response) => {

@@ -17,10 +17,6 @@ function contactDetailsSection (props) {
             <th width='30%'>Company</th>
             <td><a href={`/company/DIT/${contact.company.id}`}>{ contact.company.name }</a></td>
           </tr>
-          <tr>
-            <th>Title</th>
-            <td>{ contact.title.name }</td>
-          </tr>
           { contact.job_title &&
             <tr>
               <th>Job title</th>
