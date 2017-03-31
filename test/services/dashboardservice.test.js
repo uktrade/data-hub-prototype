@@ -21,7 +21,7 @@ describe('Dashboard service', () => {
       }
     }]
   }
-  let dashboardService;
+  let dashboardService
 
   beforeEach(() => {
     dashboardService = proxyquire('../../src/services/dashboardservice', {
