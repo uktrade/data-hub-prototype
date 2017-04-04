@@ -3,6 +3,7 @@ $images-dir: '/images/';
 @import 'trade-elements';
 
 // application specific
+@import 'helpers';
 @import 'dashboard';
 @import 'facets';
 @import 'leads';

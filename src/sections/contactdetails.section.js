@@ -74,7 +74,7 @@ function contactDetailsSection (props) {
           </tr>
           <tr>
             <th>Notes</th>
-            <td>{ contact.notes }</td>
+            <td className="preserve-ws">{ contact.notes }</td>
           </tr>
         </tbody>
       </table>
