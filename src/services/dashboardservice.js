@@ -5,7 +5,7 @@ function mapContacts (contacts) {
   if (contacts && (typeof contacts.map) === 'function') {
     return contacts.map((contact) => {
       return {
-        url: `contact/${contact.id}`,
+        url: `/contact/${contact.id}`,
         name: `${contact.first_name} ${contact.last_name}`,
         id: contact.id,
         company: {
@@ -23,10 +23,15 @@ function mapContacts (contacts) {
 function mapInteractions (interactions) {
   if (interactions && (typeof interactions.map) === 'function') {
     return interactions.map((interaction) => {
+      const company = typeof interaction.company === 'object' ? interaction.company : {}
       return {
         url: `/interaction/${interaction.id}/details`,
         id: interaction.id,
-        subject: interaction.subject
+        subject: interaction.subject,
+        company: {
+          name: company.name,
+          url: `/company/company_company/${company.id}`
+        }
       }
     })
   }
