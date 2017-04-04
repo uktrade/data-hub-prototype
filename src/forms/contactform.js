@@ -13,7 +13,6 @@ const companyService = require('../services/companyservice')
 
 const LABELS = {
   'company': 'Company',
-  'title': 'Title',
   'first_name': 'First name',
   'last_name': 'Last name',
   'job_title': 'Job title',
@@ -29,10 +28,6 @@ const LABELS = {
 
 const defaultContact = {
   company: {
-    id: '',
-    name: ''
-  },
-  title: {
     id: '',
     name: ''
   },
@@ -228,15 +223,6 @@ class ContactForm extends BaseForm {
             <strong>{ formData.company.name }</strong>
           </div>
         }
-        <Autosuggest
-          name='title'
-          label={LABELS.title}
-          value={formData.title}
-          optionsUrl='/api/meta/title'
-          onChange={this.updateField}
-          errors={this.getErrors('title')}
-          searchingFor='title'
-        />
         <InputText
           label={LABELS.first_name}
           name='first_name'
