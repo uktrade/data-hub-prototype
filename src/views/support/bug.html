@@ -22,7 +22,7 @@
   <form action="{{ action }}" method="post">
     {{ trade.textbox('title', label="Title", hint="A brief summary of your feedback/problem", error=errors.title, autofocus=true, value=data.title) }}
     {{ trade.textarea('description', label="Description", hint="If you were having a problem, explain what you did, what happened and what you expected to happen. If you want to provide feedback or a suggestion, describe it here.", error=errors.steps, autofocus=true, value=data.steps) }}
-    {{ trade.textbox('name', label="Email", hint="If you wish to be contacted, please provide your email address",error=errors.name, autofocus=true, value=data.name) }}
+    {{ trade.textbox('email', label="Email", hint="If you wish to be contacted, please provide your email address",error=errors.name, autofocus=true, value=data.name) }}
     {{ trade.textbox('browser', label="Web browser", hint="The name of the web browser and version you were using", error=errors.browser, autofocus=true, value=data.browser) }}
 
     <div id="type-wrapper" class="inline form-group {% if errors.type %}error{% endif %}">

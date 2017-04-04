@@ -40,7 +40,7 @@ function getBug (req, res) {
 
 function postBug (req, res) {
   req.checkBody({
-    name: {
+    email: {
       optional: {
         options: { checkFalsy: true }
       },
@@ -66,7 +66,7 @@ function postBug (req, res) {
 
       const ticket = {
         requester: {
-          name: (req.body.name && req.body.name.length > 0) ? req.body.name : 'Anonymous'
+          email: (req.body.email && req.body.email.length > 0) ? req.body.email : 'Anonymous'
         },
         subject: req.body.title,
         comment: {
