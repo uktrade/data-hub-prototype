@@ -1,3 +1,4 @@
+const winston = require('winston')
 const authorisedRequest = require('../lib/authorisedrequest')
 const config = require('../config')
 
@@ -7,7 +8,7 @@ function saveServiceDelivery (token, serviceDelivery) {
   }
 
   if (serviceDelivery.data.id && serviceDelivery.data.id.length > 0) {
-    options.url = `${config.apiRoot}/v2/service-delivery/${serviceDelivery.data.id}/`
+    options.url = `${config.apiRoot}/v2/service-delivery/${serviceDelivery.id}/`
     options.method = 'PUT'
   } else {
     options.url = `${config.apiRoot}/v2/service-delivery/`
@@ -18,15 +19,42 @@ function saveServiceDelivery (token, serviceDelivery) {
 }
 
 function getServiceDelivery (token, serviceDeliveryId) {
-  return authorisedRequest(token, `${config.apiRoot}/v2/service-delivery/${serviceDeliveryId}/`)
+  return new Promise((resolve, reject) => {
+    authorisedRequest(token, `${config.apiRoot}/v2/service-delivery/${serviceDeliveryId}/`)
+    .then((response) => {
+      resolve(response.data)
+    })
+    .catch((error) => {
+      winston.error(error)
+      reject(error)
+    })
+  })
 }
 
 function getServiceDeliverysForCompany (token, companyId) {
-  return authorisedRequest(token, `${config.apiRoot}/v2/service-delivery/?company=${companyId}`)
+  return new Promise((resolve) => {
+    authorisedRequest(token, `${config.apiRoot}/v2/service-delivery/?company_id=${companyId}`)
+    .then((response) => {
+      resolve(response.data)
+    })
+    .catch((error) => {
+      winston.info(error)
+      resolve([])
+    })
+  })
 }
 
 function getServiceDeliverysForContact (token, companyId) {
-  return authorisedRequest(token, `${config.apiRoot}/v2/service-delivery/?contact=${companyId}`)
+  return new Promise((resolve) => {
+    authorisedRequest(token, `${config.apiRoot}/v2/service-delivery/?contact_id=${companyId}`)
+    .then((response) => {
+      resolve(response.data)
+    })
+    .catch((error) => {
+      winston.info(error)
+      resolve([])
+    })
+  })
 }
 
 module.exports = {

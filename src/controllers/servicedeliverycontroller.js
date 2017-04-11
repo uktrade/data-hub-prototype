@@ -113,7 +113,7 @@ function getServiceDeliveryDetails (req, res, next) {
     dit_advisor: serviceDelivery.dit_advisor.name,
     uk_region: serviceDelivery.uk_region.name,
     sector: serviceDelivery.sector.name,
-    country_of_interest: serviceDelivery.country_of_interest.name
+    country_of_interest: (serviceDelivery.country_of_interest && serviceDelivery.country_of_interest.name) ? serviceDelivery.country_of_interestname : null
   }
   res.locals.labels = serviceDeliverylabels
 
